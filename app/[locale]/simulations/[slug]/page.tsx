@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
-import { getSimulationCard, getSubjectForSimulation } from "@/lib/subjects/catalog";
+import { getSimulationCard, getSubjectForSimulation, isVisibleSubjectSlug } from "@/lib/subjects/catalog";
 import { ConceptLabClient } from "@/components/simulation/ConceptLabClient";
 import { ChemistryActivitiesClient } from "@/components/subjects/chemistry/ChemistryActivitiesClient";
 import { PhysicsActivitiesClient } from "@/components/subjects/physics/PhysicsActivitiesClient";
@@ -11,13 +11,14 @@ import { SpaceActivitiesClient } from "@/components/subjects/space/SpaceActiviti
 import { GeographyActivitiesClient } from "@/components/subjects/geography/GeographyActivitiesClient";
 import { BiologyActivitiesClient } from "@/components/subjects/biology/BiologyActivitiesClient";
 import { MathematicsActivitiesClient } from "@/components/subjects/mathematics/MathematicsActivitiesClient";
+import { EnvironmentalActivitiesClient } from "@/components/subjects/environmental/EnvironmentalActivitiesClient";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
   if (!isLocale(locale)) return {};
   const baseSimulation = getSimulationCard(slug);
   const baseSubject = getSubjectForSimulation(slug);
-  if (!baseSimulation || !baseSubject) return {};
+  if (!baseSimulation || !baseSubject || !isVisibleSubjectSlug(baseSubject.slug)) return {};
   const localizedSubject = getLocalizedSubject(locale, baseSubject.slug);
   const simulation = localizedSubject.simulations.find((item) => item.slug === slug);
   if (!simulation) return {};
@@ -38,7 +39,7 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
   if (!isLocale(locale)) notFound();
   const baseSubject = getSubjectForSimulation(slug);
   const baseSimulation = getSimulationCard(slug);
-  if (!baseSubject || !baseSimulation || slug === "moon-landing" || slug === "orbital-rescue") notFound();
+  if (!baseSubject || !baseSimulation || !isVisibleSubjectSlug(baseSubject.slug) || slug === "moon-landing" || slug === "orbital-rescue") notFound();
   const safeLocale = locale as Locale;
   const subject = getLocalizedSubject(safeLocale, baseSubject.slug);
   const simulation = subject.simulations.find((item) => item.slug === slug);
@@ -57,6 +58,11 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     { name: subject.eyebrow, path: `/subjects/${subject.slug}` },
     { name: simulation.title, path: `/simulations/${slug}` },
   ]);
+  if (baseSubject.slug === "environmental-science") return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
+    <EnvironmentalActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+  </>;
   if (baseSubject.slug === "mathematics") return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>

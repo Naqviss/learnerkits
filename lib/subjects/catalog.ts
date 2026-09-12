@@ -1,5 +1,10 @@
-export const subjectSlugs = ["space", "physics", "geography", "biology", "chemistry", "mathematics"] as const;
+export const subjectSlugs = ["space", "physics", "geography", "environmental-science", "biology", "chemistry", "mathematics"] as const;
 export type SubjectSlug = (typeof subjectSlugs)[number];
+
+// Keep hidden subjects in the catalog so their work can resume without data loss.
+// Remove a slug from this set when it is ready to be published again.
+export const hiddenSubjectSlugs: ReadonlySet<SubjectSlug> = new Set(["biology"]);
+export const visibleSubjectSlugs = subjectSlugs.filter((slug) => !hiddenSubjectSlugs.has(slug));
 
 export type SimulationCard = {
   slug: string;
@@ -104,6 +109,29 @@ export const subjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
       { slug: "ocean-currents-3d", title: "Ocean Currents 3D Simulator", concepts: "Temperature · salinity · density · circulation", difficulty: "Intermediate", duration: "7–12 min", kind: "3D simulation", outcome: "Relate temperature and salinity differences to global ocean circulation.", seoTarget: "ocean currents simulator", opportunity: "Very High", featured: true, visualMode: "3d" },
     ],
   },
+  "environmental-science": {
+    slug: "environmental-science",
+    labelKey: "environmental-science",
+    eyebrow: "Environmental Science & Climate",
+    headline: "Model a changing planet. Design solutions that hold up.",
+    description: "Investigate climate, carbon, oceans, pollution, biodiversity, clean energy, and resilient cities through interactive environmental science simulations with measurable outcomes.",
+    prompt: "How do connected Earth systems respond when people change emissions, land, energy, and adaptation choices?",
+    concepts: ["Climate systems", "Pollution", "Ecosystems", "Sustainability"],
+    gradeBand: "Grades 6–12",
+    learningObjectives: ["Trace cause and effect across environmental systems", "Interpret evidence from simplified quantitative models", "Compare mitigation, conservation, and adaptation strategies"],
+    simulations: [
+      { slug:"greenhouse-effect-simulator", title:"Greenhouse Effect Simulator", concepts:"Carbon dioxide · methane · albedo · radiative forcing", difficulty:"Intermediate", duration:"7–12 min", kind:"Climate simulation", outcome:"Explore how greenhouse gases and planetary reflectivity influence Earth's energy balance and modeled warming.", seoTarget:"greenhouse effect simulator", opportunity:"Very High", featured:true, visualMode:"simulation" },
+      { slug:"carbon-cycle-simulator", title:"Carbon Cycle Simulator", concepts:"Emissions · carbon sinks · atmosphere · net zero", difficulty:"Intermediate", duration:"8–14 min", kind:"Systems simulation", outcome:"Balance emissions and carbon sinks to see how atmospheric CO₂ changes over three decades.", seoTarget:"carbon cycle simulator", opportunity:"Very High", featured:true, visualMode:"simulation" },
+      { slug:"sea-level-rise-simulator", title:"Sea Level Rise Simulator", concepts:"Thermal expansion · ice melt · warming · coastal risk", difficulty:"Intermediate", duration:"7–12 min", kind:"Coastal simulation", outcome:"Compare thermal expansion, land-ice melt, and local subsidence in a simplified sea-level scenario.", seoTarget:"sea level rise simulator", opportunity:"Very High", visualMode:"simulation" },
+      { slug:"ocean-acidification-simulator", title:"Ocean Acidification Simulator", concepts:"Ocean pH · carbon dioxide · carbonate · shell health", difficulty:"Intermediate", duration:"7–12 min", kind:"Ocean chemistry lab", outcome:"Connect rising carbon dioxide with ocean pH, carbonate availability, and shell-building organism health.", seoTarget:"ocean acidification simulator", opportunity:"Very High", featured:true, visualMode:"simulation" },
+      { slug:"renewable-energy-grid-simulator", title:"Renewable Energy Grid Simulator", concepts:"Solar · wind · storage · reliability · emissions", difficulty:"Advanced", duration:"10–18 min", kind:"Clean energy game", outcome:"Build a reliable low-carbon electricity mix by balancing demand, renewable generation, storage, and backup.", seoTarget:"renewable energy grid simulator", opportunity:"Very High", featured:true, visualMode:"game" },
+      { slug:"air-pollution-smog-simulator", title:"Air Pollution & Smog Simulator", concepts:"PM2.5 · ozone · emissions · wind · inversion", difficulty:"Intermediate", duration:"7–12 min", kind:"Air quality simulation", outcome:"Test how emissions and weather conditions change particulate pollution, ozone, and an air-quality index proxy.", seoTarget:"air pollution simulator", opportunity:"High", visualMode:"simulation" },
+      { slug:"deforestation-water-cycle-simulator", title:"Deforestation & Water Cycle Simulator", concepts:"Forest cover · infiltration · runoff · soil erosion", difficulty:"Intermediate", duration:"8–14 min", kind:"Watershed simulation", outcome:"Observe how forest loss, rainfall, slope, and soil compaction affect runoff, infiltration, and erosion.", seoTarget:"deforestation water cycle simulation", opportunity:"High", visualMode:"simulation" },
+      { slug:"biodiversity-habitat-fragmentation", title:"Biodiversity & Habitat Fragmentation Game", concepts:"Habitat loss · fragmentation · corridors · viability", difficulty:"Intermediate", duration:"8–15 min", kind:"Conservation game", outcome:"Design a connected habitat network that supports biodiversity under land and pollution pressures.", seoTarget:"habitat fragmentation game", opportunity:"High", visualMode:"game" },
+      { slug:"urban-heat-island-simulator", title:"Urban Heat Island Simulator", concepts:"Tree canopy · cool roofs · pavement · stormwater", difficulty:"Beginner", duration:"7–12 min", kind:"Sustainable city lab", outcome:"Redesign an urban neighborhood to reduce heat exposure and stormwater runoff.", seoTarget:"urban heat island simulator", opportunity:"Very High", visualMode:"simulation" },
+      { slug:"climate-resilience-city-builder", title:"Climate Resilience City Builder", concepts:"Adaptation · flooding · heat · storms · budget", difficulty:"Advanced", duration:"10–18 min", kind:"Resilience strategy game", outcome:"Allocate a limited adaptation budget to reduce flood, heat, and storm risks across a city.", seoTarget:"climate resilience game", opportunity:"High", visualMode:"game" },
+    ],
+  },
   biology: {
     slug: "biology",
     labelKey: "biology",
@@ -184,6 +212,10 @@ export const subjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
 
 export function isSubjectSlug(value: string): value is SubjectSlug {
   return (subjectSlugs as readonly string[]).includes(value);
+}
+
+export function isVisibleSubjectSlug(value: string): value is SubjectSlug {
+  return isSubjectSlug(value) && !hiddenSubjectSlugs.has(value);
 }
 
 export function getSubjectForSimulation(slug: string): SubjectDefinition | undefined {

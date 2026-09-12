@@ -4,16 +4,16 @@ import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
 import { displayDifficulty, displayOpportunity, getEducationCopy, getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, jsonLd, localizedMetadata } from "@/lib/seo/metadata";
-import { isSubjectSlug, type SubjectSlug } from "@/lib/subjects/catalog";
+import { isVisibleSubjectSlug, type SubjectSlug } from "@/lib/subjects/catalog";
 import { SubjectVisual } from "@/components/subjects/SubjectVisual";
 
 export async function generateMetadata({params}:{params:Promise<{locale:string;subject:string}>}):Promise<Metadata>{
-  const {locale,subject}=await params;if(!isLocale(locale)||!isSubjectSlug(subject))return{};const c=getEducationCopy(locale);const data=getLocalizedSubject(locale,subject);const name=getLocalizedSubjectName(locale,subject);
+  const {locale,subject}=await params;if(!isLocale(locale)||!isVisibleSubjectSlug(subject))return{};const c=getEducationCopy(locale);const data=getLocalizedSubject(locale,subject);const name=getLocalizedSubjectName(locale,subject);
   return localizedMetadata(locale,`/subjects/${subject}`,c.seo.subjectTitle(name),c.seo.subjectDescription(name,data.description),{keywords:[name,...data.concepts,c.subject.labs,c.lab.interactiveModel]});
 }
 
 export default async function SubjectPage({ params }: { params: Promise<{ locale: string; subject: string }> }) {
-  const { locale, subject } = await params;if (!isLocale(locale) || !isSubjectSlug(subject)) notFound();const c=getEducationCopy(locale);const subjectSlug=subject as SubjectSlug;const data=getLocalizedSubject(locale,subjectSlug);const name=getLocalizedSubjectName(locale,subjectSlug);const featured=data.simulations.filter(sim=>sim.featured);
+  const { locale, subject } = await params;if (!isLocale(locale) || !isVisibleSubjectSlug(subject)) notFound();const c=getEducationCopy(locale);const subjectSlug=subject as SubjectSlug;const data=getLocalizedSubject(locale,subjectSlug);const name=getLocalizedSubjectName(locale,subjectSlug);const featured=data.simulations.filter(sim=>sim.featured);
   const breadcrumb=breadcrumbJsonLd(locale,[{name:c.home.subjects,path:"/subjects"},{name,path:`/subjects/${subjectSlug}`}]);
   return <main className={`subjectPage educationSubjectPage subject-${subject}`}><script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumb)}/>
     <section className="container subjectHero educationSubjectHero"><div className="subjectHeroCopy"><Link className="backLink" href={`/${locale}/subjects`}>← {c.home.subjects}</Link><div className="eyebrow">{data.eyebrow}</div><h1>{data.headline}</h1><p>{data.description}</p><div className="subjectStudyMeta"><span>{data.gradeBand}</span><span>{data.simulations.length} {c.subject.labs}</span><span>{data.concepts.length} {c.subject.concepts}</span></div><div className="conceptRow">{data.concepts.map(concept=><span className="conceptChip" key={concept}>{concept}</span>)}</div></div><div className="subjectStudyPanel"><SubjectVisual subject={subjectSlug}/><div className="studyPanelBody"><span className="eyebrow">{c.subject.learningObjectives}</span><ul>{data.learningObjectives.map(objective=><li key={objective}><span>✓</span>{objective}</li>)}</ul></div></div></section>
