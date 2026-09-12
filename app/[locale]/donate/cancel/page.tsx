@@ -1,0 +1,8 @@
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import type { Metadata } from "next";
+import { isLocale } from "@/lib/i18n/config";
+import { getEducationCopy } from "@/lib/i18n/content";
+import { localizedMetadata } from "@/lib/seo/metadata";
+export async function generateMetadata({ params }: { params: Promise<{locale:string}> }):Promise<Metadata>{ const {locale}=await params;if(!isLocale(locale))return {};const c=getEducationCopy(locale);return localizedMetadata(locale,"/donate/cancel",c.donate.cancelTitle,c.donate.cancelBody,{noIndex:true}); }
+export default async function DonateCancel({params}:{params:Promise<{locale:string}>}){const {locale}=await params;if(!isLocale(locale))notFound();const c=getEducationCopy(locale);return <main className="container donationState"><span className="stateIcon" aria-hidden="true">↩</span><h1>{c.donate.cancelTitle}</h1><p>{c.donate.cancelBody}</p><Link className="button primary" href={`/${locale}/donate`}>{c.donate.tryAgain}</Link></main>}

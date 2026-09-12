@@ -1,0 +1,331 @@
+{
+  "meta": {
+    "title": "LearnerKits",
+    "description": "Apprenez les sciences en expérimentant avec de vraies simulations interactives."
+  },
+  "navigation": {
+    "explore": "Explorer",
+    "simulations": "Simulations",
+    "missions": "Missions",
+    "subjects": "Matières",
+    "learn": "Apprendre",
+    "progress": "Progression",
+    "language": "Langue",
+    "settings": "Réglages"
+  },
+  "home": {
+    "eyebrow": "Laboratoire scientifique interactif",
+    "headline": "Apprenez en expérimentant, pas en mémorisant.",
+    "support": "Manipulez de vrais systèmes physiques, faites des erreurs, observez les conséquences et construisez votre intuition par l'expérience.",
+    "start": "Commencer à expérimenter",
+    "explore": "Explorer les simulations",
+    "featured": "Simulations à la une",
+    "how": "Comment ça marche",
+    "subjects": "Matières",
+    "benefits": "Conçu pour développer le raisonnement scientifique",
+    "missionSystem": "Apprendre grâce aux missions",
+    "missionCopy": "Relevez des défis, améliorez votre méthode et progressez grâce à la compréhension, pas simplement au temps passé.",
+    "steps": [
+      "Explorer",
+      "Expérimenter",
+      "Se tromper",
+      "Comprendre",
+      "Accomplir des missions",
+      "Maîtriser le concept"
+    ],
+    "benefitCopy": "Entraînez la résolution de problèmes, le raisonnement spatial et mathématique, les liens de cause à effet et la pensée scientifique.",
+    "xpMissions": "XP + missions",
+    "learningDesign": "Conception pédagogique"
+  },
+  "simulations": {
+    "title": "Laboratoire de simulation",
+    "subtitle": "Choisissez un système, modifiez les variables et observez ce que fait réellement la physique.",
+    "launch": "Ouvrir la simulation",
+    "moon": {
+      "title": "Alunissage",
+      "subject": "Espace + Physique",
+      "concepts": "Gravité, poussée, masse, vitesse",
+      "difficulty": "Intermédiaire",
+      "duration": "8–15 min",
+      "missions": "5 missions"
+    },
+    "orbit": {
+      "title": "Sauvetage orbital",
+      "subject": "Espace + Physique",
+      "concepts": "Orbites, delta-v, énergie, transferts",
+      "difficulty": "Avancé",
+      "duration": "10–20 min",
+      "missions": "6 missions"
+    }
+  },
+  "common": {
+    "play": "Mode jeu",
+    "learn": "Mode apprentissage",
+    "experiment": "Mode expérience",
+    "restart": "Recommencer",
+    "pause": "Pause",
+    "resume": "Reprendre",
+    "camera": "Caméra",
+    "status": "État",
+    "fuel": "Carburant",
+    "mass": "Masse",
+    "throttle": "Poussée",
+    "altitude": "Altitude",
+    "velocity": "Vitesse",
+    "acceleration": "Accélération",
+    "gravity": "Gravité",
+    "timeScale": "Échelle de temps",
+    "controls": "Commandes",
+    "close": "Fermer",
+    "reset": "Réinitialiser",
+    "verticalVelocity": "Vitesse verticale",
+    "horizontalVelocity": "Vitesse horizontale",
+    "mode": "Mode",
+    "experimentPreset": "Paramètres expérimentaux",
+    "applyRestart": "Appliquer et recommencer",
+    "startAltitude": "Altitude initiale",
+    "startVelocity": "Vitesse verticale initiale",
+    "fuelMass": "Masse de carburant",
+    "maxThrust": "Poussée maximale",
+    "spacecraftMass": "Masse à vide du vaisseau",
+    "targetAltitude": "Altitude cible",
+    "languageLabel": "Sélecteur de langue",
+    "closeCamera": "Rapprochée",
+    "thirdPerson": "Troisième personne",
+    "overview": "Vue générale"
+  },
+  "moonLanding": {
+    "title": "Simulateur d’alunissage",
+    "subtitle": "Utilisez la poussée et le contrôle d’attitude pour vous poser dans l’enveloppe de sécurité.",
+    "instructions": "W/S règle la poussée. A/D fait pivoter l’atterrisseur. Réduisez les vitesses verticale et horizontale avant le contact.",
+    "telemetry": "Télémétrie de vol",
+    "learnTitle": "Pourquoi cela s’est-il produit ?",
+    "learnBody": "La gravité accélère continuellement l’atterrisseur vers le bas. La poussée modifie l’accélération ; la combustion du carburant réduit la masse, de sorte qu’une même poussée produit progressivement davantage d’accélération.",
+    "resultSafe": "Atterrissage sûr",
+    "resultHard": "Atterrissage brutal",
+    "resultCrash": "Écrasement",
+    "retry": "Ajustez votre approche et réessayez.",
+    "experimentCopy": "Modifiez les conditions initiales, appliquez-les, puis comparez la descente obtenue.",
+    "hardReason": "L’atterrisseur a survécu, mais la vitesse d’impact ou l’inclinaison dépassait l’enveloppe d’atterrissage sûr.",
+    "crashReason": "L’énergie d’impact était trop élevée. Réduisez la vitesse de descente et stabilisez l’appareil avant le contact.",
+    "safeReason": "Le contact est resté dans l’enveloppe sûre de vitesse et d’orientation.",
+    "seo": {
+      "objectivesTitle": "Objectifs d’apprentissage",
+      "objectives": [
+        "Contrôler la descente avec la poussée",
+        "Relier force, masse et accélération",
+        "Observer comment la consommation de carburant modifie la masse totale",
+        "Se poser dans une enveloppe sûre de vitesse et d’attitude"
+      ],
+      "faqTitle": "FAQ sur l’alunissage",
+      "faq": [
+        {
+          "q": "Pourquoi l’alunissage est-il difficile ?",
+          "a": "L’atterrisseur doit gérer en permanence l’accélération vers le bas tout en conservant assez de carburant pour réduire sa vitesse avant le contact."
+        },
+        {
+          "q": "Pourquoi l’accélération change-t-elle quand le carburant brûle ?",
+          "a": "La combustion réduit la masse du vaisseau. À poussée identique, une masse plus faible produit une accélération plus grande car a = F/m."
+        },
+        {
+          "q": "Qu’est-ce qu’un atterrissage sûr ici ?",
+          "a": "La simulation vérifie la vitesse verticale, la vitesse horizontale et l’orientation de l’atterrisseur au contact de la surface."
+        }
+      ],
+      "relatedTitle": "Notions associées",
+      "related": "Gravité · poussée · accélération · masse · équation de Tsiolkovski"
+    }
+  },
+  "orbitalRescue": {
+    "title": "Simulateur de sauvetage orbital",
+    "subtitle": "Rejoignez l’orbite d’un satellite cible avec une gravité newtonienne réelle et un propergol limité.",
+    "instructions": "Choisissez la direction de poussée et sa puissance. Une poussée prograde augmente l’énergie orbitale ; une poussée rétrograde la diminue. Le rendez-vous exige une faible distance et une faible vitesse relative.",
+    "telemetry": "Télémétrie orbitale",
+    "distance": "Distance à la cible",
+    "relativeVelocity": "Vitesse relative",
+    "orbitalVelocity": "Vitesse circulaire",
+    "deltaV": "Delta-v restant",
+    "energy": "Énergie orbitale spécifique",
+    "direction": "Direction de poussée",
+    "prograde": "Prograde",
+    "retrograde": "Rétrograde",
+    "radialOut": "Radiale vers l’extérieur",
+    "radialIn": "Radiale vers l’intérieur",
+    "none": "Vol balistique",
+    "rescued": "Satellite secouru",
+    "reentry": "Rentrée atmosphérique",
+    "escaped": "Zone de mission quittée",
+    "learnBody": "Une poussée prograde augmente l’énergie orbitale. Une poussée rétrograde la diminue. Modifier la vitesse change la forme de l’orbite au lieu de déplacer simplement le vaisseau verticalement.",
+    "experimentCopy": "Modifiez les conditions initiales et comparez comment des poussées identiques changent l’orbite obtenue.",
+    "rescuedReason": "Rendez-vous réussi avec une faible distance et une faible vitesse relative.",
+    "reentryReason": "Le périgée est devenu trop bas et le vaisseau est rentré dans l’atmosphère.",
+    "escapedReason": "Le vaisseau a quitté la région de mission.",
+    "startAltitude": "Altitude initiale",
+    "targetAltitude": "Altitude cible",
+    "seo": {
+      "objectivesTitle": "Objectifs d’apprentissage",
+      "objectives": [
+        "Relier l’altitude à la vitesse orbitale circulaire",
+        "Utiliser des poussées progrades et rétrogrades pour modifier l’énergie orbitale",
+        "Gérer un delta-v limité",
+        "Effectuer un rendez-vous en réduisant distance et vitesse relative"
+      ],
+      "faqTitle": "FAQ sur la mécanique orbitale",
+      "faq": [
+        {
+          "q": "Pourquoi une poussée prograde élève-t-elle l’orbite ?",
+          "a": "Ajouter de la vitesse augmente l’énergie orbitale spécifique et élève généralement le côté opposé de l’orbite."
+        },
+        {
+          "q": "Pourquoi la même position ne suffit-elle pas pour le sauvetage ?",
+          "a": "Un rendez-vous exige aussi une faible vitesse relative. Deux vaisseaux peuvent passer très près l’un de l’autre tout en se déplaçant trop différemment pour s’amarrer en sécurité."
+        },
+        {
+          "q": "L’orbite est-elle une animation prédéfinie ?",
+          "a": "Non. La position et la trajectoire sont calculées à partir de la gravité newtonienne et de la poussée appliquée par le joueur."
+        }
+      ],
+      "relatedTitle": "Notions associées",
+      "related": "Vitesse orbitale · delta-v · énergie orbitale · orbites de transfert · vitesse de libération"
+    }
+  },
+  "missions": {
+    "title": "Tableau des missions",
+    "subtitle": "Des défis progressifs transforment les expériences en objectifs d’apprentissage mesurables.",
+    "xp": "XP",
+    "moon1": {
+      "title": "Comprendre la gravité",
+      "description": "Observez la gravité lunaire et son effet sur la descente."
+    },
+    "moon2": {
+      "title": "Contrôler la descente",
+      "description": "Maintenez une vitesse de descente sûre."
+    },
+    "moon3": {
+      "title": "Atterrissage en douceur",
+      "description": "Posez-vous sans dépasser l’enveloppe de vitesse sûre."
+    },
+    "moon4": {
+      "title": "Défi carburant",
+      "description": "Posez-vous en économisant un carburant limité."
+    },
+    "moon5": {
+      "title": "Atterrissage expert",
+      "description": "Réalisez un atterrissage sûr avec des conditions plus strictes."
+    },
+    "orbit1": {
+      "title": "Orbite stable",
+      "description": "Atteignez et maintenez une orbite stable."
+    },
+    "orbit2": {
+      "title": "Changer d’altitude",
+      "description": "Utilisez des poussées contrôlées pour modifier l’altitude orbitale."
+    },
+    "orbit3": {
+      "title": "Transfert orbital",
+      "description": "Effectuez un transfert orbital contrôlé."
+    },
+    "orbit4": {
+      "title": "Intercepter la cible",
+      "description": "Interceptez le satellite cible."
+    },
+    "orbit5": {
+      "title": "Secourir le satellite",
+      "description": "Effectuez le rendez-vous en économisant le delta-v."
+    },
+    "orbit6": {
+      "title": "Sauvetage expert",
+      "description": "Terminez le sauvetage avec un carburant limité."
+    },
+    "active": "Mission active",
+    "complete": "Mission terminée",
+    "inProgress": "En cours",
+    "score": "Score"
+  },
+  "learn": {
+    "title": "Comprendre la science derrière les commandes",
+    "subtitle": "Commencez par l’intuition, puis affichez les mathématiques quand vous le souhaitez.",
+    "gravity": "Gravité",
+    "gravityBody": "La gravité modifie continuellement la vitesse. Près de la surface de la Lune, l’accélération est d’environ 1,62 m/s².",
+    "thrust": "Poussée",
+    "thrustBody": "La poussée est une force. L’accélération dépend de la poussée et de la masse actuelle du vaisseau : a = F/m.",
+    "orbit": "Mouvement orbital",
+    "orbitBody": "Une orbite est une chute libre continue. À un rayon donné, la vitesse orbitale circulaire vaut v = √(GM/r).",
+    "rocket": "Équation de la fusée",
+    "rocketBody": "La quantité finie de propergol limite les manœuvres. Le delta-v disponible suit Δv = Isp × g0 × ln(m0/mf)."
+  },
+  "subjects": {
+    "title": "Univers des matières",
+    "subtitle": "Explorez six domaines de sciences et de mathématiques avec des simulations, des jeux et des laboratoires interactifs reliés à une même architecture d’apprentissage.",
+    "live": "Disponible",
+    "upcoming": "À venir",
+    "space": "Espace et astronomie",
+    "physics": "Physique et ingénierie",
+    "geography": "Géographie et Terre",
+    "biology": "Biologie et écosystèmes",
+    "chemistry": "Chimie",
+    "mathematics": "Mathématiques"
+  },
+  "progress": {
+    "title": "Progression",
+    "subtitle": "La progression récompense les défis terminés, l’amélioration des performances et les notions découvertes.",
+    "rank": "Rang",
+    "completed": "Missions terminées",
+    "local": "Enregistré localement sur cet appareil pour le MVP.",
+    "explorer": "Explorateur",
+    "cadet": "Cadet",
+    "pilot": "Pilote",
+    "missionSpecialist": "Spécialiste de mission",
+    "spaceScientist": "Scientifique spatial"
+  },
+  "teacher": {
+    "title": "Aperçu du tableau de bord enseignant",
+    "subtitle": "Une vue prête pour l’avenir des devoirs, de la progression et des erreurs fréquentes sans nécessiter encore un backend complet.",
+    "classes": "Classes",
+    "completion": "Achèvement des missions",
+    "mistakes": "Erreurs fréquentes",
+    "objectives": "Objectifs d’apprentissage",
+    "preview": "Aperçu",
+    "active": "actives",
+    "highDescentVelocity": "Vitesse de descente trop élevée"
+  },
+  "loading": {
+    "physics": "Initialisation de la physique...",
+    "environment": "Chargement de l’environnement...",
+    "instruments": "Étalonnage des instruments...",
+    "mission": "Préparation de la mission..."
+  },
+  "errors": {
+    "simulation": "La simulation a rencontré un problème. Essayez de redémarrer l’expérience."
+  },
+  "difficulty": {
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "advanced": "Avancé"
+  },
+  "footer": {
+    "tagline": "LearnerKits · Apprendre en expérimentant."
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Réglez la qualité de rendu et les préférences de mouvement pour cet appareil.",
+    "quality": "Qualité du rendu",
+    "qualityHelp": "La qualité visuelle ne modifie que le rendu ; le modèle physique reste identique.",
+    "low": "Faible",
+    "medium": "Moyenne",
+    "high": "Élevée",
+    "motion": "Préférence de mouvement",
+    "motionHelp": "Réduisez les mouvements décoratifs tout en gardant les simulations pleinement fonctionnelles.",
+    "system": "Utiliser le réglage système",
+    "reduce": "Réduire les mouvements",
+    "full": "Mouvement complet",
+    "saved": "Paramètres enregistrés.",
+    "applies": "Les changements de rendu s’appliquent au prochain chargement d’une simulation.",
+    "lead": "Choisissez le thème visuel, la qualité du rendu et le comportement des mouvements pour cet appareil.",
+    "theme": "Thème",
+    "themeHelp": "Le thème clair est utilisé par défaut ; le mode sombre reste disponible à tout moment.",
+    "appearance": "Apparence",
+    "light": "Clair",
+    "dark": "Sombre"
+  }
+}

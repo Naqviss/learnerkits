@@ -1,0 +1,331 @@
+{
+  "meta": {
+    "title": "LearnerKits",
+    "description": "通过真实可交互的模拟实验学习科学。"
+  },
+  "navigation": {
+    "explore": "探索",
+    "simulations": "模拟",
+    "missions": "任务",
+    "subjects": "学科",
+    "learn": "学习",
+    "progress": "进度",
+    "language": "语言",
+    "settings": "设置"
+  },
+  "home": {
+    "eyebrow": "互动科学实验室",
+    "headline": "通过实验学习，而不是死记硬背。",
+    "support": "操纵真实物理系统，允许犯错，观察结果，并在互动中建立直觉。",
+    "start": "开始实验",
+    "explore": "探索模拟",
+    "featured": "精选模拟",
+    "how": "学习方式",
+    "subjects": "学科",
+    "benefits": "为科学思维而设计",
+    "missionSystem": "通过任务学习",
+    "missionCopy": "完成挑战、改进方法，并因为真正理解概念而获得进步，而不是只看使用时长。",
+    "steps": [
+      "探索",
+      "实验",
+      "允许犯错",
+      "理解",
+      "完成任务",
+      "掌握概念"
+    ],
+    "benefitCopy": "练习问题解决、空间推理、数学推理、因果分析和科学思维。",
+    "xpMissions": "XP + 任务",
+    "learningDesign": "学习设计"
+  },
+  "simulations": {
+    "title": "模拟实验室",
+    "subtitle": "选择一个系统，改变变量，看看真实物理会发生什么。",
+    "launch": "打开模拟",
+    "moon": {
+      "title": "月球着陆",
+      "subject": "太空 + 物理",
+      "concepts": "重力、推力、质量、速度",
+      "difficulty": "中级",
+      "duration": "8–15 分钟",
+      "missions": "5 个任务"
+    },
+    "orbit": {
+      "title": "轨道救援",
+      "subject": "太空 + 物理",
+      "concepts": "轨道、速度增量、能量、轨道转移",
+      "difficulty": "高级",
+      "duration": "10–20 分钟",
+      "missions": "6 个任务"
+    }
+  },
+  "common": {
+    "play": "游玩模式",
+    "learn": "学习模式",
+    "experiment": "实验模式",
+    "restart": "重新开始",
+    "pause": "暂停",
+    "resume": "继续",
+    "camera": "相机",
+    "status": "状态",
+    "fuel": "燃料",
+    "mass": "质量",
+    "throttle": "推力",
+    "altitude": "高度",
+    "velocity": "速度",
+    "acceleration": "加速度",
+    "gravity": "重力",
+    "timeScale": "时间倍率",
+    "controls": "控制",
+    "close": "关闭",
+    "reset": "重置",
+    "verticalVelocity": "垂直速度",
+    "horizontalVelocity": "水平速度",
+    "mode": "模式",
+    "experimentPreset": "实验设置",
+    "applyRestart": "应用并重启",
+    "startAltitude": "起始高度",
+    "startVelocity": "起始垂直速度",
+    "fuelMass": "燃料质量",
+    "maxThrust": "最大推力",
+    "spacecraftMass": "航天器干质量",
+    "targetAltitude": "目标高度",
+    "languageLabel": "语言选择",
+    "closeCamera": "近景",
+    "thirdPerson": "第三人称",
+    "overview": "总览"
+  },
+  "moonLanding": {
+    "title": "月球着陆模拟器",
+    "subtitle": "控制推力和姿态，在安全条件范围内完成月面着陆。",
+    "instructions": "W/S 调整推力，A/D 旋转着陆器。接触月面前降低垂直和水平速度。",
+    "telemetry": "飞行遥测",
+    "learnTitle": "为什么会这样？",
+    "learnBody": "重力会持续使着陆器向下加速。推力会改变加速度；燃料消耗后总质量下降，因此相同推力会逐渐产生更大的加速度。",
+    "resultSafe": "安全着陆",
+    "resultHard": "硬着陆",
+    "resultCrash": "坠毁",
+    "retry": "调整进近方式，再试一次。",
+    "experimentCopy": "改变初始条件并应用，然后比较不同条件下的下降过程。",
+    "hardReason": "着陆器没有坠毁，但撞击速度或倾角超过了安全着陆范围。",
+    "crashReason": "撞击能量过高。接触月面前请降低下降速度并稳定姿态。",
+    "safeReason": "接地时的速度和姿态均处于安全范围内。",
+    "seo": {
+      "objectivesTitle": "学习目标",
+      "objectives": [
+        "使用推力控制下降",
+        "理解力、质量和加速度之间的关系",
+        "观察燃料消耗如何改变总质量",
+        "在安全速度和姿态范围内着陆"
+      ],
+      "faqTitle": "月球着陆常见问题",
+      "faq": [
+        {
+          "q": "为什么月球着陆很困难？",
+          "a": "着陆器必须持续控制向下加速度，同时保留足够燃料在接地前降低速度。"
+        },
+        {
+          "q": "为什么燃料消耗后加速度会变化？",
+          "a": "燃料消耗会降低航天器质量。在相同推力下，质量越小，加速度越大，因为 a = F/m。"
+        },
+        {
+          "q": "这里怎样才算安全着陆？",
+          "a": "模拟会在接触月面时检查垂直速度、水平速度和着陆器姿态。"
+        }
+      ],
+      "relatedTitle": "相关概念",
+      "related": "重力 · 推力 · 加速度 · 质量 · 火箭方程"
+    }
+  },
+  "orbitalRescue": {
+    "title": "轨道救援模拟器",
+    "subtitle": "使用真实的牛顿引力和有限推进剂，使航天器与目标卫星轨道匹配。",
+    "instructions": "选择点火方向和推力。顺行点火会增加轨道能量，逆行点火会降低轨道能量。交会要求距离和相对速度都足够小。",
+    "telemetry": "轨道遥测",
+    "distance": "目标距离",
+    "relativeVelocity": "相对速度",
+    "orbitalVelocity": "圆轨道速度",
+    "deltaV": "剩余 delta-v",
+    "energy": "比轨道能",
+    "direction": "点火方向",
+    "prograde": "顺行",
+    "retrograde": "逆行",
+    "radialOut": "径向向外",
+    "radialIn": "径向向内",
+    "none": "滑行",
+    "rescued": "卫星救援成功",
+    "reentry": "再入",
+    "escaped": "离开任务区域",
+    "learnBody": "顺行点火会增加轨道能量，逆行点火会降低它。改变速度会改变轨道形状，而不是简单地让航天器直线上升或下降。",
+    "experimentCopy": "改变初始条件，比较相同点火如何改变最终轨道。",
+    "rescuedReason": "在较小距离和较低相对速度下完成交会。",
+    "reentryReason": "近地点过低，航天器进入再入状态。",
+    "escapedReason": "航天器离开了任务区域。",
+    "startAltitude": "起始高度",
+    "targetAltitude": "目标高度",
+    "seo": {
+      "objectivesTitle": "学习目标",
+      "objectives": [
+        "理解高度与圆轨道速度的关系",
+        "使用顺行和逆行点火改变轨道能量",
+        "管理有限的 delta-v",
+        "同时降低距离和相对速度以完成交会"
+      ],
+      "faqTitle": "轨道力学常见问题",
+      "faq": [
+        {
+          "q": "为什么顺行点火会提高轨道？",
+          "a": "增加速度会提高比轨道能，通常会抬高轨道另一侧。"
+        },
+        {
+          "q": "为什么救援时只重合位置还不够？",
+          "a": "交会还需要较低的相对速度。两艘航天器可能靠得很近，但如果速度差太大，仍无法安全对接。"
+        },
+        {
+          "q": "轨道是预设动画吗？",
+          "a": "不是。位置和轨迹由牛顿引力以及玩家施加的推力实时计算。"
+        }
+      ],
+      "relatedTitle": "相关概念",
+      "related": "轨道速度 · delta-v · 轨道能量 · 转移轨道 · 逃逸速度"
+    }
+  },
+  "missions": {
+    "title": "任务面板",
+    "subtitle": "渐进式挑战把实验转化为可衡量的学习目标。",
+    "xp": "XP",
+    "moon1": {
+      "title": "理解重力",
+      "description": "观察月球重力及其对下降的影响。"
+    },
+    "moon2": {
+      "title": "控制下降",
+      "description": "保持安全的下降速度。"
+    },
+    "moon3": {
+      "title": "软着陆",
+      "description": "在不超过安全速度范围的情况下着陆。"
+    },
+    "moon4": {
+      "title": "燃料挑战",
+      "description": "在燃料有限的情况下节省燃料并完成着陆。"
+    },
+    "moon5": {
+      "title": "专家着陆",
+      "description": "在更严格的条件下完成安全着陆。"
+    },
+    "orbit1": {
+      "title": "稳定轨道",
+      "description": "进入并保持稳定轨道。"
+    },
+    "orbit2": {
+      "title": "改变高度",
+      "description": "使用受控点火改变轨道高度。"
+    },
+    "orbit3": {
+      "title": "轨道转移",
+      "description": "完成一次受控轨道转移。"
+    },
+    "orbit4": {
+      "title": "拦截目标",
+      "description": "拦截目标卫星。"
+    },
+    "orbit5": {
+      "title": "救援卫星",
+      "description": "在节省 delta-v 的同时完成交会。"
+    },
+    "orbit6": {
+      "title": "专家救援",
+      "description": "使用有限燃料完成救援。"
+    },
+    "active": "当前任务",
+    "complete": "任务完成",
+    "inProgress": "进行中",
+    "score": "得分"
+  },
+  "learn": {
+    "title": "学习控制背后的科学原理",
+    "subtitle": "先建立直觉，需要时再展开数学公式。",
+    "gravity": "重力",
+    "gravityBody": "重力会持续改变速度。月球表面附近的重力加速度约为 1.62 m/s²。",
+    "thrust": "推力",
+    "thrustBody": "推力是一种力。加速度取决于推力和航天器当前质量：a = F/m。",
+    "orbit": "轨道运动",
+    "orbitBody": "轨道是一种持续的自由落体。在给定半径处，圆轨道速度为 v = √(GM/r)。",
+    "rocket": "火箭方程",
+    "rocketBody": "有限推进剂会限制机动能力。可用 delta-v 满足 Δv = Isp × g0 × ln(m0/mf)。"
+  },
+  "subjects": {
+    "title": "学科宇宙",
+    "subtitle": "通过统一的学习架构探索六个科学与数学领域，其中包含模拟、游戏和互动实验。",
+    "live": "现已开放",
+    "upcoming": "即将推出",
+    "space": "太空与天文学",
+    "physics": "物理与工程",
+    "geography": "地理与地球",
+    "biology": "生物与生态系统",
+    "chemistry": "化学",
+    "mathematics": "数学"
+  },
+  "progress": {
+    "title": "学习进度",
+    "subtitle": "完成挑战、提升成绩和发现概念都会计入学习进度。",
+    "rank": "等级",
+    "completed": "已完成任务",
+    "local": "MVP 阶段数据保存在本设备上。",
+    "explorer": "探索者",
+    "cadet": "学员",
+    "pilot": "飞行员",
+    "missionSpecialist": "任务专家",
+    "spaceScientist": "空间科学家"
+  },
+  "teacher": {
+    "title": "教师仪表板预览",
+    "subtitle": "无需完整后端即可预览未来的作业、学习进度和常见误区管理。",
+    "classes": "班级",
+    "completion": "任务完成率",
+    "mistakes": "常见错误",
+    "objectives": "学习目标",
+    "preview": "预览",
+    "active": "活跃",
+    "highDescentVelocity": "下降速度过高"
+  },
+  "loading": {
+    "physics": "正在初始化物理系统...",
+    "environment": "正在加载环境...",
+    "instruments": "正在校准仪器...",
+    "mission": "正在准备任务..."
+  },
+  "errors": {
+    "simulation": "模拟运行时出现问题。请尝试重新开始实验。"
+  },
+  "difficulty": {
+    "beginner": "初级",
+    "intermediate": "中级",
+    "advanced": "高级"
+  },
+  "footer": {
+    "tagline": "LearnerKits · 在实验中学习。"
+  },
+  "settings": {
+    "title": "设置",
+    "subtitle": "调整此设备的渲染质量和动态效果偏好。",
+    "quality": "渲染质量",
+    "qualityHelp": "视觉质量只影响渲染，物理模型保持完全一致。",
+    "low": "低",
+    "medium": "中",
+    "high": "高",
+    "motion": "动态效果偏好",
+    "motionHelp": "减少装饰性动态效果，同时保持模拟完整可用。",
+    "system": "使用系统设置",
+    "reduce": "减少动态效果",
+    "full": "完整动态效果",
+    "saved": "设置已保存。",
+    "applies": "渲染更改将在下次加载模拟时生效。",
+    "lead": "选择此设备的视觉主题、渲染质量和动态效果。",
+    "theme": "主题",
+    "themeHelp": "默认使用浅色主题，也可以随时切换为深色模式。",
+    "appearance": "外观",
+    "light": "浅色",
+    "dark": "深色"
+  }
+}

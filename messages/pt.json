@@ -1,0 +1,331 @@
+{
+  "meta": {
+    "title": "LearnerKits",
+    "description": "Aprenda ciências experimentando com simulações interativas reais."
+  },
+  "navigation": {
+    "explore": "Explorar",
+    "simulations": "Simulações",
+    "missions": "Missões",
+    "subjects": "Disciplinas",
+    "learn": "Aprender",
+    "progress": "Progresso",
+    "language": "Idioma",
+    "settings": "Configurações"
+  },
+  "home": {
+    "eyebrow": "Laboratório científico interativo",
+    "headline": "Aprenda experimentando, não memorizando.",
+    "support": "Manipule sistemas físicos reais, erre, observe as consequências e construa intuição brincando.",
+    "start": "Começar a experimentar",
+    "explore": "Explorar simulações",
+    "featured": "Simulações em destaque",
+    "how": "Como funciona",
+    "subjects": "Disciplinas",
+    "benefits": "Criado para o pensamento científico",
+    "missionSystem": "Aprenda por meio de missões",
+    "missionCopy": "Conclua desafios, melhore sua técnica e avance pela compreensão — não apenas pelo tempo gasto.",
+    "steps": [
+      "Explorar",
+      "Experimentar",
+      "Cometer erros",
+      "Compreender",
+      "Concluir missões",
+      "Dominar o conceito"
+    ],
+    "benefitCopy": "Pratique resolução de problemas, raciocínio espacial e matemático, causa e efeito e pensamento científico.",
+    "xpMissions": "XP + missões",
+    "learningDesign": "Design de aprendizagem"
+  },
+  "simulations": {
+    "title": "Laboratório de simulação",
+    "subtitle": "Escolha um sistema, altere as variáveis e veja o que a física realmente faz.",
+    "launch": "Abrir simulação",
+    "moon": {
+      "title": "Pouso na Lua",
+      "subject": "Espaço + Física",
+      "concepts": "Gravidade, empuxo, massa, velocidade",
+      "difficulty": "Intermediário",
+      "duration": "8–15 min",
+      "missions": "5 missões"
+    },
+    "orbit": {
+      "title": "Resgate orbital",
+      "subject": "Espaço + Física",
+      "concepts": "Órbitas, delta-v, energia, transferências",
+      "difficulty": "Avançado",
+      "duration": "10–20 min",
+      "missions": "6 missões"
+    }
+  },
+  "common": {
+    "play": "Modo jogo",
+    "learn": "Modo aprender",
+    "experiment": "Modo experimento",
+    "restart": "Reiniciar",
+    "pause": "Pausar",
+    "resume": "Continuar",
+    "camera": "Câmera",
+    "status": "Status",
+    "fuel": "Combustível",
+    "mass": "Massa",
+    "throttle": "Aceleração",
+    "altitude": "Altitude",
+    "velocity": "Velocidade",
+    "acceleration": "Aceleração",
+    "gravity": "Gravidade",
+    "timeScale": "Escala de tempo",
+    "controls": "Controles",
+    "close": "Fechar",
+    "reset": "Redefinir",
+    "verticalVelocity": "Velocidade vertical",
+    "horizontalVelocity": "Velocidade horizontal",
+    "mode": "Modo",
+    "experimentPreset": "Configuração experimental",
+    "applyRestart": "Aplicar e reiniciar",
+    "startAltitude": "Altitude inicial",
+    "startVelocity": "Velocidade vertical inicial",
+    "fuelMass": "Massa de combustível",
+    "maxThrust": "Empuxo máximo",
+    "spacecraftMass": "Massa seca da nave",
+    "targetAltitude": "Altitude alvo",
+    "languageLabel": "Seletor de idioma",
+    "closeCamera": "Próxima",
+    "thirdPerson": "Terceira pessoa",
+    "overview": "Visão geral"
+  },
+  "moonLanding": {
+    "title": "Simulador de pouso lunar",
+    "subtitle": "Use empuxo e controle de atitude para pousar dentro dos limites seguros.",
+    "instructions": "W/S altera o acelerador. A/D gira o módulo. Reduza as velocidades vertical e horizontal antes do contato.",
+    "telemetry": "Telemetria de voo",
+    "learnTitle": "Por que isso aconteceu?",
+    "learnBody": "A gravidade acelera continuamente o módulo para baixo. O empuxo altera a aceleração; ao queimar combustível, a massa diminui, então o mesmo empuxo passa a produzir mais aceleração.",
+    "resultSafe": "Pouso seguro",
+    "resultHard": "Pouso brusco",
+    "resultCrash": "Colisão",
+    "retry": "Ajuste a aproximação e tente novamente.",
+    "experimentCopy": "Altere as condições iniciais, aplique-as e compare a descida resultante.",
+    "hardReason": "O módulo sobreviveu, mas a velocidade de impacto ou a inclinação ultrapassou os limites de um pouso seguro.",
+    "crashReason": "A energia do impacto foi alta demais. Reduza a velocidade de descida e estabilize antes do contato.",
+    "safeReason": "O toque ocorreu dentro dos limites seguros de velocidade e orientação.",
+    "seo": {
+      "objectivesTitle": "Objetivos de aprendizagem",
+      "objectives": [
+        "Controlar a descida usando o empuxo",
+        "Relacionar força, massa e aceleração",
+        "Observar como a queima de combustível altera a massa total",
+        "Pousar dentro de limites seguros de velocidade e atitude"
+      ],
+      "faqTitle": "Perguntas frequentes sobre pouso lunar",
+      "faq": [
+        {
+          "q": "Por que pousar na Lua é difícil?",
+          "a": "O módulo precisa gerenciar continuamente a aceleração para baixo e preservar combustível suficiente para reduzir a velocidade antes do contato."
+        },
+        {
+          "q": "Por que a aceleração muda conforme o combustível é queimado?",
+          "a": "A queima de combustível reduz a massa da nave. Com o mesmo empuxo, uma massa menor produz maior aceleração porque a = F/m."
+        },
+        {
+          "q": "O que conta como pouso seguro aqui?",
+          "a": "A simulação verifica a velocidade vertical, a velocidade horizontal e a orientação do módulo no contato com a superfície."
+        }
+      ],
+      "relatedTitle": "Conceitos relacionados",
+      "related": "Gravidade · empuxo · aceleração · massa · equação do foguete"
+    }
+  },
+  "orbitalRescue": {
+    "title": "Simulador de resgate orbital",
+    "subtitle": "Iguale a órbita de um satélite-alvo usando gravidade newtoniana real e propelente limitado.",
+    "instructions": "Escolha a direção da queima e o acelerador. Uma queima prógrada aumenta a energia orbital; uma retrógrada a reduz. O encontro exige pouca distância e baixa velocidade relativa.",
+    "telemetry": "Telemetria orbital",
+    "distance": "Distância até o alvo",
+    "relativeVelocity": "Velocidade relativa",
+    "orbitalVelocity": "Velocidade circular",
+    "deltaV": "Delta-v restante",
+    "energy": "Energia orbital específica",
+    "direction": "Direção da queima",
+    "prograde": "Prógrada",
+    "retrograde": "Retrógrada",
+    "radialOut": "Radial para fora",
+    "radialIn": "Radial para dentro",
+    "none": "Coasting",
+    "rescued": "Satélite resgatado",
+    "reentry": "Reentrada",
+    "escaped": "Região da missão excedida",
+    "learnBody": "Uma queima prógrada aumenta a energia orbital. Uma retrógrada a reduz. Alterar a velocidade muda a forma da órbita, em vez de simplesmente mover a nave em linha reta para cima ou para baixo.",
+    "experimentCopy": "Altere as condições iniciais e compare como queimas idênticas mudam a órbita resultante.",
+    "rescuedReason": "Encontro realizado com pouca distância e baixa velocidade relativa.",
+    "reentryReason": "O perigeu caiu demais e a nave reentrou.",
+    "escapedReason": "A nave saiu da região da missão.",
+    "startAltitude": "Altitude inicial",
+    "targetAltitude": "Altitude alvo",
+    "seo": {
+      "objectivesTitle": "Objetivos de aprendizagem",
+      "objectives": [
+        "Relacionar altitude à velocidade orbital circular",
+        "Usar queimas prógradas e retrógradas para alterar a energia orbital",
+        "Gerenciar delta-v limitado",
+        "Realizar um encontro reduzindo distância e velocidade relativa"
+      ],
+      "faqTitle": "Perguntas frequentes sobre mecânica orbital",
+      "faq": [
+        {
+          "q": "Por que uma queima prógrada eleva a órbita?",
+          "a": "Adicionar velocidade aumenta a energia orbital específica e normalmente eleva o lado oposto da órbita."
+        },
+        {
+          "q": "Por que coincidir em posição não basta para o resgate?",
+          "a": "O encontro também exige baixa velocidade relativa. Duas naves podem passar muito perto e ainda assim se mover de maneira diferente demais para um acoplamento seguro."
+        },
+        {
+          "q": "A órbita é uma animação predefinida?",
+          "a": "Não. A posição e a trajetória são geradas pela gravidade newtoniana e pelo empuxo aplicado pelo jogador."
+        }
+      ],
+      "relatedTitle": "Conceitos relacionados",
+      "related": "Velocidade orbital · delta-v · energia orbital · órbitas de transferência · velocidade de escape"
+    }
+  },
+  "missions": {
+    "title": "Painel de missões",
+    "subtitle": "Desafios progressivos transformam experimentos em objetivos de aprendizagem mensuráveis.",
+    "xp": "XP",
+    "moon1": {
+      "title": "Entender a gravidade",
+      "description": "Observe a gravidade lunar e seu efeito na descida."
+    },
+    "moon2": {
+      "title": "Controlar a descida",
+      "description": "Mantenha uma velocidade de descida segura."
+    },
+    "moon3": {
+      "title": "Pouso suave",
+      "description": "Pouse sem exceder os limites seguros de velocidade."
+    },
+    "moon4": {
+      "title": "Desafio de combustível",
+      "description": "Pouse conservando combustível limitado."
+    },
+    "moon5": {
+      "title": "Pouso especialista",
+      "description": "Conclua um pouso seguro sob condições mais rigorosas."
+    },
+    "orbit1": {
+      "title": "Órbita estável",
+      "description": "Alcance e mantenha uma órbita estável."
+    },
+    "orbit2": {
+      "title": "Alterar altitude",
+      "description": "Use queimas controladas para mudar a altitude orbital."
+    },
+    "orbit3": {
+      "title": "Transferência orbital",
+      "description": "Realize uma transferência orbital controlada."
+    },
+    "orbit4": {
+      "title": "Interceptar alvo",
+      "description": "Intercepte o satélite-alvo."
+    },
+    "orbit5": {
+      "title": "Resgatar satélite",
+      "description": "Faça o encontro conservando delta-v."
+    },
+    "orbit6": {
+      "title": "Resgate especialista",
+      "description": "Conclua o resgate com combustível limitado."
+    },
+    "active": "Missão ativa",
+    "complete": "Missão concluída",
+    "inProgress": "Em andamento",
+    "score": "Pontuação"
+  },
+  "learn": {
+    "title": "Aprenda a ciência por trás dos controles",
+    "subtitle": "Comece pela intuição e revele a matemática quando quiser.",
+    "gravity": "Gravidade",
+    "gravityBody": "A gravidade altera continuamente a velocidade. Perto da superfície da Lua, a aceleração é de aproximadamente 1,62 m/s².",
+    "thrust": "Empuxo",
+    "thrustBody": "Empuxo é uma força. A aceleração depende do empuxo e da massa atual da nave: a = F/m.",
+    "orbit": "Movimento orbital",
+    "orbitBody": "Uma órbita é uma queda livre contínua. Em um dado raio, a velocidade orbital circular é v = √(GM/r).",
+    "rocket": "Equação do foguete",
+    "rocketBody": "Propelente finito limita as manobras. O delta-v disponível segue Δv = Isp × g0 × ln(m0/mf)."
+  },
+  "subjects": {
+    "title": "Universo de disciplinas",
+    "subtitle": "Explore seis áreas de ciências e matemática com simulações, jogos e laboratórios interativos conectados à mesma arquitetura de aprendizagem.",
+    "live": "Disponível agora",
+    "upcoming": "Em breve",
+    "space": "Espaço e astronomia",
+    "physics": "Física e engenharia",
+    "geography": "Geografia e Terra",
+    "biology": "Biologia e ecossistemas",
+    "chemistry": "Química",
+    "mathematics": "Matemática"
+  },
+  "progress": {
+    "title": "Progresso",
+    "subtitle": "O progresso recompensa desafios concluídos, melhor desempenho e conceitos descobertos.",
+    "rank": "Patente",
+    "completed": "Missões concluídas",
+    "local": "Armazenado localmente neste dispositivo para o MVP.",
+    "explorer": "Explorador",
+    "cadet": "Cadete",
+    "pilot": "Piloto",
+    "missionSpecialist": "Especialista de missão",
+    "spaceScientist": "Cientista espacial"
+  },
+  "teacher": {
+    "title": "Prévia do painel do professor",
+    "subtitle": "Uma visão preparada para o futuro de tarefas, progresso e erros comuns sem exigir ainda um backend completo.",
+    "classes": "Turmas",
+    "completion": "Conclusão de missões",
+    "mistakes": "Erros comuns",
+    "objectives": "Objetivos de aprendizagem",
+    "preview": "Prévia",
+    "active": "ativas",
+    "highDescentVelocity": "Velocidade de descida muito alta"
+  },
+  "loading": {
+    "physics": "Inicializando física...",
+    "environment": "Carregando ambiente...",
+    "instruments": "Calibrando instrumentos...",
+    "mission": "Preparando missão..."
+  },
+  "errors": {
+    "simulation": "A simulação encontrou um problema. Tente reiniciar o experimento."
+  },
+  "difficulty": {
+    "beginner": "Iniciante",
+    "intermediate": "Intermediário",
+    "advanced": "Avançado"
+  },
+  "footer": {
+    "tagline": "LearnerKits · Aprenda experimentando."
+  },
+  "settings": {
+    "title": "Configurações",
+    "subtitle": "Ajuste a qualidade de renderização e as preferências de movimento neste dispositivo.",
+    "quality": "Qualidade de renderização",
+    "qualityHelp": "A qualidade visual altera apenas a renderização; o modelo físico permanece idêntico.",
+    "low": "Baixa",
+    "medium": "Média",
+    "high": "Alta",
+    "motion": "Preferência de movimento",
+    "motionHelp": "Reduza movimentos decorativos mantendo as simulações totalmente funcionais.",
+    "system": "Usar configuração do sistema",
+    "reduce": "Reduzir movimento",
+    "full": "Movimento completo",
+    "saved": "Configurações salvas.",
+    "applies": "As alterações de renderização valem na próxima vez que uma simulação for carregada.",
+    "lead": "Escolha o tema visual, a qualidade de renderização e o comportamento de movimento deste dispositivo.",
+    "theme": "Tema",
+    "themeHelp": "O tema claro é o padrão; o modo escuro continua disponível quando você preferir.",
+    "appearance": "Aparência",
+    "light": "Claro",
+    "dark": "Escuro"
+  }
+}

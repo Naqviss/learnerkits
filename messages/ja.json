@@ -1,0 +1,331 @@
+{
+  "meta": {
+    "title": "LearnerKits",
+    "description": "実際に反応するインタラクティブなシミュレーションで、実験しながら科学を学びます。"
+  },
+  "navigation": {
+    "explore": "探索",
+    "simulations": "シミュレーション",
+    "missions": "ミッション",
+    "subjects": "分野",
+    "learn": "学ぶ",
+    "progress": "進捗",
+    "language": "言語",
+    "settings": "設定"
+  },
+  "home": {
+    "eyebrow": "インタラクティブ科学ラボ",
+    "headline": "暗記ではなく、実験しながら学ぶ。",
+    "support": "実際の物理システムを操作し、失敗し、結果を観察しながら直感を育てます。",
+    "start": "実験を始める",
+    "explore": "シミュレーションを見る",
+    "featured": "注目のシミュレーション",
+    "how": "学び方",
+    "subjects": "科目",
+    "benefits": "科学的思考を育てる設計",
+    "missionSystem": "ミッションで学ぶ",
+    "missionCopy": "課題を達成し、方法を改善し、単なる滞在時間ではなく理解に応じて進歩します。",
+    "steps": [
+      "探究する",
+      "実験する",
+      "失敗する",
+      "理解する",
+      "ミッションを完了する",
+      "概念を習得する"
+    ],
+    "benefitCopy": "問題解決、空間・数学的推論、因果関係、科学的思考を練習します。",
+    "xpMissions": "XP + ミッション",
+    "learningDesign": "学習設計"
+  },
+  "simulations": {
+    "title": "シミュレーション・ラボ",
+    "subtitle": "システムを選び、変数を変えて、物理が実際にどう動くか確かめよう。",
+    "launch": "シミュレーションを開く",
+    "moon": {
+      "title": "月面着陸",
+      "subject": "宇宙 + 物理",
+      "concepts": "重力、推力、質量、速度",
+      "difficulty": "中級",
+      "duration": "8〜15分",
+      "missions": "5ミッション"
+    },
+    "orbit": {
+      "title": "軌道救出ミッション",
+      "subject": "宇宙 + 物理",
+      "concepts": "軌道、デルタV、エネルギー、軌道遷移",
+      "difficulty": "上級",
+      "duration": "10〜20分",
+      "missions": "6ミッション"
+    }
+  },
+  "common": {
+    "play": "プレイモード",
+    "learn": "学習モード",
+    "experiment": "実験モード",
+    "restart": "やり直す",
+    "pause": "一時停止",
+    "resume": "再開",
+    "camera": "カメラ",
+    "status": "状態",
+    "fuel": "燃料",
+    "mass": "質量",
+    "throttle": "スロットル",
+    "altitude": "高度",
+    "velocity": "速度",
+    "acceleration": "加速度",
+    "gravity": "重力",
+    "timeScale": "時間倍率",
+    "controls": "操作",
+    "close": "閉じる",
+    "reset": "リセット",
+    "verticalVelocity": "垂直速度",
+    "horizontalVelocity": "水平速度",
+    "mode": "モード",
+    "experimentPreset": "実験設定",
+    "applyRestart": "適用して再開",
+    "startAltitude": "開始高度",
+    "startVelocity": "開始垂直速度",
+    "fuelMass": "燃料質量",
+    "maxThrust": "最大推力",
+    "spacecraftMass": "宇宙船の乾燥質量",
+    "targetAltitude": "目標高度",
+    "languageLabel": "言語選択",
+    "closeCamera": "近接",
+    "thirdPerson": "三人称",
+    "overview": "全体"
+  },
+  "moonLanding": {
+    "title": "月面着陸シミュレーター",
+    "subtitle": "推力と姿勢を調整し、安全な条件の範囲内で月面に着陸します。",
+    "instructions": "W/Sでスロットル、A/Dで機体を回転します。接地前に垂直・水平速度を十分に下げてください。",
+    "telemetry": "飛行テレメトリ",
+    "learnTitle": "なぜそうなった？",
+    "learnBody": "重力は着陸船を常に下向きに加速させます。推力を変えると加速度が変わり、燃料を消費すると質量が減るため、同じ推力でも徐々に大きな加速度が生じます。",
+    "resultSafe": "安全な着陸",
+    "resultHard": "ハードランディング",
+    "resultCrash": "墜落",
+    "retry": "進入方法を調整して、もう一度試してください。",
+    "experimentCopy": "初期条件を変えて適用し、その後の降下を比較します。",
+    "hardReason": "機体は損壊を免れましたが、衝突速度または傾きが安全範囲を超えました。",
+    "crashReason": "衝突エネルギーが大きすぎました。接地前に降下速度を下げ、姿勢を安定させてください。",
+    "safeReason": "接地時の速度と姿勢が安全範囲内でした。",
+    "seo": {
+      "objectivesTitle": "学習目標",
+      "objectives": [
+        "推力で降下を制御する",
+        "力・質量・加速度の関係を理解する",
+        "燃料消費による総質量の変化を観察する",
+        "安全な速度と姿勢の範囲内で着陸する"
+      ],
+      "faqTitle": "月面着陸 FAQ",
+      "faq": [
+        {
+          "q": "月面着陸はなぜ難しいのですか？",
+          "a": "着陸船は下向きの加速度を継続的に制御しながら、接地前に速度を下げるための燃料も残す必要があるからです。"
+        },
+        {
+          "q": "燃料を使うと加速度が変わるのはなぜですか？",
+          "a": "燃料が減ると宇宙船の質量が小さくなります。同じ推力なら、a = F/m により質量が小さいほど加速度は大きくなります。"
+        },
+        {
+          "q": "このシミュレーションで安全な着陸とは？",
+          "a": "接地時の垂直速度、水平速度、機体の姿勢を判定します。"
+        }
+      ],
+      "relatedTitle": "関連概念",
+      "related": "重力 · 推力 · 加速度 · 質量 · ロケット方程式"
+    }
+  },
+  "orbitalRescue": {
+    "title": "軌道救助シミュレーター",
+    "subtitle": "ニュートン力学の重力と有限の推進剤を使って、目標衛星の軌道に合わせます。",
+    "instructions": "噴射方向とスロットルを選びます。順行噴射は軌道エネルギーを増やし、逆行噴射は減らします。ランデブーには距離と相対速度の両方を小さくする必要があります。",
+    "telemetry": "軌道テレメトリ",
+    "distance": "目標までの距離",
+    "relativeVelocity": "相対速度",
+    "orbitalVelocity": "円軌道速度",
+    "deltaV": "残りデルタV",
+    "energy": "比軌道エネルギー",
+    "direction": "噴射方向",
+    "prograde": "順行",
+    "retrograde": "逆行",
+    "radialOut": "半径方向外向き",
+    "radialIn": "半径方向内向き",
+    "none": "惰性飛行",
+    "rescued": "衛星救助成功",
+    "reentry": "再突入",
+    "escaped": "ミッション領域外",
+    "learnBody": "順行噴射は軌道エネルギーを増やし、逆行噴射は減らします。速度を変えると軌道の形が変わり、単純に機体が上下へ直線移動するわけではありません。",
+    "experimentCopy": "初期条件を変え、同じ噴射が結果の軌道をどう変えるか比較します。",
+    "rescuedReason": "距離と相対速度の両方を小さくしてランデブーを達成しました。",
+    "reentryReason": "近地点が低くなりすぎ、宇宙船が再突入しました。",
+    "escapedReason": "宇宙船がミッション領域を離れました。",
+    "startAltitude": "開始高度",
+    "targetAltitude": "目標高度",
+    "seo": {
+      "objectivesTitle": "学習目標",
+      "objectives": [
+        "高度と円軌道速度の関係を理解する",
+        "順行・逆行噴射で軌道エネルギーを変える",
+        "有限のデルタVを管理する",
+        "距離と相対速度の両方を下げてランデブーする"
+      ],
+      "faqTitle": "軌道力学 FAQ",
+      "faq": [
+        {
+          "q": "順行噴射で軌道が高くなるのはなぜ？",
+          "a": "速度を加えると比軌道エネルギーが増え、通常は軌道の反対側が高くなります。"
+        },
+        {
+          "q": "救助では位置を合わせるだけでは不十分なのはなぜ？",
+          "a": "ランデブーには低い相対速度も必要です。非常に近くを通っても速度差が大きければ安全にドッキングできません。"
+        },
+        {
+          "q": "軌道はあらかじめ決められたアニメーションですか？",
+          "a": "いいえ。位置と軌道はニュートン重力とプレイヤーが加えた推力から計算されます。"
+        }
+      ],
+      "relatedTitle": "関連概念",
+      "related": "軌道速度 · デルタV · 軌道エネルギー · 遷移軌道 · 脱出速度"
+    }
+  },
+  "missions": {
+    "title": "ミッション一覧",
+    "subtitle": "段階的な課題で、実験を測定可能な学習目標に変えます。",
+    "xp": "XP",
+    "moon1": {
+      "title": "重力を理解する",
+      "description": "月の重力と降下への影響を観察します。"
+    },
+    "moon2": {
+      "title": "降下を制御する",
+      "description": "安全な降下速度を保ちます。"
+    },
+    "moon3": {
+      "title": "ソフトランディング",
+      "description": "安全速度を超えずに着陸します。"
+    },
+    "moon4": {
+      "title": "燃料チャレンジ",
+      "description": "限られた燃料を節約しながら着陸します。"
+    },
+    "moon5": {
+      "title": "エキスパート着陸",
+      "description": "より厳しい条件で安全に着陸します。"
+    },
+    "orbit1": {
+      "title": "安定軌道",
+      "description": "安定した軌道に入り、維持します。"
+    },
+    "orbit2": {
+      "title": "高度を変える",
+      "description": "制御噴射で軌道高度を変えます。"
+    },
+    "orbit3": {
+      "title": "軌道遷移",
+      "description": "制御された軌道遷移を行います。"
+    },
+    "orbit4": {
+      "title": "目標を迎撃する",
+      "description": "目標衛星を迎撃します。"
+    },
+    "orbit5": {
+      "title": "衛星を救助する",
+      "description": "デルタVを節約しながらランデブーします。"
+    },
+    "orbit6": {
+      "title": "エキスパート救助",
+      "description": "限られた燃料で救助を完了します。"
+    },
+    "active": "進行中のミッション",
+    "complete": "ミッション完了",
+    "inProgress": "進行中",
+    "score": "スコア"
+  },
+  "learn": {
+    "title": "操作の裏にある科学を学ぶ",
+    "subtitle": "まず直感で理解し、必要になったら数式を確認します。",
+    "gravity": "重力",
+    "gravityBody": "重力は速度を継続的に変化させます。月面近くの加速度は約 1.62 m/s² です。",
+    "thrust": "推力",
+    "thrustBody": "推力は力です。加速度は推力と現在の宇宙船質量の両方で決まり、a = F/m です。",
+    "orbit": "軌道運動",
+    "orbitBody": "軌道は連続した自由落下です。半径 r の円軌道速度は v = √(GM/r) です。",
+    "rocket": "ロケット方程式",
+    "rocketBody": "推進剤には限りがあるため、可能な機動も限られます。利用可能なデルタVは Δv = Isp × g0 × ln(m0/mf) で表されます。"
+  },
+  "subjects": {
+    "title": "学習分野",
+    "subtitle": "6つの科学・数学分野を、共通の学習アーキテクチャにつながったシミュレーション、ゲーム、インタラクティブラボで探究できます。",
+    "live": "利用可能",
+    "upcoming": "近日公開",
+    "space": "宇宙・天文学",
+    "physics": "物理・工学",
+    "geography": "地理・地球",
+    "biology": "生物・生態系",
+    "chemistry": "化学",
+    "mathematics": "数学"
+  },
+  "progress": {
+    "title": "進捗",
+    "subtitle": "課題の達成、成績の向上、概念の発見を進捗として評価します。",
+    "rank": "ランク",
+    "completed": "完了したミッション",
+    "local": "MVPではこのデバイスにローカル保存されます。",
+    "explorer": "探究者",
+    "cadet": "候補生",
+    "pilot": "パイロット",
+    "missionSpecialist": "ミッションスペシャリスト",
+    "spaceScientist": "宇宙科学者"
+  },
+  "teacher": {
+    "title": "教師ダッシュボード プレビュー",
+    "subtitle": "完全なバックエンドをまだ必要とせず、課題、進捗、よくある誤解を確認できる将来向けの画面です。",
+    "classes": "クラス",
+    "completion": "ミッション達成率",
+    "mistakes": "よくあるミス",
+    "objectives": "学習目標",
+    "preview": "プレビュー",
+    "active": "アクティブ",
+    "highDescentVelocity": "降下速度が高すぎる"
+  },
+  "loading": {
+    "physics": "物理エンジンを初期化中...",
+    "environment": "環境を読み込み中...",
+    "instruments": "計器を校正中...",
+    "mission": "ミッションを準備中..."
+  },
+  "errors": {
+    "simulation": "シミュレーションで問題が発生しました。実験を再開してください。"
+  },
+  "difficulty": {
+    "beginner": "初級",
+    "intermediate": "中級",
+    "advanced": "上級"
+  },
+  "footer": {
+    "tagline": "LearnerKits · 実験して学ぶ。"
+  },
+  "settings": {
+    "title": "設定",
+    "subtitle": "このデバイスの描画品質とモーション設定を調整します。",
+    "quality": "描画品質",
+    "qualityHelp": "視覚品質が変わっても、物理モデルは同一のままです。",
+    "low": "低",
+    "medium": "中",
+    "high": "高",
+    "motion": "モーション設定",
+    "motionHelp": "シミュレーション機能を保ったまま装飾的な動きを減らします。",
+    "system": "システム設定を使用",
+    "reduce": "動きを減らす",
+    "full": "通常の動き",
+    "saved": "設定を保存しました。",
+    "applies": "描画設定は次回シミュレーションを読み込むときに適用されます。",
+    "lead": "このデバイスのテーマ、描画品質、モーション動作を選択します。",
+    "theme": "テーマ",
+    "themeHelp": "標準はライトテーマです。必要に応じていつでもダークモードに切り替えられます。",
+    "appearance": "表示",
+    "light": "ライト",
+    "dark": "ダーク"
+  }
+}

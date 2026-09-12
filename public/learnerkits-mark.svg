@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">LearnerKits mark</title>
+  <desc id="desc">An open learning kit with a spark of discovery.</desc>
+  <rect x="4" y="4" width="56" height="56" rx="17" fill="#315bd6"/>
+  <path d="M16 19.5c7.3-4.4 14.1-4 20 1.1v25.2c-5.9-5-12.7-5.4-20-1.1V19.5Z" fill="#f7f8fb"/>
+  <path d="M48 19.5c-7.3-4.4-14.1-4-20 1.1v25.2c5.9-5 12.7-5.4 20-1.1V19.5Z" fill="#dbe5ff"/>
+  <path d="M36 20.6v25.2" fill="none" stroke="#315bd6" stroke-width="2" stroke-linecap="round"/>
+  <path d="M20.5 27.5c4.1-1.7 8-1.4 11.4.7M20.5 34c4.1-1.7 8-1.4 11.4.7M43.5 27.5c-2.1-.9-4.2-1.2-6.2-.9M43.5 34c-2.1-.9-4.2-1.2-6.2-.9" fill="none" stroke="#7e9cff" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="m32 10.5 1.5 3.8 3.8 1.5-3.8 1.5-1.5 3.8-1.5-3.8-3.8-1.5 3.8-1.5 1.5-3.8Z" fill="#f4b942"/>
+</svg>

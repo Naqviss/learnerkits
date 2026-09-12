@@ -1,0 +1,3 @@
+import {NextRequest,NextResponse} from "next/server";import {defaultLocale,locales} from "@/lib/i18n/config";
+export function proxy(request:NextRequest){const{pathname}=request.nextUrl;if(pathname.startsWith('/_next')||pathname.includes('.')||locales.some(l=>pathname===`/${l}`||pathname.startsWith(`/${l}/`)))return NextResponse.next();const remembered=request.cookies.get('science-sim-locale')?.value;const accept=request.headers.get('accept-language')?.split(',')[0]?.split('-')[0];const locale=locales.find(l=>l===remembered)||locales.find(l=>l===accept)||defaultLocale;return NextResponse.redirect(new URL(`/${locale}${pathname}`,request.url))}
+export const config={matcher:["/((?!api).*)"]};

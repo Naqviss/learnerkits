@@ -1,0 +1,331 @@
+{
+  "meta": {
+    "title": "LearnerKits",
+    "description": "Lerne Naturwissenschaften durch Experimente mit echten interaktiven Simulationen."
+  },
+  "navigation": {
+    "explore": "Entdecken",
+    "simulations": "Simulationen",
+    "missions": "Missionen",
+    "subjects": "Fächer",
+    "learn": "Lernen",
+    "progress": "Fortschritt",
+    "language": "Sprache",
+    "settings": "Einstellungen"
+  },
+  "home": {
+    "eyebrow": "Interaktives Wissenschaftslabor",
+    "headline": "Lerne durch Experimentieren, nicht durch Auswendiglernen.",
+    "support": "Verändere echte physikalische Systeme, mache Fehler, beobachte die Folgen und entwickle spielerisch Intuition.",
+    "start": "Experiment starten",
+    "explore": "Simulationen entdecken",
+    "featured": "Empfohlene Simulationen",
+    "how": "So funktioniert es",
+    "subjects": "Fächer",
+    "benefits": "Für wissenschaftliches Denken entwickelt",
+    "missionSystem": "Mit Missionen lernen",
+    "missionCopy": "Schließe Herausforderungen ab, verbessere deine Methode und sammle Fortschritt für Verständnis – nicht nur für verbrachte Zeit.",
+    "steps": [
+      "Erkunden",
+      "Experimentieren",
+      "Fehler machen",
+      "Verstehen",
+      "Missionen abschließen",
+      "Konzept beherrschen"
+    ],
+    "benefitCopy": "Trainiere Problemlösen, räumliches und mathematisches Denken, Ursache und Wirkung sowie wissenschaftliches Denken.",
+    "xpMissions": "XP + Missionen",
+    "learningDesign": "Lerndesign"
+  },
+  "simulations": {
+    "title": "Simulationslabor",
+    "subtitle": "Wähle ein System, ändere Variablen und beobachte, was die Physik wirklich macht.",
+    "launch": "Simulation öffnen",
+    "moon": {
+      "title": "Mondlandung",
+      "subject": "Weltraum + Physik",
+      "concepts": "Gravitation, Schub, Masse, Geschwindigkeit",
+      "difficulty": "Mittel",
+      "duration": "8–15 Min.",
+      "missions": "5 Missionen"
+    },
+    "orbit": {
+      "title": "Orbitale Rettung",
+      "subject": "Weltraum + Physik",
+      "concepts": "Orbits, Delta-v, Energie, Transfers",
+      "difficulty": "Fortgeschritten",
+      "duration": "10–20 Min.",
+      "missions": "6 Missionen"
+    }
+  },
+  "common": {
+    "play": "Spielmodus",
+    "learn": "Lernmodus",
+    "experiment": "Experimentmodus",
+    "restart": "Neustart",
+    "pause": "Pause",
+    "resume": "Fortsetzen",
+    "camera": "Kamera",
+    "status": "Status",
+    "fuel": "Treibstoff",
+    "mass": "Masse",
+    "throttle": "Schubregler",
+    "altitude": "Höhe",
+    "velocity": "Geschwindigkeit",
+    "acceleration": "Beschleunigung",
+    "gravity": "Gravitation",
+    "timeScale": "Zeitskalierung",
+    "controls": "Steuerung",
+    "close": "Schließen",
+    "reset": "Zurücksetzen",
+    "verticalVelocity": "Vertikale Geschwindigkeit",
+    "horizontalVelocity": "Horizontale Geschwindigkeit",
+    "mode": "Modus",
+    "experimentPreset": "Experiment-Einstellungen",
+    "applyRestart": "Anwenden und neu starten",
+    "startAltitude": "Starthöhe",
+    "startVelocity": "Vertikale Startgeschwindigkeit",
+    "fuelMass": "Treibstoffmasse",
+    "maxThrust": "Maximaler Schub",
+    "spacecraftMass": "Trockenmasse des Raumfahrzeugs",
+    "targetAltitude": "Zielhöhe",
+    "languageLabel": "Sprachauswahl",
+    "closeCamera": "Nah",
+    "thirdPerson": "Dritte Person",
+    "overview": "Übersicht"
+  },
+  "moonLanding": {
+    "title": "Mondlandungs-Simulator",
+    "subtitle": "Nutze Schub und Lageregelung, um innerhalb des sicheren Landebereichs aufzusetzen.",
+    "instructions": "W/S verändert den Schub. A/D dreht die Landefähre. Verringere vor dem Kontakt die vertikale und horizontale Geschwindigkeit.",
+    "telemetry": "Flugtelemetrie",
+    "learnTitle": "Warum ist das passiert?",
+    "learnBody": "Die Gravitation beschleunigt die Landefähre ständig nach unten. Schub verändert die Beschleunigung; beim Verbrennen von Treibstoff sinkt die Masse, sodass derselbe Schub allmählich mehr Beschleunigung erzeugt.",
+    "resultSafe": "Sichere Landung",
+    "resultHard": "Harte Landung",
+    "resultCrash": "Absturz",
+    "retry": "Passe deinen Anflug an und versuche es erneut.",
+    "experimentCopy": "Ändere die Startbedingungen, wende sie an und vergleiche den resultierenden Sinkflug.",
+    "hardReason": "Die Landefähre hat überlebt, aber Aufprallgeschwindigkeit oder Neigung lagen außerhalb des sicheren Landebereichs.",
+    "crashReason": "Die Aufprallenergie war zu hoch. Verringere die Sinkgeschwindigkeit und stabilisiere die Landefähre vor dem Kontakt.",
+    "safeReason": "Das Aufsetzen blieb innerhalb der sicheren Grenzen für Geschwindigkeit und Ausrichtung.",
+    "seo": {
+      "objectivesTitle": "Lernziele",
+      "objectives": [
+        "Den Sinkflug mit Schub kontrollieren",
+        "Kraft, Masse und Beschleunigung verknüpfen",
+        "Beobachten, wie Treibstoffverbrauch die Gesamtmasse verändert",
+        "Innerhalb sicherer Geschwindigkeits- und Neigungsgrenzen landen"
+      ],
+      "faqTitle": "FAQ zur Mondlandung",
+      "faq": [
+        {
+          "q": "Warum ist eine Mondlandung schwierig?",
+          "a": "Die Landefähre muss die Abwärtsbeschleunigung ständig kontrollieren und gleichzeitig genug Treibstoff behalten, um die Geschwindigkeit vor dem Kontakt zu reduzieren."
+        },
+        {
+          "q": "Warum ändert sich die Beschleunigung beim Treibstoffverbrauch?",
+          "a": "Beim Verbrennen von Treibstoff sinkt die Masse des Raumfahrzeugs. Bei gleichem Schub führt geringere Masse zu größerer Beschleunigung, weil a = F/m gilt."
+        },
+        {
+          "q": "Was gilt hier als sichere Landung?",
+          "a": "Die Simulation prüft beim Bodenkontakt vertikale Geschwindigkeit, horizontale Geschwindigkeit und Ausrichtung der Landefähre."
+        }
+      ],
+      "relatedTitle": "Verwandte Konzepte",
+      "related": "Gravitation · Schub · Beschleunigung · Masse · Raketengleichung"
+    }
+  },
+  "orbitalRescue": {
+    "title": "Orbitalrettungs-Simulator",
+    "subtitle": "Gleiche die Umlaufbahn eines Zielsatelliten mit echter newtonscher Gravitation und begrenztem Treibstoff an.",
+    "instructions": "Wähle Brennrichtung und Schub. Ein prograder Impuls erhöht die Orbitalenergie; ein retrograder senkt sie. Für ein Rendezvous müssen Abstand und Relativgeschwindigkeit klein sein.",
+    "telemetry": "Orbitaltelemetrie",
+    "distance": "Abstand zum Ziel",
+    "relativeVelocity": "Relativgeschwindigkeit",
+    "orbitalVelocity": "Kreisbahngeschwindigkeit",
+    "deltaV": "Verbleibendes Delta-v",
+    "energy": "Spezifische Orbitalenergie",
+    "direction": "Brennrichtung",
+    "prograde": "Prograd",
+    "retrograde": "Retrograd",
+    "radialOut": "Radial nach außen",
+    "radialIn": "Radial nach innen",
+    "none": "Freiflug",
+    "rescued": "Satellit gerettet",
+    "reentry": "Wiedereintritt",
+    "escaped": "Missionsgebiet verlassen",
+    "learnBody": "Ein prograder Impuls erhöht die Orbitalenergie. Ein retrograder Impuls verringert sie. Eine Geschwindigkeitsänderung verändert die Form der Umlaufbahn, statt das Raumfahrzeug einfach gerade nach oben oder unten zu bewegen.",
+    "experimentCopy": "Ändere die Startbedingungen und vergleiche, wie identische Impulse die resultierende Umlaufbahn verändern.",
+    "rescuedReason": "Rendezvous mit geringem Abstand und geringer Relativgeschwindigkeit erreicht.",
+    "reentryReason": "Das Perigäum fiel zu tief und das Raumfahrzeug trat wieder ein.",
+    "escapedReason": "Das Raumfahrzeug hat das Missionsgebiet verlassen.",
+    "startAltitude": "Starthöhe",
+    "targetAltitude": "Zielhöhe",
+    "seo": {
+      "objectivesTitle": "Lernziele",
+      "objectives": [
+        "Höhe mit der Kreisbahngeschwindigkeit verknüpfen",
+        "Mit prograden und retrograden Impulsen die Orbitalenergie verändern",
+        "Begrenztes Delta-v verwalten",
+        "Durch Verringerung von Abstand und Relativgeschwindigkeit ein Rendezvous erreichen"
+      ],
+      "faqTitle": "FAQ zur Orbitalmechanik",
+      "faq": [
+        {
+          "q": "Warum hebt ein prograder Impuls die Umlaufbahn an?",
+          "a": "Zusätzliche Geschwindigkeit erhöht die spezifische Orbitalenergie und hebt typischerweise die gegenüberliegende Seite der Umlaufbahn an."
+        },
+        {
+          "q": "Warum reicht gleiche Position für die Rettung nicht aus?",
+          "a": "Ein Rendezvous erfordert auch eine geringe Relativgeschwindigkeit. Zwei Raumfahrzeuge können sich sehr nahe kommen und sich dennoch zu unterschiedlich bewegen, um sicher anzudocken."
+        },
+        {
+          "q": "Ist die Umlaufbahn eine vordefinierte Animation?",
+          "a": "Nein. Position und Flugbahn entstehen aus newtonscher Gravitation und dem vom Spieler angewandten Schub."
+        }
+      ],
+      "relatedTitle": "Verwandte Konzepte",
+      "related": "Orbitalgeschwindigkeit · Delta-v · Orbitalenergie · Transferbahnen · Fluchtgeschwindigkeit"
+    }
+  },
+  "missions": {
+    "title": "Missionsübersicht",
+    "subtitle": "Stufenweise Herausforderungen machen aus Experimenten messbare Lernziele.",
+    "xp": "XP",
+    "moon1": {
+      "title": "Gravitation verstehen",
+      "description": "Beobachte die Mondgravitation und ihren Einfluss auf den Sinkflug."
+    },
+    "moon2": {
+      "title": "Sinkflug kontrollieren",
+      "description": "Halte eine sichere Sinkgeschwindigkeit."
+    },
+    "moon3": {
+      "title": "Sanfte Landung",
+      "description": "Lande, ohne die sichere Geschwindigkeitsgrenze zu überschreiten."
+    },
+    "moon4": {
+      "title": "Treibstoff-Herausforderung",
+      "description": "Lande mit begrenztem Treibstoff und spare möglichst viel davon."
+    },
+    "moon5": {
+      "title": "Expertenlandung",
+      "description": "Führe unter strengeren Bedingungen eine sichere Landung durch."
+    },
+    "orbit1": {
+      "title": "Stabile Umlaufbahn",
+      "description": "Erreiche und halte eine stabile Umlaufbahn."
+    },
+    "orbit2": {
+      "title": "Höhe verändern",
+      "description": "Verändere die Bahnhöhe mit kontrollierten Impulsen."
+    },
+    "orbit3": {
+      "title": "Orbitaltransfer",
+      "description": "Führe einen kontrollierten Orbitaltransfer durch."
+    },
+    "orbit4": {
+      "title": "Ziel abfangen",
+      "description": "Fange den Zielsatelliten ab."
+    },
+    "orbit5": {
+      "title": "Satellit retten",
+      "description": "Führe das Rendezvous mit sparsamem Delta-v durch."
+    },
+    "orbit6": {
+      "title": "Expertenrettung",
+      "description": "Schließe die Rettung mit begrenztem Treibstoff ab."
+    },
+    "active": "Aktive Mission",
+    "complete": "Mission abgeschlossen",
+    "inProgress": "In Arbeit",
+    "score": "Punktzahl"
+  },
+  "learn": {
+    "title": "Lerne die Wissenschaft hinter der Steuerung",
+    "subtitle": "Beginne mit Intuition und blende die Mathematik ein, wenn du sie brauchst.",
+    "gravity": "Gravitation",
+    "gravityBody": "Gravitation verändert die Geschwindigkeit kontinuierlich. Nahe der Mondoberfläche beträgt die Beschleunigung etwa 1,62 m/s².",
+    "thrust": "Schub",
+    "thrustBody": "Schub ist eine Kraft. Die Beschleunigung hängt von Schub und aktueller Masse des Raumfahrzeugs ab: a = F/m.",
+    "orbit": "Orbitalbewegung",
+    "orbitBody": "Eine Umlaufbahn ist kontinuierlicher freier Fall. Bei einem gegebenen Radius gilt für die Kreisbahngeschwindigkeit v = √(GM/r).",
+    "rocket": "Raketengleichung",
+    "rocketBody": "Begrenzter Treibstoff begrenzt Manöver. Das verfügbare Delta-v folgt Δv = Isp × g0 × ln(m0/mf)."
+  },
+  "subjects": {
+    "title": "Fächeruniversum",
+    "subtitle": "Entdecke sechs naturwissenschaftliche und mathematische Bereiche mit Simulationen, Spielen und interaktiven Laboren auf einer gemeinsamen Lernarchitektur.",
+    "live": "Jetzt verfügbar",
+    "upcoming": "Demnächst",
+    "space": "Weltraum und Astronomie",
+    "physics": "Physik und Ingenieurwesen",
+    "geography": "Geografie und Erde",
+    "biology": "Biologie und Ökosysteme",
+    "chemistry": "Chemie",
+    "mathematics": "Mathematik"
+  },
+  "progress": {
+    "title": "Fortschritt",
+    "subtitle": "Fortschritt belohnt abgeschlossene Herausforderungen, bessere Leistungen und entdeckte Konzepte.",
+    "rank": "Rang",
+    "completed": "Abgeschlossene Missionen",
+    "local": "Für das MVP lokal auf diesem Gerät gespeichert.",
+    "explorer": "Entdecker",
+    "cadet": "Kadett",
+    "pilot": "Pilot",
+    "missionSpecialist": "Missionsspezialist",
+    "spaceScientist": "Weltraumwissenschaftler"
+  },
+  "teacher": {
+    "title": "Vorschau des Lehrkräfte-Dashboards",
+    "subtitle": "Eine zukunftsfähige Übersicht über Aufgaben, Fortschritt und häufige Fehlvorstellungen – noch ohne vollständiges Backend.",
+    "classes": "Klassen",
+    "completion": "Missionsabschluss",
+    "mistakes": "Häufige Fehler",
+    "objectives": "Lernziele",
+    "preview": "Vorschau",
+    "active": "aktiv",
+    "highDescentVelocity": "Zu hohe Sinkgeschwindigkeit"
+  },
+  "loading": {
+    "physics": "Physik wird initialisiert...",
+    "environment": "Umgebung wird geladen...",
+    "instruments": "Instrumente werden kalibriert...",
+    "mission": "Mission wird vorbereitet..."
+  },
+  "errors": {
+    "simulation": "Bei der Simulation ist ein Problem aufgetreten. Starte das Experiment neu."
+  },
+  "difficulty": {
+    "beginner": "Anfänger",
+    "intermediate": "Mittel",
+    "advanced": "Fortgeschritten"
+  },
+  "footer": {
+    "tagline": "LearnerKits · Lernen durch Experimentieren."
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "subtitle": "Passe Rendering-Qualität und Bewegungseinstellungen für dieses Gerät an.",
+    "quality": "Rendering-Qualität",
+    "qualityHelp": "Die visuelle Qualität ändert nur das Rendering; das Physikmodell bleibt identisch.",
+    "low": "Niedrig",
+    "medium": "Mittel",
+    "high": "Hoch",
+    "motion": "Bewegungseinstellung",
+    "motionHelp": "Reduziere dekorative Bewegung, während die Simulationen vollständig funktionsfähig bleiben.",
+    "system": "Systemeinstellung verwenden",
+    "reduce": "Bewegung reduzieren",
+    "full": "Volle Bewegung",
+    "saved": "Einstellungen gespeichert.",
+    "applies": "Rendering-Änderungen gelten beim nächsten Laden einer Simulation.",
+    "lead": "Wähle das visuelle Design, die Rendering-Qualität und das Bewegungsverhalten für dieses Gerät.",
+    "theme": "Design",
+    "themeHelp": "Das helle Design ist standardmäßig aktiv; der Dunkelmodus ist jederzeit verfügbar.",
+    "appearance": "Darstellung",
+    "light": "Hell",
+    "dark": "Dunkel"
+  }
+}

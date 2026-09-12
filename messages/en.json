@@ -1,0 +1,331 @@
+{
+  "meta": {
+    "title": "LearnerKits",
+    "description": "Learn science by experimenting with real interactive simulations."
+  },
+  "navigation": {
+    "explore": "Explore",
+    "simulations": "Simulations",
+    "missions": "Missions",
+    "subjects": "Subjects",
+    "learn": "Learn",
+    "progress": "Progress",
+    "language": "Language",
+    "settings": "Settings"
+  },
+  "home": {
+    "eyebrow": "Interactive science laboratory",
+    "headline": "Learn by experimenting, not memorizing.",
+    "support": "Manipulate real physical systems, make mistakes, observe consequences, and build intuition through play.",
+    "start": "Start Experimenting",
+    "explore": "Explore Simulations",
+    "featured": "Featured Simulations",
+    "how": "How it works",
+    "subjects": "Subjects",
+    "benefits": "Built for scientific thinking",
+    "missionSystem": "Learn through missions",
+    "missionCopy": "Complete challenges, improve your technique, and earn progress for understanding—not just time spent.",
+    "steps": [
+      "Explore",
+      "Experiment",
+      "Make mistakes",
+      "Understand",
+      "Complete missions",
+      "Master the concept"
+    ],
+    "benefitCopy": "Practice problem solving, spatial reasoning, mathematical reasoning, cause and effect, and scientific thinking.",
+    "xpMissions": "XP + missions",
+    "learningDesign": "Learning design"
+  },
+  "simulations": {
+    "title": "Simulation Lab",
+    "subtitle": "Choose a system, change the variables, and see what the physics actually does.",
+    "launch": "Launch simulation",
+    "moon": {
+      "title": "Moon Landing",
+      "subject": "Space + Physics",
+      "concepts": "Gravity, thrust, mass, velocity",
+      "difficulty": "Intermediate",
+      "duration": "8–15 min",
+      "missions": "5 missions"
+    },
+    "orbit": {
+      "title": "Orbital Rescue",
+      "subject": "Space + Physics",
+      "concepts": "Orbits, delta-v, energy, transfers",
+      "difficulty": "Advanced",
+      "duration": "10–20 min",
+      "missions": "6 missions"
+    }
+  },
+  "common": {
+    "play": "Play Mode",
+    "learn": "Learn Mode",
+    "experiment": "Experiment Mode",
+    "restart": "Restart",
+    "pause": "Pause",
+    "resume": "Resume",
+    "camera": "Camera",
+    "status": "Status",
+    "fuel": "Fuel",
+    "mass": "Mass",
+    "throttle": "Throttle",
+    "altitude": "Altitude",
+    "velocity": "Velocity",
+    "acceleration": "Acceleration",
+    "gravity": "Gravity",
+    "timeScale": "Time scale",
+    "controls": "Controls",
+    "close": "Close",
+    "reset": "Reset",
+    "verticalVelocity": "Vertical velocity",
+    "horizontalVelocity": "Horizontal velocity",
+    "mode": "Mode",
+    "experimentPreset": "Experiment preset",
+    "applyRestart": "Apply & restart",
+    "startAltitude": "Starting altitude",
+    "startVelocity": "Starting vertical velocity",
+    "fuelMass": "Fuel mass",
+    "maxThrust": "Maximum thrust",
+    "spacecraftMass": "Spacecraft dry mass",
+    "targetAltitude": "Target altitude",
+    "languageLabel": "Language selector",
+    "closeCamera": "Close",
+    "thirdPerson": "Third-person",
+    "overview": "Overview"
+  },
+  "moonLanding": {
+    "title": "Moon Landing Simulator",
+    "subtitle": "Use thrust and attitude control to touch down inside the safe landing envelope.",
+    "instructions": "W/S changes throttle. A/D rotates. Reduce vertical and horizontal speed before contact.",
+    "telemetry": "Flight telemetry",
+    "learnTitle": "Why did that happen?",
+    "learnBody": "Gravity continuously accelerates the lander downward. Thrust changes acceleration; burning fuel reduces mass, so the same thrust gradually produces more acceleration.",
+    "resultSafe": "Safe touchdown",
+    "resultHard": "Hard landing",
+    "resultCrash": "Crash",
+    "retry": "Adjust your approach and try again.",
+    "experimentCopy": "Change starting conditions, apply them, then compare the resulting descent.",
+    "hardReason": "The lander survived, but impact velocity or tilt exceeded the safe landing envelope.",
+    "crashReason": "Impact energy was too high. Reduce descent speed and stabilize before contact.",
+    "safeReason": "Touchdown stayed inside the safe velocity and orientation envelope.",
+    "seo": {
+      "objectivesTitle": "Learning objectives",
+      "objectives": [
+        "Control descent using thrust",
+        "Connect force, mass and acceleration",
+        "Observe how fuel burn changes total mass",
+        "Land inside a safe velocity and attitude envelope"
+      ],
+      "faqTitle": "Moon landing FAQ",
+      "faq": [
+        {
+          "q": "Why is lunar landing difficult?",
+          "a": "The lander must continuously manage downward acceleration while preserving enough fuel to reduce velocity before contact."
+        },
+        {
+          "q": "Why does acceleration change as fuel burns?",
+          "a": "Burning fuel reduces spacecraft mass. With the same thrust, lower mass produces greater acceleration because a = F/m."
+        },
+        {
+          "q": "What counts as a safe landing here?",
+          "a": "The simulation checks vertical speed, horizontal speed and lander orientation at surface contact."
+        }
+      ],
+      "relatedTitle": "Related concepts",
+      "related": "Gravity · thrust · acceleration · mass · rocket equation"
+    }
+  },
+  "orbitalRescue": {
+    "title": "Orbital Rescue Simulator",
+    "subtitle": "Match a target satellite's orbit using real Newtonian gravity and finite propellant.",
+    "instructions": "Choose a burn direction and throttle. Prograde raises orbital energy; retrograde lowers it. Rendezvous requires both low distance and low relative velocity.",
+    "telemetry": "Orbital telemetry",
+    "distance": "Distance to target",
+    "relativeVelocity": "Relative velocity",
+    "orbitalVelocity": "Circular velocity",
+    "deltaV": "Delta-v remaining",
+    "energy": "Specific orbital energy",
+    "direction": "Burn direction",
+    "prograde": "Prograde",
+    "retrograde": "Retrograde",
+    "radialOut": "Radial out",
+    "radialIn": "Radial in",
+    "none": "Coast",
+    "rescued": "Satellite rescued",
+    "reentry": "Reentry",
+    "escaped": "Mission region exited",
+    "learnBody": "A prograde burn increases orbital energy. A retrograde burn decreases it. Changing speed changes the shape of the orbit rather than simply moving the spacecraft straight up or down.",
+    "experimentCopy": "Change starting conditions and compare how identical burns alter the resulting orbit.",
+    "rescuedReason": "Rendezvous achieved with low distance and low relative velocity.",
+    "reentryReason": "Perigee fell too low and the spacecraft reentered.",
+    "escapedReason": "The spacecraft moved beyond the mission region.",
+    "startAltitude": "Starting altitude",
+    "targetAltitude": "Target altitude",
+    "seo": {
+      "objectivesTitle": "Learning objectives",
+      "objectives": [
+        "Relate altitude to circular orbital velocity",
+        "Use prograde and retrograde burns to change orbital energy",
+        "Manage finite delta-v",
+        "Rendezvous by reducing both distance and relative velocity"
+      ],
+      "faqTitle": "Orbital mechanics FAQ",
+      "faq": [
+        {
+          "q": "Why does a prograde burn raise the orbit?",
+          "a": "Adding velocity increases specific orbital energy and typically raises the opposite side of the orbit."
+        },
+        {
+          "q": "Why is matching position not enough for rescue?",
+          "a": "Rendezvous also requires low relative velocity. Two spacecraft can pass very close while moving too differently to dock safely."
+        },
+        {
+          "q": "Is the orbit a predefined animation?",
+          "a": "No. Position and trajectory are generated from Newtonian gravity and the player’s applied thrust."
+        }
+      ],
+      "relatedTitle": "Related concepts",
+      "related": "Orbital velocity · delta-v · orbital energy · transfer orbits · escape velocity"
+    }
+  },
+  "missions": {
+    "title": "Mission Deck",
+    "subtitle": "Progressive challenges turn experiments into measurable learning goals.",
+    "xp": "XP",
+    "moon1": {
+      "title": "Understand Gravity",
+      "description": "Observe lunar gravity and its effect on descent."
+    },
+    "moon2": {
+      "title": "Control Descent",
+      "description": "Maintain a safe descent velocity."
+    },
+    "moon3": {
+      "title": "Soft Landing",
+      "description": "Land without exceeding the safe velocity envelope."
+    },
+    "moon4": {
+      "title": "Fuel Challenge",
+      "description": "Land while conserving limited fuel."
+    },
+    "moon5": {
+      "title": "Expert Landing",
+      "description": "Complete a safe landing under stricter conditions."
+    },
+    "orbit1": {
+      "title": "Stable Orbit",
+      "description": "Reach and maintain a stable orbit."
+    },
+    "orbit2": {
+      "title": "Change Altitude",
+      "description": "Use controlled burns to change orbital altitude."
+    },
+    "orbit3": {
+      "title": "Orbital Transfer",
+      "description": "Perform a controlled orbital transfer."
+    },
+    "orbit4": {
+      "title": "Intercept Target",
+      "description": "Intercept the target satellite."
+    },
+    "orbit5": {
+      "title": "Rescue Satellite",
+      "description": "Rendezvous while conserving delta-v."
+    },
+    "orbit6": {
+      "title": "Expert Rescue",
+      "description": "Complete the rescue with limited fuel."
+    },
+    "active": "Active mission",
+    "complete": "Mission complete",
+    "inProgress": "In progress",
+    "score": "Score"
+  },
+  "learn": {
+    "title": "Learn the science behind the controls",
+    "subtitle": "Start with intuition, then reveal the math when you want it.",
+    "gravity": "Gravity",
+    "gravityBody": "Gravity changes velocity continuously. Near the Moon's surface the acceleration is about 1.62 m/s².",
+    "thrust": "Thrust",
+    "thrustBody": "Thrust is a force. Acceleration depends on both thrust and current spacecraft mass: a = F/m.",
+    "orbit": "Orbital motion",
+    "orbitBody": "An orbit is continuous free fall. At a given radius, circular orbital speed is v = √(GM/r).",
+    "rocket": "Rocket equation",
+    "rocketBody": "Finite propellant limits maneuvering. Available delta-v follows Δv = Isp × g0 × ln(m0/mf)."
+  },
+  "subjects": {
+    "title": "Subject Universe",
+    "subtitle": "Explore six science and mathematics areas through simulations, games, and interactive labs connected by the same learning architecture.",
+    "live": "Available now",
+    "upcoming": "Upcoming",
+    "space": "Space & Astronomy",
+    "physics": "Physics & Engineering",
+    "geography": "Geography & Earth",
+    "biology": "Biology & Ecosystems",
+    "chemistry": "Chemistry",
+    "mathematics": "Mathematics"
+  },
+  "progress": {
+    "title": "Progress",
+    "subtitle": "Progress rewards completed challenges, improved performance, and discovered concepts.",
+    "rank": "Rank",
+    "completed": "Completed missions",
+    "local": "Stored locally on this device for the MVP.",
+    "explorer": "Explorer",
+    "cadet": "Cadet",
+    "pilot": "Pilot",
+    "missionSpecialist": "Mission Specialist",
+    "spaceScientist": "Space Scientist"
+  },
+  "teacher": {
+    "title": "Teacher Dashboard Preview",
+    "subtitle": "A future-ready view of assignments, progress, and common misconceptions without requiring the full backend yet.",
+    "classes": "Classrooms",
+    "completion": "Mission completion",
+    "mistakes": "Common mistakes",
+    "objectives": "Learning objectives",
+    "preview": "Preview",
+    "active": "active",
+    "highDescentVelocity": "High descent velocity"
+  },
+  "loading": {
+    "physics": "Initializing physics...",
+    "environment": "Loading environment...",
+    "instruments": "Calibrating instruments...",
+    "mission": "Preparing mission..."
+  },
+  "errors": {
+    "simulation": "The simulation encountered a problem. Try restarting the experiment."
+  },
+  "difficulty": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  },
+  "footer": {
+    "tagline": "LearnerKits · Learn by experimenting."
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Tune rendering quality and motion preferences for this device.",
+    "quality": "Rendering quality",
+    "qualityHelp": "Visual quality changes rendering only; the physics model remains identical.",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "motion": "Motion preference",
+    "motionHelp": "Reduce decorative motion while keeping the simulations fully functional.",
+    "system": "Use system setting",
+    "reduce": "Reduce motion",
+    "full": "Full motion",
+    "saved": "Settings saved.",
+    "applies": "Rendering changes apply the next time a simulation loads.",
+    "lead": "Choose the visual theme, rendering quality, and motion behavior for this device.",
+    "theme": "Theme",
+    "themeHelp": "Light is the default product theme; dark mode is available whenever you prefer it.",
+    "appearance": "Appearance",
+    "light": "Light",
+    "dark": "Dark"
+  }
+}
