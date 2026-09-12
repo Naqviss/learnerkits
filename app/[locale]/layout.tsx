@@ -15,5 +15,9 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   return <html lang={htmlLang} dir={dir} data-theme="light" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:themeBoot}}/></head><body className={dir === "rtl" ? "rtl" : undefined}><Nav locale={raw} m={m}/>{children}<footer className="footer"><div className="container">{m.footer.tagline}</div></footer><Script async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`} strategy="afterInteractive"/><Script id="google-analytics" strategy="afterInteractive">{`window.dataLayer = window.dataLayer || [];
 function gtag(){window.dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${googleAnalyticsId}');`}</Script></body></html>;
+gtag('config', '${googleAnalyticsId}');`}</Script><Script id="microsoft-clarity" strategy="afterInteractive">{`(function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ygwnomr7fd");`}</Script></body></html>;
 }

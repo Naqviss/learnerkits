@@ -4,7 +4,7 @@ import { hreflangCodes, localizedUrl } from "@/lib/seo/metadata";
 import { subjectSlugs, subjectsCatalog } from "@/lib/subjects/catalog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const core = ["", "/simulations", "/missions", "/learn", "/subjects", "/progress", "/teacher-preview", "/settings", "/donate"];
+  const core = ["/", "/simulations", "/missions", "/learn", "/subjects", "/progress", "/teacher-preview", "/settings", "/donate"];
   const subjectPaths = subjectSlugs.map((slug) => `/subjects/${slug}`);
   const simulationPaths = subjectSlugs.flatMap((slug) => subjectsCatalog[slug].simulations.map((sim) => `/simulations/${sim.slug}`));
   const paths = [...core, ...subjectPaths, ...simulationPaths];
@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: localizedUrl(locale, path),
     lastModified: new Date(),
     changeFrequency: path.includes("simulations") ? "weekly" : "monthly",
-    priority: path === "" ? 1 : path.includes("subjects/") ? .85 : path === "/donate" ? .5 : .8,
+    priority: path === "/" ? 1 : path.includes("subjects/") ? .85 : path === "/donate" ? .5 : .8,
     alternates: {
       languages: {
         ...Object.fromEntries(locales.map((alt) => [hreflangCodes[alt], localizedUrl(alt, path)])),

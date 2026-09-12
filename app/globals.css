@@ -54,6 +54,64 @@ html[data-theme="dark"]{
 .subject-mathematics .subjectHero{grid-template-columns:1fr 1fr}.subject-mathematics .subjectHeroCopy{background-image:linear-gradient(color-mix(in srgb,var(--subject) 9%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--subject) 9%,transparent) 1px,transparent 1px);background-size:28px 28px;padding:34px;border-radius:12px}.subject-mathematics .subjectVisual{border-radius:4px}.subject-mathematics .subjectPrompt{border:1px solid var(--subject);padding:22px}.subject-mathematics .subjectSimCard{border-radius:4px;box-shadow:8px 8px 0 color-mix(in srgb,var(--subject) 16%,transparent)}
 @media(max-width:900px){.subject-physics .subjectHeroCopy,.subject-physics .subjectVisual{order:initial}.subject-geography .subjectVisual,.subject-biology .subjectVisual{height:350px}.subject-mathematics .subjectHeroCopy{padding:22px}}
 
+/* Chemistry flagship lab: a dark glass-and-neon bench makes the molecular
+   model feel like a real instrument, while the controls stay worksheet-clear. */
+.chemistryLabPage{--chemistry:#7c5ce6;--chemistry-2:#3f8cff;--chemistry-soft:#ede9ff;padding-bottom:44px}
+.chemistryLabHeader{display:flex;justify-content:space-between;align-items:end;gap:28px;padding:40px 0 24px}
+.chemistryLabHeader .backLink{margin-bottom:24px}
+.chemistryLabHeader h1{font-size:clamp(2.8rem,5vw,5rem);line-height:.95;letter-spacing:-.055em;margin:10px 0 16px}
+.chemistryLabHeader p{max-width:700px;color:var(--muted);font-size:1.05rem;line-height:1.6;margin:0}
+.chemistryMissionBadge{min-width:180px;padding:16px 18px;border:1px solid color-mix(in srgb,var(--chemistry) 30%,var(--line));background:color-mix(in srgb,var(--chemistry) 6%,var(--surface));border-radius:12px;display:grid;gap:5px}
+.chemistryMissionBadge span,.chemistryMissionBadge strong{display:block}
+.chemistryMissionBadge span{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--chemistry);font-weight:850}
+.chemistryMissionBadge strong{font-size:.95rem}
+.chemistryWorkspace{display:grid;grid-template-columns:minmax(0,1.36fr) minmax(350px,.78fr);gap:16px;align-items:start}
+.chemistrySceneCard,.chemistryControlPanel{border:1px solid var(--line);background:var(--surface);border-radius:16px;overflow:hidden}
+.chemistrySceneCard{background:#071421;border-color:#18354b;box-shadow:0 18px 50px rgba(19,42,74,.16)}
+.chemistrySceneTop{height:54px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 18px;background:rgba(8,24,38,.92);border-bottom:1px solid rgba(150,205,238,.15)}
+.chemistrySceneTop .eyebrow{color:#87c7ff}
+.sceneHint{font-size:.72rem;color:#9ab1c5}
+.chemistrySceneViewport{height:560px;position:relative;overflow:hidden;background:radial-gradient(circle at 25% 15%,rgba(75,151,222,.16),transparent 32%),#071421}
+.chemistryThreeScene{position:absolute;inset:0}
+.chemistryThreeScene canvas{display:block;width:100%;height:100%;touch-action:none}
+.chemistrySceneOverlay{position:absolute;left:18px;top:18px;padding:12px 14px;display:grid;gap:3px;background:rgba(5,15,27,.76);border:1px solid rgba(177,225,255,.2);border-radius:10px;color:#f4fbff;backdrop-filter:blur(12px);pointer-events:none}
+.chemistrySceneOverlay span{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#8cb4cc;font-weight:800}
+.chemistrySceneOverlay strong{font-size:1.4rem;letter-spacing:-.03em}
+.chemistrySceneOverlay small{color:#b8d5e5;font-size:.75rem}
+.chemistrySceneStatus{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(5,15,27,.82);color:#e8f6ff;font-size:.8rem;white-space:nowrap;backdrop-filter:blur(12px);pointer-events:none}
+.chemistrySceneStatus i{width:8px;height:8px;border-radius:50%;background:#70c1a1;box-shadow:0 0 12px currentColor}
+.chemistrySceneStatus.acidic i{background:#ff7096;color:#ff7096}.chemistrySceneStatus.basic i{background:#7657d9;color:#7657d9}.chemistrySceneStatus.neutral i{background:#70c1a1;color:#70c1a1}
+.chemistrySceneStatus b{color:#fff;margin-left:5px}
+.particleLegend{display:flex;flex-wrap:wrap;gap:16px;padding:13px 18px;background:#091c2d;color:#a9c2d2;font-size:.73rem}
+.particleLegend span{display:inline-flex;align-items:center;gap:6px}.particleSwatch{display:inline-block;width:9px;height:9px;border-radius:50%;box-shadow:0 0 9px currentColor}.particleSwatch.hydrogen{background:#ff7096;color:#ff7096}.particleSwatch.hydroxide{background:#70d7ff;color:#70d7ff}.particleSwatch.water{background:#f9d65c;color:#f9d65c}
+.chemistryControlPanel{padding:20px}
+.chemistryPanelHeading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:1px solid var(--line);padding-bottom:15px}
+.chemistryPanelHeading h2{font-size:1.55rem;letter-spacing:-.035em;margin:6px 0 0}
+.chemistryTextButton{border:0;background:none;padding:3px 0;color:var(--chemistry);font-size:.76rem;font-weight:800;white-space:nowrap}
+.chemistryPrompt{font-size:.86rem;line-height:1.5;color:var(--muted);margin:15px 0 17px}
+.chemistryControls{display:grid;gap:12px}
+.chemistryControl{display:grid;gap:7px;margin:0}
+.chemistryControl>span{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:.78rem}
+.chemistryControl b{font-weight:700}.chemistryControl output{color:var(--chemistry);font-weight:800;font-variant-numeric:tabular-nums}
+.chemistryControl input{width:100%;accent-color:var(--chemistry);height:20px;margin:0;cursor:pointer}
+.phMeterBlock{margin-top:18px;padding:14px;background:var(--surface-2);border-radius:10px}
+.phMeterHeader{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}.phMeterHeader span{font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:800}.phMeterHeader strong{font-size:1.5rem;color:var(--text);font-variant-numeric:tabular-nums}
+.phMeter{height:13px;position:relative;border-radius:999px;background:linear-gradient(90deg,#ef476f 0%,#f28f3b 18%,#f4d35e 35%,#70c1a1 50%,#4d96ff 72%,#7657d9 100%);box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+.phNeutralZone{position:absolute;left:47.5%;width:5%;top:-3px;height:19px;border:2px solid rgba(255,255,255,.85);border-radius:999px;opacity:.86}
+.phMeterThumb{position:absolute;top:50%;z-index:2;width:18px;height:18px;border:3px solid var(--surface);border-radius:50%;background:var(--text);transform:translate(-50%,-50%);box-shadow:0 2px 7px rgba(0,0,0,.32);transition:left .12s ease}
+.phScale{display:flex;justify-content:space-between;margin-top:8px;color:var(--muted);font-size:.68rem}.phScale b{color:var(--success);font-weight:800}
+.chemistryMetrics{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.chemistryMetrics div{min-width:0;padding:10px 9px;border:1px solid var(--line);border-radius:9px}.chemistryMetrics span{display:block;color:var(--muted);font-size:.65rem;line-height:1.25}.chemistryMetrics strong{display:block;margin-top:5px;font-size:.8rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chemistryActions{display:flex;gap:8px;margin-top:15px}.chemistryActions .button{flex:1;min-height:42px;font-size:.82rem}.chemistryActions .button.primary{background:var(--chemistry);border-color:var(--chemistry)}
+.chemistryFeedback{display:grid;gap:3px;margin-top:12px;padding:11px 12px;border-left:3px solid var(--chemistry);background:color-mix(in srgb,var(--chemistry) 7%,var(--surface));border-radius:0 8px 8px 0}.chemistryFeedback strong{font-size:.82rem}.chemistryFeedback span{font-size:.75rem;color:var(--muted);line-height:1.4}.chemistryFeedback.success{border-left-color:var(--success)}
+.chemistryExplain{display:grid;gap:10px;margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}.chemistryExplain>div{display:grid;gap:5px}.chemistryExplain .eyebrow{font-size:.62rem;color:var(--chemistry)}.chemistryExplain b{font-size:.82rem;line-height:1.45}.chemistryExplain small{color:var(--muted);font-size:.7rem;line-height:1.4}
+.chemistryLearning,.chemistryTopics{padding-top:64px}.chemistryLearningHeader,.chemistryTopicsHeader{display:flex;justify-content:space-between;align-items:end;gap:26px;margin-bottom:23px}.chemistryLearningHeader h2,.chemistryTopicsHeader h2{font-size:clamp(1.9rem,3vw,2.7rem);letter-spacing:-.04em;margin:7px 0 0}.chemistryLearningHeader p,.chemistryTopicsHeader p{max-width:480px;margin:0;color:var(--muted);line-height:1.55;font-size:.9rem}
+.chemistryStepGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.chemistryStepGrid article{padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}.chemistryStepGrid article>span{display:grid;place-items:center;width:30px;height:24px;border-radius:6px;background:color-mix(in srgb,var(--chemistry) 12%,var(--surface));color:var(--chemistry);font-size:.68rem;font-weight:850}.chemistryStepGrid h3{font-size:1rem;margin:15px 0 7px}.chemistryStepGrid p{color:var(--muted);font-size:.82rem;line-height:1.55;margin:0}
+.chemistryFormula{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin-top:13px;padding:15px 17px;border-radius:10px;background:#101d2b;color:#dceeff}.chemistryFormula span{font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;color:#8cb4cc;font-weight:800}.chemistryFormula strong{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#8fdcff;font-size:1.1rem}.chemistryFormula b{font-size:.78rem;color:#b5ccda;font-weight:600}
+.chemistryTopics{padding-bottom:20px}.chemistryTopicGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.chemistryTopicCard{min-height:188px;display:flex;flex-direction:column;align-items:flex-start;padding:16px;border:1px solid var(--line);border-top:3px solid color-mix(in srgb,var(--chemistry) 55%,var(--line));border-radius:10px;background:var(--surface);transition:transform .15s ease,border-color .15s ease}.chemistryTopicCard:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--chemistry) 42%,var(--line))}.chemistryTopicCard>span{font-size:.63rem;line-height:1.3;color:var(--chemistry);font-weight:800;text-transform:uppercase;letter-spacing:.06em}.chemistryTopicCard h3{font-size:1rem;line-height:1.2;margin:11px 0 7px}.chemistryTopicCard p{margin:0;color:var(--muted);font-size:.76rem;line-height:1.45}.chemistryTopicCard b{margin-top:auto;padding-top:13px;color:var(--chemistry);font-size:.75rem}
+@media(max-width:1050px){.chemistryWorkspace{grid-template-columns:minmax(0,1fr) minmax(320px,.8fr)}.chemistryTopicGrid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.chemistryLabHeader{align-items:flex-start;flex-direction:column}.chemistryWorkspace{grid-template-columns:1fr}.chemistrySceneViewport{height:520px}.chemistryLearningHeader,.chemistryTopicsHeader{align-items:flex-start;flex-direction:column}.chemistryTopicGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.chemistryLabPage{padding-bottom:20px}.chemistryLabHeader{padding-top:30px}.chemistryLabHeader h1{font-size:clamp(2.5rem,13vw,4rem)}.chemistryMissionBadge{width:100%}.chemistrySceneTop{height:auto;min-height:52px;padding:10px 13px}.sceneHint{font-size:.63rem}.chemistrySceneViewport{height:430px}.chemistrySceneOverlay{left:12px;top:12px}.chemistrySceneStatus{bottom:12px;font-size:.7rem}.particleLegend{gap:9px;padding:11px 13px;font-size:.66rem}.chemistryControlPanel{padding:15px}.chemistryPanelHeading{gap:8px}.chemistryTextButton{font-size:.68rem}.chemistryMetrics{grid-template-columns:1fr}.chemistryStepGrid,.chemistryTopicGrid{grid-template-columns:1fr}.chemistryFormula{align-items:flex-start;flex-direction:column;gap:7px}}
+
 /* LearnerKits identity */
 .brandMark{width:34px;height:34px;border:0;border-radius:0;transform:none;background:transparent url('/learnerkits-mark.svg') center/contain no-repeat}.brandMark:before,.brandMark:after,.brandMark i{display:none}
 .brandLogo{display:block;width:178px;height:auto}.brandLogo:focus-visible{outline:0}html[data-theme="dark"] .brandLogo{content:url('/learnerkits-logo-dark.svg')}
