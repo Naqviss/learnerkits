@@ -6,12 +6,29 @@ import { displayDifficulty, displayOpportunity, getEducationCopy, getLocalizedSu
 import { localizedMetadata } from "@/lib/seo/metadata";
 import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
 
-export async function generateMetadata({params}:{params:Promise<{locale:string}>}):Promise<Metadata>{const{locale:raw}=await params;const locale=isLocale(raw)?raw:"en";const c=getEducationCopy(locale);return localizedMetadata(locale,"/simulations",c.seo.libraryTitle,c.seo.libraryDescription,{});}
+export async function generateMetadata({params}:{params:Promise<{locale:string}>}):Promise<Metadata>{
+  const {locale:raw}=await params,locale=isLocale(raw)?raw:"en",copy=getEducationCopy(locale);
+  return localizedMetadata(locale,"/simulations",copy.seo.libraryTitle,copy.seo.libraryDescription,{});
+}
 
-export default async function Simulations({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale: raw } = await params;if (!isLocale(raw)) notFound();const c=getEducationCopy(raw);const localized=visibleSubjectSlugs.map(slug=>getLocalizedSubject(raw,slug));const all=localized.flatMap(s=>s.simulations);const featured=all.filter(s=>s.featured);
-  return <main className="container educationLibrary"><header className="pageHeader generalPageHeader"><div className="eyebrow">{c.library.eyebrow}</div><h1 className="pageTitle">{c.library.title}</h1><p className="lede">{c.library.body(all.length,visibleSubjectSlugs.length)}</p></header>
-    <section className="libraryPriority section"><div className="sectionHeading"><div><div className="eyebrow">{c.library.priority}</div><h2>{c.library.priorityTitle}</h2></div><p>{c.library.priorityBody}</p></div><div className="priorityStrip">{featured.map(sim=><Link href={`/${raw}/simulations/${sim.slug}`} className="priorityStripCard" key={sim.slug}><span>{displayOpportunity(raw,sim.opportunity)}</span><strong>{sim.title}</strong>{sim.seoTarget&&raw==="en"&&<small>{sim.seoTarget}</small>}</Link>)}</div></section>
-    {visibleSubjectSlugs.map(slug=>{const data=getLocalizedSubject(raw,slug);return <section className={`simulationShelf educationShelf subject-${slug}`} key={slug}><div className="shelfHeading"><div><span>{data.gradeBand} · {data.simulations.length} {c.generic.labs}</span><h2>{getLocalizedSubjectName(raw,slug)}</h2></div><Link href={`/${raw}/subjects/${slug}`}>{c.library.viewSubject} →</Link></div><div className="libraryCatalogGrid">{data.simulations.map((sim,index)=><article className="librarySimCard educationLibraryCard" key={sim.slug}><div className="libraryCardTop"><span className="labType">{c.library.lab} {String(index+1).padStart(2,"0")}{sim.kind?` · ${sim.kind}`:""}</span>{sim.featured?<span className="priorityBadge">{c.library.priorityBadge}</span>:<span className="lessonBadge">{sim.duration}</span>}</div><h3>{sim.title}</h3><div className="learningOutcome compactOutcome"><span>{c.library.whatLearn}</span><strong>{sim.outcome}</strong></div>{sim.concepts&&<p>{sim.concepts}</p>}{sim.seoTarget&&raw==="en"&&<div className="compactSeo"><span>{c.library.searchTopic}</span>{sim.seoTarget}</div>}<div className="simMeta"><span className="pill">{displayDifficulty(raw,sim.difficulty)}</span>{sim.opportunity&&<span className="pill">{displayOpportunity(raw,sim.opportunity)}</span>}</div><Link className="button subjectButton" href={`/${raw}/simulations/${sim.slug}`}>{c.library.startLab}</Link></article>)}</div></section>})}
+export default async function Simulations({params}:{params:Promise<{locale:string}>}){
+  const {locale:raw}=await params;if(!isLocale(raw))notFound();
+  const copy=getEducationCopy(raw),localized=visibleSubjectSlugs.map(slug=>getLocalizedSubject(raw,slug)),all=localized.flatMap(subject=>subject.simulations),featured=all.filter(sim=>sim.featured);
+  return <main className="container educationLibrary">
+    <header className="pageHeader generalPageHeader"><div className="eyebrow">{copy.library.eyebrow}</div><h1 className="pageTitle">{copy.library.title}</h1><p className="lede">{copy.library.body(all.length,visibleSubjectSlugs.length)}</p></header>
+    <nav className="subjectQuickNav" aria-label={copy.home.subjects}>{visibleSubjectSlugs.map((slug,index)=><a href={`#${slug}`} className={`subject-${slug}`} key={slug}><span>{String(index+1).padStart(2,"0")}</span>{getLocalizedSubjectName(raw,slug)}</a>)}</nav>
+    <section className="libraryPriority section"><div className="sectionHeading"><div><div className="eyebrow">{copy.library.priority}</div><h2>{copy.library.priorityTitle}</h2></div><p>{copy.library.priorityBody}</p></div><div className="priorityStrip">{featured.map(sim=><Link href={`/${raw}/simulations/${sim.slug}`} className="priorityStripCard" key={sim.slug}><span>{displayOpportunity(raw,sim.opportunity)}</span><strong>{sim.title}</strong>{sim.seoTarget&&raw==="en"&&<small>{sim.seoTarget}</small>}</Link>)}</div></section>
+    {visibleSubjectSlugs.map((slug,shelfIndex)=>{
+      const subject=getLocalizedSubject(raw,slug);
+      return <details id={slug} className={`simulationShelf educationShelf subject-${slug}`} key={slug} open={shelfIndex===0}>
+        <summary className="shelfHeading"><div><span>{subject.gradeBand} · {subject.simulations.length} {copy.generic.labs}</span><h2>{getLocalizedSubjectName(raw,slug)}</h2></div><b><span>{copy.generic.labs}</span><i>⌄</i></b></summary>
+        <div className="shelfTools"><p>{subject.description}</p><Link href={`/${raw}/subjects/${slug}`}>{copy.library.viewSubject} →</Link></div>
+        <div className="libraryCatalogGrid">{subject.simulations.map((sim,index)=><article className="librarySimCard educationLibraryCard" key={sim.slug}>
+          <div className="libraryCardTop"><span className="labType">{copy.library.lab} {String(index+1).padStart(2,"0")}{sim.kind?` · ${sim.kind}`:""}</span>{sim.featured?<span className="priorityBadge">{copy.library.priorityBadge}</span>:<span className="lessonBadge">{sim.duration}</span>}</div>
+          <h3>{sim.title}</h3><div className="learningOutcome compactOutcome"><span>{copy.library.whatLearn}</span><strong>{sim.outcome}</strong></div>{sim.concepts&&<p>{sim.concepts}</p>}{sim.seoTarget&&raw==="en"&&<div className="compactSeo"><span>{copy.library.searchTopic}</span>{sim.seoTarget}</div>}
+          <div className="simMeta"><span className="pill">{displayDifficulty(raw,sim.difficulty)}</span>{sim.opportunity&&<span className="pill">{displayOpportunity(raw,sim.opportunity)}</span>}</div><Link className="button subjectButton" href={`/${raw}/simulations/${sim.slug}`}>{copy.library.startLab} <span>→</span></Link>
+        </article>)}</div>
+      </details>;
+    })}
   </main>;
 }

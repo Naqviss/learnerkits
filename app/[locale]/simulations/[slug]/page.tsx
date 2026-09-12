@@ -12,6 +12,14 @@ import { GeographyActivitiesClient } from "@/components/subjects/geography/Geogr
 import { BiologyActivitiesClient } from "@/components/subjects/biology/BiologyActivitiesClient";
 import { MathematicsActivitiesClient } from "@/components/subjects/mathematics/MathematicsActivitiesClient";
 import { EnvironmentalActivitiesClient } from "@/components/subjects/environmental/EnvironmentalActivitiesClient";
+import { SimulationGuide } from "@/components/seo/SimulationGuide";
+import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
+
+export function generateStaticParams() {
+  return visibleSubjectSlugs.flatMap((subject) => getLocalizedSubject("en", subject).simulations
+    .filter((simulation) => simulation.slug !== "moon-landing" && simulation.slug !== "orbital-rescue")
+    .map((simulation) => ({ slug: simulation.slug })));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -58,44 +66,25 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     { name: subject.eyebrow, path: `/subjects/${subject.slug}` },
     { name: simulation.title, path: `/simulations/${slug}` },
   ]);
-  if (baseSubject.slug === "environmental-science") return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
-    <EnvironmentalActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
-  </>;
-  if (baseSubject.slug === "mathematics") return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
-    <MathematicsActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
-  </>;
-  if (baseSubject.slug === "biology") return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
-    <BiologyActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
-  </>;
-  if (baseSubject.slug === "geography") return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
-    <GeographyActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
-  </>;
-  if (baseSubject.slug === "space") return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
-    <SpaceActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
-  </>;
-  if (baseSubject.slug === "physics") return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
-    <PhysicsActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
-  </>;
-  if (baseSubject.slug === "chemistry") return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
-    <ChemistryActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
-  </>;
+  const activity = baseSubject.slug === "environmental-science"
+    ? <EnvironmentalActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+    : baseSubject.slug === "mathematics"
+      ? <MathematicsActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+      : baseSubject.slug === "biology"
+        ? <BiologyActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+        : baseSubject.slug === "geography"
+          ? <GeographyActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+          : baseSubject.slug === "space"
+            ? <SpaceActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+            : baseSubject.slug === "physics"
+              ? <PhysicsActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+              : baseSubject.slug === "chemistry"
+                ? <ChemistryActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+                : <ConceptLabClient locale={safeLocale} subject={subject} simulation={simulation} copy={{ lab: copy.lab }}/>;
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
-    <ConceptLabClient locale={safeLocale} subject={subject} simulation={simulation} copy={{ lab: copy.lab }}/>
+    {activity}
+    <SimulationGuide locale={safeLocale} subject={subject} simulation={simulation}/>
   </>;
 }

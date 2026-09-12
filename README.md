@@ -78,6 +78,19 @@ DONATION_CURRENCY=usd
 
 `NEXT_PUBLIC_SITE_URL` must be the real production origin before deployment because it is also used for canonical URLs, hreflang URLs, sitemap entries, JSON-LD URLs, and donation redirects.
 
+## AdSense and publisher readiness
+
+The site includes About, Contact, Privacy, Cookie, Terms, Disclaimer, and Editorial Policy pages in the global footer. Google Analytics and Microsoft Clarity are consent-gated and do not load when a visitor selects essential storage only.
+
+Set the following production variables before requesting review:
+
+```bash
+NEXT_PUBLIC_CONTACT_EMAIL=contact@your-domain.com
+ADSENSE_PUBLISHER_ID=pub-0000000000000000
+```
+
+`ADSENSE_PUBLISHER_ID` automatically publishes the AdSense account verification meta tag and a matching `/ads.txt` authorized-seller record. Ad units are intentionally not inserted by this setup; configure Google's certified Privacy & Messaging consent flow and child-directed treatment settings, where applicable, before serving ads.
+
 ## Multilingual translation
 
 The platform now translates the full educational experience across the required nine locales:

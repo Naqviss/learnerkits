@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
 import { displayDifficulty, displayOpportunity, getEducationCopy, getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, jsonLd, localizedMetadata } from "@/lib/seo/metadata";
-import { isVisibleSubjectSlug, type SubjectSlug } from "@/lib/subjects/catalog";
+import { isVisibleSubjectSlug, visibleSubjectSlugs, type SubjectSlug } from "@/lib/subjects/catalog";
 import { SubjectVisual } from "@/components/subjects/SubjectVisual";
+
+export function generateStaticParams() { return visibleSubjectSlugs.map((subject) => ({ subject })); }
 
 export async function generateMetadata({params}:{params:Promise<{locale:string;subject:string}>}):Promise<Metadata>{
   const {locale,subject}=await params;if(!isLocale(locale)||!isVisibleSubjectSlug(subject))return{};const c=getEducationCopy(locale);const data=getLocalizedSubject(locale,subject);const name=getLocalizedSubjectName(locale,subject);
