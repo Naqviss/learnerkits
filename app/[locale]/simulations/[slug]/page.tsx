@@ -6,6 +6,7 @@ import { breadcrumbJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@
 import { getSimulationCard, getSubjectForSimulation } from "@/lib/subjects/catalog";
 import { ConceptLabClient } from "@/components/simulation/ConceptLabClient";
 import { ChemistryActivitiesClient } from "@/components/subjects/chemistry/ChemistryActivitiesClient";
+import { PhysicsActivitiesClient } from "@/components/subjects/physics/PhysicsActivitiesClient";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -52,6 +53,11 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     { name: subject.eyebrow, path: `/subjects/${subject.slug}` },
     { name: simulation.title, path: `/simulations/${slug}` },
   ]);
+  if (baseSubject.slug === "physics") return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
+    <PhysicsActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+  </>;
   if (baseSubject.slug === "chemistry") return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
