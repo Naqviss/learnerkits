@@ -52,6 +52,7 @@ export function MoonLandingClient({ m }: { m: Messages }) {
   const engineRef = useRef(new MoonLandingEngine());
   const runnerRef = useRef(new FixedStepRunner(1 / 120));
   const pausedRef = useRef(false);
+  const heldKeys = useRef(new Set<string>());
   const timeScaleRef = useRef(1);
   const cameraModeRef = useRef<"close" | "third" | "overview">("third");
   const [state, setState] = useState<MoonLandingState>(initialState);
@@ -70,17 +71,16 @@ export function MoonLandingClient({ m }: { m: Messages }) {
     setState(engineRef.current.getState());
 
     const key = (event: KeyboardEvent, down: boolean) => {
+      if (down && event.target instanceof HTMLElement && event.target.closest("input, select, textarea, button, [contenteditable='true']")) return;
       if (["KeyW", "KeyS", "KeyA", "KeyD", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(event.code)) event.preventDefault();
+      if (down) heldKeys.current.add(event.code); else heldKeys.current.delete(event.code);
+      if (["KeyA", "KeyD", "ArrowLeft", "ArrowRight"].includes(event.code)) {
+        const keys = heldKeys.current;
+        engineRef.current.handleInput({ rotate: (Number(keys.has("KeyD") || keys.has("ArrowRight")) - Number(keys.has("KeyA") || keys.has("ArrowLeft"))) as -1 | 0 | 1 });
+      }
       if (!down) {
-        if (["KeyA", "KeyD", "ArrowLeft", "ArrowRight"].includes(event.code)) engineRef.current.handleInput({ rotate: 0 });
         return;
       }
-      const engine = engineRef.current;
-      const s = engine.getState();
-      if (event.code === "KeyW" || event.code === "ArrowUp") engine.handleInput({ throttle: Math.min(1, s.throttle + 0.06) });
-      if (event.code === "KeyS" || event.code === "ArrowDown") engine.handleInput({ throttle: Math.max(0, s.throttle - 0.06) });
-      if (event.code === "KeyA" || event.code === "ArrowLeft") engine.handleInput({ rotate: -1 });
-      if (event.code === "KeyD" || event.code === "ArrowRight") engine.handleInput({ rotate: 1 });
       if (event.code === "Space" && !event.repeat) {
         setPaused((value) => {
           pausedRef.current = !value;
@@ -91,11 +91,17 @@ export function MoonLandingClient({ m }: { m: Messages }) {
     };
     const down = (event: KeyboardEvent) => key(event, true);
     const up = (event: KeyboardEvent) => key(event, false);
+    const release = () => { heldKeys.current.clear(); engineRef.current.handleInput({ rotate: 0 }); };
+    const visibility = () => { if (document.hidden) release(); };
     window.addEventListener("keydown", down);
     window.addEventListener("keyup", up);
+    window.addEventListener("blur", release);
+    document.addEventListener("visibilitychange", visibility);
     return () => {
       window.removeEventListener("keydown", down);
       window.removeEventListener("keyup", up);
+      window.removeEventListener("blur", release);
+      document.removeEventListener("visibilitychange", visibility);
     };
   }, []);
 
@@ -267,7 +273,12 @@ export function MoonLandingClient({ m }: { m: Messages }) {
     const loop = (now: number) => {
       const frameDt = Math.min(0.05, (now - previous) / 1000);
       previous = now;
-      if (!pausedRef.current) runnerRef.current.advance(frameDt * timeScaleRef.current, (dt) => engineRef.current.update(dt));
+      if (!pausedRef.current && !document.hidden) {
+        const keys = heldKeys.current;
+        const direction = Number(keys.has("KeyW") || keys.has("ArrowUp")) - Number(keys.has("KeyS") || keys.has("ArrowDown"));
+        if (direction) engineRef.current.handleInput({ throttle: Math.max(0, Math.min(1, engineRef.current.getState().throttle + direction * frameDt * 0.4)) });
+        runnerRef.current.advance(frameDt * timeScaleRef.current, (dt) => engineRef.current.update(dt));
+      }
       const s = engineRef.current.getState();
       const scale = 0.052;
       lander.position.set(s.position.x * scale, Math.max(0, s.position.y * scale) + 5.9, 0);
@@ -326,6 +337,7 @@ export function MoonLandingClient({ m }: { m: Messages }) {
   }, []);
 
   function reset() {
+    heldKeys.current.clear();
     engineRef.current.reset();
     engineRef.current.handleInput({ throttle: 0.52 });
     runnerRef.current.reset();

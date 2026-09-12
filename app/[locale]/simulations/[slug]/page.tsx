@@ -7,6 +7,7 @@ import { getSimulationCard, getSubjectForSimulation } from "@/lib/subjects/catal
 import { ConceptLabClient } from "@/components/simulation/ConceptLabClient";
 import { ChemistryActivitiesClient } from "@/components/subjects/chemistry/ChemistryActivitiesClient";
 import { PhysicsActivitiesClient } from "@/components/subjects/physics/PhysicsActivitiesClient";
+import { SpaceActivitiesClient } from "@/components/subjects/space/SpaceActivitiesClient";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -53,6 +54,11 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     { name: subject.eyebrow, path: `/subjects/${subject.slug}` },
     { name: simulation.title, path: `/simulations/${slug}` },
   ]);
+  if (baseSubject.slug === "space") return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
+    <SpaceActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+  </>;
   if (baseSubject.slug === "physics") return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
