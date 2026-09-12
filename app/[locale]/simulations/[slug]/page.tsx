@@ -9,6 +9,8 @@ import { ChemistryActivitiesClient } from "@/components/subjects/chemistry/Chemi
 import { PhysicsActivitiesClient } from "@/components/subjects/physics/PhysicsActivitiesClient";
 import { SpaceActivitiesClient } from "@/components/subjects/space/SpaceActivitiesClient";
 import { GeographyActivitiesClient } from "@/components/subjects/geography/GeographyActivitiesClient";
+import { BiologyActivitiesClient } from "@/components/subjects/biology/BiologyActivitiesClient";
+import { MathematicsActivitiesClient } from "@/components/subjects/mathematics/MathematicsActivitiesClient";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -55,6 +57,16 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     { name: subject.eyebrow, path: `/subjects/${subject.slug}` },
     { name: simulation.title, path: `/simulations/${slug}` },
   ]);
+  if (baseSubject.slug === "mathematics") return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
+    <MathematicsActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+  </>;
+  if (baseSubject.slug === "biology") return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
+    <BiologyActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+  </>;
   if (baseSubject.slug === "geography") return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
