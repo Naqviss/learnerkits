@@ -5,7 +5,7 @@ import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
 import { getSimulationCard, getSubjectForSimulation } from "@/lib/subjects/catalog";
 import { ConceptLabClient } from "@/components/simulation/ConceptLabClient";
-import { NeutralizationLabClient } from "@/components/subjects/ChemistryLabClient";
+import { ChemistryActivitiesClient } from "@/components/subjects/chemistry/ChemistryActivitiesClient";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -52,10 +52,10 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     { name: subject.eyebrow, path: `/subjects/${subject.slug}` },
     { name: simulation.title, path: `/simulations/${slug}` },
   ]);
-  if (slug === "neutralization-station") return <>
+  if (baseSubject.slug === "chemistry") return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
-    <NeutralizationLabClient locale={safeLocale} subject={subject}/>
+    <ChemistryActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
   </>;
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
