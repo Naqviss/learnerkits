@@ -7,6 +7,7 @@ import { getMessages } from "@/lib/i18n/getMessages";
 import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
 import { OrbitalRescueClient } from "@/components/simulation/OrbitalRescueClient";
+import { SimulationGuide } from "@/components/seo/SimulationGuide";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale: raw } = await params;
@@ -35,5 +36,6 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
     <section className="container section" aria-labelledby="orbit-objectives"><h2 id="orbit-objectives">{m.orbitalRescue.seo.objectivesTitle}</h2><div className="grid2">{m.orbitalRescue.seo.objectives.map((objective) => <article className="card" key={objective}><h3>{objective}</h3></article>)}</div></section>
     <section className="container section"><h2>{m.orbitalRescue.seo.faqTitle}</h2><div className="grid3">{m.orbitalRescue.seo.faq.map((item) => <article className="card" key={item.q}><h3>{item.q}</h3><p className="muted">{item.a}</p></article>)}</div></section>
     <section className="container section"><div className="card"><h2>{m.orbitalRescue.seo.relatedTitle}</h2><p className="muted">{m.orbitalRescue.seo.related}</p><Link className="button" href={`/${locale}/learn`}>{m.navigation.learn}</Link></div></section>
+    {simulation && <SimulationGuide locale={locale} subject={subject} simulation={simulation}/>}
   </>;
 }

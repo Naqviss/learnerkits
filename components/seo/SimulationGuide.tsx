@@ -26,7 +26,7 @@ export function SimulationGuide({ locale, subject, simulation }: { locale: Local
       <article className="simulationGuideCard classroomGuide">
         <h3>{guide.classroom}</h3>
         <p>{guide.classroomBody}</p>
-        <dl><div><dt>Level</dt><dd>{simulation.difficulty}</dd></div><div><dt>Time</dt><dd>{simulation.duration}</dd></div><div><dt>Format</dt><dd>{simulation.kind}</dd></div></dl>
+        <dl><div><dt>{guide.level}</dt><dd>{simulation.difficulty}</dd></div><div><dt>{guide.time}</dt><dd>{simulation.duration}</dd></div><div><dt>{guide.format}</dt><dd>{simulation.kind}</dd></div></dl>
       </article>
     </div>
     <div className="simulationFaq">

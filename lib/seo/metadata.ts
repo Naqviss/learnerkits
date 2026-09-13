@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { defaultLocale, locales, type Locale } from "@/lib/i18n/config";
 
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
+// Keep production URLs canonical even when the deployment has not supplied the env var yet.
+// Local development can still override this with NEXT_PUBLIC_SITE_URL=http://localhost:3000.
+export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://www.learnerkits.com")).replace(/\/$/, "");
 export const siteName = "LearnerKits";
 export const defaultOgImage = `${siteUrl}/og-default.png`;
 
@@ -108,7 +110,7 @@ export function simulationJsonLd(args: {
 }) {
   return {
     "@context": "https://schema.org",
-    "@type": "LearningResource",
+    "@type": ["LearningResource", "SoftwareApplication"],
     name: args.title,
     description: args.description,
     url: localizedUrl(args.locale, args.path),
@@ -116,8 +118,47 @@ export function simulationJsonLd(args: {
     isAccessibleForFree: true,
     learningResourceType: "Interactive simulation",
     educationalUse: ["instruction", "practice", "assessment"],
+    educationalLevel: "Grades 6–12",
+    teaches: args.concepts,
+    applicationCategory: "EducationalApplication",
+    operatingSystem: "Any",
+    browserRequirements: "Requires a modern web browser with JavaScript enabled.",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     about: [args.subject, ...args.concepts],
+    audience: { "@type": "EducationalAudience", educationalRole: ["student", "teacher"] },
     provider: { "@type": "Organization", name: siteName, url: siteUrl },
+  };
+}
+
+export function subjectCollectionJsonLd(args: {
+  locale: Locale;
+  path: string;
+  name: string;
+  description: string;
+  simulations: { name: string; path: string; description: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: args.name,
+    description: args.description,
+    url: localizedUrl(args.locale, args.path),
+    inLanguage: hreflangCodes[args.locale],
+    isPartOf: { "@type": "WebSite", name: siteName, url: siteUrl },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: args.simulations.length,
+      itemListElement: args.simulations.map((simulation, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "LearningResource",
+          name: simulation.name,
+          description: simulation.description,
+          url: localizedUrl(args.locale, simulation.path),
+        },
+      })),
+    },
   };
 }
 
