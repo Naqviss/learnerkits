@@ -4,14 +4,14 @@ A browser-based educational simulation platform built around **learn by experime
 
 ## Current catalog
 
-- **6 subjects**
-- **12 labs per subject**
-- **72 simulations total**
+- **6 published subject areas**
+- **71 simulations currently indexable**
+- **71 simulations total**
 - **12 SEO-priority simulations** surfaced as the first build/promote collection
 - Light theme by default, plus Dark and System appearance modes
 - Locale-aware routing for `en`, `es`, `zh`, `ar`, `pt`, `fr`, `ru`, `ja`, `de`
 
-The original two labs in every subject are retained. The latest expansion adds the requested ten additional simulations to **each** subject.
+The original labs are retained. The published catalog currently contains 71 indexable simulations; verify the catalog count when adding or removing a lab.
 
 ## Subjects
 
@@ -24,11 +24,11 @@ Existing Projectile Lab and Circuit Builder plus Inclined Plane & Friction, Mome
 ### Geography & Earth — 12 labs
 Existing Seismic Wave Lab and Plate Motion Lab plus Volcano Eruption 3D, Earthquake Epicenter Finder, Plate Tectonics 3D, Tsunami 3D, Hurricane, Weather Fronts, River Erosion, Rock Cycle, Water Cycle and Ocean Currents 3D.
 
-### Biology & Ecosystems — 12 labs
-Existing Population Growth and Predator–Prey Dynamics plus Animal Cell 3D, Cell Membrane Transport, Mitosis, DNA Replication, Protein Synthesis, Human Heart 3D, Natural Selection, Food Web Builder, Photosynthesis and Immune System Defense.
+### Environmental Science & Climate — 10 labs
+Greenhouse Effect, Carbon Cycle, Sea Level Rise, Ocean Acidification, Renewable Energy Grid, Air Pollution & Smog, Deforestation & Water Cycle, Biodiversity & Habitat Fragmentation, Urban Heat Island, and Climate Resilience City Builder.
 
-### Chemistry — 12 labs
-Existing Gas Law and Reaction Rate labs plus Molecular Geometry 3D, Molecule Builder 3D, Chemical Bonding, Acid–Base & pH, Titration, States of Matter 3D, Solubility Curve, Limiting Reagent, Balance the Equation and Periodic Table Element Hunt.
+### Chemistry — 13 labs
+Existing Gas Law and Reaction Rate labs plus Molecular Geometry 3D, Molecule Builder 3D, Chemical Bonding, Acid–Base & pH, Neutralization Station, Titration, States of Matter 3D, Solubility Curve, Limiting Reagent, Balance the Equation and Periodic Table Element Hunt.
 
 ### Mathematics — 12 labs
 Existing Vector Playground and Function Explorer plus 3D Geometry Slice, Pythagorean Puzzle, Unit Circle, Quadratic Transformations, Slope Intercept, Geometry Transformations, Probability Experiment, Derivative & Tangent, Area Under Curve and Matrix Transformation.
@@ -50,7 +50,7 @@ The supplied roadmap is represented directly in `lib/subjects/catalog.ts` with `
 11. Solubility Curve Simulator
 12. Matrix Transformation Visualizer
 
-Subject pages and the global simulation library surface these first while still exposing the complete 72-lab curriculum. Generic simulation metadata uses the supplied SEO phrase as a keyword and creates localized canonical/hreflang metadata.
+Subject pages and the global simulation library surface these first while still exposing the complete 71-lab curriculum. Generic simulation metadata uses the supplied SEO phrase as a keyword and creates localized canonical/hreflang metadata.
 
 ## Donate Now
 
@@ -105,7 +105,7 @@ The platform now translates the full educational experience across the required 
 - Japanese `ja`
 - German `de`
 
-Translation coverage includes navigation, homepage, settings, missions, progress, donation copy, subject landing pages, all **72 simulation titles and learning outcomes**, simulation concepts/types, scientific-method guidance, dedicated lab controls, expanded-lab controls, select options, chart labels, live metric labels, common categorical results, accessibility labels, and SEO copy. Equations, chemical symbols, variable names, and scientific units remain mathematically/scientifically unchanged. English is still the safe missing-key fallback in development.
+Translation coverage includes navigation, homepage, settings, missions, progress, donation copy, subject landing pages, all **71 simulation titles and learning outcomes**, simulation concepts/types, scientific-method guidance, dedicated lab controls, expanded-lab controls, select options, chart labels, live metric labels, common categorical results, accessibility labels, and SEO copy. Equations, chemical symbols, variable names, and scientific units remain mathematically/scientifically unchanged. English is still the safe missing-key fallback in development.
 
 ## International SEO
 
@@ -124,7 +124,7 @@ Every indexable localized page uses:
 - a multilingual sitemap covering the subject and simulation catalog
 - `robots.txt` pointing to the sitemap
 
-The 72 simulation pages use localized simulation names, outcomes, concepts, and subject terminology in metadata; the English-only SEO target phrase is only injected as a keyword on the English variant rather than leaking into translated pages.
+The 71 simulation pages use localized simulation names, outcomes, concepts, and subject terminology in metadata; the English-only SEO target phrase is only injected as a keyword on the English variant rather than leaking into translated pages.
 
 ## Simulation implementation
 

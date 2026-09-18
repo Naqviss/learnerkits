@@ -24,7 +24,7 @@
 
 ### Translation coverage
 - All nine message files share the same 222-key schema.
-- All 72 simulation titles/outcomes have translations in each of the eight non-English locales.
+- All 71 simulation titles/outcomes have translations in each of the eight non-English locales.
 - All six subject landing-page content sets are localized.
 - Dedicated lab labels and expanded-lab controls are localized at runtime.
 - Human-reviewed dictionaries cover technical control labels and result phrases that are unreliable to translate word-by-word.
@@ -37,17 +37,16 @@
 The supplied ten-simulation list for each subject has been added **on top of** the two existing labs per subject.
 
 ### Catalog totals
-- 6 subjects
-- 12 simulations per subject
-- 72 unique simulation slugs
+- 6 published subject areas (10–13 simulations per subject)
+- 71 unique simulation slugs
 - 60 newly added simulation routes
 - 12 supplied SEO-priority entries flagged as `featured`
 
 ### Routing and discovery
 - Every catalog entry appears on its subject landing page.
-- The global Simulation Library includes all 72 entries grouped by subject.
+- The global Simulation Library includes all 71 entries grouped by subject.
 - A dedicated 12-card priority collection surfaces the strongest supplied SEO opportunities.
-- The sitemap automatically includes all 72 simulation paths for all supported locales.
+- The sitemap automatically includes all 71 simulation paths for all supported locales.
 - Generic simulation pages use localized canonical/hreflang metadata and incorporate the supplied SEO target when present.
 
 ### Interactive implementation
@@ -70,14 +69,14 @@ More complex systems—such as hurricane intensity, eruption behavior, immune re
 
 ## Validation performed here
 
-- Catalog check: **72 simulations / 72 unique slugs**.
-- Per-subject check: **12 simulations in each of the six subjects**.
+- Catalog check: **71 simulations / 71 unique slugs**.
+- Published catalog check: **six subject areas; 71 simulations total**.
 - Expanded-model coverage check: **60 new configs**, with no missing or extra new slugs.
 - Existing coverage: 10 dedicated concept labs + 2 flagship simulations.
 - Featured SEO-priority check: **12**.
 - TypeScript parser check passed for all `.ts` and `.tsx` source files using the locally available TypeScript compiler.
 - Message dictionaries: 222 keys per locale with only legitimate invariant/cognate matches remaining against English (for example brand name, XP, numeric durations).
-- Simulation translation catalog: 72 translated entries for each non-English locale.
+- Simulation translation catalog: 71 translated entries for each non-English locale.
 - Expanded control-label audit: all control labels translate in every locale; unchanged items are scientific invariants/cognates such as `pH`, German `Matrix`, or `Planet`.
 - Runtime metric-label audit leaves only scientific notation/symbols or legitimate cognates unchanged.
 
@@ -99,7 +98,7 @@ npm run dev
 2. Add dedicated mission/game-state logic for Earthquake Epicenter Finder, Cell Membrane Transport and Protein Synthesis.
 3. Add charts/measurement tools where the educational goal depends on interpreting a curve or time series.
 4. Add native-speaker editorial review for the highest-traffic translated landing pages before large-scale SEO promotion.
-5. Add E2E tests that visit all 72 routes and exercise at least one control on every simulation.
+5. Add E2E tests that visit all 71 routes and exercise at least one control on every simulation.
 6. Add subject-specific localized article/FAQ content clusters around the supplied SEO targets rather than relying on simulation pages alone.
 7. Configure Stripe webhook handling if you later need a persistent donation ledger, receipts workflow, or donor analytics.
 

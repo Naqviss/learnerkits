@@ -5,7 +5,7 @@ import Link from "next/link";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/getMessages";
 import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
-import { breadcrumbJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
+import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
 import { MoonLandingClient } from "@/components/simulation/MoonLandingClient";
 import { SimulationGuide } from "@/components/seo/SimulationGuide";
 
@@ -29,9 +29,11 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   const simulation = subject.simulations.find((item) => item.slug === "moon-landing");
   const schema = simulationJsonLd({ locale, path: "/simulations/moon-landing", title: simulation?.title ?? m.moonLanding.title, description: simulation?.outcome ?? m.moonLanding.subtitle, subject: subject.eyebrow, concepts: simulation?.concepts ? simulation.concepts.split(" · ") : [] });
   const crumbs = breadcrumbJsonLd(locale, [{ name: c.home.exploreSubjects, path: "/subjects" }, { name: subject.eyebrow, path: "/subjects/space" }, { name: simulation?.title ?? m.moonLanding.title, path: "/simulations/moon-landing" }]);
+  const faq = faqJsonLd(locale, m.moonLanding.seo.faq);
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faq)}/>
     <Suspense fallback={<div className="simLayout" aria-busy="true"><section className="simViewport"><div className="statusBanner"><strong>{m.moonLanding.title}</strong><span>{m.loading.environment}</span></div></section></div>}><MoonLandingClient m={m}/></Suspense>
     <section className="container section" aria-labelledby="moon-objectives"><h2 id="moon-objectives">{m.moonLanding.seo.objectivesTitle}</h2><div className="grid2">{m.moonLanding.seo.objectives.map((objective) => <article className="card" key={objective}><h3>{objective}</h3></article>)}</div></section>
     <section className="container section"><h2>{m.moonLanding.seo.faqTitle}</h2><div className="grid3">{m.moonLanding.seo.faq.map((item) => <article className="card" key={item.q}><h3>{item.q}</h3><p className="muted">{item.a}</p></article>)}</div></section>

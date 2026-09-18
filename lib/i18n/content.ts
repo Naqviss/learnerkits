@@ -1,6 +1,6 @@
 import type { Locale } from "./config";
 import type { SimulationCard, SubjectDefinition, SubjectSlug } from "@/lib/subjects/catalog";
-import { subjectsCatalog } from "@/lib/subjects/catalog";
+import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { simulationTranslations } from "./simulationTranslations";
 import { siteName } from "@/lib/seo/metadata";
 
@@ -219,8 +219,16 @@ for (const locale of ["es","fr","de","pt","ru","ja","zh","ar"] as Locale[]) {
 
 export function getEducationCopy(locale: Locale): EducationCopy {
   const copy = copies[locale] ?? en;
+  const visibleLabCount = visibleSubjectSlugs.reduce((count, slug) => count + subjectsCatalog[slug].simulations.length, 0);
+  const updateLabCount = (value: string) => value.replace(/\b70\b/g, String(visibleLabCount));
   return {
     ...copy,
+    home: { ...copy.home, labCount: updateLabCount(copy.home.labCount) },
+    seo: {
+      ...copy.seo,
+      homeDescription: updateLabCount(copy.seo.homeDescription),
+      libraryDescription: updateLabCount(copy.seo.libraryDescription),
+    },
     donate: {
       ...copy.donate,
       seoTitle: copy.donate.seoTitle.replace(/Science Universe/g, siteName),

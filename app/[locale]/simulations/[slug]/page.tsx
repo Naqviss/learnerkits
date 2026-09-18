@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
-import { breadcrumbJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
+import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
 import { getSimulationCard, getSubjectForSimulation, isVisibleSubjectSlug } from "@/lib/subjects/catalog";
 import { ConceptLabClient } from "@/components/simulation/ConceptLabClient";
 import { ChemistryActivitiesClient } from "@/components/subjects/chemistry/ChemistryActivitiesClient";
@@ -13,6 +13,7 @@ import { BiologyActivitiesClient } from "@/components/subjects/biology/BiologyAc
 import { MathematicsActivitiesClient } from "@/components/subjects/mathematics/MathematicsActivitiesClient";
 import { EnvironmentalActivitiesClient } from "@/components/subjects/environmental/EnvironmentalActivitiesClient";
 import { SimulationGuide } from "@/components/seo/SimulationGuide";
+import { getSimulationGuide } from "@/lib/seo/simulation-guides";
 import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
 
 export function generateStaticParams() {
@@ -68,6 +69,8 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     { name: subject.eyebrow, path: `/subjects/${subject.slug}` },
     { name: simulation.title, path: `/simulations/${slug}` },
   ]);
+  const guide = getSimulationGuide(safeLocale, subject, simulation);
+  const faq = faqJsonLd(safeLocale, guide.faq);
   const activity = baseSubject.slug === "environmental-science"
     ? <EnvironmentalActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
     : baseSubject.slug === "mathematics"
@@ -86,6 +89,7 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faq)}/>
     {activity}
     <SimulationGuide locale={safeLocale} subject={subject} simulation={simulation}/>
   </>;
