@@ -9,8 +9,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const subjectPaths = visibleSubjectSlugs.map((slug) => `/subjects/${slug}`);
   const simulationPaths = visibleSubjectSlugs.flatMap((slug) => subjectsCatalog[slug].simulations.map((sim) => `/simulations/${sim.slug}`));
   const paths = [...core, ...subjectPaths, ...simulationPaths];
+  const lastModified = new Date();
   return locales.flatMap((locale) => paths.map((path) => ({
     url: localizedUrl(locale, path),
+    lastModified,
     changeFrequency: path.includes("simulations") ? "weekly" : "monthly",
     priority: path === "/" ? 1 : path.includes("subjects/") ? .85 : path === "/donate" ? .5 : .8,
     alternates: {

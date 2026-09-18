@@ -19,10 +19,12 @@ export function proxy(request: NextRequest) {
     defaultLocale;
 
   const destination = request.nextUrl.clone();
-  destination.pathname = pathname === "/" ? `/${locale}` : `/${locale}${pathname}`;
+  destination.pathname = `/${locale}${pathname}`;
 
-  // Give the root URL a concrete destination so browsers and CDNs do not have
-  // to keep a rewritten response under the non-localized pathname.
+  // Keep the public homepage crawlable while still serving the visitor's language.
+  // Its localized canonical points search engines to the stable /{locale} URL.
+  if (pathname === "/") return NextResponse.rewrite(destination);
+
   return NextResponse.redirect(destination);
 }
 
