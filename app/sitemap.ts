@@ -20,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: localizedUrl(locale, path),
     lastModified,
     changeFrequency: path.includes("simulations") ? "weekly" : "monthly",
-    priority: path === "/" ? 1 : path.includes("subjects/") ? .85 : isEnglishOnly(path) ? .85 : path === "/donate" ? .5 : .8,
+    priority: path === "/" ? 1 : path === "/molecule-kit" ? .9 : path.includes("subjects/") ? .85 : isEnglishOnly(path) ? .85 : path === "/donate" ? .5 : .8,
     alternates: isEnglishOnly(path)
       ? { languages: { en: localizedUrl(defaultLocale, path), "x-default": localizedUrl(defaultLocale, path) } }
       : {

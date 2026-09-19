@@ -1,9 +1,13 @@
 import type { Locale } from "@/lib/i18n/config";
 
+export const moleculeKitSimSlugs = ["molecule-builder-3d", "molecular-geometry-3d"] as const;
+
 export type MoleculeKitCopy = {
   title: string;
   metaTitle: string;
   metaDescription: string;
+  keywords: string[];
+  partOfBadge: string;
   heroEyebrowSuffix: string;
   lede: string;
   ctaPrimary: string;
@@ -25,6 +29,8 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
     title: "Molecule Kit",
     metaTitle: "Molecule Kit: Build & Explore 3D Molecules Free",
     metaDescription: "Build stable molecules and predict their 3D shape with the free Molecule Kit — two interactive labs covering valence, bonding, VSEPR geometry, and bond angles. No sign-up required.",
+    keywords: ["molecule kit", "molecule builder 3D", "molecular geometry simulator", "build molecules game", "VSEPR simulator"],
+    partOfBadge: "Part of the Molecule Kit",
     heroEyebrowSuffix: "Interactive 3D lab kit",
     lede: "Build real molecules atom by atom, then predict how their shape forms. The Molecule Kit pairs two free, interactive 3D labs covering valence, bonding, VSEPR reasoning, and bond angles — no sign-up required.",
     ctaPrimary: "Start building molecules",
@@ -56,6 +62,8 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
     title: "Kit de Moléculas",
     metaTitle: "Kit de Moléculas: construye y explora moléculas 3D gratis",
     metaDescription: "Construye moléculas estables y predice su forma en 3D con el Kit de Moléculas, gratuito — dos laboratorios interactivos sobre valencia, enlaces, geometría VSEPR y ángulos de enlace. Sin registro.",
+    keywords: ["kit de moléculas", "construir moléculas 3D", "simulador de geometría molecular", "juego para construir moléculas", "simulador VSEPR"],
+    partOfBadge: "Parte del Kit de Moléculas",
     heroEyebrowSuffix: "Kit de laboratorio 3D interactivo",
     lede: "Construye moléculas reales átomo a átomo y luego predice cómo se forma su geometría. El Kit de Moléculas combina dos laboratorios 3D gratuitos e interactivos sobre valencia, enlaces, razonamiento VSEPR y ángulos de enlace — sin necesidad de registrarte.",
     ctaPrimary: "Empieza a construir moléculas",
@@ -87,6 +95,8 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
     title: "Kit Molécules",
     metaTitle: "Kit Molécules : construire et explorer des molécules 3D gratuitement",
     metaDescription: "Construisez des molécules stables et prédisez leur forme en 3D avec le Kit Molécules, gratuit — deux laboratoires interactifs sur la valence, les liaisons, la géométrie VSEPR et les angles de liaison. Aucune inscription requise.",
+    keywords: ["kit molécules", "construire des molécules 3D", "simulateur de géométrie moléculaire", "jeu de construction de molécules", "simulateur VSEPR"],
+    partOfBadge: "Fait partie du Kit Molécules",
     heroEyebrowSuffix: "Kit de laboratoire 3D interactif",
     lede: "Construisez de vraies molécules atome par atome, puis prédisez comment leur forme se dessine. Le Kit Molécules réunit deux laboratoires 3D gratuits et interactifs sur la valence, les liaisons, le raisonnement VSEPR et les angles de liaison — sans inscription.",
     ctaPrimary: "Commencer à construire des molécules",
@@ -118,6 +128,8 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
     title: "Molekül-Kit",
     metaTitle: "Molekül-Kit: 3D-Moleküle kostenlos bauen und erkunden",
     metaDescription: "Baue stabile Moleküle und sage ihre 3D-Form voraus – mit dem kostenlosen Molekül-Kit, zwei interaktiven Laboren zu Valenz, Bindungen, VSEPR-Geometrie und Bindungswinkeln. Keine Anmeldung nötig.",
+    keywords: ["molekül-kit", "moleküle 3D bauen", "simulator molekülgeometrie", "spiel moleküle bauen", "VSEPR simulator"],
+    partOfBadge: "Teil des Molekül-Kits",
     heroEyebrowSuffix: "Interaktives 3D-Labor-Kit",
     lede: "Baue echte Moleküle Atom für Atom und sage dann voraus, wie ihre Form entsteht. Das Molekül-Kit vereint zwei kostenlose, interaktive 3D-Labore zu Valenz, Bindungen, VSEPR-Logik und Bindungswinkeln – ohne Anmeldung.",
     ctaPrimary: "Mit dem Molekülbau beginnen",
@@ -149,6 +161,8 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
     title: "Kit de Moléculas",
     metaTitle: "Kit de Moléculas: construa e explore moléculas 3D grátis",
     metaDescription: "Construa moléculas estáveis e preveja sua forma em 3D com o Kit de Moléculas, gratuito — dois laboratórios interativos sobre valência, ligações, geometria VSEPR e ângulos de ligação. Sem necessidade de cadastro.",
+    keywords: ["kit de moléculas", "construir moléculas 3D", "simulador de geometria molecular", "jogo de construir moléculas", "simulador VSEPR"],
+    partOfBadge: "Parte do Kit de Moléculas",
     heroEyebrowSuffix: "Kit de laboratório 3D interativo",
     lede: "Construa moléculas reais átomo por átomo e depois preveja como sua forma se forma. O Kit de Moléculas reúne dois laboratórios 3D gratuitos e interativos sobre valência, ligações, raciocínio VSEPR e ângulos de ligação — sem necessidade de cadastro.",
     ctaPrimary: "Comece a construir moléculas",
@@ -180,6 +194,8 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
     title: "Молекулярный набор",
     metaTitle: "Молекулярный набор: бесплатно стройте и изучайте 3D-молекулы",
     metaDescription: "Стройте устойчивые молекулы и предсказывайте их 3D-форму с помощью бесплатного «Молекулярного набора» — две интерактивные лаборатории по валентности, связям, геометрии VSEPR и углам связей. Регистрация не требуется.",
+    keywords: ["молекулярный набор", "конструктор молекул 3D", "симулятор молекулярной геометрии", "игра построй молекулу", "симулятор VSEPR"],
+    partOfBadge: "Часть Молекулярного набора",
     heroEyebrowSuffix: "Интерактивный 3D-набор лабораторий",
     lede: "Стройте настоящие молекулы атом за атомом, а затем предсказывайте, как формируется их форма. «Молекулярный набор» объединяет две бесплатные интерактивные 3D-лаборатории по валентности, связям, логике VSEPR и углам связей — без регистрации.",
     ctaPrimary: "Начать собирать молекулы",
@@ -211,6 +227,8 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
     title: "分子キット",
     metaTitle: "分子キット：3D分子を無料で組み立てて探索",
     metaDescription: "無料の「分子キット」で安定した分子を組み立て、3D形状を予測しよう。原子価、結合、VSEPR構造、結合角を扱う2つのインタラクティブラボ。登録不要。",
+    keywords: ["分子キット", "分子ビルダー3D", "分子構造シミュレーター", "分子を作るゲーム", "VSEPRシミュレーター"],
+    partOfBadge: "分子キットの一部",
     heroEyebrowSuffix: "インタラクティブ3Dラボキット",
     lede: "原子を1つずつ組み合わせて実際の分子を作り、その形がどう決まるかを予測しよう。分子キットは、原子価・結合・VSEPR推論・結合角を扱う2つの無料インタラクティブ3Dラボをまとめたものです。登録は不要です。",
     ctaPrimary: "分子作りを始める",
@@ -242,6 +260,8 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
     title: "分子工具包",
     metaTitle: "分子工具包：免费搭建并探索3D分子",
     metaDescription: "使用免费的分子工具包搭建稳定分子并预测其3D形状——两个互动实验，涵盖化合价、化学键、VSEPR几何构型和键角。无需注册。",
+    keywords: ["分子工具包", "3D分子构建器", "分子几何模拟器", "搭建分子游戏", "VSEPR模拟器"],
+    partOfBadge: "分子工具包的一部分",
     heroEyebrowSuffix: "互动3D实验工具包",
     lede: "逐个原子搭建真实分子，然后预测其形状是如何形成的。分子工具包包含两个免费的互动3D实验，涵盖化合价、化学键、VSEPR推理和键角——无需注册。",
     ctaPrimary: "开始搭建分子",
@@ -273,6 +293,8 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
     title: "مجموعة الجزيئات",
     metaTitle: "مجموعة الجزيئات: ابنِ واستكشف جزيئات ثلاثية الأبعاد مجانًا",
     metaDescription: "ابنِ جزيئات مستقرة وتوقّع شكلها ثلاثي الأبعاد باستخدام مجموعة الجزيئات المجانية — مختبران تفاعليان يغطيان التكافؤ والروابط وهندسة VSEPR وزوايا الروابط. لا حاجة لإنشاء حساب.",
+    keywords: ["مجموعة الجزيئات", "بناء جزيئات ثلاثية الأبعاد", "محاكي الهندسة الجزيئية", "لعبة بناء الجزيئات", "محاكي VSEPR"],
+    partOfBadge: "جزء من مجموعة الجزيئات",
     heroEyebrowSuffix: "مجموعة مختبر تفاعلي ثلاثي الأبعاد",
     lede: "ابنِ جزيئات حقيقية ذرة تلو الأخرى، ثم توقّع كيف يتشكل شكلها. تجمع مجموعة الجزيئات بين مختبرين مجانيين تفاعليين ثلاثيي الأبعاد يغطيان التكافؤ والروابط ومنطق VSEPR وزوايا الروابط — دون الحاجة لإنشاء حساب.",
     ctaPrimary: "ابدأ ببناء الجزيئات",

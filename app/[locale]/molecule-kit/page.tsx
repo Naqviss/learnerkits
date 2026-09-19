@@ -4,9 +4,7 @@ import { notFound } from "next/navigation";
 import { isLocale, locales, type Locale } from "@/lib/i18n/config";
 import { getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, subjectCollectionJsonLd } from "@/lib/seo/metadata";
-import { getMoleculeKitCopy } from "@/lib/seo/molecule-kit-content";
-
-const kitSimSlugs = ["molecule-builder-3d", "molecular-geometry-3d"] as const;
+import { getMoleculeKitCopy, moleculeKitSimSlugs } from "@/lib/seo/molecule-kit-content";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -16,9 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: raw } = await params;
   if (!isLocale(raw)) return {};
   const copy = getMoleculeKitCopy(raw);
-  return localizedMetadata(raw, "/molecule-kit", copy.metaTitle, copy.metaDescription, {
-    keywords: ["molecule kit", "molecule builder 3D", "molecular geometry simulator", "build molecules game", "VSEPR simulator"],
-  });
+  return localizedMetadata(raw, "/molecule-kit", copy.metaTitle, copy.metaDescription, { keywords: copy.keywords });
 }
 
 export default async function MoleculeKitPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -28,7 +24,7 @@ export default async function MoleculeKitPage({ params }: { params: Promise<{ lo
   const copy = getMoleculeKitCopy(locale);
   const chemistryName = getLocalizedSubjectName(locale, "chemistry");
   const chemistry = getLocalizedSubject(locale, "chemistry");
-  const kitSimulations = kitSimSlugs.map((slug) => chemistry.simulations.find((sim) => sim.slug === slug)!);
+  const kitSimulations = moleculeKitSimSlugs.map((slug) => chemistry.simulations.find((sim) => sim.slug === slug)!);
 
   const breadcrumb = breadcrumbJsonLd(locale, [
     { name: chemistryName, path: "/subjects/chemistry" },

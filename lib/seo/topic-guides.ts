@@ -173,6 +173,19 @@ const editorial: Record<string, TopicEditorial> = {
       { q: "Why can lone pairs change molecular shape?", a: "Lone pairs occupy space around the central atom and repel bonding pairs, changing bond angles and the visible shape." },
     ],
   },
+  "molecule-builder-3d": {
+    title: "Molecule builder game: build stable molecules in 3D",
+    target: "build molecules game",
+    answer: "A stable molecule forms when its atoms combine so that each one satisfies its typical valence — often the octet rule for main-group atoms — by sharing or transferring electrons through bonds.",
+    whyItMatters: "Building a molecule piece by piece, instead of only labeling a finished diagram, turns valence and bonding capacity into a testable constraint rather than a fact to memorize.",
+    investigate: ["Try adding more bonds to an atom than its valence allows and see what happens.", "Compare how many bonds hydrogen, oxygen, and carbon typically form.", "Build the same set of atoms two different ways and check which arrangement is stable."],
+    method: ["Pick a target molecule or a set of available atoms.", "Predict how many bonds each atom needs before connecting anything.", "Build the structure and use the model's feedback to fix any unstable atom."],
+    modelNote: "The builder enforces common valence and bonding patterns for teaching purposes; it does not model every exception, resonance structure, or expanded-octet case found in real chemistry.",
+    faq: [
+      { q: "What determines how many bonds an atom can form?", a: "For most main-group atoms, the number of bonds relates to valence electrons and the tendency to reach a stable octet (or a pair, for hydrogen)." },
+      { q: "Why did my structure fail?", a: "Usually because an atom has too few or too many bonds for its valence — check each atom's bond count against its typical valence." },
+    ],
+  },
   "neutralization-station": {
     title: "Acid-base neutralization game: reach the endpoint",
     target: "acid base neutralization game",

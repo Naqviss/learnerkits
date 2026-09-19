@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, siteName, siteUrl } from "@/lib/seo/metadata";
 import { getTopicGuide, getTopicGuides } from "@/lib/seo/topic-guides";
+import { getMoleculeKitCopy, moleculeKitSimSlugs } from "@/lib/seo/molecule-kit-content";
 
 export function generateStaticParams() {
   return getTopicGuides().map((guide) => ({ locale: "en", slug: guide.slug }));
@@ -51,6 +52,8 @@ export default async function TopicGuidePage({ params }: { params: Promise<{ loc
     { name: guide.title, path },
   ]);
   const faq = faqJsonLd(locale, guide.faq);
+  const inMoleculeKit = (moleculeKitSimSlugs as readonly string[]).includes(guide.simulation.slug);
+  const kitCopy = inMoleculeKit ? getMoleculeKitCopy(locale) : undefined;
 
   return <main className="container topicGuidePage">
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(article)} />
@@ -64,6 +67,7 @@ export default async function TopicGuidePage({ params }: { params: Promise<{ loc
         <div className="topicGuideHeroActions">
           <Link className="button primary" href={`/en/simulations/${guide.simulation.slug}`}>Open the interactive simulation</Link>
           <Link className="textLink" href={`/en/subjects/${guide.subject.slug}`}>Browse {guide.subject.eyebrow} →</Link>
+          {kitCopy && <Link className="textLink" href={`/en/molecule-kit`}>{kitCopy.partOfBadge} →</Link>}
         </div>
       </header>
       <div className="topicGuideBody">

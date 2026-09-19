@@ -2,18 +2,22 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import { getSimulationGuide } from "@/lib/seo/simulation-guides";
 import { getTopicGuide } from "@/lib/seo/topic-guides";
+import { getMoleculeKitCopy, moleculeKitSimSlugs } from "@/lib/seo/molecule-kit-content";
 import type { SimulationCard, SubjectDefinition } from "@/lib/subjects/catalog";
 
 export function SimulationGuide({ locale, subject, simulation }: { locale: Locale; subject: SubjectDefinition; simulation: SimulationCard }) {
   const guide = getSimulationGuide(locale, subject, simulation);
   const related = subject.simulations.filter((item) => item.slug !== simulation.slug).slice(0, 4);
   const topicGuide = locale === "en" ? getTopicGuide(simulation.slug) : undefined;
+  const inMoleculeKit = (moleculeKitSimSlugs as readonly string[]).includes(simulation.slug);
+  const kitCopy = inMoleculeKit ? getMoleculeKitCopy(locale) : undefined;
 
   return <section className="container simulationGuide" aria-labelledby="simulation-guide-title">
     <header className="simulationGuideHeader">
       <span className="eyebrow">{guide.freeLabel}</span>
       <h2 id="simulation-guide-title">{guide.title}</h2>
       <p>{guide.intro}</p>
+      {kitCopy && <Link className="textLink simulationTopicLink" href={`/${locale}/molecule-kit`}>{kitCopy.partOfBadge} →</Link>}
       {topicGuide && <Link className="textLink simulationTopicLink" href={`/en/guides/${topicGuide.slug}`}>Read the focused topic guide →</Link>}
     </header>
     <div className="simulationGuideGrid">
