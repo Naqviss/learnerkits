@@ -30,6 +30,7 @@ LearnerKits is an education platform, not a blog or news site. Each simulation p
 - [Learn](${siteUrl}/en/learn)
 - [About](${siteUrl}/en/about)
 - [Science simulation guides](${siteUrl}/en/guides)
+- [Molecule Kit](${siteUrl}/en/molecule-kit): Build molecules and explore 3D molecular geometry.
 - [Sitemap](${siteUrl}/sitemap.xml)
 
 ## Focused topic guides
