@@ -50,11 +50,14 @@ function directionsFor(count: number, lone: number, angleDeg: number): THREE.Vec
 
 export function MolecularScene({ molecule = 0, attachments, matter, temperature = 25, paused, resetKey }: { molecule?: number; attachments?: Attachment[]; matter?: boolean; temperature?: number; paused: boolean; resetKey: number }) {
   const host = useRef<HTMLDivElement>(null);
-  const live = useRef({ paused, temperature });
-  live.current = { paused, temperature };
+  const [autoRotate, setAutoRotate] = useState(false);
+  const [showLonePairs, setShowLonePairs] = useState(true);
+  const live = useRef({ paused, temperature, autoRotate });
+  live.current = { paused, temperature, autoRotate };
   const cameraControls = useRef<OrbitControls | null>(null);
   const [failed, setFailed] = useState(false);
   const attached = attachments?.map(a => `${a.atom}:${a.order}`).join(",");
+  const canShowLonePairs = !matter && attachments === undefined;
 
   // Buttons drive zoom instead of scroll/pinch (enableZoom stays off) so the page
   // keeps scrolling normally when the pointer is over the 3D stage.
@@ -89,6 +92,7 @@ export function MolecularScene({ molecule = 0, attachments, matter, temperature 
     controls.enableDamping = true;
     controls.minDistance = 6; controls.maxDistance = 18;
     controls.enableZoom = false; // Let normal page scrolling work over the stage.
+    controls.autoRotateSpeed = 2.4;
     cameraControls.current = controls;
     scene.add(new THREE.HemisphereLight(0xe8eeff, 0x303540, 3));
     const key = new THREE.DirectionalLight(0xffffff, 4); key.position.set(-4, 5, 6); scene.add(key);
@@ -116,7 +120,7 @@ export function MolecularScene({ molecule = 0, attachments, matter, temperature 
       const directions = directionsFor(m.count, m.lone, m.angle);
       const items = attached === undefined ? directions.map(() => ({ atom: m.outer, order: m.order })) : attached ? attached.split(",").map(s => ({ atom: s.split(":")[0], order: Number(s.split(":")[1]) })) : [];
       items.forEach((item, i) => { const end = directions[i]?.clone().multiplyScalar(2); if (!end) return; bond(end, item.order); atom(item.atom, end, item.atom === "H" ? .34 : .48); });
-      if (attachments === undefined) for (let i = 0; i < m.lone; i++) {
+      if (attachments === undefined && showLonePairs) for (let i = 0; i < m.lone; i++) {
         const lobe = new THREE.Mesh(sphere, new THREE.MeshStandardMaterial({ color: 0xd2acff, transparent: true, opacity: .25, depthWrite: false }));
         lobe.scale.set(.45,.8,.4); lobe.position.set((i - (m.lone - 1)/2)*1.2, 1.1, -.3); model.add(lobe);
         for (const dx of [-.12,.12]) { const electron = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0xd5a9ff })); electron.scale.setScalar(.07); electron.position.copy(lobe.position); electron.position.x += dx; model.add(electron); }
@@ -138,12 +142,13 @@ export function MolecularScene({ molecule = 0, attachments, matter, temperature 
           else { const bounce = (v:number, span:number) => Math.abs(((v% (4*span)) + 4*span)%(4*span)-2*span)-span; p.position.set(bounce(seed+clock*speed*1.9,2.7),bounce(seed*2+clock*speed*1.3,1.7),bounce(seed*3+clock*speed,1.2)); }
         });
       }
+      controls.autoRotate = live.current.autoRotate && !live.current.paused && !reduced;
       controls.update(); renderer.render(scene,camera); raf=requestAnimationFrame(frame);
     };
     raf=requestAnimationFrame(frame);
     return () => { cancelAnimationFrame(raf); observer.disconnect(); controls.dispose(); cameraControls.current=null; const geometries = new Set<THREE.BufferGeometry>(); const mats = new Set<THREE.Material>([...Object.values(materials),bondMaterial]); scene.traverse(o=>{ if (o instanceof THREE.Mesh || o instanceof THREE.LineSegments) { geometries.add(o.geometry); (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>mats.add(m)); } }); geometries.add(sphere); geometries.forEach(g=>g.dispose()); mats.forEach(m=>m.dispose()); renderer.dispose(); renderer.domElement.remove(); };
-  // Rebuild geometry only for a changed molecule/build, not for temperature or playback.
+  // Rebuild geometry only for a changed molecule/build, not for temperature, playback, or the auto-rotate toggle.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [molecule, attached, matter, resetKey]);
-  return <div className="chemMolecular"><div className="chemWebgl" ref={host} role="img" aria-label={matter ? `Water particles: ${phase(temperature)}` : `${molecules[molecule].formula} molecular model`} />{failed && <p className="chemRenderFallback">3D rendering is unavailable on this device. The controls, molecular data, and mission still work.</p>}<div className="chemOrbitBar"><span>Drag to rotate · touch to explore</span><div className="chemZoomGroup"><button onClick={() => zoomBy(1 / 1.2)} aria-label="Zoom in">+</button><button onClick={() => zoomBy(1.2)} aria-label="Zoom out">−</button><button onClick={() => cameraControls.current?.reset()}>Reset view</button></div></div></div>;
+  }, [molecule, attached, matter, resetKey, showLonePairs]);
+  return <div className="chemMolecular"><div className="chemWebgl" ref={host} role="img" aria-label={matter ? `Water particles: ${phase(temperature)}` : `${molecules[molecule].formula} molecular model`} />{failed && <p className="chemRenderFallback">3D rendering is unavailable on this device. The controls, molecular data, and mission still work.</p>}<div className="chemOrbitBar"><span>Drag to rotate · touch to explore</span><div className="chemZoomGroup"><button aria-pressed={autoRotate} onClick={() => setAutoRotate(v => !v)}>{autoRotate ? "⏸ Auto-rotate" : "↻ Auto-rotate"}</button>{canShowLonePairs && <button aria-pressed={showLonePairs} onClick={() => setShowLonePairs(v => !v)}>{showLonePairs ? "Hide lone pairs" : "Show lone pairs"}</button>}<button onClick={() => zoomBy(1 / 1.2)} aria-label="Zoom in">+</button><button onClick={() => zoomBy(1.2)} aria-label="Zoom out">−</button><button onClick={() => cameraControls.current?.reset()}>Reset view</button></div></div></div>;
 }
