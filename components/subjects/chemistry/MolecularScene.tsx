@@ -7,7 +7,46 @@ import { molecules, phase } from "@/lib/simulations/chemistry/model";
 import { loadSettings, prefersReducedMotion, renderProfile } from "@/lib/settings/storage";
 
 export type Attachment = { atom: string; order: number };
-const colors: Record<string, number> = { H: 0xe9f2fa, O: 0xf05d70, C: 0x65788e, N: 0x6388ff, F: 0x8cdb95, B: 0xf2bd82 };
+const colors: Record<string, number> = {
+  H: 0xe9f2fa, O: 0xf05d70, C: 0x65788e, N: 0x6388ff, F: 0x8cdb95, B: 0xf2bd82,
+  Al: 0xc9c2d6, Si: 0xe0c98f, P: 0xffab5e, S: 0xf5db6b, Cl: 0x5fd97a, Ga: 0xd9a8a8, Ge: 0x9fc2c2,
+  As: 0xc9a0e0, Se: 0xffb870, Br: 0xb5544f, Sn: 0x8fa3a3, Sb: 0xb98fd1, Te: 0xd9b25e, I: 0xa15fc2, Xe: 0x6bc4d1,
+  Be: 0x9fd67f, Mg: 0x7fbf7f, Ti: 0xc7ccd6, Zn: 0x9a9fd6, Cd: 0xf0d9a1, Hg: 0xc7c7dc, Pb: 0x7a7d87,
+  Mo: 0x7fc2c2, W: 0x5fa3c9, U: 0x6f9fd1, Nb: 0x8fd1c9, Mn: 0xb583a8, Cr: 0x6f93d1,
+};
+
+// Generic VSEPR direction table: given bonding domains (`count`) and lone pairs (`lone`),
+// returns unit vectors for the bonding directions. Lone pairs are removed from the front of
+// each domain-count's canonical position list, in the order real molecules prefer them
+// (equatorial-first for 5 domains; a trans pair for the second lone pair at 6 domains) —
+// this reproduces the correct idealized geometry for every AXnEm combination up to 6 domains.
+function directionsFor(count: number, lone: number, angleDeg: number): THREE.Vector3[] {
+  const domains = count + lone;
+  const rad = angleDeg * Math.PI / 180;
+  if (domains <= 2) return [new THREE.Vector3(-1, 0, 0), new THREE.Vector3(1, 0, 0)].slice(0, count);
+  if (domains === 3) {
+    if (lone === 0) return [0, 1, 2].map(i => new THREE.Vector3(Math.cos(i * 2 * Math.PI / 3), Math.sin(i * 2 * Math.PI / 3), 0));
+    return [-1, 1].map(sign => new THREE.Vector3(sign * Math.sin(rad / 2), -Math.cos(rad / 2), 0));
+  }
+  if (domains === 4) {
+    if (lone === 0) return [[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]].map(p => new THREE.Vector3(...(p as [number,number,number])).normalize());
+    if (lone === 1) {
+      const vertical = Math.sqrt(Math.max(0, (Math.cos(rad) + .5) / 1.5));
+      const radius = Math.sqrt(Math.max(0, 1 - vertical ** 2));
+      return [0, 1, 2].map(i => new THREE.Vector3(radius * Math.cos(i * 2 * Math.PI / 3), -vertical, radius * Math.sin(i * 2 * Math.PI / 3)));
+    }
+    return [-1, 1].map(sign => new THREE.Vector3(sign * Math.sin(rad / 2), -Math.cos(rad / 2), 0));
+  }
+  if (domains === 5) {
+    const equatorial = [0, 1, 2].map(i => new THREE.Vector3(Math.cos(i * 2 * Math.PI / 3), 0, Math.sin(i * 2 * Math.PI / 3)));
+    const axial = [new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, -1, 0)];
+    return [...equatorial, ...axial].slice(lone, lone + count);
+  }
+  // domains === 6 (octahedral family): drop `lone` positions, taking the second lone pair
+  // from the opposite (trans) side of the first so two lone pairs always end up square planar.
+  const oct = [new THREE.Vector3(1,0,0), new THREE.Vector3(-1,0,0), new THREE.Vector3(0,1,0), new THREE.Vector3(0,-1,0), new THREE.Vector3(0,0,1), new THREE.Vector3(0,0,-1)];
+  return oct.slice(lone, lone + count);
+}
 
 export function MolecularScene({ molecule = 0, attachments, matter, temperature = 25, paused, resetKey }: { molecule?: number; attachments?: Attachment[]; matter?: boolean; temperature?: number; paused: boolean; resetKey: number }) {
   const host = useRef<HTMLDivElement>(null);
@@ -16,6 +55,19 @@ export function MolecularScene({ molecule = 0, attachments, matter, temperature 
   const cameraControls = useRef<OrbitControls | null>(null);
   const [failed, setFailed] = useState(false);
   const attached = attachments?.map(a => `${a.atom}:${a.order}`).join(",");
+
+  // Buttons drive zoom instead of scroll/pinch (enableZoom stays off) so the page
+  // keeps scrolling normally when the pointer is over the 3D stage.
+  const zoomBy = (factor: number) => {
+    const controls = cameraControls.current;
+    if (!controls) return;
+    const camera = controls.object as THREE.PerspectiveCamera;
+    const offset = camera.position.clone().sub(controls.target);
+    const distance = THREE.MathUtils.clamp(offset.length() * factor, controls.minDistance, controls.maxDistance);
+    offset.setLength(distance);
+    camera.position.copy(controls.target).add(offset);
+    controls.update();
+  };
 
   useEffect(() => {
     const container = host.current;
@@ -61,12 +113,7 @@ export function MolecularScene({ molecule = 0, attachments, matter, temperature 
     } else {
       const m = molecules[molecule];
       atom(m.center, new THREE.Vector3(), .56);
-      let directions: THREE.Vector3[];
-      if (molecule === 0) directions = [new THREE.Vector3(-1,0,0), new THREE.Vector3(1,0,0)];
-      else if (molecule === 1) directions = [0,1,2].map(i => new THREE.Vector3(Math.cos(i * 2 * Math.PI / 3), Math.sin(i * 2 * Math.PI / 3), 0));
-      else if (molecule === 2) directions = [[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]].map(p => new THREE.Vector3(...p).normalize());
-      else if (molecule === 3) { const vertical = Math.sqrt((Math.cos(107 * Math.PI / 180) + .5) / 1.5); directions = [0,1,2].map(i => new THREE.Vector3(Math.sqrt(1-vertical**2)*Math.cos(i*2*Math.PI/3), -vertical, Math.sqrt(1-vertical**2)*Math.sin(i*2*Math.PI/3))); }
-      else directions = [-1,1].map(sign => new THREE.Vector3(sign * Math.sin(104.5 * Math.PI / 360), -Math.cos(104.5 * Math.PI / 360), 0));
+      const directions = directionsFor(m.count, m.lone, m.angle);
       const items = attached === undefined ? directions.map(() => ({ atom: m.outer, order: m.order })) : attached ? attached.split(",").map(s => ({ atom: s.split(":")[0], order: Number(s.split(":")[1]) })) : [];
       items.forEach((item, i) => { const end = directions[i]?.clone().multiplyScalar(2); if (!end) return; bond(end, item.order); atom(item.atom, end, item.atom === "H" ? .34 : .48); });
       if (attachments === undefined) for (let i = 0; i < m.lone; i++) {
@@ -98,5 +145,5 @@ export function MolecularScene({ molecule = 0, attachments, matter, temperature 
   // Rebuild geometry only for a changed molecule/build, not for temperature or playback.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [molecule, attached, matter, resetKey]);
-  return <div className="chemMolecular"><div className="chemWebgl" ref={host} role="img" aria-label={matter ? `Water particles: ${phase(temperature)}` : `${molecules[molecule].formula} molecular model`} />{failed && <p className="chemRenderFallback">3D rendering is unavailable on this device. The controls, molecular data, and mission still work.</p>}<div className="chemOrbitBar"><span>Drag to rotate · touch to explore</span><button onClick={() => cameraControls.current?.reset()}>Reset view</button></div></div>;
+  return <div className="chemMolecular"><div className="chemWebgl" ref={host} role="img" aria-label={matter ? `Water particles: ${phase(temperature)}` : `${molecules[molecule].formula} molecular model`} />{failed && <p className="chemRenderFallback">3D rendering is unavailable on this device. The controls, molecular data, and mission still work.</p>}<div className="chemOrbitBar"><span>Drag to rotate · touch to explore</span><div className="chemZoomGroup"><button onClick={() => zoomBy(1 / 1.2)} aria-label="Zoom in">+</button><button onClick={() => zoomBy(1.2)} aria-label="Zoom out">−</button><button onClick={() => cameraControls.current?.reset()}>Reset view</button></div></div></div>;
 }

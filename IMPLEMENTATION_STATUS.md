@@ -40,12 +40,13 @@ The supplied ten-simulation list for each subject has been added **on top of** t
 - 6 published subject areas (10–13 simulations per subject)
 - 71 unique simulation slugs
 - 60 newly added simulation routes
-- 17 supplied SEO-priority entries flagged as `featured`; 15 are currently published because Biology is hidden
+- 18 supplied SEO-priority entries flagged as `featured`; 16 are currently published because Biology is hidden
 
 ### Routing and discovery
 - Every catalog entry appears on its subject landing page.
 - The global Simulation Library includes all 71 entries grouped by subject.
 - A dedicated published priority collection surfaces the strongest supplied SEO opportunities.
+- The English Molecule Kit hub groups the two molecular 3D labs and links to their individual topic guides.
 - The sitemap automatically includes all 71 simulation paths for all supported locales.
 - Generic simulation pages use localized canonical/hreflang metadata and incorporate the supplied SEO target when present.
 
@@ -73,7 +74,7 @@ More complex systems—such as hurricane intensity, eruption behavior, immune re
 - Published catalog check: **six subject areas; 71 simulations total**.
 - Expanded-model coverage check: **60 new configs**, with no missing or extra new slugs.
 - Existing coverage: 10 dedicated concept labs + 2 flagship simulations.
-- Featured SEO-priority check: **17 catalog entries / 15 published topic guides**.
+- Featured SEO-priority check: **18 catalog entries / 16 published topic guides**.
 - TypeScript parser check passed for all `.ts` and `.tsx` source files using the locally available TypeScript compiler.
 - Message dictionaries: 222 keys per locale with only legitimate invariant/cognate matches remaining against English (for example brand name, XP, numeric durations).
 - Simulation translation catalog: 71 translated entries for each non-English locale.

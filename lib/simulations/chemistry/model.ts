@@ -4,10 +4,143 @@ export type Control = { key: string; label: string; min: number; max: number; st
 export type Activity = { slug: string; instrument: string; mission: string; hint: string; science: string; controls: Control[] };
 const slider = (key: string, label: string, min: number, max: number, step: number, value: number, unit = ""): Control => ({ key, label, min, max, step, value, unit });
 const choice = (key: string, label: string, options: string[], value = 0): Control => ({ key, label, options, value, min: 0, max: options.length - 1, step: 1 });
+// VSEPR library: one entry per AXn(lone pairs) molecule or common ion. `count` is bonding
+// domains, `lone` is lone pairs on the central atom; together they set the 3D geometry
+// (see MolecularScene's directionsFor). `angle` is the commonly cited approximate bond
+// angle shown in the UI; `order` is the uniform bond order drawn for every outer atom.
+export const molecules = [
+  { formula: "CO₂", center: "C", outer: "O", count: 2, lone: 0, angle: 180, shape: "Linear", order: 2 },
+  { formula: "BF₃", center: "B", outer: "F", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 1 },
+  { formula: "CH₄", center: "C", outer: "H", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "NH₃", center: "N", outer: "H", count: 3, lone: 1, angle: 107, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "H₂O", center: "O", outer: "H", count: 2, lone: 2, angle: 104.5, shape: "Bent", order: 1 },
+  // Linear, AX2E0
+  { formula: "CS₂", center: "C", outer: "S", count: 2, lone: 0, angle: 180, shape: "Linear", order: 2 },
+  { formula: "BeF₂", center: "Be", outer: "F", count: 2, lone: 0, angle: 180, shape: "Linear", order: 1 },
+  { formula: "BeCl₂", center: "Be", outer: "Cl", count: 2, lone: 0, angle: 180, shape: "Linear", order: 1 },
+  { formula: "BeBr₂", center: "Be", outer: "Br", count: 2, lone: 0, angle: 180, shape: "Linear", order: 1 },
+  { formula: "MgCl₂", center: "Mg", outer: "Cl", count: 2, lone: 0, angle: 180, shape: "Linear", order: 1 },
+  { formula: "MgBr₂", center: "Mg", outer: "Br", count: 2, lone: 0, angle: 180, shape: "Linear", order: 1 },
+  { formula: "ZnCl₂", center: "Zn", outer: "Cl", count: 2, lone: 0, angle: 180, shape: "Linear", order: 1 },
+  { formula: "ZnBr₂", center: "Zn", outer: "Br", count: 2, lone: 0, angle: 180, shape: "Linear", order: 1 },
+  { formula: "CdCl₂", center: "Cd", outer: "Cl", count: 2, lone: 0, angle: 180, shape: "Linear", order: 1 },
+  { formula: "HgCl₂", center: "Hg", outer: "Cl", count: 2, lone: 0, angle: 180, shape: "Linear", order: 1 },
+  { formula: "N₃⁻", center: "N", outer: "N", count: 2, lone: 0, angle: 180, shape: "Linear", order: 2 },
+  // Trigonal planar, AX3E0
+  { formula: "BCl₃", center: "B", outer: "Cl", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 1 },
+  { formula: "BBr₃", center: "B", outer: "Br", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 1 },
+  { formula: "BI₃", center: "B", outer: "I", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 1 },
+  { formula: "AlCl₃", center: "Al", outer: "Cl", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 1 },
+  { formula: "AlF₃", center: "Al", outer: "F", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 1 },
+  { formula: "GaCl₃", center: "Ga", outer: "Cl", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 1 },
+  { formula: "SO₃", center: "S", outer: "O", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 2 },
+  { formula: "CO₃²⁻", center: "C", outer: "O", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 1 },
+  { formula: "NO₃⁻", center: "N", outer: "O", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 1 },
+  { formula: "BO₃³⁻", center: "B", outer: "O", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 1 },
+  // Bent, AX2E1 (3 domains)
+  { formula: "SO₂", center: "S", outer: "O", count: 2, lone: 1, angle: 119, shape: "Bent", order: 1 },
+  { formula: "O₃", center: "O", outer: "O", count: 2, lone: 1, angle: 117, shape: "Bent", order: 1 },
+  { formula: "NO₂⁻", center: "N", outer: "O", count: 2, lone: 1, angle: 115, shape: "Bent", order: 1 },
+  { formula: "SnCl₂", center: "Sn", outer: "Cl", count: 2, lone: 1, angle: 95, shape: "Bent", order: 1 },
+  { formula: "SnBr₂", center: "Sn", outer: "Br", count: 2, lone: 1, angle: 98, shape: "Bent", order: 1 },
+  { formula: "PbCl₂", center: "Pb", outer: "Cl", count: 2, lone: 1, angle: 98, shape: "Bent", order: 1 },
+  { formula: "GeCl₂", center: "Ge", outer: "Cl", count: 2, lone: 1, angle: 100, shape: "Bent", order: 1 },
+  { formula: "GeF₂", center: "Ge", outer: "F", count: 2, lone: 1, angle: 97, shape: "Bent", order: 1 },
+  // Tetrahedral, AX4E0
+  { formula: "CCl₄", center: "C", outer: "Cl", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "CF₄", center: "C", outer: "F", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "CBr₄", center: "C", outer: "Br", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "SiH₄", center: "Si", outer: "H", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "SiCl₄", center: "Si", outer: "Cl", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "SiF₄", center: "Si", outer: "F", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "SiBr₄", center: "Si", outer: "Br", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "GeH₄", center: "Ge", outer: "H", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "GeCl₄", center: "Ge", outer: "Cl", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "GeF₄", center: "Ge", outer: "F", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "SnCl₄", center: "Sn", outer: "Cl", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "SnBr₄", center: "Sn", outer: "Br", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "TiCl₄", center: "Ti", outer: "Cl", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "NH₄⁺", center: "N", outer: "H", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "PO₄³⁻", center: "P", outer: "O", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "SO₄²⁻", center: "S", outer: "O", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "ClO₄⁻", center: "Cl", outer: "O", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "BF₄⁻", center: "B", outer: "F", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "MnO₄⁻", center: "Mn", outer: "O", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "CrO₄²⁻", center: "Cr", outer: "O", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "XeO₄", center: "Xe", outer: "O", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 2 },
+  // Trigonal pyramidal, AX3E1 (4 domains)
+  { formula: "PH₃", center: "P", outer: "H", count: 3, lone: 1, angle: 93.5, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "AsH₃", center: "As", outer: "H", count: 3, lone: 1, angle: 91.8, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "SbH₃", center: "Sb", outer: "H", count: 3, lone: 1, angle: 91.5, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "NF₃", center: "N", outer: "F", count: 3, lone: 1, angle: 102.5, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "PF₃", center: "P", outer: "F", count: 3, lone: 1, angle: 97.8, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "PCl₃", center: "P", outer: "Cl", count: 3, lone: 1, angle: 100.3, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "PBr₃", center: "P", outer: "Br", count: 3, lone: 1, angle: 101, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "AsF₃", center: "As", outer: "F", count: 3, lone: 1, angle: 96, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "AsCl₃", center: "As", outer: "Cl", count: 3, lone: 1, angle: 98.9, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "ClO₃⁻", center: "Cl", outer: "O", count: 3, lone: 1, angle: 107, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "IO₃⁻", center: "I", outer: "O", count: 3, lone: 1, angle: 101, shape: "Trigonal pyramidal", order: 1 },
+  // Bent, AX2E2 (4 domains)
+  { formula: "H₂S", center: "S", outer: "H", count: 2, lone: 2, angle: 92.1, shape: "Bent", order: 1 },
+  { formula: "H₂Se", center: "Se", outer: "H", count: 2, lone: 2, angle: 91, shape: "Bent", order: 1 },
+  { formula: "H₂Te", center: "Te", outer: "H", count: 2, lone: 2, angle: 90, shape: "Bent", order: 1 },
+  { formula: "OF₂", center: "O", outer: "F", count: 2, lone: 2, angle: 103.3, shape: "Bent", order: 1 },
+  { formula: "SCl₂", center: "S", outer: "Cl", count: 2, lone: 2, angle: 103, shape: "Bent", order: 1 },
+  { formula: "SBr₂", center: "S", outer: "Br", count: 2, lone: 2, angle: 100, shape: "Bent", order: 1 },
+  { formula: "SeCl₂", center: "Se", outer: "Cl", count: 2, lone: 2, angle: 99, shape: "Bent", order: 1 },
+  { formula: "TeCl₂", center: "Te", outer: "Cl", count: 2, lone: 2, angle: 97, shape: "Bent", order: 1 },
+  // Trigonal bipyramidal, AX5E0
+  { formula: "PCl₅", center: "P", outer: "Cl", count: 5, lone: 0, angle: 120, shape: "Trigonal bipyramidal", order: 1 },
+  { formula: "PF₅", center: "P", outer: "F", count: 5, lone: 0, angle: 120, shape: "Trigonal bipyramidal", order: 1 },
+  { formula: "PBr₅", center: "P", outer: "Br", count: 5, lone: 0, angle: 120, shape: "Trigonal bipyramidal", order: 1 },
+  { formula: "AsF₅", center: "As", outer: "F", count: 5, lone: 0, angle: 120, shape: "Trigonal bipyramidal", order: 1 },
+  { formula: "SbCl₅", center: "Sb", outer: "Cl", count: 5, lone: 0, angle: 120, shape: "Trigonal bipyramidal", order: 1 },
+  { formula: "SbF₅", center: "Sb", outer: "F", count: 5, lone: 0, angle: 120, shape: "Trigonal bipyramidal", order: 1 },
+  { formula: "NbCl₅", center: "Nb", outer: "Cl", count: 5, lone: 0, angle: 120, shape: "Trigonal bipyramidal", order: 1 },
+  // Seesaw, AX4E1 (5 domains)
+  { formula: "SF₄", center: "S", outer: "F", count: 4, lone: 1, angle: 90, shape: "Seesaw", order: 1 },
+  { formula: "SeF₄", center: "Se", outer: "F", count: 4, lone: 1, angle: 90, shape: "Seesaw", order: 1 },
+  { formula: "TeF₄", center: "Te", outer: "F", count: 4, lone: 1, angle: 90, shape: "Seesaw", order: 1 },
+  // T-shaped, AX3E2 (5 domains)
+  { formula: "ClF₃", center: "Cl", outer: "F", count: 3, lone: 2, angle: 90, shape: "T-shaped", order: 1 },
+  { formula: "BrF₃", center: "Br", outer: "F", count: 3, lone: 2, angle: 90, shape: "T-shaped", order: 1 },
+  { formula: "IF₃", center: "I", outer: "F", count: 3, lone: 2, angle: 90, shape: "T-shaped", order: 1 },
+  // Linear, AX2E3 (5 domains)
+  { formula: "XeF₂", center: "Xe", outer: "F", count: 2, lone: 3, angle: 180, shape: "Linear", order: 1 },
+  { formula: "I₃⁻", center: "I", outer: "I", count: 2, lone: 3, angle: 180, shape: "Linear", order: 1 },
+  { formula: "ICl₂⁻", center: "I", outer: "Cl", count: 2, lone: 3, angle: 180, shape: "Linear", order: 1 },
+  // Octahedral, AX6E0
+  { formula: "SF₆", center: "S", outer: "F", count: 6, lone: 0, angle: 90, shape: "Octahedral", order: 1 },
+  { formula: "SeF₆", center: "Se", outer: "F", count: 6, lone: 0, angle: 90, shape: "Octahedral", order: 1 },
+  { formula: "TeF₆", center: "Te", outer: "F", count: 6, lone: 0, angle: 90, shape: "Octahedral", order: 1 },
+  { formula: "MoF₆", center: "Mo", outer: "F", count: 6, lone: 0, angle: 90, shape: "Octahedral", order: 1 },
+  { formula: "WF₆", center: "W", outer: "F", count: 6, lone: 0, angle: 90, shape: "Octahedral", order: 1 },
+  { formula: "UF₆", center: "U", outer: "F", count: 6, lone: 0, angle: 90, shape: "Octahedral", order: 1 },
+  { formula: "PF₆⁻", center: "P", outer: "F", count: 6, lone: 0, angle: 90, shape: "Octahedral", order: 1 },
+  { formula: "SiF₆²⁻", center: "Si", outer: "F", count: 6, lone: 0, angle: 90, shape: "Octahedral", order: 1 },
+  // Square pyramidal, AX5E1 (6 domains)
+  { formula: "BrF₅", center: "Br", outer: "F", count: 5, lone: 1, angle: 90, shape: "Square pyramidal", order: 1 },
+  { formula: "IF₅", center: "I", outer: "F", count: 5, lone: 1, angle: 90, shape: "Square pyramidal", order: 1 },
+  { formula: "ClF₅", center: "Cl", outer: "F", count: 5, lone: 1, angle: 90, shape: "Square pyramidal", order: 1 },
+  // Square planar, AX4E2 (6 domains)
+  { formula: "XeF₄", center: "Xe", outer: "F", count: 4, lone: 2, angle: 90, shape: "Square planar", order: 1 },
+  { formula: "ICl₄⁻", center: "I", outer: "Cl", count: 4, lone: 2, angle: 90, shape: "Square planar", order: 1 },
+  { formula: "BrF₄⁻", center: "Br", outer: "F", count: 4, lone: 2, angle: 90, shape: "Square planar", order: 1 },
+];
+export const builderMolecules = [4, 2, 0];
+const moleculeFormulas = molecules.map(m => m.formula);
+// Word-only color descriptions for the legend (matches MolecularScene's hex swatches).
+export const elementColorNames: Record<string, string> = {
+  H: "white", O: "red", C: "slate", N: "blue", F: "green", B: "tan",
+  Al: "lavender", Si: "sand", P: "orange", S: "yellow", Cl: "jade", Ga: "rose", Ge: "teal-gray",
+  As: "purple", Se: "amber", Br: "brick", Sn: "pewter", Sb: "mauve", Te: "gold", I: "violet", Xe: "cyan",
+  Be: "sage", Mg: "moss", Ti: "steel", Zn: "periwinkle", Cd: "cream", Hg: "silver", Pb: "gray",
+  Mo: "teal", W: "azure", U: "sky", Nb: "aqua", Mn: "plum", Cr: "cobalt",
+};
 export const activities: Activity[] = [
   { slug: "gas-law-lab", instrument: "Pressure chamber", mission: "Tune the chamber to 150 ± 3 kPa.", hint: "Compress the gas or warm it to increase pressure. Try 1 mol at 300 K in about 16.6 L.", science: "PV = nRT. Ideal gas; R = 8.314 kPa·L·mol⁻¹·K⁻¹. Particle count is illustrative.", controls: [slider("volume", "Chamber volume", 5, 40, .1, 25, "L"), slider("temperature", "Temperature", 200, 600, 1, 300, "K"), slider("moles", "Gas amount", .2, 2, .1, 1, "mol")] },
   { slug: "reaction-rate-lab", instrument: "Kinetics reactor", mission: "Reach at least 80% conversion within 20 simulated seconds.", hint: "Increase temperature or use a catalyst, then restart the reaction. Conditions are locked during a run.", science: "A → B, first-order model: [A] = [A]₀e⁻ᵏᵗ. k = 0.035 exp[(Eₐ/R)(1/298 − 1/T)] s⁻¹, Eₐ = 40 kJ/mol. Catalyst multiplies k by 3 in this teaching model.", controls: [slider("temperature", "Reactor temperature", 280, 340, 1, 298, "K"), slider("concentration", "Initial A concentration", .1, 2, .1, 1, "mol/L"), choice("catalyst", "Catalyst", ["Absent", "Present"])] },
-  { slug: "molecular-geometry-3d", instrument: "Molecular observatory", mission: "Find the bent molecule with two lone pairs and identify its shape.", hint: "Choose water, inspect the lone pairs, and select Bent. Drag the model to inspect it from another angle.", science: "VSEPR models electron-domain repulsion. Displayed bond angles are approximate molecular values. Ball sizes and bond lengths are illustrative.", controls: [choice("molecule", "Inspect molecule", ["CO₂", "BF₃", "CH₄", "NH₃", "H₂O"]), choice("answer", "Identify its shape", ["Choose a shape", "Linear", "Trigonal planar", "Tetrahedral", "Trigonal pyramidal", "Bent"])] },
+  { slug: "molecular-geometry-3d", instrument: "Molecular observatory", mission: "Find the bent molecule with two lone pairs and identify its shape.", hint: "Choose water, inspect the lone pairs, and select Bent. Drag the model to inspect it from another angle.", science: "VSEPR models electron-domain repulsion. Displayed bond angles are approximate molecular values. Ball sizes and bond lengths are illustrative.", controls: [choice("molecule", "Inspect molecule", moleculeFormulas), choice("answer", "Identify its shape", ["Choose a shape", "Linear", "Trigonal planar", "Tetrahedral", "Trigonal pyramidal", "Bent", "Trigonal bipyramidal", "Seesaw", "T-shaped", "Octahedral", "Square pyramidal", "Square planar"])] },
   { slug: "molecule-builder-3d", instrument: "Molecule workshop", mission: "Build the displayed target by attaching the correct atoms and bond orders.", hint: "Water needs two single O–H bonds; methane four single C–H bonds; carbon dioxide two double C=O bonds. Select a socket to remove a bond.", science: "This guided builder uses common neutral valences: H = 1, O = 2, C = 4. It builds three specific target molecules, not arbitrary chemical structures.", controls: [choice("target", "Target molecule", ["H₂O · water", "CH₄ · methane", "CO₂ · carbon dioxide"])] },
   { slug: "chemical-bonding", instrument: "Electron exchange", mission: "Classify the bond in each of three pairs: NaCl, H₂, and HCl.", hint: "NaCl forms ions; H₂ shares equally; HCl shares unequally. Move through all three pairs and check each answer.", science: "Bond character is a continuum. These examples illustrate ionic, nonpolar covalent, and polar covalent bonding; NaCl represents a formula unit of an extended lattice.", controls: [choice("pair", "Atom pair", ["Na + Cl", "H + H", "H + Cl"]), choice("answer", "Bond type", ["Choose a bond", "Ionic", "Nonpolar covalent", "Polar covalent"])] },
   { slug: "acid-base-ph", instrument: "pH analysis bench", mission: "Prepare a strong-acid solution at pH 3.00 ± 0.10.", hint: "Select HCl and set log₁₀ concentration to −3. Compare with acetic acid at the same concentration.", science: "At 25 °C, Kᵥ = 10⁻¹⁴. HCl/NaOH fully dissociate. Acetic acid uses Kₐ = 1.8 × 10⁻⁵ and charge balance including water. Indicator colors are illustrative.", controls: [choice("solution", "Solution", ["HCl · strong acid", "CH₃COOH · weak acid", "NaOH · strong base"]), slider("logC", "log₁₀ concentration", -7, -1, .1, -2, "mol/L exponent")] },
@@ -20,14 +153,6 @@ export const activities: Activity[] = [
   { slug: "periodic-table-hunt", instrument: "Element detective", mission: "Solve three clues by selecting elements in the first 36 elements of the periodic table.", hint: "Find the group (column) and period (row) in each clue. The number in a tile is its atomic number.", science: "The first 36 elements retain their actual group and period positions. Atomic number equals proton count; shells shown for the selected examples are simplified.", controls: [] },
 ];
 export const initialValues = (activity: Activity): Values => Object.fromEntries(activity.controls.map(c => [c.key, c.value]));
-export const molecules = [
-  { formula: "CO₂", center: "C", outer: "O", count: 2, lone: 0, angle: 180, shape: "Linear", order: 2 },
-  { formula: "BF₃", center: "B", outer: "F", count: 3, lone: 0, angle: 120, shape: "Trigonal planar", order: 1 },
-  { formula: "CH₄", center: "C", outer: "H", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
-  { formula: "NH₃", center: "N", outer: "H", count: 3, lone: 1, angle: 107, shape: "Trigonal pyramidal", order: 1 },
-  { formula: "H₂O", center: "O", outer: "H", count: 2, lone: 2, angle: 104.5, shape: "Bent", order: 1 },
-];
-export const builderMolecules = [4, 2, 0];
 export const reactions = [
   { formula: ["H₂", "O₂", "H₂O"], atoms: [{ H: 2, O: 0 }, { H: 0, O: 2 }, { H: 2, O: 1 }], split: 2, solution: [2, 1, 2] },
   { formula: ["N₂", "H₂", "NH₃"], atoms: [{ N: 2, H: 0 }, { N: 0, H: 2 }, { N: 1, H: 3 }], split: 2, solution: [1, 3, 2] },

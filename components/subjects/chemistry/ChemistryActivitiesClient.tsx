@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import type { SimulationCard, SubjectDefinition } from "@/lib/subjects/catalog";
 import { runtimeText } from "@/lib/i18n/runtimeText";
 import { loadSettings, prefersReducedMotion } from "@/lib/settings/storage";
-import { activities, atomBalance, builderMolecules, clues, elementGroups, elementPeriod, elementSymbols, initialValues, molecules, phase, rateConstant, reactions, solutionPH, titrationPH, yieldResult, type Values } from "@/lib/simulations/chemistry/model";
+import { activities, atomBalance, builderMolecules, clues, elementColorNames, elementGroups, elementPeriod, elementSymbols, initialValues, molecules, phase, rateConstant, reactions, solutionPH, titrationPH, yieldResult, type Values } from "@/lib/simulations/chemistry/model";
 import { BenchScene, Chart } from "./BenchScene";
 import { MolecularScene, type Attachment } from "./MolecularScene";
 import styles from "./chemistry.module.css";
@@ -122,7 +122,7 @@ export function ChemistryActivitiesClient({ locale, subject, simulation }: { loc
         {slug==="reaction-rate-lab"&&<div className={styles.chartPanel}><h3>Reaction progress <span>A → B</span></h3><Chart points={Array.from({length:81},(_,i)=>[i/4,values.concentration*Math.exp(-rateConstant(values)*i/4)])} secondary={Array.from({length:81},(_,i)=>[i/4,values.concentration*(1-Math.exp(-rateConstant(values)*i/4))])} xMax={20} yMax={values.concentration} xLabel="Time (s)" yLabel="Concentration (mol/L)" marker={[time,values.concentration*Math.exp(-rateConstant(values)*time)]}/><p>Blue: reactant A · Amber: product B · Curves predict the selected conditions.</p></div>}
         {titration&&<div className={styles.chartPanel}><h3>Your titration curve <span>pH PROBE</span></h3><Chart points={Array.from({length:Math.max(1,Math.ceil(added*20)+1)},(_,i)=>{const volume=Math.min(added,i*.05);return [volume,titrationPH(volume,slug==="titration-simulator"?.12:.1)];})} xMax={50} yMax={14} xLabel="NaOH added (mL)" yLabel="pH" marker={[added,titrationPH(added,slug==="titration-simulator"?.12:.1)]}/></div>}
         {slug==="solubility-curve"&&<div className={styles.chartPanel}><h3>Solubility curve <span>ILLUSTRATIVE SALT</span></h3><Chart points={[[0,20],[100,100]]} secondary={[[0,values.solute],[100,values.solute]]} marker={[values.temperature,20+.8*values.temperature]} xMax={100} yMax={120} xLabel="Temperature (°C)" yLabel="g per 100 g water"/><p>Blue: solubility capacity · Amber: total added solute. Above capacity, crystals remain.</p></div>}
-        {molecular&&<div className={styles.legend}><span>● H · white</span><span>● O · red</span><span>● C · slate</span><span>● N · blue</span><span>● F · green</span><span>● B · tan</span>{!builder&&<span>◌ Purple · lone pairs</span>}</div>}
+        {molecular&&<div className={styles.legend}>{[...new Set([molecule.center,molecule.outer])].map(el=><span key={el}>● {el} · {elementColorNames[el]??"white"}</span>)}{!builder&&<span>◌ Purple · lone pairs</span>}</div>}
       </section>
       <aside className={styles.controlsPanel}>
         <div className={styles.mission}><div className={styles.missionLabel}><span>YOUR MISSION</span><b>{currentDone?"✓ COMPLETE":"IN PROGRESS"}</b></div><h2>{activity.mission}</h2><button className={styles.hintButton} aria-expanded={showHint} onClick={()=>setShowHint(v=>!v)}>{showHint?"Hide hint":"Need a hint?"}</button>{showHint&&<p>{activity.hint}</p>}</div>
