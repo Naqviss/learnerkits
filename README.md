@@ -7,7 +7,7 @@ A browser-based educational simulation platform built around **learn by experime
 - **6 published subject areas**
 - **71 simulations currently indexable**
 - **71 simulations total**
-- **12 SEO-priority simulations** surfaced as the first build/promote collection
+- **15 SEO-priority simulations** surfaced as the first build/promote collection
 - Light theme by default, plus Dark and System appearance modes
 - Locale-aware routing for `en`, `es`, `zh`, `ar`, `pt`, `fr`, `ru`, `ja`, `de`
 
@@ -35,7 +35,7 @@ Existing Vector Playground and Function Explorer plus 3D Geometry Slice, Pythago
 
 ## SEO-priority collection
 
-The supplied roadmap is represented directly in `lib/subjects/catalog.ts` with `seoTarget`, `opportunity`, and `featured` fields. The 12 featured simulations are:
+The supplied roadmap is represented directly in `lib/subjects/catalog.ts` with `seoTarget`, `opportunity`, and `featured` fields. The 15 published featured simulations are:
 
 1. Moon Phases 3D Simulator
 2. Earth Seasons & Tilt Simulator
@@ -44,13 +44,28 @@ The supplied roadmap is represented directly in `lib/subjects/catalog.ts` with `
 5. Momentum Collision Simulator
 6. Earthquake Epicenter Finder
 7. Ocean Currents 3D Simulator
-8. Cell Membrane Transport Lab
-9. Protein Synthesis Game
-10. Molecular Geometry 3D Explorer
-11. Solubility Curve Simulator
-12. Matrix Transformation Visualizer
+8. Greenhouse Effect Simulator
+9. Carbon Cycle Simulator
+10. Ocean Acidification Simulator
+11. Renewable Energy Grid Simulator
+12. Molecular Geometry 3D Explorer
+13. Neutralization Station
+14. Solubility Curve Simulator
+15. Matrix Transformation Visualizer
 
-Subject pages and the global simulation library surface these first while still exposing the complete 71-lab curriculum. Generic simulation metadata uses the supplied SEO phrase as a keyword and creates localized canonical/hreflang metadata.
+Subject pages and the global simulation library surface these first while still exposing the complete 71-lab curriculum. Each published priority lab also has an English topic guide at `/en/guides/{slug}` with unique explanation, investigation prompts, model scope, FAQs, and a direct link into the lab. Generic simulation metadata uses the supplied SEO phrase as a keyword and creates localized canonical/hreflang metadata.
+
+## Search and AI discovery operations
+
+`/robots.txt` explicitly allows Googlebot, bingbot, and OpenAI's OAI-SearchBot while keeping `/api/` private. `/sitemap.xml` includes the localized curriculum plus the English topic-guide hubs, and `/llms.txt` exposes a concise machine-readable catalog for AI systems.
+
+After deployment, verify the production property in Google Search Console and Bing Webmaster Tools, submit `https://www.learnerkits.com/sitemap.xml`, and configure IndexNow. The helper submits the current sitemap after the key file is published:
+
+```bash
+INDEXNOW_KEY=your-key NEXT_PUBLIC_SITE_URL=https://www.learnerkits.com npm run indexnow
+```
+
+Use `INDEXNOW_URLS=https://www.learnerkits.com/en/guides/moon-phases-3d` when only a small set of changed URLs needs to be submitted.
 
 ## Donate Now
 
@@ -157,7 +172,7 @@ Entries marked as 3D use a reusable direct-Three.js learning scene so the route 
 - Subject-specific landing pages with learning objectives and inquiry questions
 - Predict → Experiment → Observe → Explain learning cycle
 - Grade bands, concepts and learning outcomes on lab cards
-- 12-lab subject catalogs with priority/high-opportunity callouts
+- Subject catalogs with priority/high-opportunity callouts
 - Light academic theme by default; dark theme remains available
 - Subject visual identity is layered onto the academic shell rather than making the whole website look like a space game
 

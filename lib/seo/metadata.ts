@@ -27,6 +27,7 @@ export type SeoOptions = {
   keywords?: string[];
   type?: "website" | "article";
   noIndex?: boolean;
+  englishOnly?: boolean;
 };
 
 export function localizedUrl(locale: Locale | string, path: string) {
@@ -43,11 +44,13 @@ export function localizedMetadata(
 ): Metadata {
   const safeLocale = (locales as readonly string[]).includes(locale) ? (locale as Locale) : defaultLocale;
   const canonical = localizedUrl(safeLocale, path);
-  const languages = Object.fromEntries([
-    ...locales.map((code) => [hreflangCodes[code], localizedUrl(code, path)] as const),
-    ["x-default", localizedUrl(defaultLocale, path)] as const,
-  ]);
-  const alternateLocale = locales.filter((code) => code !== safeLocale).map((code) => ogLocales[code]);
+  const languages = options.englishOnly
+    ? { en: localizedUrl(defaultLocale, path), "x-default": localizedUrl(defaultLocale, path) }
+    : Object.fromEntries([
+        ...locales.map((code) => [hreflangCodes[code], localizedUrl(code, path)] as const),
+        ["x-default", localizedUrl(defaultLocale, path)] as const,
+      ]);
+  const alternateLocale = options.englishOnly ? [] : locales.filter((code) => code !== safeLocale).map((code) => ogLocales[code]);
 
   return {
     title,

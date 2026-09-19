@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -6,8 +7,9 @@ import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/getMessages";
 import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
-import { MoonLandingClient } from "@/components/simulation/MoonLandingClient";
 import { SimulationGuide } from "@/components/seo/SimulationGuide";
+
+const MoonLandingClient = dynamic(() => import("@/components/simulation/MoonLandingClient").then((module) => module.MoonLandingClient));
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale: raw } = await params;

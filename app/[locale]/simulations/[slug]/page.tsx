@@ -1,20 +1,25 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
 import { getSimulationCard, getSubjectForSimulation, isVisibleSubjectSlug } from "@/lib/subjects/catalog";
-import { ConceptLabClient } from "@/components/simulation/ConceptLabClient";
-import { ChemistryActivitiesClient } from "@/components/subjects/chemistry/ChemistryActivitiesClient";
-import { PhysicsActivitiesClient } from "@/components/subjects/physics/PhysicsActivitiesClient";
-import { SpaceActivitiesClient } from "@/components/subjects/space/SpaceActivitiesClient";
-import { GeographyActivitiesClient } from "@/components/subjects/geography/GeographyActivitiesClient";
-import { BiologyActivitiesClient } from "@/components/subjects/biology/BiologyActivitiesClient";
-import { MathematicsActivitiesClient } from "@/components/subjects/mathematics/MathematicsActivitiesClient";
-import { EnvironmentalActivitiesClient } from "@/components/subjects/environmental/EnvironmentalActivitiesClient";
 import { SimulationGuide } from "@/components/seo/SimulationGuide";
 import { getSimulationGuide } from "@/lib/seo/simulation-guides";
 import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
+
+// Keep subject-specific client engines out of the shared route bundle. The server
+// still renders the accessible shell and SEO guide immediately; each lab engine is
+// loaded as the client island for the selected subject.
+const ConceptLabClient = dynamic(() => import("@/components/simulation/ConceptLabClient").then((module) => module.ConceptLabClient));
+const ChemistryActivitiesClient = dynamic(() => import("@/components/subjects/chemistry/ChemistryActivitiesClient").then((module) => module.ChemistryActivitiesClient));
+const PhysicsActivitiesClient = dynamic(() => import("@/components/subjects/physics/PhysicsActivitiesClient").then((module) => module.PhysicsActivitiesClient));
+const SpaceActivitiesClient = dynamic(() => import("@/components/subjects/space/SpaceActivitiesClient").then((module) => module.SpaceActivitiesClient));
+const GeographyActivitiesClient = dynamic(() => import("@/components/subjects/geography/GeographyActivitiesClient").then((module) => module.GeographyActivitiesClient));
+const BiologyActivitiesClient = dynamic(() => import("@/components/subjects/biology/BiologyActivitiesClient").then((module) => module.BiologyActivitiesClient));
+const MathematicsActivitiesClient = dynamic(() => import("@/components/subjects/mathematics/MathematicsActivitiesClient").then((module) => module.MathematicsActivitiesClient));
+const EnvironmentalActivitiesClient = dynamic(() => import("@/components/subjects/environmental/EnvironmentalActivitiesClient").then((module) => module.EnvironmentalActivitiesClient));
 
 export function generateStaticParams() {
   return visibleSubjectSlugs.flatMap((subject) => getLocalizedSubject("en", subject).simulations
