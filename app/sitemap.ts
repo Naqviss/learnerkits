@@ -6,7 +6,7 @@ import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // User-specific tools and previews are noindex and should not consume crawl budget.
-  const core = ["/", "/simulations", "/missions", "/learn", "/subjects", "/molecule-kit", "/donate", "/about", "/contact", "/privacy", "/cookies", "/terms", "/disclaimer", "/editorial-policy"];
+  const core = ["/", "/simulations", "/subjects", "/molecule-kit", "/donate", "/about", "/contact", "/privacy", "/cookies", "/terms", "/disclaimer", "/editorial-policy"];
   const subjectPaths = visibleSubjectSlugs.map((slug) => `/subjects/${slug}`);
   const simulationPaths = visibleSubjectSlugs.flatMap((slug) => subjectsCatalog[slug].simulations.map((sim) => `/simulations/${sim.slug}`));
   const topicGuidePaths = ["/guides", ...getTopicGuides().map((guide) => `/guides/${guide.slug}`)];

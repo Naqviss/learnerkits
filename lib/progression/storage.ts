@@ -1,3 +1,6 @@
+// The /progress page is hidden until teacher/student sign-in ships. Flip back to true to re-enable.
+export const progressPageEnabled = false;
+
 export interface ProgressState { xp: number; completedMissionIds: string[]; bestScores: Record<string, number> }
 const KEY = "science-sim-progress-v1";
 const EMPTY: ProgressState = { xp: 0, completedMissionIds: [], bestScores: {} };

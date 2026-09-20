@@ -13,6 +13,11 @@
     "language": "Sprache",
     "settings": "Einstellungen"
   },
+  "search": {
+    "placeholder": "Simulationen und Fächer durchsuchen…",
+    "ariaLabel": "Simulationen und Fächer durchsuchen",
+    "noResults": "Keine Ergebnisse gefunden."
+  },
   "home": {
     "eyebrow": "Interaktives Wissenschaftslabor",
     "headline": "Lerne durch Experimentieren, nicht durch Auswendiglernen.",

@@ -13,6 +13,11 @@
     "language": "Idioma",
     "settings": "Configurações"
   },
+  "search": {
+    "placeholder": "Buscar simulações e disciplinas…",
+    "ariaLabel": "Buscar simulações e disciplinas",
+    "noResults": "Nenhum resultado encontrado."
+  },
   "home": {
     "eyebrow": "Laboratório científico interativo",
     "headline": "Aprenda experimentando, não memorizando.",

@@ -13,6 +13,11 @@
     "language": "Langue",
     "settings": "Réglages"
   },
+  "search": {
+    "placeholder": "Rechercher des simulations et matières…",
+    "ariaLabel": "Rechercher des simulations et matières",
+    "noResults": "Aucun résultat trouvé."
+  },
   "home": {
     "eyebrow": "Laboratoire scientifique interactif",
     "headline": "Apprenez en expérimentant, pas en mémorisant.",

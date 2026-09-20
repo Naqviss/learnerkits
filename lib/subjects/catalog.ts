@@ -3,7 +3,7 @@ export type SubjectSlug = (typeof subjectSlugs)[number];
 
 // Keep hidden subjects in the catalog so their work can resume without data loss.
 // Remove a slug from this set when it is ready to be published again.
-export const hiddenSubjectSlugs: ReadonlySet<SubjectSlug> = new Set(["biology"]);
+export const hiddenSubjectSlugs: ReadonlySet<SubjectSlug> = new Set(["biology", "mathematics"]);
 export const visibleSubjectSlugs = subjectSlugs.filter((slug) => !hiddenSubjectSlugs.has(slug));
 
 export type SimulationCard = {

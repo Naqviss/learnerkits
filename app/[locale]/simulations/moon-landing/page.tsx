@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
     <Suspense fallback={<div className="simLayout" aria-busy="true"><section className="simViewport"><div className="statusBanner"><strong>{m.moonLanding.title}</strong><span>{m.loading.environment}</span></div></section></div>}><MoonLandingClient m={m}/></Suspense>
     <section className="container section" aria-labelledby="moon-objectives"><h2 id="moon-objectives">{m.moonLanding.seo.objectivesTitle}</h2><div className="grid2">{m.moonLanding.seo.objectives.map((objective) => <article className="card" key={objective}><h3>{objective}</h3></article>)}</div></section>
     <section className="container section"><h2>{m.moonLanding.seo.faqTitle}</h2><div className="grid3">{m.moonLanding.seo.faq.map((item) => <article className="card" key={item.q}><h3>{item.q}</h3><p className="muted">{item.a}</p></article>)}</div></section>
-    <section className="container section"><div className="card"><h2>{m.moonLanding.seo.relatedTitle}</h2><p className="muted">{m.moonLanding.seo.related}</p><Link className="button" href={`/${locale}/learn`}>{m.navigation.learn}</Link></div></section>
+    <section className="container section"><div className="card"><h2>{m.moonLanding.seo.relatedTitle}</h2><p className="muted">{m.moonLanding.seo.related}</p><Link className="button" href={`/${locale}/simulations`}>{m.navigation.simulations}</Link></div></section>
     {simulation && <SimulationGuide locale={locale} subject={subject} simulation={simulation}/>}
   </>;
 }

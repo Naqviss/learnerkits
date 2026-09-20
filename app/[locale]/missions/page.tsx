@@ -3,11 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/getMessages";
-import { missions } from "@/lib/missions/catalog";
+import { missions, missionsEnabled } from "@/lib/missions/catalog";
 import { t } from "@/lib/i18n/t";
 import { localizedMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata({ params }: { params: Promise<{locale:string}> }): Promise<Metadata> {
+  if (!missionsEnabled) notFound();
   const { locale: raw } = await params;
   const locale = isLocale(raw) ? raw : "en";
   const m = getMessages(locale);
@@ -15,6 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{locale:str
 }
 
 export default async function Page({params}:{params:Promise<{locale:string}>}) {
+  if (!missionsEnabled) notFound();
   const {locale:raw}=await params;
   if(!isLocale(raw)) notFound();
   const m=getMessages(raw);

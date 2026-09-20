@@ -18,7 +18,7 @@ export async function GET() {
 
   const body = `# LearnerKits
 
-> Free, interactive science simulations for grades 6-12. Students predict, experiment, observe, and explain across space, physics, geography, environmental science, chemistry, and mathematics — no sign-up required.
+> Free, interactive science simulations for grades 6-12. Students predict, experiment, observe, and explain across space, physics, geography, environmental science, and chemistry — no sign-up required.
 
 LearnerKits is an education platform, not a blog or news site. Each simulation page is a self-contained interactive lab with a stated learning outcome, difficulty level, and the concepts it teaches. Content is available in English, Spanish, Simplified Chinese, Arabic, Portuguese, French, Russian, Japanese, and German at /{locale}/... paths (default locale: en).
 
@@ -26,8 +26,6 @@ LearnerKits is an education platform, not a blog or news site. Each simulation p
 
 - [All subjects](${siteUrl}/en/subjects)
 - [All simulations](${siteUrl}/en/simulations)
-- [Missions](${siteUrl}/en/missions)
-- [Learn](${siteUrl}/en/learn)
 - [About](${siteUrl}/en/about)
 - [Science simulation guides](${siteUrl}/en/guides)
 - [Molecule Kit](${siteUrl}/en/molecule-kit): Build molecules and explore 3D molecular geometry.

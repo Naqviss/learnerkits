@@ -13,6 +13,11 @@
     "language": "言語",
     "settings": "設定"
   },
+  "search": {
+    "placeholder": "シミュレーションと分野を検索…",
+    "ariaLabel": "シミュレーションと分野を検索",
+    "noResults": "検索結果はありません。"
+  },
   "home": {
     "eyebrow": "インタラクティブ科学ラボ",
     "headline": "暗記ではなく、実験しながら学ぶ。",

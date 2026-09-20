@@ -13,6 +13,11 @@
     "language": "语言",
     "settings": "设置"
   },
+  "search": {
+    "placeholder": "搜索模拟和学科…",
+    "ariaLabel": "搜索模拟和学科",
+    "noResults": "未找到结果。"
+  },
   "home": {
     "eyebrow": "互动科学实验室",
     "headline": "通过实验学习，而不是死记硬背。",

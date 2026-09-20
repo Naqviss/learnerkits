@@ -1,3 +1,6 @@
+// Missions are hidden until teacher/student sign-in ships. Flip back to true to re-enable.
+export const missionsEnabled = false;
+
 export type MissionDifficulty = "Beginner" | "Intermediate" | "Advanced";
 export interface MissionDefinition {
   id: string;
