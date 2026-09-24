@@ -202,3 +202,16 @@ npm run dev
 ```
 
 Open `http://localhost:3000`; the root route resolves to a locale and `/en` is the English general entry page.
+
+## Science learning articles
+
+`/en/articles` contains five original, AI-assisted educational articles (1,000–1,500 words each). Article pages are prerendered with visible source links, worked examples, a table of contents, related labs, and Article/Breadcrumb structured data. The practice article includes native expandable answer keys. Navigation search loads only the lightweight article index.
+
+- Edit titles, descriptions, audiences, related articles, and simulation links in `lib/articles/catalog.ts`.
+- Edit article bodies in `lib/articles/content/` and register new bodies in `lib/articles/index.ts`.
+- Supported body syntax: paragraphs, `##` sections, `###` subheadings, Markdown links, `-` lists, `>` prompts, and `:::answer Title` / `:::` disclosures. Raw HTML is escaped.
+- Keep sources close to the claims they support. Verify numerical examples against both the relevant science reference and the actual lab controls. Do not claim human or expert review unless it has happened.
+- Articles are English-only until translated. Do not add duplicate English pages under other locales. The sitemap, existing `llms.txt` discovery file, search, and lab backlinks use the article catalog.
+- Run `npm test` and `npm run build` after changes. Article checks cover length, internal destinations, rendering, schema, canonical URLs, discovery, and missing-page handling.
+
+After deployment, confirm the production canonical host and inspect the article URLs and sitemap in Search Console. Ranking, indexing, and AdSense approval are external decisions; word count is not an approval threshold. Google documents [people-first content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content), [AI search eligibility](https://developers.google.com/search/docs/appearance/ai-features), and [AdSense eligibility](https://support.google.com/adsense/answer/9724). The existing `llms.txt` is a discovery aid, not a requirement or guarantee for AI search inclusion.

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { articleSummaries, articlePublishedAt } from "@/lib/articles/catalog";
 import { defaultLocale, locales } from "@/lib/i18n/config";
 import { hreflangCodes, localizedUrl } from "@/lib/seo/metadata";
 import { getTopicGuides } from "@/lib/seo/topic-guides";
@@ -10,15 +11,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const subjectPaths = visibleSubjectSlugs.map((slug) => `/subjects/${slug}`);
   const simulationPaths = visibleSubjectSlugs.flatMap((slug) => subjectsCatalog[slug].simulations.map((sim) => `/simulations/${sim.slug}`));
   const topicGuidePaths = ["/guides", ...getTopicGuides().map((guide) => `/guides/${guide.slug}`)];
-  const isEnglishOnly = (path: string) => path.startsWith("/guides");
+  const articlePaths = ["/articles", ...articleSummaries.map((article) => `/articles/${article.slug}`)];
+  const isEnglishOnly = (path: string) => path.startsWith("/guides") || path.startsWith("/articles");
   const lastModified = process.env.NEXT_PUBLIC_CONTENT_UPDATED_AT ?? "2026-09-19";
   return locales.flatMap((locale) => {
     // The focused guides are intentionally English-only until translated; do not publish
     // duplicate localized URLs that point to the same English editorial content.
-    const paths = locale === defaultLocale ? [...core, ...subjectPaths, ...simulationPaths, ...topicGuidePaths] : [...core, ...subjectPaths, ...simulationPaths];
+    const paths = locale === defaultLocale ? [...core, ...subjectPaths, ...simulationPaths, ...topicGuidePaths, ...articlePaths] : [...core, ...subjectPaths, ...simulationPaths];
     return paths.map((path) => ({
     url: localizedUrl(locale, path),
-    lastModified,
+    lastModified: path.startsWith("/articles") ? articlePublishedAt : lastModified,
     changeFrequency: path.includes("simulations") ? "weekly" : "monthly",
     priority: path === "/" ? 1 : path === "/molecule-kit" ? .9 : path.includes("subjects/") ? .85 : isEnglishOnly(path) ? .85 : path === "/donate" ? .5 : .8,
     alternates: isEnglishOnly(path)

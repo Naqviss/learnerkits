@@ -6,8 +6,11 @@ import { getLocalizedSubject } from "@/lib/i18n/content";
 import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import type { Messages } from "@/lib/i18n/getMessages";
 
+import { articleSummaries } from "@/lib/articles/catalog";
+
 type Result =
   | { type: "subject"; key: string; slug: string; title: string; detail: string }
+  | { type: "article"; key: string; slug: string; title: string; detail: string }
   | { type: "simulation"; key: string; slug: string; title: string; detail: string };
 
 const MAX_RESULTS = 8;
@@ -25,6 +28,9 @@ export function SearchBar({ locale, search, id }: { locale: string; search: Mess
       for (const sim of subject.simulations) {
         results.push({ type: "simulation", key: `sim-${sim.slug}`, slug: sim.slug, title: sim.title, detail: `${subject.eyebrow} · ${sim.concepts}` });
       }
+    }
+    if (locale === "en") {
+      for (const article of articleSummaries) results.push({ type: "article", key: `article-${article.slug}`, slug: article.slug, title: article.title, detail: `Article · ${article.audience} · ${article.description}` });
     }
     return results;
   }, [locale]);
@@ -60,7 +66,7 @@ export function SearchBar({ locale, search, id }: { locale: string; search: Mess
       {matches.length === 0
         ? <li className="navSearchEmpty">{search.noResults}</li>
         : matches.map((item) => <li key={item.key}>
-            <Link href={`/${locale}/${item.type === "subject" ? "subjects" : "simulations"}/${item.slug}`} onClick={close}>
+            <Link href={`/${locale}/${item.type === "subject" ? "subjects" : item.type === "article" ? "articles" : "simulations"}/${item.slug}`} onClick={close}>
               <span className="navSearchResultTitle">{item.title}</span>
               <span className="navSearchResultDetail">{item.detail}</span>
             </Link>

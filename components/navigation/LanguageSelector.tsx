@@ -11,6 +11,8 @@ export function LanguageSelector({ locale, label }: { locale: string; label: str
     segments[1] = next;
     localStorage.setItem("science-sim-locale", next);
     document.cookie = `science-sim-locale=${next}; path=/; max-age=31536000; samesite=lax`;
-    router.push(segments.join("/") || `/${next}`);
+    // Editorial pages are English-only until a translated edition exists.
+    const englishOnly = segments[2] === "articles" || segments[2] === "guides";
+    router.push(englishOnly && next !== "en" ? `/${next}` : segments.join("/") || `/${next}`);
   }}>{locales.map((code) => <option value={code} key={code}>{localeNames[code]}</option>)}</select>;
 }

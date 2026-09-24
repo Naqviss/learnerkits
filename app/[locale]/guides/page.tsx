@@ -31,6 +31,7 @@ export default async function TopicGuidesPage({ params }: { params: Promise<{ lo
       <div className="eyebrow">Learn before you launch the lab</div>
       <h1 className="pageTitle">Science simulation guides</h1>
       <p className="lede">Start with a plain-language explanation, make a prediction, then use the interactive model to test it. Each guide states what the model does and where its simplifications matter.</p>
+      <Link className="textLink" href="/en/articles">Explore articles on AI, study skills, and teaching →</Link>
     </header>
     <section className="topicGuideGrid" aria-label="Priority science topic guides">
       {guides.map((guide) => <article className="topicGuideCard" key={guide.slug}>

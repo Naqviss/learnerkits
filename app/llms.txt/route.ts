@@ -1,3 +1,4 @@
+import { articleSummaries } from "@/lib/articles/catalog";
 import { siteUrl } from "@/lib/seo/metadata";
 import { getTopicGuides } from "@/lib/seo/topic-guides";
 import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
@@ -16,20 +17,27 @@ export async function GET() {
     .map((guide) => `- [${guide.title}](${siteUrl}/en/guides/${guide.slug}): ${guide.answer}`)
     .join("\n");
 
+  const articleLinks = articleSummaries.map((article) => `- [${article.title}](${siteUrl}/en/articles/${article.slug}): ${article.description}`).join("\n");
+
   const body = `# LearnerKits
 
 > Free, interactive science simulations for grades 6-12. Students predict, experiment, observe, and explain across space, physics, geography, environmental science, and chemistry — no sign-up required.
 
-LearnerKits is an education platform, not a blog or news site. Each simulation page is a self-contained interactive lab with a stated learning outcome, difficulty level, and the concepts it teaches. Content is available in English, Spanish, Simplified Chinese, Arabic, Portuguese, French, Russian, Japanese, and German at /{locale}/... paths (default locale: en).
+LearnerKits is an education platform with interactive labs, topic guides, and practical science-learning articles. Articles and focused topic guides are currently available in English only. Each simulation page is a self-contained interactive lab with a stated learning outcome, difficulty level, and the concepts it teaches. Content is available in English, Spanish, Simplified Chinese, Arabic, Portuguese, French, Russian, Japanese, and German at /{locale}/... paths (default locale: en).
 
 ## Key pages
 
 - [All subjects](${siteUrl}/en/subjects)
 - [All simulations](${siteUrl}/en/simulations)
+- [Science learning articles](${siteUrl}/en/articles)
 - [About](${siteUrl}/en/about)
 - [Science simulation guides](${siteUrl}/en/guides)
 - [Molecule Kit](${siteUrl}/en/molecule-kit): Build molecules and explore 3D molecular geometry.
 - [Sitemap](${siteUrl}/sitemap.xml)
+
+## Science learning articles
+
+${articleLinks}
 
 ## Focused topic guides
 

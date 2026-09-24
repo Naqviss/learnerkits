@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getArticlesForSimulation } from "@/lib/articles/catalog";
 import type { Locale } from "@/lib/i18n/config";
 import { getSimulationGuide } from "@/lib/seo/simulation-guides";
 import { getTopicGuide } from "@/lib/seo/topic-guides";
@@ -40,6 +41,7 @@ export function SimulationGuide({ locale, subject, simulation }: { locale: Local
       <h2>{guide.questions}</h2>
       {guide.faq.map((item) => <details key={item.q}><summary>{item.q}</summary><p>{item.a}</p></details>)}
     </div>
+    {locale === "en" && getArticlesForSimulation(simulation.slug).length > 0 && <aside className="simulationArticleLinks"><h2>Learn with this simulation</h2><ul>{getArticlesForSimulation(simulation.slug).map((article) => <li key={article.slug}><Link className="textLink" href={`/en/articles/${article.slug}`}>{article.title} →</Link></li>)}</ul></aside>}
     <nav className="relatedSimulations" aria-label={guide.related}>
       <div><span className="eyebrow">{guide.related}</span><Link href={`/${locale}/subjects/${subject.slug}`}>{subject.eyebrow} →</Link></div>
       <div>{related.map((item) => <Link href={`/${locale}/simulations/${item.slug}`} key={item.slug}><span>{item.kind}</span><strong>{item.title}</strong><small>{guide.open} →</small></Link>)}</div>

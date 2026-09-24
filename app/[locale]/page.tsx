@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { articleSummaries } from "@/lib/articles/catalog";
+import { ArticleCard } from "@/components/articles/ArticleCard";
+import articleStyles from "@/components/articles/articles.module.css";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
@@ -45,5 +48,6 @@ export default async function Home({params}:{params:Promise<{locale:string}>}){
     </section>
     <section className="container section educationMethod"><div className="sectionHeading"><div><div className="eyebrow">{c.home.learningDesign}</div><h2>{c.home.everyLab}</h2></div><p>{c.home.everyLabBody}</p></div><div className="educationFeatureGrid"><article className="educationFeature"><span>?</span><h3>{c.home.questionTitle}</h3><p>{c.home.questionBody}</p></article><article className="educationFeature"><span>↔</span><h3>{c.home.variablesTitle}</h3><p>{c.home.variablesBody}</p></article><article className="educationFeature"><span>▥</span><h3>{c.home.evidenceTitle}</h3><p>{c.home.evidenceBody}</p></article><article className="educationFeature"><span>↻</span><h3>{c.home.retryTitle}</h3><p>{c.home.retryBody}</p></article></div></section>
     <section className="container classroomBand"><div><span className="eyebrow">{c.home.anywhere}</span><h2>{c.home.anywhereTitle}</h2><p>{c.home.anywhereBody}</p></div><div className="classroomCards"><article><b>{c.home.studentView}</b><span>{c.home.studentFlow}</span></article><article><b>{c.home.teacherReady}</b><span>{c.home.teacherBody}</span></article></div></section>
+    {raw === "en" && <section className="container section"><div className="sectionHeading"><div><span className="eyebrow">The learning notebook</span><h2>Read, question, experiment.</h2></div><Link className="textLink" href="/en/articles">Explore all articles →</Link></div><div className={articleStyles.grid}>{articleSummaries.slice(0, 2).map((article) => <ArticleCard key={article.slug} article={article} />)}</div></section>}
   </main>;
 }
