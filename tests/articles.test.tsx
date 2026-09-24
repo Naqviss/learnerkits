@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { articles, getArticle } from "@/lib/articles";
 import { getArticlesForSimulation } from "@/lib/articles/catalog";
 import { getSimulationCard, getSubjectForSimulation, isVisibleSubjectSlug } from "@/lib/subjects/catalog";
 import { articleJsonLd } from "@/lib/articles/seo";
-import { localizedUrl } from "@/lib/seo/metadata";
+import { articleImages } from "@/lib/articles/images";
+import { localizedUrl, siteUrl } from "@/lib/seo/metadata";
 import { ArticleBody } from "@/components/articles/ArticleBody";
 import sitemap from "@/app/sitemap";
 import { GET } from "@/app/llms.txt/route";
@@ -46,6 +49,11 @@ describe("article publishing", () => {
       expect(structured.datePublished).toBe(article.publishedAt);
       expect(structured.citation.length).toBeGreaterThan(0);
       expect(Object.keys(metadata.alternates!.languages!)).toEqual(["en", "x-default"]);
+      const image = articleImages[article.slug];
+      expect(metadata.openGraph).toMatchObject({ type: "article", images: [{ url: `${siteUrl}${image.socialSrc}`, type: "image/webp", width: 1200, height: 630, alt: image.alt }] });
+      expect(metadata.twitter).toMatchObject({ card: "summary_large_image", images: [{ url: `${siteUrl}${image.socialSrc}`, alt: image.alt }] });
+      expect(structured.image[0]).toMatchObject({ contentUrl: `${siteUrl}${image.src}`, width: 1200, height: 800, encodingFormat: "image/webp" });
+      expect(metadata.robots).toMatchObject({ index: true, follow: true, googleBot: { "max-image-preview": "large" } });
     }
   });
 
@@ -56,9 +64,23 @@ describe("article publishing", () => {
     for (const article of articles) {
       const url = localizedUrl("en", `/articles/${article.slug}`);
       expect(entries.find((entry) => entry.url === url)?.lastModified).toBe(article.updatedAt);
+      expect(entries.find((entry) => entry.url === url)?.images).toContain(`${siteUrl}${articleImages[article.slug].src}`);
       expect(guide).toContain(url);
     }
     expect(entries.every((entry) => entry.url.includes("/en/articles"))).toBe(true);
+  });
+
+  it("ships distinct, compressed WebP files for full, small and social images", () => {
+    expect(new Set(Object.values(articleImages).map((image) => image.src)).size).toBe(5);
+    for (const image of Object.values(articleImages)) {
+      for (const src of [image.src, image.smallSrc, image.socialSrc]) {
+        const file = join(process.cwd(), "public", src);
+        const bytes = readFileSync(file);
+        expect(bytes.toString("ascii", 0, 4)).toBe("RIFF");
+        expect(bytes.toString("ascii", 8, 12)).toBe("WEBP");
+        expect(statSync(file).size).toBeLessThan(200 * 1024);
+      }
+    }
   });
 
   it("renders content, sources, headings and answer disclosures without client JavaScript", async () => {

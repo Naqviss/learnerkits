@@ -12,6 +12,8 @@
 .card h2 a:hover{color:var(--accent)}
 .card p{color:var(--muted);line-height:1.75;margin:0 0 20px}
 .cardMeta{font-size:.8rem;color:var(--muted);margin-top:auto;margin-bottom:16px}
+.cardImage{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:14px;margin-bottom:22px;background:#f4f3ef}
+.figure{margin:28px 0 36px}.articleImage{display:block;width:100%;height:auto;aspect-ratio:3/2;border:1px solid var(--line);border-radius:18px;background:#f4f3ef}.figure figcaption{margin-top:12px;color:var(--muted);font-size:.8rem;line-height:1.65}
 .note{padding:30px;margin-top:30px;border-radius:22px;background:var(--surface-2);border:1px solid var(--line)}
 .note h2{margin:0 0 12px}.note p{line-height:1.75;color:var(--muted);max-width:750px}
 .links{display:flex;gap:18px;flex-wrap:wrap}.links a{color:var(--accent);font-weight:650}

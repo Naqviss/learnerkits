@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { articleSummaries, articlePublishedAt } from "@/lib/articles/catalog";
+import { articleImages } from "@/lib/articles/images";
 import { defaultLocale, locales } from "@/lib/i18n/config";
-import { hreflangCodes, localizedUrl } from "@/lib/seo/metadata";
+import { hreflangCodes, localizedUrl, siteUrl } from "@/lib/seo/metadata";
 import { getTopicGuides } from "@/lib/seo/topic-guides";
 import { moleculeReferences } from "@/lib/seo/molecules";
 import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
@@ -22,6 +23,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const paths = locale === defaultLocale ? [...core, ...subjectPaths, ...simulationPaths, ...topicGuidePaths, ...articlePaths, ...moleculePaths] : [...core, ...subjectPaths, ...simulationPaths];
     return paths.map((path) => ({
     url: localizedUrl(locale, path),
+    ...(path === "/articles"
+      ? { images: articleSummaries.map((article) => `${siteUrl}${articleImages[article.slug].src}`) }
+      : articleSummaries.some((article) => path === `/articles/${article.slug}`)
+        ? { images: articleSummaries.filter((article) => path === `/articles/${article.slug}`).map((article) => `${siteUrl}${articleImages[article.slug].src}`) }
+        : {}),
     lastModified: path.startsWith("/articles") ? articlePublishedAt : lastModified,
     changeFrequency: path.includes("simulations") ? "weekly" : "monthly",
     priority: path === "/" ? 1 : path === "/molecule-kit" ? .9 : path.includes("subjects/") || path === "/molecules" ? .85 : path.startsWith("/molecules/") ? .7 : isEnglishOnly(path) ? .85 : path === "/donate" ? .5 : .8,

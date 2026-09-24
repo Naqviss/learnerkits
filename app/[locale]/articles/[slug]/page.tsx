@@ -3,10 +3,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { articles, getArticle } from "@/lib/articles";
 import { getArticleSummary } from "@/lib/articles/catalog";
-import { articleJsonLd } from "@/lib/articles/seo";
+import { articleJsonLd, articleMetadata } from "@/lib/articles/seo";
 import { ArticleBody } from "@/components/articles/ArticleBody";
 import { ArticleCard } from "@/components/articles/ArticleCard";
-import { breadcrumbJsonLd, jsonLd, localizedMetadata, localizedUrl } from "@/lib/seo/metadata";
+import { ArticleImage } from "@/components/articles/ArticleImage";
+import { breadcrumbJsonLd, jsonLd } from "@/lib/seo/metadata";
 import { getSimulationCard } from "@/lib/subjects/catalog";
 import styles from "@/components/articles/articles.module.css";
 
@@ -16,8 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const article = getArticle(slug);
   if (locale !== "en" || !article) return {};
-  const metadata = localizedMetadata("en", `/articles/${slug}`, article.title, article.description, { type: "article", englishOnly: true });
-  return { ...metadata, title: { absolute: `${article.title} | LearnerKits` }, authors: [{ name: "LearnerKits", url: localizedUrl("en", "/about") }], openGraph: { ...metadata.openGraph, type: "article", publishedTime: article.publishedAt, modifiedTime: article.updatedAt, authors: [localizedUrl("en", "/about")], section: article.category } };
+  return articleMetadata(article);
 }
 
 export default async function ArticlePage({ params }: Props) {
@@ -42,6 +42,7 @@ export default async function ArticlePage({ params }: Props) {
         </aside>
         <div className={styles.prose}>
           <div className={styles.intro}><ArticleBody body={article.intro} /></div>
+          <ArticleImage slug={article.slug} />
           {article.sections.map((section) => <section key={section.id} id={section.id}><h2>{section.title}</h2><ArticleBody body={section.body} /></section>)}
           <aside className={styles.editorialNote}><strong>About this article</strong><p>AI-assisted educational content from LearnerKits. Worked examples are illustrative; simulation outputs are model predictions. Sources are linked beside the relevant discussion. No independent expert review is claimed.</p><div className={styles.links}><Link href="/en/editorial-policy">Editorial policy</Link><Link href="/en/contact">Report a correction</Link></div></aside>
         </div>
