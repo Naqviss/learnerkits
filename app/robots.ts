@@ -8,7 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "bingbot", allow: "/", disallow: ["/api/"] },
       { userAgent: "*", allow: "/", disallow: ["/api/"] },
     ],
-    host: siteUrl,
     sitemap: `${siteUrl}/sitemap.xml`,
   };
 }
