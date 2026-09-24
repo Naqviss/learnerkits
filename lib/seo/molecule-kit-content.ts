@@ -22,6 +22,8 @@ export type MoleculeKitCopy = {
   faqTitle: string;
   faq: { q: string; a: string }[];
   banner: { newLabel: string; title: string; body: string; cta: string };
+  // The VSEPR chart and per-molecule reference pages are English-only for now.
+  chart: { eyebrow: string; title: string; body: string; cta: string };
 };
 
 export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
@@ -57,6 +59,7 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
       { q: "Is the Molecule Kit part of a larger chemistry collection?", a: "Yes. Both labs also live in the full Chemistry subject, which includes 13 interactive labs covering reactions, solutions, gases, and more." },
     ],
     banner: { newLabel: "New", title: "Molecule Kit: build & explore 3D molecules", body: "Construct molecules from valence and bonding rules, then predict their 3D shape with VSEPR reasoning — two free interactive labs in one kit.", cta: "Explore the Molecule Kit" },
+    chart: { eyebrow: "Reference", title: "VSEPR shapes chart and 3D molecule library", body: "Look up the molecular geometry, bond angle, hybridization, and polarity of more than 100 molecules and ions, each with a rotatable 3D model.", cta: "Open the VSEPR shapes chart" },
   },
   es: {
     title: "Kit de Moléculas",
@@ -90,6 +93,7 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
       { q: "¿El Kit de Moléculas forma parte de una colección más amplia de química?", a: "Sí. Los dos laboratorios también forman parte de la materia completa de Química, que incluye 13 laboratorios interactivos sobre reacciones, disoluciones, gases y mucho más." },
     ],
     banner: { newLabel: "Nuevo", title: "Kit de Moléculas: construye y explora moléculas 3D", body: "Construye moléculas siguiendo las reglas de valencia y enlace, y luego predice su forma en 3D con el razonamiento VSEPR — dos laboratorios interactivos gratuitos en un solo kit.", cta: "Explorar el Kit de Moléculas" },
+    chart: { eyebrow: "Referencia", title: "Tabla de formas VSEPR y biblioteca de moléculas 3D", body: "Consulta la geometría molecular, el ángulo de enlace, la hibridación y la polaridad de más de 100 moléculas e iones, cada uno con un modelo 3D giratorio (en inglés).", cta: "Abrir la tabla VSEPR" },
   },
   fr: {
     title: "Kit Molécules",
@@ -123,6 +127,7 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
       { q: "Le Kit Molécules fait-il partie d’une collection de chimie plus large ?", a: "Oui. Les deux laboratoires font aussi partie de la matière Chimie complète, qui comprend 13 laboratoires interactifs sur les réactions, les solutions, les gaz et bien plus." },
     ],
     banner: { newLabel: "Nouveau", title: "Kit Molécules : construire et explorer des molécules 3D", body: "Construisez des molécules à partir des règles de valence et de liaison, puis prédisez leur forme en 3D grâce au raisonnement VSEPR — deux laboratoires interactifs gratuits dans un seul kit.", cta: "Découvrir le Kit Molécules" },
+    chart: { eyebrow: "Référence", title: "Tableau des formes VSEPR et bibliothèque de molécules 3D", body: "Consultez la géométrie moléculaire, l’angle de liaison, l’hybridation et la polarité de plus de 100 molécules et ions, chacun avec un modèle 3D orientable (en anglais).", cta: "Ouvrir le tableau VSEPR" },
   },
   de: {
     title: "Molekül-Kit",
@@ -156,6 +161,7 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
       { q: "Ist das Molekül-Kit Teil einer größeren Chemie-Sammlung?", a: "Ja. Beide Labore gehören auch zum vollständigen Fach Chemie mit 13 interaktiven Laboren zu Reaktionen, Lösungen, Gasen und mehr." },
     ],
     banner: { newLabel: "Neu", title: "Molekül-Kit: 3D-Moleküle bauen und erkunden", body: "Baue Moleküle nach Valenz- und Bindungsregeln und sage dann ihre 3D-Form mit VSEPR-Logik voraus – zwei kostenlose interaktive Labore in einem Kit.", cta: "Molekül-Kit entdecken" },
+    chart: { eyebrow: "Nachschlagen", title: "VSEPR-Formentabelle und 3D-Molekülbibliothek", body: "Schlage Molekülgeometrie, Bindungswinkel, Hybridisierung und Polarität von über 100 Molekülen und Ionen nach – jeweils mit drehbarem 3D-Modell (auf Englisch).", cta: "VSEPR-Tabelle öffnen" },
   },
   pt: {
     title: "Kit de Moléculas",
@@ -189,6 +195,7 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
       { q: "O Kit de Moléculas faz parte de uma coleção maior de química?", a: "Sim. Os dois laboratórios também fazem parte da disciplina completa de Química, que inclui 13 laboratórios interativos sobre reações, soluções, gases e muito mais." },
     ],
     banner: { newLabel: "Novo", title: "Kit de Moléculas: construa e explore moléculas 3D", body: "Construa moléculas a partir das regras de valência e ligação, depois preveja sua forma em 3D com o raciocínio VSEPR — dois laboratórios interativos gratuitos em um só kit.", cta: "Explorar o Kit de Moléculas" },
+    chart: { eyebrow: "Referência", title: "Tabela de formas VSEPR e biblioteca de moléculas 3D", body: "Consulte a geometria molecular, o ângulo de ligação, a hibridização e a polaridade de mais de 100 moléculas e íons, cada um com um modelo 3D giratório (em inglês).", cta: "Abrir a tabela VSEPR" },
   },
   ru: {
     title: "Молекулярный набор",
@@ -222,6 +229,7 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
       { q: "Входит ли Молекулярный набор в более крупную коллекцию по химии?", a: "Да. Обе лаборатории также входят в полный курс химии, который включает 13 интерактивных лабораторий по реакциям, растворам, газам и другим темам." },
     ],
     banner: { newLabel: "Новинка", title: "Молекулярный набор: стройте и изучайте 3D-молекулы", body: "Стройте молекулы по правилам валентности и связей, а затем предсказывайте их 3D-форму с помощью логики VSEPR — две бесплатные интерактивные лаборатории в одном наборе.", cta: "Открыть Молекулярный набор" },
+    chart: { eyebrow: "Справочник", title: "Таблица форм VSEPR и библиотека 3D-молекул", body: "Геометрия, валентный угол, гибридизация и полярность более 100 молекул и ионов — у каждой вращаемая 3D-модель (на английском).", cta: "Открыть таблицу VSEPR" },
   },
   ja: {
     title: "分子キット",
@@ -255,6 +263,7 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
       { q: "分子キットはより大きな化学コレクションの一部ですか？", a: "はい。どちらのラボも、反応・溶液・気体などを扱う13のインタラクティブラボを含む化学科目全体の一部でもあります。" },
     ],
     banner: { newLabel: "新着", title: "分子キット：3D分子を組み立てて探索", body: "原子価と結合ルールから分子を組み立て、VSEPR推論でその3D形状を予測しよう。1つのキットに2つの無料インタラクティブラボ。", cta: "分子キットを見る" },
+    chart: { eyebrow: "リファレンス", title: "VSEPR形状表と3D分子ライブラリ", body: "100種類以上の分子・イオンについて、分子の形、結合角、混成軌道、極性を調べられます。すべて回転できる3Dモデル付き（英語）。", cta: "VSEPR形状表を開く" },
   },
   zh: {
     title: "分子工具包",
@@ -288,6 +297,7 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
       { q: "分子工具包是更大化学合集的一部分吗？", a: "是的。这两个实验也属于完整的化学学科，其中包含13个涵盖反应、溶液、气体等内容的互动实验。" },
     ],
     banner: { newLabel: "新上线", title: "分子工具包：搭建并探索3D分子", body: "按照化合价和成键规律搭建分子，然后用VSEPR推理预测其3D形状——一个工具包内含两个免费互动实验。", cta: "探索分子工具包" },
+    chart: { eyebrow: "参考资料", title: "VSEPR构型表与3D分子库", body: "查阅100多种分子和离子的分子构型、键角、杂化方式和极性，每种都配有可旋转的3D模型（英文）。", cta: "打开VSEPR构型表" },
   },
   ar: {
     title: "مجموعة الجزيئات",
@@ -321,6 +331,7 @@ export const moleculeKitCopy: Record<Locale, MoleculeKitCopy> = {
       { q: "هل مجموعة الجزيئات جزء من مجموعة كيمياء أكبر؟", a: "نعم. يندرج كلا المختبرين أيضًا ضمن مادة الكيمياء الكاملة، التي تضم 13 مختبرًا تفاعليًا حول التفاعلات والمحاليل والغازات وغيرها." },
     ],
     banner: { newLabel: "جديد", title: "مجموعة الجزيئات: ابنِ واستكشف جزيئات ثلاثية الأبعاد", body: "ابنِ الجزيئات وفق قواعد التكافؤ والترابط، ثم توقّع شكلها ثلاثي الأبعاد باستخدام منطق VSEPR — مختبران تفاعليان مجانيان في مجموعة واحدة.", cta: "استكشف مجموعة الجزيئات" },
+    chart: { eyebrow: "مرجع", title: "جدول أشكال VSEPR ومكتبة الجزيئات ثلاثية الأبعاد", body: "اطّلع على الشكل الهندسي وزاوية الرابطة والتهجين والقطبية لأكثر من 100 جزيء وأيون، لكلٍّ منها نموذج ثلاثي الأبعاد قابل للتدوير (بالإنجليزية).", cta: "افتح جدول VSEPR" },
   },
 };
 

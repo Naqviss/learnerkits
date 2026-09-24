@@ -3,8 +3,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, locales, type Locale } from "@/lib/i18n/config";
 import { getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content";
-import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, subjectCollectionJsonLd } from "@/lib/seo/metadata";
+import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonLd, subjectCollectionJsonLd } from "@/lib/seo/metadata";
 import { getMoleculeKitCopy, moleculeKitSimSlugs } from "@/lib/seo/molecule-kit-content";
+import { getMoleculeReference } from "@/lib/seo/molecules";
+
+// High-demand lookups featured on the kit page; each links to its English reference page.
+const popularMolecules = ["water-h2o", "carbon-dioxide-co2", "methane-ch4", "ammonia-nh3", "sulfur-dioxide-so2", "boron-trifluoride-bf3", "phosphorus-pentachloride-pcl5", "sulfur-hexafluoride-sf6", "xenon-tetrafluoride-xef4", "sulfate-ion-so4"];
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -38,12 +42,22 @@ export default async function MoleculeKitPage({ params }: { params: Promise<{ lo
     simulations: kitSimulations.map((sim) => ({ name: sim.title, path: `/simulations/${sim.slug}`, description: sim.outcome })),
   });
   const faq = faqJsonLd(locale, copy.faq);
+  const kitApp = simulationJsonLd({
+    locale,
+    path: "/molecule-kit",
+    title: copy.title,
+    description: copy.metaDescription,
+    subject: chemistryName,
+    concepts: ["Valence", "Chemical bonding", "VSEPR theory", "Molecular geometry", "Bond angles", "Lone pairs"],
+  });
+  const featured = popularMolecules.map((slug) => getMoleculeReference(slug)!);
 
   return (
     <main className="container topicGuidePage subject-chemistry">
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumb)} />
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(collection)} />
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faq)} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(kitApp)} />
       <header className="topicGuideHero">
         <div className="eyebrow">{chemistryName} · {copy.heroEyebrowSuffix}</div>
         <h1>{copy.title}</h1>
@@ -73,6 +87,15 @@ export default async function MoleculeKitPage({ params }: { params: Promise<{ lo
               </article>
             ))}
           </div>
+        </section>
+        <section className="topicGuideSection">
+          <span className="eyebrow">{copy.chart.eyebrow}</span>
+          <h2>{copy.chart.title}</h2>
+          <p>{copy.chart.body}</p>
+          <div className="moleculeKitChart" lang="en">
+            {featured.map((m) => <Link key={m.slug} href={`/en/molecules/${m.slug}`}>{m.formula} · {m.name}</Link>)}
+          </div>
+          <div className="topicGuideHeroActions"><Link className="button subjectButton" href="/en/molecules">{copy.chart.cta} →</Link></div>
         </section>
         <section className="topicGuideSection topicGuideFaq">
           <span className="eyebrow">{copy.faqEyebrow}</span>

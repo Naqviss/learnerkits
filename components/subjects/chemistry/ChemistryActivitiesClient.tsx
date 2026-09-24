@@ -8,6 +8,7 @@ import { loadSettings, prefersReducedMotion } from "@/lib/settings/storage";
 import { activities, atomBalance, builderMolecules, clues, elementColorNames, elementGroups, elementPeriod, elementSymbols, initialValues, molecules, phase, rateConstant, reactions, solutionPH, titrationPH, yieldResult, type Values } from "@/lib/simulations/chemistry/model";
 import { BenchScene, Chart } from "./BenchScene";
 import { MolecularScene, type Attachment } from "./MolecularScene";
+import { getMoleculeReference } from "@/lib/seo/molecules";
 import styles from "./chemistry.module.css";
 
 const STORAGE = "learnerkits-chemistry-missions-v1";
@@ -38,7 +39,10 @@ export function ChemistryActivitiesClient({ locale, subject, simulation }: { loc
   useEffect(()=>{
     try { const parsed:unknown=JSON.parse(localStorage.getItem(STORAGE)||"[]"); if(Array.isArray(parsed)) setCompleted(parsed.filter((s):s is string=>typeof s==="string"&&activities.some(a=>a.slug===s))); } catch { /* A fresh local notebook works without storage. */ }
     setReduced(prefersReducedMotion(loadSettings()));
-  },[]);
+    // Molecule reference pages deep-link here with ?molecule=<slug> to preselect that molecule.
+    const linked=slug==="molecular-geometry-3d"?getMoleculeReference(new URLSearchParams(window.location.search).get("molecule")??""):undefined;
+    if(linked) setValues(v=>({...v,molecule:linked.index}));
+  },[slug]);
   useEffect(()=>{
     let last=performance.now();
     const timer=window.setInterval(()=>{

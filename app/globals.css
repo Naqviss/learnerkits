@@ -534,3 +534,11 @@ body{background:radial-gradient(circle at 8% 4%,rgba(132,177,255,.22),transparen
 .simulationArticleLinks{margin:28px 0;padding:24px;border:1px solid var(--line);border-radius:20px;background:var(--surface)}
 .simulationArticleLinks h2{margin:0 0 16px;font-size:1.4rem}.simulationArticleLinks ul{margin:0;padding-left:20px}.simulationArticleLinks li{margin:12px 0;line-height:1.6}
 @media(min-width:801px) and (max-width:900px){.mobileNav{display:block}.navInner>.navSearch{display:none}.navActions{margin-left:auto}}
+
+/* Molecule reference pages and VSEPR shapes chart. */
+.moleculeFacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 24px;margin:6px 0 0}
+.moleculeFacts>div{min-width:0}.moleculeFacts dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}.moleculeFacts dd{margin:4px 0 0;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
+.moleculeLinkList{list-style:none;padding:0 !important;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}.moleculeLinkList a{color:inherit}.moleculeLinkList b{color:var(--subject,var(--accent));margin-inline-end:6px}
+.vseprTableWrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.vseprTable{width:100%;min-width:720px;border-collapse:collapse;font-size:.9rem}.vseprTable th,.vseprTable td{padding:11px 14px;text-align:start;border-bottom:1px solid var(--line);vertical-align:top}.vseprTable thead th{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);background:var(--surface-2)}.vseprTable tbody tr:last-child>*{border-bottom:0}.vseprTable a{color:var(--subject,var(--accent));font-weight:700}
+.moleculeKitChart{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.moleculeKitChart a{padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:inherit;font-weight:650;font-size:.9rem}
