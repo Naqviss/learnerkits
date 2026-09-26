@@ -16,14 +16,13 @@ export default async function Simulations({params}:{params:Promise<{locale:strin
   const {locale:raw}=await params;if(!isLocale(raw))notFound();
   const copy=getEducationCopy(raw);
   const subjects=visibleSubjectSlugs.map(slug=>({slug,name:getLocalizedSubjectName(raw,slug),data:getLocalizedSubject(raw,slug)}));
-  const all=subjects.flatMap(({data})=>data.simulations),featured=all.filter(sim=>sim.featured).slice(0,6);
+  const all=subjects.flatMap(({data})=>data.simulations);
   const labs=subjects.flatMap(({slug,name,data})=>data.simulations.map((sim,index)=>({slug,name,sim,base:subjectsCatalog[slug].simulations[index]})));
   const levels=(["Beginner","Intermediate","Advanced"] as const).map(value=>({value,label:displayDifficulty(raw,value)}));
   return <main className="container educationLibrary simLibrary">
     <header className="pageHeader generalPageHeader libHeader"><div className="eyebrow">{copy.library.eyebrow}</div><h1 className="pageTitle">{copy.library.title}</h1><p className="lede">{copy.library.body(all.length,visibleSubjectSlugs.length)}</p></header>
-    {featured.length>0&&<section className="libStartHere" aria-labelledby="lib-start-here"><h2 id="lib-start-here">{copy.library.priority}</h2><div>{featured.map(sim=><Link href={`/${raw}/simulations/${sim.slug}`} key={sim.slug}>{sim.title} <span aria-hidden="true">→</span></Link>)}</div></section>}
     <SimulationLibrary
-      groups={subjects.map(({slug,name,data})=>({slug,name,meta:`${data.gradeBand} · ${data.simulations.length} ${copy.generic.labs}`,href:`/${raw}/subjects/${slug}`,viewLabel:copy.library.viewSubject}))}
+      groups={subjects.map(({slug,name,data})=>({slug,name,meta:`${data.simulations.length} ${copy.generic.labs}`,href:`/${raw}/subjects/${slug}`,viewLabel:copy.library.viewSubject}))}
       upcoming={subjectSlugs.filter(slug=>hiddenSubjectSlugs.has(slug)).map(slug=>({slug,name:getLocalizedSubjectName(raw,slug)}))}
       items={labs.map(({slug,name,sim,base})=>({subject:slug,level:sim.difficulty,text:[sim.title,sim.kind,sim.concepts,sim.outcome,name,base.title,base.concepts,sim.slug.replace(/-/g," ")].filter(Boolean).join(" ")}))}
       levels={levels}
