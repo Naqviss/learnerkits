@@ -7,10 +7,10 @@ import { localizedUrl, siteName, siteUrl } from "./metadata";
 export function withSubjectImage(metadata: Metadata, locale: Locale, subject: SubjectSlug): Metadata {
   const image = subjectImages[subject];
   if (!image) return metadata;
-  const url = `${siteUrl}${image.src}`;
+  const url = `${siteUrl}${image.og.src}`;
   return {
     ...metadata,
-    openGraph: { ...metadata.openGraph, images: [{ url, width: image.width, height: image.height, type: "image/webp", alt: image.alt[locale] }] },
+    openGraph: { ...metadata.openGraph, images: [{ url, width: image.og.width, height: image.og.height, type: "image/jpeg", alt: image.alt[locale] }] },
     twitter: { ...metadata.twitter, card: "summary_large_image", images: [{ url, alt: image.alt[locale] }] },
   };
 }

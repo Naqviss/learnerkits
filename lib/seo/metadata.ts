@@ -161,6 +161,8 @@ export function subjectCollectionJsonLd(args: {
   path: string;
   name: string;
   description: string;
+  concepts?: string[];
+  gradeBand?: string;
   simulations: { name: string; path: string; description: string }[];
 }) {
   return {
@@ -170,7 +172,12 @@ export function subjectCollectionJsonLd(args: {
     description: args.description,
     url: localizedUrl(args.locale, args.path),
     inLanguage: hreflangCodes[args.locale],
-    isPartOf: { "@type": "WebSite", name: siteName, url: siteUrl },
+    isPartOf: { "@type": "WebSite", "@id": `${siteUrl}/#website`, name: siteName, url: `${siteUrl}/` },
+    publisher: { "@type": "Organization", "@id": `${siteUrl}/#organization`, name: siteName, url: `${siteUrl}/` },
+    isAccessibleForFree: true,
+    ...(args.concepts?.length ? { about: args.concepts.map((name) => ({ "@type": "Thing", name })) } : {}),
+    ...(args.gradeBand ? { educationalLevel: args.gradeBand } : {}),
+    audience: { "@type": "EducationalAudience", educationalRole: ["student", "teacher"] },
     mainEntity: {
       "@type": "ItemList",
       numberOfItems: args.simulations.length,

@@ -28,8 +28,9 @@ describe("subject image discovery", () => {
         const collection = json.find((item) => item["@type"] === "CollectionPage");
         expect(collection.primaryImageOfPage).toMatchObject({ "@type": "ImageObject", contentUrl: `${siteUrl}${image.src}`, description: image.alt[locale] });
         expect(collection.image).toEqual(collection.primaryImageOfPage);
-        expect(metadata.openGraph).toMatchObject({ images: [{ url: collection.image.contentUrl, width: 1200, height: 800, type: "image/webp", alt: image.alt[locale] }] });
-        expect(metadata.twitter).toMatchObject({ images: [{ url: collection.image.contentUrl, alt: image.alt[locale] }] });
+        const ogUrl = `${siteUrl}${image.og.src}`;
+        expect(metadata.openGraph).toMatchObject({ images: [{ url: ogUrl, width: 1200, height: 630, type: "image/jpeg", alt: image.alt[locale] }] });
+        expect(metadata.twitter).toMatchObject({ images: [{ url: ogUrl, alt: image.alt[locale] }] });
         expect(metadata.robots).toMatchObject({ index: true, googleBot: { "max-image-preview": "large" } });
       }
     }
@@ -61,6 +62,18 @@ describe("subject image discovery", () => {
         expect(bytes.toString("ascii", 8, 12)).toBe("WEBP");
         expect(statSync(path).size).toBeLessThan(src.includes("-640") ? 110 * 1024 : 300 * 1024);
       }
+    }
+  });
+
+  it("provides 1200×630 JPEG social cards", () => {
+    for (const subject of visibleSubjectSlugs) {
+      const og = subjectImages[subject]!.og;
+      const path = join(process.cwd(), "public", og.src);
+      const bytes = readFileSync(path);
+      expect(bytes[0]).toBe(0xff);
+      expect(bytes[1]).toBe(0xd8);
+      expect(statSync(path).size).toBeLessThan(400 * 1024);
+      expect([og.width, og.height]).toEqual([1200, 630]);
     }
   });
 });

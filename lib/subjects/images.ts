@@ -1,10 +1,13 @@
 import type { Locale } from "@/lib/i18n/config";
 import type { SubjectSlug } from "./catalog";
 
-type SubjectImage = { src: string; smallSrc: string; width: number; height: number; alt: Record<Locale, string> };
+// `og` is a 1200×630 JPEG crop for social cards: they display at ~1.91:1 and not every
+// platform reads WebP.
+type SubjectImage = { src: string; smallSrc: string; og: { src: string; width: number; height: number }; width: number; height: number; alt: Record<Locale, string> };
 const asset = (slug: string, alt: Record<Locale, string>): SubjectImage => ({
   src: `/images/subjects/learnerkits-${slug}.webp`,
   smallSrc: `/images/subjects/learnerkits-${slug}-640.webp`,
+  og: { src: `/images/subjects/learnerkits-${slug}-og.jpg`, width: 1200, height: 630 },
   width: 1200,
   height: 800,
   alt,
@@ -80,4 +83,4 @@ export const subjectImageCaptions: Record<Locale, string> = {
   de: "KI-generierte Fachillustration von LearnerKits. Nicht maßstabsgetreu.",
 };
 
-export const subjectImagesUpdatedAt = "2026-09-26";
+export const subjectImagesUpdatedAt = "2026-09-27";

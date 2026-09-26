@@ -7,18 +7,21 @@ import { breadcrumbJsonLd, jsonLd, localizedMetadata, subjectCollectionJsonLd } 
 import { isVisibleSubjectSlug, visibleSubjectSlugs, type SubjectSlug } from "@/lib/subjects/catalog";
 import { SubjectImage } from "@/components/subjects/SubjectImage";
 import { subjectImageJsonLd, withSubjectImage } from "@/lib/seo/subject-images";
+import { getSubjectSeo } from "@/lib/seo/subject-seo";
 
 export function generateStaticParams() { return visibleSubjectSlugs.map((subject) => ({ subject })); }
 
 export async function generateMetadata({params}:{params:Promise<{locale:string;subject:string}>}):Promise<Metadata>{
   const {locale,subject}=await params;if(!isLocale(locale)||!isVisibleSubjectSlug(subject))return{};const c=getEducationCopy(locale);const data=getLocalizedSubject(locale,subject);const name=getLocalizedSubjectName(locale,subject);
-  return withSubjectImage(localizedMetadata(locale,`/subjects/${subject}`,c.seo.subjectTitle(name),c.seo.subjectDescription(name,data.description),{keywords:[name,...data.concepts,c.subject.labs,c.lab.interactiveModel]}), locale, subject);
+  const seo=getSubjectSeo(locale,subject,data.simulations.length);
+  return withSubjectImage(localizedMetadata(locale,`/subjects/${subject}`,seo?.title??c.seo.subjectTitle(name),seo?.description??c.seo.subjectDescription(name,data.description),{keywords:[name,...data.concepts,...data.simulations.slice(0,6).map((sim)=>sim.title)]}), locale, subject);
 }
 
 export default async function SubjectPage({ params }: { params: Promise<{ locale: string; subject: string }> }) {
   const { locale, subject } = await params;if (!isLocale(locale) || !isVisibleSubjectSlug(subject)) notFound();const c=getEducationCopy(locale);const subjectSlug=subject as SubjectSlug;const data=getLocalizedSubject(locale,subjectSlug);const name=getLocalizedSubjectName(locale,subjectSlug);
   const breadcrumb=breadcrumbJsonLd(locale,[{name:c.home.subjects,path:"/subjects"},{name,path:`/subjects/${subjectSlug}`}]);
-  const collection={ ...subjectCollectionJsonLd({locale,path:`/subjects/${subjectSlug}`,name,description:data.description,simulations:data.simulations.map((sim)=>({name:sim.title,path:`/simulations/${sim.slug}`,description:sim.outcome}))}), image: subjectImageJsonLd(locale, subjectSlug), primaryImageOfPage: subjectImageJsonLd(locale, subjectSlug) };
+  const description=getSubjectSeo(locale,subjectSlug,data.simulations.length)?.description??data.description;
+  const collection={ ...subjectCollectionJsonLd({locale,path:`/subjects/${subjectSlug}`,name,description,concepts:data.concepts,gradeBand:data.gradeBand,simulations:data.simulations.map((sim)=>({name:sim.title,path:`/simulations/${sim.slug}`,description:sim.outcome}))}), image: subjectImageJsonLd(locale, subjectSlug), primaryImageOfPage: subjectImageJsonLd(locale, subjectSlug) };
   return <main className={`subjectPage educationSubjectPage subject-${subject}`}><script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumb)}/><script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(collection)}/>
     <section className="container subjectHero educationSubjectHero"><div className="subjectHeroCopy"><Link className="backLink" href={`/${locale}/subjects`}>← {c.home.subjects}</Link><div className="eyebrow">{data.eyebrow}</div><h1>{data.headline}</h1><p>{data.description}</p><div className="subjectStudyMeta"><span>{data.gradeBand}</span><span>{data.simulations.length} {c.subject.labs}</span><span>{data.concepts.length} {c.subject.concepts}</span></div><div className="conceptRow">{data.concepts.map(concept=><span className="conceptChip" key={concept}>{concept}</span>)}</div></div><div className="subjectStudyPanel"><SubjectImage subject={subjectSlug} locale={locale} priority/><div className="studyPanelBody"><span className="eyebrow">{c.subject.learningObjectives}</span><ul>{data.learningObjectives.map(objective=><li key={objective}><span>✓</span>{objective}</li>)}</ul></div></div></section>
     <section className="container inquiryCard"><div><span className="eyebrow">{c.subject.inquiry}</span><p>{c.subject.inquiryBody}</p></div><strong>{data.prompt}</strong></section>
