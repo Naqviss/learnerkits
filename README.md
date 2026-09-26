@@ -1,5 +1,7 @@
 # LearnerKits — Interactive Science Simulation Platform
 
+**Predict. Experiment. Explain.**
+
 A browser-based educational simulation platform built around **learn by experimenting, not memorizing**. The product opens as a general science gateway, then branches into six subject-specific learning areas with a calm academic light/dark theme.
 
 ## Current catalog

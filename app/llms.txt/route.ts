@@ -1,5 +1,5 @@
 import { articleSummaries } from "@/lib/articles/catalog";
-import { siteUrl } from "@/lib/seo/metadata";
+import { siteSlogan, siteUrl } from "@/lib/seo/metadata";
 import { getTopicGuides } from "@/lib/seo/topic-guides";
 import { moleculeReferences } from "@/lib/seo/molecules";
 import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
@@ -25,6 +25,8 @@ export async function GET() {
     .join("\n");
 
   const body = `# LearnerKits
+
+${siteSlogan}
 
 > Free, interactive science simulations for grades 6-12. Students predict, experiment, observe, and explain across space, physics, geography, environmental science, and chemistry — no sign-up required.
 

@@ -5,6 +5,7 @@ import { defaultLocale, locales, type Locale } from "@/lib/i18n/config";
 // Local development can still override this with NEXT_PUBLIC_SITE_URL=http://localhost:3000.
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://www.learnerkits.com")).replace(/\/$/, "");
 export const siteName = "LearnerKits";
+export const siteSlogan = "Predict. Experiment. Explain.";
 export const defaultOgImage = `${siteUrl}/og-default.png`;
 
 const ogLocales: Record<Locale, string> = {
@@ -116,6 +117,7 @@ export function websiteJsonLd(locale: Locale, description: string) {
         name: siteName,
         alternateName: siteAlternateNames,
         url: `${siteUrl}/`,
+        slogan: siteSlogan,
         logo: `${siteUrl}/learnerkits-mark.svg`,
       },
     ],
