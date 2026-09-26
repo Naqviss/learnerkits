@@ -20,7 +20,7 @@ export async function generateMetadata({params}:{params:Promise<{locale:string}>
 export default async function Home({params}:{params:Promise<{locale:string}>}){
   const {locale:raw}=await params;if(!isLocale(raw))notFound();const c=getEducationCopy(raw);
   const visibleLabCount=visibleSubjectSlugs.reduce((count,slug)=>count+subjectsCatalog[slug].simulations.length,0);
-  const structured=websiteJsonLd(raw,c.seo.homeTitle,c.seo.homeDescription);
+  const structured=websiteJsonLd(raw,c.seo.homeDescription);
   const kit=getMoleculeKitCopy(raw);
   const chemistryName=getLocalizedSubjectName(raw,"chemistry");
   return <main className="educationHome">

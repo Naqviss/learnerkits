@@ -91,15 +91,34 @@ export function jsonLd(data: unknown) {
   return { __html: JSON.stringify(data).replace(/</g, "\\u003c") };
 }
 
-export function websiteJsonLd(locale: Locale, title: string, description: string) {
+// Spellings people type when searching for the brand; tells Google they all mean this site.
+export const siteAlternateNames = ["Learner Kits", "LearnerKit", "Learner Kit", "learnerkits.com"];
+
+// `name` must be the brand, not the page title: Google reads it for the site name in results
+// and for matching brand queries.
+export function websiteJsonLd(locale: Locale, description: string) {
   return {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: title,
-    url: localizedUrl(locale, "/"),
-    description,
-    inLanguage: hreflangCodes[locale],
-    publisher: { "@type": "Organization", name: siteName, url: siteUrl },
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${siteUrl}/#website`,
+        name: siteName,
+        alternateName: siteAlternateNames,
+        url: `${siteUrl}/`,
+        description,
+        inLanguage: hreflangCodes[locale],
+        publisher: { "@id": `${siteUrl}/#organization` },
+      },
+      {
+        "@type": "Organization",
+        "@id": `${siteUrl}/#organization`,
+        name: siteName,
+        alternateName: siteAlternateNames,
+        url: `${siteUrl}/`,
+        logo: `${siteUrl}/learnerkits-mark.svg`,
+      },
+    ],
   };
 }
 
