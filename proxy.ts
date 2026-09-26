@@ -22,7 +22,7 @@ export function proxy(request: NextRequest) {
   destination.pathname = `/${locale}${pathname}`;
 
   // Keep the public homepage crawlable while still serving the visitor's language.
-  // Its localized canonical points search engines to the stable /{locale} URL.
+  // Crawlers get English here, which declares "/" as its own canonical; other languages point to /{locale}.
   if (pathname === "/") return NextResponse.rewrite(destination);
 
   return NextResponse.redirect(destination);

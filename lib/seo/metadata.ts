@@ -33,6 +33,8 @@ export type SeoOptions = {
 
 export function localizedUrl(locale: Locale | string, path: string) {
   const cleanPath = path === "/" ? "" : path.startsWith("/") ? path : `/${path}`;
+  // The bare domain is the canonical English homepage; /en serves the same page and defers to it.
+  if (locale === defaultLocale && cleanPath === "") return `${siteUrl}/`;
   return `${siteUrl}/${locale}${cleanPath}`;
 }
 
