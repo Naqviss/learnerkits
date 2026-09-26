@@ -7,6 +7,7 @@ import { articleCategories, getArticlesForSimulation } from "@/lib/articles/cata
 import { getSimulationCard, getSubjectForSimulation, isVisibleSubjectSlug } from "@/lib/subjects/catalog";
 import { articleJsonLd } from "@/lib/articles/seo";
 import { articleImages } from "@/lib/articles/images";
+import { articleFigures, getArticleFigure } from "@/lib/articles/figures";
 import { localizedUrl, siteUrl } from "@/lib/seo/metadata";
 import { ArticleBody } from "@/components/articles/ArticleBody";
 import sitemap from "@/app/sitemap";
@@ -21,8 +22,7 @@ describe("article publishing", () => {
     expect(articles.filter((article) => article.category === "AI in Education")).toHaveLength(5);
     expect(articles.filter((article) => article.category === "Educational Technology")).toHaveLength(6);
     for (const article of articles) {
-      expect(article.wordCount, article.slug).toBeGreaterThanOrEqual(article.category === "Educational Technology" ? 1500 : 1000);
-      if (article.category === "AI in Education") expect(article.wordCount, article.slug).toBeLessThanOrEqual(1500);
+      expect(article.wordCount, article.slug).toBeGreaterThanOrEqual(1500);
       expect(article.sections.length).toBeGreaterThanOrEqual(6);
       expect(new Set(article.sections.map((section) => section.id)).size).toBe(article.sections.length);
       expect(article.sections.every((section) => section.id && section.body)).toBe(true);
@@ -97,6 +97,34 @@ describe("article publishing", () => {
         expect(statSync(file).size).toBeLessThan(200 * 1024);
       }
     }
+  });
+
+  it("renders registered explanatory figures and includes them in schema and the image sitemap", async () => {
+    const entries = sitemap();
+    const used = new Set<string>();
+    for (const article of articles) {
+      const markers = [...article.body.matchAll(/^:::figure (.+)$/gm)].map((match) => match[1].trim());
+      for (const id of markers) expect(getArticleFigure(id), `${article.slug}: ${id}`).toBeDefined();
+      expect(article.figures).toHaveLength(new Set(markers).size);
+      const html = renderToStaticMarkup(await ArticlePage({ params: Promise.resolve({ locale: "en", slug: article.slug }) }));
+      expect(html).not.toContain(":::figure");
+      for (const figure of article.figures) {
+        used.add(figure.id);
+        expect(html).toContain(`src="${figure.src}"`);
+        expect(html).toContain(`href="${figure.src}"`);
+        expect(html).toContain(`width="1200" height="900"`);
+        expect(articleJsonLd(article).image.some((image) => image.contentUrl === `${siteUrl}${figure.src}`)).toBe(true);
+        expect(entries.find((entry) => entry.url === localizedUrl("en", `/articles/${article.slug}`))?.images).toContain(`${siteUrl}${figure.src}`);
+        for (const src of [figure.src, figure.smallSrc]) {
+          const file = join(process.cwd(), "public", src);
+          expect(readFileSync(file).toString("ascii", 8, 12)).toBe("WEBP");
+          expect(statSync(file).size).toBeLessThan(100 * 1024);
+        }
+      }
+    }
+    expect(used.size).toBe(Object.keys(articleFigures).length);
+    expect(getArticleFigure("__proto__")).toBeUndefined();
+    expect(renderToStaticMarkup(<ArticleBody body=":::figure missing" />)).toBe("");
   });
 
   it("renders content, sources, headings and answer disclosures without client JavaScript", async () => {

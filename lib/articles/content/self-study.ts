@@ -51,6 +51,24 @@ You can also diagnose an incorrect statement: a pendulum twice as long always ha
 
 The [Institute of Education Sciences study guide](https://ies.ed.gov/ncee/wwc/PracticeGuide/1) recommends approaches including spaced learning and quizzing to support learning. A practical application here is to retrieve the explanation later, rather than simply replaying the same animation immediately. The exact timing should fit your course and how difficult you find the material.
 
+## When the test is tomorrow and time is limited
+
+Suppose you have fifteen minutes, a phone, and several topics you still find difficult. Start by attempting one short question from memory. If you cannot identify the relationship, read a focused explanation first. If you know the relationship but cannot apply it, choose a simulation comparison that targets the exact mistake. Browsing several attractive labs without a question is unlikely to resolve that gap.
+
+For example, if you repeatedly use Celsius values in gas-law ratios, open the [Gas Law Lab](/en/simulations/gas-law-lab), keep amount and volume fixed, and compare 300 K with 600 K. Predict the pressure ratio before moving the control. Then explain why this is a doubling of absolute temperature, whereas changing from 20 °C to 40 °C is not.
+
+Write one correction in your notes and close the model. Try a new question with different values, or explain which conditions are required for your result. If you still need help, mark the exact step for a teacher or a later study session. Do not spend the remaining time polishing a screenshot or generating a long set of questions you cannot check.
+
+This is a fallback routine for a short session, not a promise that last-minute study replaces earlier practice. The Learning Scientists' [overview of six study strategies](https://www.learningscientists.org/blog/2016/8/18-1) offers links to approaches you can build into a longer revision plan. Choose a small change you can repeat, such as answering yesterday's question before beginning a new topic.
+
+## Study with a friend without copying each other's answer
+
+Ask each person to predict independently before sharing a screen. If your answers differ, compare the reasons before running the model. One of you may have changed an unstated condition, such as mass or temperature, rather than misunderstood the equation. Writing the conditions makes that disagreement easier to resolve.
+
+Take turns choosing a new setting while the other person predicts the result. The person operating the controls should wait for a reason, not just a number. After checking, both write a short explanation separately. This prevents a confident partner's wording from becoming the group's only evidence of understanding.
+
+If you are studying alone, you can imitate the same structure with two columns in your notebook: my prediction and what would make it wrong. Add a possible alternative explanation before checking the model. This makes your study session less dependent on immediately recognizing the correct answer when it appears.
+
 ## A flexible twenty-five-minute routine
 
 Spend the first few minutes identifying the target and reading the model notes. Use the next few minutes for a written prediction and baseline setup. Reserve the main part of the session for two or three controlled comparisons, with notes taken as you work.

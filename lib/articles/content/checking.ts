@@ -51,6 +51,24 @@ The [Circuit Builder](/en/simulations/circuit-builder) also illustrates why the 
 
 A boundary test is a diagnostic tool, not a substitute for a derivation. Some equations have a restricted domain. A surprising result outside that domain may show that the model is being misused rather than that the equation is wrong.
 
+## Check a convincing explanation about something familiar
+
+Imagine an answer says that the Moon looks like a crescent because Earth's shadow covers most of it. It contains no difficult arithmetic, and the word shadow sounds plausible. Start by separating two phenomena: ordinary lunar phases and a lunar eclipse. A source about eclipses alone would not establish an explanation of the monthly phase cycle.
+
+NASA's [Moon phases guide](https://science.nasa.gov/moon/moon-phases/) explains the changing view of the Moon's sunlit portion as it orbits Earth. Use the positions and viewpoint in its illustration to inspect the claim. For ordinary phases, the changing visible fraction of the illuminated Moon is the relevant explanation; Earth's shadow is involved in lunar eclipses.
+
+Write a short correction that names the confusion rather than simply marking the response wrong. Then open the [Moon Phases 3D Simulator](/en/simulations/moon-phases-3d) and connect the orbital position with the appearance from Earth. Treat the simulation as a representation of the geometry, while the source provides the reference explanation. This checks a causal story rather than only a number.
+
+Do the same when a response contains a realistic everyday example. A familiar object does not make the reasoning reliable. Ask which observation the explanation accounts for, which competing explanation it rules out, and what conditions it assumes. Those questions work for a paragraph in a blog, a video caption, or a classroom handout as well as an AI answer.
+
+## What to do when a link is real but the conclusion is too strong
+
+A source may support a narrow statement while the response turns it into a universal rule. For example, a page discussing a particular simulation activity does not establish that every student learns every science topic better with simulations. Identify who was studied, what was compared, and which outcome was measured before repeating a research claim.
+
+If you cannot access the full evidence, record the limit instead of filling the gap with confidence. You might write: this source describes the classroom activity, but I have not verified the claimed improvement in test scores. That is more useful than either accepting the number or rejecting the entire topic without checking.
+
+When sharing a correction with a classmate, include the original claim, one direct source, and your own explanation of the difference. Avoid a long list of links with no indication of what each supports. The [digital science notebook guide](/en/articles/how-to-create-a-digital-science-notebook) shows how to keep this verification trail alongside your working notes.
+
 ## Keep a short verification record
 
 - Claim: write the specific statement you checked, including conditions.

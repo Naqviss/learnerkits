@@ -61,6 +61,24 @@ Students can time ten complete oscillations and divide the elapsed time by ten, 
 
 Have groups distinguish proposed causes from demonstrated causes. Saying that reaction time affected a reading is plausible, but testing a revised timing method offers stronger support. A valuable follow-up asks which procedural change would most help resolve the observed disagreement and what new evidence that change would produce.
 
+## A classroom decision: what should happen before the practical?
+
+Imagine you have one lesson before students use pendulum equipment. Some can calculate a period but cannot define a complete oscillation; others can count swings but think period changes in direct proportion to length. A virtual pre-lab can make those differences visible before the equipment is distributed.
+
+Give students two tasks: mark the start and end of one full cycle on a sketch, then predict the period ratio for two lengths. Use their responses to decide what to explain together and what can be investigated in pairs. The simulation is serving a specific preparation role, rather than being added because the lesson should include technology.
+
+During the physical session, shift attention to practical decisions. Ask how the group measured length, chose a timing reference, and kept the release procedure consistent. Students should record those decisions even when the numerical result is close to the model. A matching answer does not remove the need to understand how the measurement was made.
+
+Afterward, compare one model prediction with the group's observations and ask which difference in the procedures might matter. This sequence gives the digital and physical parts distinct jobs: previewing a relationship, making measurements, and interpreting agreement or disagreement. It also provides clear places to assess an individual learner's understanding.
+
+## What if a student misses the physical lab?
+
+A simulation and a supplied data set can help an absent student work on the conceptual question and analyze a recorded investigation. Label the data as supplied, identify the procedure, and ask the student to explain what they would need to know before judging its quality. Do not require a report that pretends they personally handled the apparatus.
+
+If the missed objective was an equipment skill, arrange an appropriate later demonstration or practical opportunity under your school's procedures. An accurate graph from supplied data does not show that the student can set up or measure the apparatus. Keep those assessment decisions explicit so the alternative work is meaningful and fair.
+
+For discussion ideas, consult [PhET's classroom facilitation resource](https://phet.colorado.edu/en/teaching-resources/teaching-with-phet/facilitation). Its teaching prompts can support the digital part of a combined lesson; they do not remove the need to teach physical procedures. Record the purpose of each part in your lesson plan so a substitute teacher or colleague can see why both formats are present.
+
 ## Assessment that respects each format
 
 Separate conceptual reasoning from practical technique in your rubric. For conceptual reasoning, examine predictions, controlled comparisons, and explanations. For practical technique, observe setup, measurement choices, and accurate recording. For evidence evaluation, ask students to discuss uncertainty and model limitations using details from their own activity.

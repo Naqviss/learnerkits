@@ -21,6 +21,26 @@ Ask what an analogy leaves out. A shopping-cart comparison may help you picture 
 
 Keep the explanation close to your course. If the response introduces unfamiliar calculus when your lesson uses simple ratios, ask for an explanation using those ratios. More technical language does not automatically make an explanation more useful or more accurate.
 
+## When the explanation makes sense but the homework does not
+
+Imagine you watch a clear explanation of forces, nod along, and then freeze when your homework describes a loaded shopping trolley. You may recognize the vocabulary without knowing which quantities belong in the equation. Start by writing your own rough answer: the loaded trolley is harder to accelerate, but I am not sure whether that means its force is larger or its acceleration is smaller.
+
+That sentence gives an AI tutor something specific to question. Ask it to identify the missing condition before calculating. Are both trolleys receiving the same net force? Are we comparing acceleration, final speed, or the effort a person feels? Those questions turn an everyday impression into a defined science problem. The real trolley may have different rolling resistance, so you should not silently treat it as frictionless.
+
+A useful exchange might begin with this request: explain which quantities must stay the same before comparing an empty trolley with a loaded one, then ask me to predict the result. After the explanation, change the setting from a trolley to a laboratory cart. If you can still explain the relationship, you are beginning to separate the scientific idea from the familiar story.
+
+Use the conversation to locate the obstacle, then do the calculation yourself. For 20 N net force, a 10 kg cart has acceleration 2 m/s² and a 20 kg cart has acceleration 1 m/s². If the AI instead discusses which cart will travel farther, bring it back to the quantity in your question. An answer to a related question can sound helpful while leaving your original confusion unresolved.
+
+:::figure force-comparison
+
+## Explain it to someone who missed the lesson
+
+A practical final task is to write a short message for a classmate who was absent. Include a familiar situation, the scientific relationship, and one limitation of the comparison. Avoid sending the AI response itself. Writing the message exposes whether you can choose the important information without relying on the original wording.
+
+For example: adding mass to a cart reduces its acceleration if the net force stays fixed. A shopping trolley helps me picture the extra mass, but its resistance may also change, so the everyday comparison is not a controlled experiment. That explanation is brief, specific, and honest about what the analogy leaves out.
+
+If you cannot write the message yet, ask for one diagnostic question instead of another full explanation. You might discover that the difficulty is subtracting opposing forces or distinguishing speed from acceleration. Return to that step and test a new case. For other study approaches to combine with this routine, see the Learning Scientists' [overview of six learning strategies](https://www.learningscientists.org/blog/2016/8/18-1), which links each strategy to a more detailed explanation.
+
 ## Work through a force example you can test
 
 Open [Newton’s Laws Force Lab](/en/simulations/newtons-laws-force-lab). Set the cart mass to 10 kg, applied force to 25 N, and resistance limit to 5 N. These settings exceed the resistance limit, so the model gives a net force of 20 N and an acceleration of 2 m/s². Predict the acceleration before running the cart.

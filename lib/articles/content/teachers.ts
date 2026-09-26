@@ -42,6 +42,26 @@ Watch for common wording errors. “Twice the force means twice the speed” is 
 
 State that the simulation is an educational model with simplified resistance. Students are comparing its predictions, not measuring friction in actual equipment. If you later use physical carts, introduce measurement uncertainty and the practical difficulty of controlling forces. The transition provides a useful discussion about models and evidence.
 
+## A realistic plan for one projector and a mixed-confidence class
+
+Consider a class in which only the teacher has a reliable device. A generated plan that tells every pair to open a separate lab cannot be used as written. Keep the scientific question, but redesign the participation: students make predictions on paper, the teacher operates one projected model, and pairs explain the comparison before a volunteer reports back.
+
+Use a short set of possible answers to expose different reasons. For a cart whose mass doubles at fixed net force, offer acceleration doubles, acceleration halves, and acceleration is unchanged. Ask students to choose privately and write a reason before discussing. The choices are useful because each can reveal a different interpretation; avoid asking the AI to invent a distractor without checking what misconception it represents.
+
+Before changing the mass, ask one student to name the controls that must stay fixed and another to explain why. After showing the result, ask for an explanation that uses the words net force and mass. This keeps the class involved in the comparison rather than watching a demonstration passively. Students who change their answer should preserve the original reason and describe what changed.
+
+For learners who need language support, offer a sentence frame: when ___ changes and ___ stays fixed, ___ changes because ___. Allow a labeled sketch or a short spoken explanation before a longer written response. The science target remains the same. A request to AI for simpler instructions should preserve the variable, comparison, and reasoning demand.
+
+## Prepare the response to a wrong answer before class
+
+Ask AI for plausible student explanations, then review them as hypothetical planning examples. One student may use applied force instead of net force; another may correctly calculate acceleration but describe it as speed. Prepare a question for each case. Which force have you left out? and What are the units of the quantity you calculated? lead to different repairs.
+
+Do not respond to every wrong answer with a longer lecture. A short comparison can make the missing distinction visible. Keep applied force unchanged and vary resistance, or keep net force unchanged and vary mass. Ask the student which version addresses their explanation before running the model.
+
+[PhET's facilitation resource](https://phet.colorado.edu/en/teaching-resources/teaching-with-phet/facilitation) offers further guidance on questioning and classroom discussion. For a teacher's account of adapting learning strategies in science, read [this classroom practice guest post on the Learning Scientists blog](https://www.learningscientists.org/blog/2017/3/21-1). Treat the latter as a practitioner's example to consider, rather than proof that the same routine will work identically in your class.
+
+After the lesson, keep one anonymized misconception and your response in your planning notes. Record whether the follow-up explanation improved, not only whether students enjoyed the activity. That gives your next AI-assisted planning request a concrete issue to solve.
+
 ## Plan support without lowering the reasoning demand
 
 Offer a results sheet with headings for mass, applied force, resistance, net force, and acceleration. Include units in the headings and one blank row for a student-designed comparison. For learners needing language support, provide the sentence frame: “When ___ changed and ___ stayed fixed, acceleration ___ because ___.”

@@ -61,6 +61,26 @@ When using a particle model, ask what each dot represents and which features are
 
 Then connect the microscopic representation with the quantities you can compare. In a fixed-temperature gas investigation, changing volume while keeping gas amount constant changes the pressure predicted by the model. The numerical comparison supports a quantitative claim. The illustration helps you think about the system, but counting screen dots does not independently verify the equation.
 
+## Why a picture can look familiar without being understood
+
+Think of a map you recognize but cannot use to give directions. A science diagram can produce the same feeling. You may remember where the colored arrow sits while forgetting whether it represents force, velocity, or a direction of travel. Before studying the picture again, cover the labels and try to explain what each feature means.
+
+For the cart example, keep three statements connected: the net horizontal force is 15 N, the mass is 5 kg, and the acceleration is 3 m/s². If the cart starts from rest under that constant net force, its velocity increases by 3 m/s each second. A force sketch and a velocity-time graph describe different aspects of this same model situation.
+
+:::figure motion-representations
+
+Notice what the graph is not showing. A straight rising line on a velocity-time graph is not the shape of the cart's path across the room. Its horizontal axis is time, not floor position. A learner who interprets every rising line as an object climbing a hill needs practice with axis meanings, not merely a larger or more colorful graph.
+
+Ask a friend to describe your graph without seeing the original problem. Can they identify the starting velocity and how velocity changes? If they cannot, inspect your labels and scale. Then reverse the task: give them a short description and ask what graph would represent it. Translating in both directions checks understanding more effectively than memorizing one finished image.
+
+## Choose a visual for the question you are asking
+
+A photograph of laboratory equipment may help someone recognize an instrument, but it will not necessarily reveal the relation between its readings. A close-up may show how a scale is read; a data graph may show a pattern across trials; a diagram may show which quantities are connected. Decide what you want the reader to notice before choosing the visual.
+
+When making revision notes, draw only the information needed for that purpose. An imperfect sketch with clear labels can be more useful to you than a polished downloaded picture you cannot explain. Keep an accompanying sentence that states the relationship and its conditions. If the picture disappeared, that sentence should still preserve the central point.
+
+For a classroom perspective, [this Learning Scientists guest post](https://www.learningscientists.org/blog/2017/3/21-1) discusses a teacher's use of examples and visual-verbal study activities. Use it for ideas to adapt, while keeping your own science explanations grounded in the relevant course material. A blog illustration is a teaching example, not independent evidence that a scientific claim is correct.
+
 ## Design choices that help a visual explanation
 
 Place labels near the feature they identify and explain unfamiliar symbols. Use consistent encodings across examples: if blue represents one quantity in a sequence, changing its meaning without notice creates extra interpretation work. Keep decorative details from competing with the relationship the learner is meant to inspect.

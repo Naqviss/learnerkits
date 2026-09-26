@@ -77,6 +77,24 @@ For another topic, use the [Gas Law Lab](/en/simulations/gas-law-lab). Ask for a
 
 Use [OpenStax’s account of net force and acceleration](https://openstax.org/books/college-physics-2e/pages/4-3-newtons-second-law-of-motion-concept-of-a-system) as a reference for this set. For broader checks, follow [how to verify an AI-generated science answer](/en/articles/check-ai-generated-science-answers). A second generated answer is another draft to inspect, not a completed verification.
 
+## Turn a familiar situation into a question with enough information
+
+A vague generated question might ask why a full shopping trolley is harder to push than an empty one. This can begin a discussion, but it is not yet a numerical problem. The wording does not specify the applied force, opposing forces, or the quantity to compare. Ask for a revised classroom model rather than accepting an answer based on unstated assumptions.
+
+For example: a cart of mass 10 kg has a constant net horizontal force of 20 N. A second cart has mass 20 kg and the same net force. Compare their accelerations. The answers are 2 m/s² and 1 m/s². Now ask the student which detail from a real supermarket the simplified model leaves out. This combines a checked calculation with a discussion of the example's limits.
+
+A useful AI instruction is to change the context while preserving the relationship, and then change the relationship while keeping the context. The first variation might replace the cart with another wheeled laboratory object. The second might hold mass fixed and change net force instead. Review both versions so a change in storytelling does not quietly introduce a different model.
+
+Avoid generating ten questions that differ only in their numbers. Include at least one request to draw the forces, one to explain why a tempting answer is wrong, and one to predict a new case. These require students to use the idea in different ways rather than recognize a familiar calculation pattern.
+
+## Mark the reasoning, then decide what to practice next
+
+For a short forces question, use a simple three-part check: identify the correct net force, apply the mass relationship, and state the answer with direction and units where appropriate. A learner who makes an arithmetic slip after setting up the problem correctly needs different practice from one who confidently omits resistance.
+
+Keep an error note in the learner's own words. For example: I used the push as the net force and forgot the opposing force. The next question should address that distinction with manageable numbers. Once the student can explain it, change the context or ask for an inverse calculation. More difficult arithmetic is not always the next useful step.
+
+For revision ideas beyond question generation, the Learning Scientists' [discussion of when study strategies work best](https://www.learningscientists.org/blog/2017/4/20-1) is useful background reading. Build a small practice set you can check carefully, attempt it without the key, and revisit the troublesome idea later. Follow [the self-study guide](/en/articles/educational-simulations-for-self-study) if you want to connect that review with a fresh simulation prediction.
+
 ## Revise from mistakes and revisit later
 
 After attempting the set, classify errors: missing concept, wrong model, arithmetic slip, unit conversion, or unclear explanation. Choose the next question to address the actual problem. A learner who repeatedly omits resistance needs a force-identification task before another page of division exercises.

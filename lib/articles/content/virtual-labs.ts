@@ -61,6 +61,26 @@ Reset carefully. A reset button may restore defaults, restart time, or clear a m
 
 Repeated identical outputs are normal in a deterministic model with identical starting conditions. They do not demonstrate that real measurements have zero uncertainty. If your assignment asks for repeated trials, explain whether repetitions explore a random model, check reproducibility, or merely repeat the same calculation. Do not invent scatter to make simulated results look more experimental.
 
+## When two classmates report different answers
+
+Suppose one student records about 124.7 kPa and another records about 249.4 kPa for what they call the same gas experiment. Before deciding that one answer is wrong, compare the full settings. At 1 mol and 300 K, those pressures correspond to volumes of 20 L and 10 L. Both can be correct model outputs for different runs.
+
+This is why a screenshot of a large pressure number is not a complete lab record. The temperature, gas amount, volume, and units give that number meaning. If a classmate cannot reconstruct the setup from your notes, add the missing condition before you compare conclusions.
+
+:::figure gas-comparison
+
+Now imagine both students confirm the same settings, but one rounded the output to a whole number while the other kept one decimal place. That difference needs a rounding explanation, not a new gas theory. On the other hand, a large disagreement after checking settings, units, and rounding deserves a reproducible report to the teacher or tool provider.
+
+A practical way to prevent this confusion is to label each run before making a change. Write baseline, smaller volume, or higher temperature beside the settings, and keep the original row. When you revise the procedure, add another row instead of replacing the first. You will then be able to explain why the results changed.
+
+## Try explaining the lab to a younger student
+
+After completing your investigation, describe it without beginning with an equation. You might say that you compared the pressure of the same amount of modeled gas in two different volumes while keeping temperature unchanged. Then show the numbers and introduce the relationship that accounts for them.
+
+Ask the listener what they think would happen if you changed temperature as well. Their answer can reveal whether your explanation made the fixed conditions clear. You do not need a younger sibling or a partner to use this task; write the explanation as a short note and inspect whether each pronoun, number, and comparison has a clear meaning.
+
+For a separate activity to compare with your approach, browse [PhET's science activity design workshop](https://phet.colorado.edu/en/teaching-resources/virtual-workshop/science-activity-design). The questions and planning ideas can help you think about an investigation, but PhET activities may use controls that differ from this gas lab. Adapt the question to the model instead of treating a worksheet as a universal set of instructions.
+
 ## Turning observations into an explanation
 
 A useful lab conclusion has three parts: the relationship you found, specific results that support it, and a reason grounded in the model. For the worked investigation, identify the fixed temperature and amount, cite the 20 L and 10 L pressure comparison, and connect it to inverse proportionality.

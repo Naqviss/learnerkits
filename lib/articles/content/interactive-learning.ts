@@ -29,6 +29,24 @@ For the scientific relationship behind the example, consult [OpenStax's explanat
 
 Finish by writing a conditional conclusion: at fixed mass in this model, doubling the net force doubles acceleration. Avoid the broader claim that doubling any force always doubles an object's speed. That claim leaves out other forces, elapsed time, and initial conditions. A precise conclusion shows that you understood more than the direction of the animation.
 
+## Why a game-like activity still needs a science question
+
+Imagine trying to land a virtual ball on a target. After several launches, you find a setting that works, but you cannot explain why. The activity was interactive, and you achieved the game's goal, yet the scientific relationship may still be unclear. A useful next question is how launch angle changes range when launch speed and gravity stay fixed.
+
+Use the [Projectile Lab](/en/simulations/projectile-lab) to turn trial and error into a comparison. Choose one permitted speed and gravity, then predict whether a 30-degree launch or a 60-degree launch travels farther in the lab's model. Record the landing range for both and explain what stayed constant. Read the model notes: this activity uses level launch and landing heights and omits air drag.
+
+In that ideal setup, the two complementary angles have the same range, although their flight times and maximum heights differ. That is a more interesting outcome than simply finding one successful shot. It lets you ask why different-looking paths can end at the same horizontal distance. A real basketball shot may start and end at different heights and experience drag, so its practical advice cannot be copied directly from this comparison.
+
+The distinction applies to any simulation mission. After reaching a target, identify the variable you changed deliberately and predict what a nearby setting would do. If you cannot, return to a smaller comparison. Success in the interface becomes useful learning evidence when you can explain the choices that produced it.
+
+## A useful question for a parent or study partner to ask
+
+You do not need to know the full topic to help someone explain an investigation. Ask what they expected, what they changed, and what surprised them. Then ask whether the result would still hold if a different condition changed. These questions encourage the learner to name the relationship instead of narrating a sequence of clicks.
+
+For instance, after the projectile comparison, ask whether matching landing points means the two balls reach their highest points at the same time. The learner can examine the outputs or sketch the trajectories before answering. Let them locate the evidence rather than supplying a result immediately.
+
+When choosing follow-up activities, [PhET's science activity design workshop](https://phet.colorado.edu/en/teaching-resources/virtual-workshop/science-activity-design) offers examples of designing questions around simulations. Use such resources to improve your investigation, while checking the assumptions of the particular model you actually use. A question designed for one tool may require different controls or outputs in another.
+
 ## The difference between exploration and an experiment
 
 Free exploration is useful when you are learning what the controls do. Move a slider, restart the model, and inspect the available readings. During this orientation stage, changing several settings can help you understand the interface. It becomes a problem only when you later use that uncontrolled exploration as evidence for a specific cause.

@@ -69,6 +69,28 @@ Crop only to improve focus, and do not remove settings needed to interpret the r
 
 For important information, provide a text equivalent. A caption that says screenshot from lab is not enough if the image contains the only record of the numbers. A small table and a sentence about the trend make the notebook more searchable, more accessible, and easier to review without reopening every image.
 
+## Rescue a notebook entry that is only a screenshot
+
+Imagine opening last week's notes and finding a screenshot with a pressure of 249.4 kPa but no explanation. You cannot remember whether you reduced volume, raised temperature, or changed the gas amount. Start by inspecting the visible controls. If a setting is cropped out or unreadable, mark it as unknown rather than reconstructing a convenient value from memory.
+
+Create a new entry with a clear question and repeat the comparison in the [Gas Law Lab](/en/simulations/gas-law-lab). For example, fix gas amount at 1 mol and temperature at 300 K, then compare 20 L and 10 L. The expected pressures are about 124.7 kPa and 249.4 kPa. Label these as calculated reference values until you have recorded the actual displayed outputs for your own runs.
+
+:::figure notebook-entry
+
+Keep the old screenshot and write why it was insufficient. Your new record should state which variable changed, what stayed fixed, and whether the numbers were model outputs or physical measurements. That short repair is more useful than making the original screenshot look tidier. It gives your future self enough information to interpret the result.
+
+The same rule applies when a value looks suspicious. Preserve the original entry, add the corrected value with a reason, and check whether the conclusion changes. An unexplained edit can make your notebook harder to trust even when the final number happens to be correct.
+
+## A weekly notebook review that takes a few minutes
+
+Choose one recent investigation and ask whether another student could repeat it from your notes. Look for missing units, unnamed controls, uncaptioned images, and conclusions that mention a pattern without citing the results. Repair the first important gap you find instead of redesigning the entire notebook.
+
+Then hide the conclusion and answer the original question again. Write one transfer question that changes a condition, such as doubling temperature while holding volume fixed. Save that question for your next review. Your notebook then becomes a source of practice rather than only an archive of completed work.
+
+For ideas about choosing and combining review activities, see the Learning Scientists' [discussion of when learning strategies work best](https://www.learningscientists.org/blog/2017/4/20-1). You do not need to adopt every suggested strategy at once. Begin with a question you can answer from memory and a record that lets you check the reasoning afterward.
+
+If several people share the same device, keep file names and ownership clear. Export your own entry when appropriate, and check that its tables and diagrams remain readable. A shared screen should not leave you dependent on someone else's account to revisit your learning record.
+
 ## Record sources and assistance honestly
 
 Save the title and direct link of the simulation or reference page you used, along with the date you accessed it when useful. Link the relevant section rather than only the website homepage. If a teacher supplied a worksheet or data set, identify it as supplied material and follow the class rules for attribution.

@@ -4,6 +4,7 @@ import { comparison } from "./content/comparison";
 import { checking } from "./content/checking";
 import { teachers } from "./content/teachers";
 import { practice } from "./content/practice";
+import { getArticleFigure } from "./figures";
 
 import { interactiveLearning } from "./content/interactive-learning";
 import { virtualLabs } from "./content/virtual-labs";
@@ -39,7 +40,8 @@ export const articles = articleSummaries.map((summary) => {
     return { title, id: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""), body: part.slice(end).trim() };
   });
   const wordCount = articlePlainText(body).split(/\s+/).length;
-  return { ...summary, body, intro, sections, wordCount, readingMinutes: Math.ceil(wordCount / 200) };
+  const figures = [...new Set([...body.matchAll(/^:::figure (.+)$/gm)].map((match) => match[1].trim()))].map(getArticleFigure).filter((figure) => figure !== undefined);
+  return { ...summary, body, intro, sections, wordCount, figures, readingMinutes: Math.ceil(wordCount / 200) };
 });
 
 export type Article = typeof articles[number];

@@ -38,7 +38,7 @@ export function articleJsonLd(article: Article) {
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     author: { "@type": "Organization", name: siteName, url: localizedUrl("en", "/about") },
     publisher: { "@type": "Organization", name: siteName, url: siteUrl, logo: { "@type": "ImageObject", url: `${siteUrl}/learnerkits-logo.svg` } },
-    image: [{ "@type": "ImageObject", "@id": `${url}#image`, url: `${siteUrl}${image.src}`, contentUrl: `${siteUrl}${image.src}`, width: image.width, height: image.height, caption: image.caption, description: image.alt, encodingFormat: "image/webp" }],
+    image: [{ "@type": "ImageObject", "@id": `${url}#image`, url: `${siteUrl}${image.src}`, contentUrl: `${siteUrl}${image.src}`, width: image.width, height: image.height, caption: image.caption, description: image.alt, encodingFormat: "image/webp" }, ...article.figures.map((figure) => ({ "@type": "ImageObject", "@id": `${url}#figure-${figure.id}`, url: `${siteUrl}${figure.src}`, contentUrl: `${siteUrl}${figure.src}`, width: figure.width, height: figure.height, caption: figure.caption, description: figure.alt, encodingFormat: "image/webp" }))],
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
     inLanguage: "en",

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { articleSummaries, articlesUpdatedAt } from "@/lib/articles/catalog";
 import { articleImages } from "@/lib/articles/images";
+import { getArticle } from "@/lib/articles";
 import { defaultLocale, locales } from "@/lib/i18n/config";
 import { hreflangCodes, localizedUrl, siteUrl } from "@/lib/seo/metadata";
 import { getTopicGuides } from "@/lib/seo/topic-guides";
@@ -32,7 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...(path === "/articles"
       ? { images: articleSummaries.map((article) => `${siteUrl}${articleImages[article.slug].src}`) }
       : articleSummaries.some((article) => path === `/articles/${article.slug}`)
-        ? { images: articleSummaries.filter((article) => path === `/articles/${article.slug}`).map((article) => `${siteUrl}${articleImages[article.slug].src}`) }
+        ? { images: articleSummaries.filter((article) => path === `/articles/${article.slug}`).flatMap((article) => [`${siteUrl}${articleImages[article.slug].src}`, ...(getArticle(article.slug)?.figures ?? []).map((figure) => `${siteUrl}${figure.src}`)]) }
         : {}),
     lastModified: path === "/subjects" || subjectImageEntries[path] ? subjectImagesUpdatedAt : path === "/articles" ? articlesUpdatedAt : articleSummaries.find((article) => path === `/articles/${article.slug}`)?.updatedAt ?? lastModified,
     changeFrequency: path.includes("simulations") ? "weekly" : "monthly",

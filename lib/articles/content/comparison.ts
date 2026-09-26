@@ -29,6 +29,28 @@ A simulation also has boundaries. An ideal-gas model does not include every inte
 
 These choices can change within a single study session. You may start with a vocabulary question and discover that your difficulty is really a prediction about an unfamiliar system. Switch activities when the question changes. Spending more time in one tool is not itself evidence of more learning.
 
+## A homework question that needs two different kinds of help
+
+Suppose your homework asks why gas pressure rises when a fixed amount of gas occupies less space. You can repeat the phrase more collisions, but you cannot explain what must stay constant. A conversational tool might help you identify that missing condition. A simulation can then let you compare volumes while keeping temperature and gas amount unchanged.
+
+Before opening either tool, decide what you want to produce: a two-run comparison and a short explanation. In the conversation, ask what pressure means and which variables could affect it. In the model, record the starting conditions and change only volume. Return to the explanation afterward and check whether it describes the exact comparison you performed.
+
+The order matters less than the division of work. If you already understand the terminology, you may begin with the simulation. If the interface is confusing, a teacher's demonstration or the lab's instructions may be more useful than a chatbot. Choose the next action because it resolves your current difficulty, not because one tool is supposed to be used first.
+
+A bicycle pump is a familiar starting image, but it adds complications. An actual pumping process may change temperature and transfer gas into a tyre, whereas a constant-temperature, fixed-amount model holds both of those conditions steady. Use the everyday object to introduce a question, then state clearly which part of the real process your digital comparison represents.
+
+:::figure gas-comparison
+
+## A simple way to divide the work in a pair
+
+If two students share a laptop, one can be the questioner and the other the investigator. The questioner writes a prediction and challenges missing assumptions. The investigator operates the controls and records the values. Swap roles for the next comparison so neither person becomes a permanent spectator or typist.
+
+Keep a small shared record with three lines: what we predicted, what the model showed, and what we still need to explain. If a generated answer disagrees with your calculation, preserve both and check the relevant source. The aim is not to make the tools agree by changing inputs until a convenient number appears.
+
+End with an individual question that changes one condition. Ask each learner to explain the result without the conversation or simulation visible. A pair may produce a convincing group answer while one learner remains unsure. This final step makes that gap easier to notice and discuss.
+
+Teachers can find examples of classroom questioning and facilitation in [PhET's teaching resource on facilitation](https://phet.colorado.edu/en/teaching-resources/teaching-with-phet/facilitation). Use it as planning support for the discussion around a model; it is not an evaluation of a particular AI tutor. For a student routine that works with or without a conversational tool, continue with [simulation-based self-study](/en/articles/educational-simulations-for-self-study).
+
 ## A worked investigation: compressing an ideal gas
 
 Start with this question: “For a fixed amount of ideal gas at constant temperature, what happens to pressure when volume is halved?” Write a prediction before consulting either tool. Include the fixed conditions, because pressure also depends on temperature and the amount of gas.
