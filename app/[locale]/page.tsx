@@ -8,9 +8,9 @@ import { isLocale } from "@/lib/i18n/config";
 import { getEducationCopy, getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content";
 import { localizedMetadata, jsonLd, websiteJsonLd } from "@/lib/seo/metadata";
 import { getMoleculeKitCopy } from "@/lib/seo/molecule-kit-content";
-import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
+import { hiddenSubjectSlugs, subjectSlugs, subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
+import { SubjectCardMedia } from "@/components/subjects/SubjectCardMedia";
 
-const subjectGlyphs = { space: "✦", physics: "↗", geography: "◒", "environmental-science": "≈", biology: "⌁", chemistry: "⚗", mathematics: "∑" } as const;
 
 export async function generateMetadata({params}:{params:Promise<{locale:string}>}):Promise<Metadata>{
   const {locale:raw}=await params; const locale=isLocale(raw)?raw:"en"; const c=getEducationCopy(locale);
@@ -41,7 +41,7 @@ export default async function Home({params}:{params:Promise<{locale:string}>}){
         <p>{c.home.aioAnswer(visibleLabCount, visibleSubjectSlugs.length)}</p>
       </div>
     </section>
-    <section className="container subjectGateway educationSubjectGateway"><div className="sectionHeading"><div><div className="eyebrow">{c.home.subjects}</div><h2>{c.home.choose}</h2></div><p>{c.home.chooseBody}</p></div><div className="subjectGatewayGrid">{visibleSubjectSlugs.map(slug=>{const data=getLocalizedSubject(raw,slug);return <Link className={`subjectGatewayCard educationSubjectCard subject-${slug}`} key={slug} href={`/${raw}/subjects/${slug}`}><div className="subjectCardTop"><span className="gatewayGlyph">{subjectGlyphs[slug]}</span><span className="gradeTag">{data.gradeBand}</span></div><div><small>{data.simulations.length} {c.home.interactiveLabs}</small><h3>{getLocalizedSubjectName(raw,slug)}</h3><p>{data.learningObjectives[0]}</p></div><div className="subjectCardFooter"><span>{data.concepts.slice(0,2).join(" · ")}</span><b>{c.home.viewSubject} →</b></div></Link>})}</div></section>
+    <section className="container subjectGateway educationSubjectGateway"><div className="sectionHeading"><div><div className="eyebrow">{c.home.subjects}</div><h2>{c.home.choose}</h2></div><p>{c.home.chooseBody}</p></div><div className="subjectGatewayGrid">{visibleSubjectSlugs.map(slug=>{const data=getLocalizedSubject(raw,slug);return <Link className={`subjectGatewayCard educationSubjectCard subject-${slug}`} key={slug} href={`/${raw}/subjects/${slug}`}><SubjectCardMedia subject={slug} locale={raw}/><div><small>{data.simulations.length} {c.home.interactiveLabs}</small><h3>{getLocalizedSubjectName(raw,slug)}</h3><p>{data.learningObjectives[0]}</p></div><div className="subjectCardFooter"><span>{data.concepts.slice(0,2).join(" · ")}</span><b>{c.home.viewSubject} →</b></div></Link>})}{subjectSlugs.filter(slug=>hiddenSubjectSlugs.has(slug)).map(slug=><div className={`subjectGatewayCard educationSubjectCard subjectComingSoon subject-${slug}`} key={slug} aria-disabled="true"><SubjectCardMedia subject={slug} locale={raw} comingSoon={c.home.comingSoon}/><div><h3>{getLocalizedSubjectName(raw,slug)}</h3><p>{c.home.comingSoonBody}</p></div></div>)}</div></section>
     <section className="container moleculeKitBanner subject-chemistry">
       <div><div className="eyebrow">{kit.banner.newLabel} · {chemistryName}</div><h2>{kit.banner.title}</h2><p>{kit.banner.body}</p></div>
       <Link className="button primary" href={`/${raw}/molecule-kit`}>{kit.banner.cta} →</Link>

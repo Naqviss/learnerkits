@@ -2,13 +2,17 @@
 
 import { useEffect, useState } from "react";
 import type { Messages } from "@/lib/i18n/getMessages";
-import { applyTheme, defaultSettings, loadSettings, saveSettings, type AppSettings, type MotionPreference, type RenderQuality, type ThemePreference } from "@/lib/settings/storage";
+import { applyMotion, applyTheme, defaultSettings, loadSettings, saveSettings, subscribeSettings, type AppSettings, type MotionPreference, type RenderQuality, type ThemePreference } from "@/lib/settings/storage";
 
 export function SettingsClient({ m }: { m: Messages }) {
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
   const [saved, setSaved] = useState(false);
 
-  useEffect(() => { const next = loadSettings(); setSettings(next); applyTheme(next.theme); }, []);
+  useEffect(() => {
+    const next = loadSettings(); setSettings(next); applyTheme(next.theme); applyMotion(next.motion);
+    // The header theme toggle (or another tab) can change settings while this page is open.
+    return subscribeSettings(setSettings);
+  }, []);
 
   const commit = (next: AppSettings) => {
     setSettings(next); saveSettings(next); setSaved(true); window.setTimeout(() => setSaved(false), 1400);

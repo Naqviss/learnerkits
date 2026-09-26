@@ -3,7 +3,7 @@ import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { locales } from "@/lib/i18n/config";
-import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
+import { subjectSlugs, hiddenSubjectSlugs, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { subjectImages } from "@/lib/subjects/images";
 import { localizedUrl, siteUrl } from "@/lib/seo/metadata";
 import SubjectPage, { generateMetadata } from "@/app/[locale]/subjects/[subject]/page";
@@ -41,19 +41,21 @@ describe("subject image discovery", () => {
     for (const locale of locales) {
       const html = renderToStaticMarkup(await SubjectIndex({ params: Promise.resolve({ locale }) }));
       const index = entries.find((entry) => entry.url === localizedUrl(locale, "/subjects"));
-      expect(index?.images).toHaveLength(visibleSubjectSlugs.length);
+      expect(index?.images).toHaveLength(subjectSlugs.length);
       for (const subject of visibleSubjectSlugs) {
         const image = subjectImages[subject]!;
         expect(html).toContain(`src="${image.src}"`);
         expect(entries.find((entry) => entry.url === localizedUrl(locale, `/subjects/${subject}`))?.images).toContain(`${siteUrl}${image.src}`);
       }
     }
-    expect(subjectImages.biology).toBeUndefined();
-    expect(subjectImages.mathematics).toBeUndefined();
+    for (const subject of hiddenSubjectSlugs) {
+      expect(subjectImages[subject]).toBeDefined();
+      expect(entries.some((entry) => entry.url === localizedUrl("en", `/subjects/${subject}`))).toBe(false);
+    }
   });
 
   it("provides compressed WebP variants without changing the downloadable originals", () => {
-    for (const subject of visibleSubjectSlugs) {
+    for (const subject of subjectSlugs) {
       const image = subjectImages[subject]!;
       for (const src of [image.src, image.smallSrc]) {
         const path = join(process.cwd(), "public", src);
@@ -66,7 +68,7 @@ describe("subject image discovery", () => {
   });
 
   it("provides 1200×630 JPEG social cards", () => {
-    for (const subject of visibleSubjectSlugs) {
+    for (const subject of subjectSlugs) {
       const og = subjectImages[subject]!.og;
       const path = join(process.cwd(), "public", og.src);
       const bytes = readFileSync(path);

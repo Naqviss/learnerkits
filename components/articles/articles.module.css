@@ -47,3 +47,13 @@
 @media(max-width:800px){.layout{grid-template-columns:1fr}.sidebar{position:static;max-height:none;padding:22px;border:1px solid var(--line);border-radius:18px;background:var(--surface)}.hero{padding-top:32px}.sidebar ol{columns:2;column-gap:28px}.sidebar li{break-inside:avoid}.prose{max-width:730px}}
 @media(max-width:560px){.grid{grid-template-columns:1fr}.card{padding:23px}.page{padding-top:22px}.indexHero{padding-top:35px}.sidebar ol{columns:1}.prose{font-size:1rem}.prose h2{font-size:1.5rem}.intro>p:first-child{font-size:1.08rem;padding-left:16px}.byline{font-size:.8rem}.note{padding:24px}}
 @media print{.sidebar{display:none}.layout{display:block}.prose{max-width:none}.related{display:none}.hero{padding-top:0}.prose details{break-inside:avoid}}
+/* Compact headers: breadcrumbs sit right above the title. */
+.page{padding-top:16px}
+.indexHero{padding:14px 0 22px}
+.indexHero h1{font-size:clamp(2rem,3.8vw,3.1rem);margin:10px 0 14px}
+.indexHero>p{font-size:1.02rem;line-height:1.65}
+.hero{padding:14px 0 24px;margin-bottom:26px}
+.hero h1{font-size:clamp(1.9rem,3.6vw,3rem);margin:10px 0 16px}
+.categoryNav{margin-bottom:24px}
+.categorySection{margin-bottom:36px}
+.categoryHeader{margin-bottom:16px}

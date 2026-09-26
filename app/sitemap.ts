@@ -29,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const paths = locale === defaultLocale ? [...core, ...subjectPaths, ...simulationPaths, ...topicGuidePaths, ...articlePaths, ...moleculePaths] : [...core, ...subjectPaths, ...simulationPaths];
     return paths.map((path) => ({
     url: localizedUrl(locale, path),
-    ...(path === "/subjects" ? { images: Object.values(subjectImageEntries) } : subjectImageEntries[path] ? { images: [subjectImageEntries[path]] } : {}),
+    ...(path === "/subjects" ? { images: Object.values(subjectImages).map((image) => `${siteUrl}${image.src}`) } : subjectImageEntries[path] ? { images: [subjectImageEntries[path]] } : {}),
     ...(path === "/articles"
       ? { images: articleSummaries.map((article) => `${siteUrl}${articleImages[article.slug].src}`) }
       : articleSummaries.some((article) => path === `/articles/${article.slug}`)

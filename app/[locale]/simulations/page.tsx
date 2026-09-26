@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
 import { displayDifficulty, getEducationCopy, getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content";
 import { localizedMetadata } from "@/lib/seo/metadata";
-import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
+import { hiddenSubjectSlugs, subjectSlugs, subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
+import { SimulationLibrary } from "@/components/simulation/SimulationLibrary";
 
 export async function generateMetadata({params}:{params:Promise<{locale:string}>}):Promise<Metadata>{
   const {locale:raw}=await params,locale=isLocale(raw)?raw:"en",copy=getEducationCopy(locale);
@@ -13,22 +14,25 @@ export async function generateMetadata({params}:{params:Promise<{locale:string}>
 
 export default async function Simulations({params}:{params:Promise<{locale:string}>}){
   const {locale:raw}=await params;if(!isLocale(raw))notFound();
-  const copy=getEducationCopy(raw),localized=visibleSubjectSlugs.map(slug=>getLocalizedSubject(raw,slug)),all=localized.flatMap(subject=>subject.simulations),featured=all.filter(sim=>sim.featured);
-  return <main className="container educationLibrary">
-    <header className="pageHeader generalPageHeader"><div className="eyebrow">{copy.library.eyebrow}</div><h1 className="pageTitle">{copy.library.title}</h1><p className="lede">{copy.library.body(all.length,visibleSubjectSlugs.length)}</p></header>
-    <nav className="subjectQuickNav" aria-label={copy.home.subjects}>{visibleSubjectSlugs.map((slug,index)=><a href={`#${slug}`} className={`subject-${slug}`} key={slug}><span>{String(index+1).padStart(2,"0")}</span>{getLocalizedSubjectName(raw,slug)}</a>)}</nav>
-    <section className="libraryPriority section"><div className="sectionHeading"><div><div className="eyebrow">{copy.library.priority}</div><h2>{copy.library.priorityTitle}</h2></div><p>{copy.library.priorityBody}</p></div><div className="priorityStrip">{featured.map(sim=><Link href={`/${raw}/simulations/${sim.slug}`} className="priorityStripCard" key={sim.slug}><strong>{sim.title}</strong></Link>)}</div></section>
-    {visibleSubjectSlugs.map((slug,shelfIndex)=>{
-      const subject=getLocalizedSubject(raw,slug);
-      return <details id={slug} className={`simulationShelf educationShelf subject-${slug}`} key={slug} open={shelfIndex===0}>
-        <summary className="shelfHeading"><div><span>{subject.gradeBand} · {subject.simulations.length} {copy.generic.labs}</span><h2>{getLocalizedSubjectName(raw,slug)}</h2></div><b><span>{copy.generic.labs}</span><i>⌄</i></b></summary>
-        <div className="shelfTools"><p>{subject.description}</p><Link href={`/${raw}/subjects/${slug}`}>{copy.library.viewSubject} →</Link></div>
-        <div className="libraryCatalogGrid">{subject.simulations.map((sim,index)=><article className="librarySimCard educationLibraryCard" key={sim.slug}>
-          <div className="libraryCardTop"><span className="labType">{copy.library.lab} {String(index+1).padStart(2,"0")}{sim.kind?` · ${sim.kind}`:""}</span>{sim.featured?<span className="priorityBadge">{copy.library.priorityBadge}</span>:<span className="lessonBadge">{sim.duration}</span>}</div>
-          <h3>{sim.title}</h3><div className="learningOutcome compactOutcome"><span>{copy.library.whatLearn}</span><strong>{sim.outcome}</strong></div>{sim.concepts&&<p>{sim.concepts}</p>}
-          <div className="simMeta"><span className="pill">{displayDifficulty(raw,sim.difficulty)}</span></div><Link className="button subjectButton" href={`/${raw}/simulations/${sim.slug}`}>{copy.library.startLab} <span>→</span></Link>
-        </article>)}</div>
-      </details>;
-    })}
+  const copy=getEducationCopy(raw);
+  const subjects=visibleSubjectSlugs.map(slug=>({slug,name:getLocalizedSubjectName(raw,slug),data:getLocalizedSubject(raw,slug)}));
+  const all=subjects.flatMap(({data})=>data.simulations),featured=all.filter(sim=>sim.featured).slice(0,6);
+  const labs=subjects.flatMap(({slug,name,data})=>data.simulations.map((sim,index)=>({slug,name,sim,base:subjectsCatalog[slug].simulations[index]})));
+  const levels=(["Beginner","Intermediate","Advanced"] as const).map(value=>({value,label:displayDifficulty(raw,value)}));
+  return <main className="container educationLibrary simLibrary">
+    <header className="pageHeader generalPageHeader libHeader"><div className="eyebrow">{copy.library.eyebrow}</div><h1 className="pageTitle">{copy.library.title}</h1><p className="lede">{copy.library.body(all.length,visibleSubjectSlugs.length)}</p></header>
+    {featured.length>0&&<section className="libStartHere" aria-labelledby="lib-start-here"><h2 id="lib-start-here">{copy.library.priority}</h2><div>{featured.map(sim=><Link href={`/${raw}/simulations/${sim.slug}`} key={sim.slug}>{sim.title} <span aria-hidden="true">→</span></Link>)}</div></section>}
+    <SimulationLibrary
+      groups={subjects.map(({slug,name,data})=>({slug,name,meta:`${data.gradeBand} · ${data.simulations.length} ${copy.generic.labs}`,href:`/${raw}/subjects/${slug}`,viewLabel:copy.library.viewSubject}))}
+      upcoming={subjectSlugs.filter(slug=>hiddenSubjectSlugs.has(slug)).map(slug=>({slug,name:getLocalizedSubjectName(raw,slug)}))}
+      items={labs.map(({slug,name,sim,base})=>({subject:slug,level:sim.difficulty,text:[sim.title,sim.kind,sim.concepts,sim.outcome,name,base.title,base.concepts,sim.slug.replace(/-/g," ")].filter(Boolean).join(" ")}))}
+      levels={levels}
+      labels={{comingSoon:copy.home.comingSoon,comingSoonBody:copy.home.comingSoonBody,search:copy.library.searchLabel,placeholder:copy.library.searchPlaceholder,allSubjects:copy.library.allSubjects,allLevels:copy.library.allLevels,subjectFilter:copy.library.subjectFilter,levelFilter:copy.library.levelFilter,count:copy.subject.labSearchCount("{shown}","{total}"),empty:copy.subject.labSearchEmpty,clear:copy.subject.labSearchClear}}
+    >{labs.map(({slug,sim})=><Link href={`/${raw}/simulations/${sim.slug}`} className={`libCard subject-${slug}`} key={sim.slug}>
+      <div className="libCardTop"><span className="libKind">{sim.kind}</span>{sim.featured&&<span className="priorityBadge">{copy.library.priorityBadge}</span>}</div>
+      <h3>{sim.title}</h3>
+      <p>{sim.outcome}</p>
+      <div className="libCardMeta"><span className="pill">{displayDifficulty(raw,sim.difficulty)}</span><span className="pill">{sim.duration}</span><b aria-hidden="true">→</b></div>
+    </Link>)}</SimulationLibrary>
   </main>;
 }

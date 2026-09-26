@@ -1,0 +1,14 @@
+{
+  "method": "Built-in image_gen",
+  "format": "1536x1024 landscape; LearnerKits watermark",
+  "images": [
+    {
+      "slug": "mathematics",
+      "prompt": "Use case: scientific-educational. Asset type: premium subject cover for LearnerKits education website, landscape 1536x1024, 3:2. Style: high-end 3D editorial illustration, tactile realistic materials and cinematic natural light, like a sophisticated science museum poster. Strong uncluttered visual story, no people, no fake equations, no labels. Compose main objects in middle 70% vertical region so a 16:9 crop still works. Exact text \"LearnerKits\" only, once at bottom-right, clean white semibold sans-serif watermark, 5% inset. No other words or logos. Subject: Mathematics. A beautifully arranged geometry exploration table, viewed at a high three-quarter angle: a precise golden brass drawing compass above unlabelled graph paper with one simple circle and triangle, tactile blue cube, amber cone and pale ceramic sphere arranged neatly beside it. Softly blurred navy teaching studio background, warm directional light, sapphire and amber palette, premium editorial detail. Keep objects around the sides with a calm open middle for the website coming-soon badge; do not draw the badge."
+    },
+    {
+      "slug": "biology",
+      "prompt": "Use case: scientific-educational. Asset type: premium subject cover for LearnerKits education website, landscape 1536x1024, 3:2. Style: high-end 3D editorial illustration, tactile realistic materials and cinematic natural light, like a sophisticated science museum poster. Strong uncluttered visual story, no people, no fake equations, no labels. Compose main objects in middle 70% vertical region so a 16:9 crop still works. Exact text \"LearnerKits\" only, once at bottom-right, clean white semibold sans-serif watermark, 5% inset. No other words or logos. Subject: Biology. A modern biology study bench, viewed from low oblique eye level: a beautifully formed compound microscope on the left with slide on its stage, a green young fern in a small pot toward the right, and a single freestanding educational DNA double-helix model with two continuous twisting rails and paired rungs in the middle distance. Soft natural window light, emerald and teal palette with warm wood accents, dark softly blurred laboratory background. Keep objects legible around a calm middle area for a website coming-soon badge; do not draw the badge. This is conceptual subject artwork, not a labeled molecular diagram."
+    }
+  ]
+}

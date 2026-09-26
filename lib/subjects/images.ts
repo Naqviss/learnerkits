@@ -14,6 +14,28 @@ const asset = (slug: string, alt: Record<Locale, string>): SubjectImage => ({
 });
 
 export const subjectImages: Partial<Record<SubjectSlug, SubjectImage>> = {
+  mathematics: asset("mathematics", {
+    en: "Illustration of a drawing compass and geometric shapes beside a circle and triangle on graph paper.",
+    es: "Ilustración de un compás y cuerpos geométricos junto a un círculo y un triángulo sobre papel cuadriculado.",
+    zh: "绘图圆规和几何立体的插画，旁边的方格纸上绘有圆和三角形。",
+    ar: "رسم توضيحي لفرجار وأشكال هندسية بجانب دائرة ومثلث على ورق مربعات.",
+    pt: "Ilustração de um compasso e sólidos geométricos ao lado de um círculo e um triângulo em papel quadriculado.",
+    fr: "Illustration d’un compas et de solides géométriques près d’un cercle et d’un triangle sur du papier quadrillé.",
+    ru: "Иллюстрация циркуля и геометрических тел рядом с окружностью и треугольником на бумаге в клетку.",
+    ja: "方眼紙の円と三角形のそばに、製図用コンパスと立体図形を描いたイラスト。",
+    de: "Illustration eines Zirkels und geometrischer Körper neben einem Kreis und einem Dreieck auf kariertem Papier.",
+  }),
+  biology: asset("biology", {
+    en: "Illustration of a microscope, a DNA double-helix teaching model, and a potted fern on a biology lab bench.",
+    es: "Ilustración de un microscopio, un modelo didáctico de la doble hélice del ADN y un helecho en una mesa de biología.",
+    zh: "生物实验台上的显微镜、DNA双螺旋教学模型和盆栽蕨类植物的插画。",
+    ar: "رسم توضيحي لمجهر ونموذج تعليمي للولب المزدوج للحمض النووي وسرخس في أصيص على طاولة مختبر أحياء.",
+    pt: "Ilustração de um microscópio, um modelo didático da dupla hélice do DNA e uma samambaia em uma bancada de biologia.",
+    fr: "Illustration d’un microscope, d’un modèle pédagogique de la double hélice d’ADN et d’une fougère sur une paillasse de biologie.",
+    ru: "Иллюстрация микроскопа, учебной модели двойной спирали ДНК и папоротника на столе в биологической лаборатории.",
+    ja: "生物実験台の顕微鏡、DNA二重らせんの教材模型、鉢植えのシダを描いたイラスト。",
+    de: "Illustration eines Mikroskops, eines DNA-Doppelhelix-Lehrmodells und eines Topffarns auf einem Biologielabortisch.",
+  }),
   space: asset("space", {
     en: "Illustration of Earth and a satellite above a rocky lunar landscape.",
     es: "Ilustración de la Tierra y un satélite sobre un paisaje lunar rocoso.",

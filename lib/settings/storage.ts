@@ -37,11 +37,40 @@ export function applyTheme(theme: ThemePreference): void {
   document.documentElement.style.colorScheme = resolveTheme(theme);
 }
 
+// Mirrors the motion choice onto <html data-motion> so the site CSS can honour it, not only the
+// simulations that read it from JavaScript.
+export function applyMotion(motion: MotionPreference): void {
+  if (typeof document === "undefined") return;
+  document.documentElement.dataset.motion = motion;
+}
+
+const SETTINGS_EVENT = "science-sim-settings";
+
 export function saveSettings(settings: AppSettings): void {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  // Storage can be blocked (private mode, site data disabled); the choice still applies to this page.
+  try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings)); } catch {}
   applyTheme(settings.theme);
-  window.dispatchEvent(new CustomEvent("science-sim-settings", { detail: settings }));
+  applyMotion(settings.motion);
+  window.dispatchEvent(new CustomEvent(SETTINGS_EVENT, { detail: settings }));
+}
+
+// Calls back whenever settings change: on this page (header toggle ↔ settings page) or in another tab.
+export function subscribeSettings(callback: (settings: AppSettings) => void): () => void {
+  const onLocal = (event: Event) => callback((event as CustomEvent<AppSettings>).detail ?? loadSettings());
+  const onStorage = (event: StorageEvent) => { if (event.key === STORAGE_KEY) { const next = loadSettings(); applyTheme(next.theme); applyMotion(next.motion); callback(next); } };
+  window.addEventListener(SETTINGS_EVENT, onLocal);
+  window.addEventListener("storage", onStorage);
+  return () => { window.removeEventListener(SETTINGS_EVENT, onLocal); window.removeEventListener("storage", onStorage); };
+}
+
+// With the "system" theme, follow the OS switching between light and dark while the page is open.
+export function watchSystemTheme(): () => void {
+  const query = window.matchMedia?.("(prefers-color-scheme: dark)");
+  if (!query) return () => {};
+  const onChange = () => { if (loadSettings().theme === "system") applyTheme("system"); };
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
 }
 
 export function prefersReducedMotion(settings = loadSettings()): boolean {
