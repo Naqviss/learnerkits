@@ -1,0 +1,4 @@
+.figure{margin:0;border-bottom:1px solid var(--line)}
+.image,.thumbnail{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:contain;background:var(--surface-2)}
+.thumbnail{border-radius:14px;margin-bottom:22px}
+.figure figcaption{padding:10px 18px;font-size:.72rem;line-height:1.6;color:var(--muted)}

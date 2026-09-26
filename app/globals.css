@@ -542,3 +542,6 @@ body{background:radial-gradient(circle at 8% 4%,rgba(132,177,255,.22),transparen
 .vseprTableWrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
 .vseprTable{width:100%;min-width:720px;border-collapse:collapse;font-size:.9rem}.vseprTable th,.vseprTable td{padding:11px 14px;text-align:start;border-bottom:1px solid var(--line);vertical-align:top}.vseprTable thead th{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);background:var(--surface-2)}.vseprTable tbody tr:last-child>*{border-bottom:0}.vseprTable a{color:var(--subject,var(--accent));font-weight:700}
 .moleculeKitChart{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.moleculeKitChart a{padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:inherit;font-weight:650;font-size:.9rem}
+
+/* Subject cover images replace the decorative bar and retain their full composition. */
+.educationIndexCard.subjectImageCard:before,.educationIndexCard.subjectImageCard:after{display:none}
