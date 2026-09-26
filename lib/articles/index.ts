@@ -1,11 +1,24 @@
-import { articlePublishedAt, articleSummaries, type ArticleSlug } from "./catalog";
+import { articleSummaries, type ArticleSlug } from "./catalog";
 import { studentAi } from "./content/student-ai";
 import { comparison } from "./content/comparison";
 import { checking } from "./content/checking";
 import { teachers } from "./content/teachers";
 import { practice } from "./content/practice";
 
+import { interactiveLearning } from "./content/interactive-learning";
+import { virtualLabs } from "./content/virtual-labs";
+import { labComparison } from "./content/lab-comparison";
+import { selfStudy } from "./content/self-study";
+import { visualLearning } from "./content/visual-learning";
+import { scienceNotebook } from "./content/science-notebook";
+
 const bodies: Record<ArticleSlug, string> = {
+  "what-are-interactive-learning-simulations": interactiveLearning,
+  "how-virtual-science-labs-work": virtualLabs,
+  "virtual-labs-vs-traditional-labs": labComparison,
+  "educational-simulations-for-self-study": selfStudy,
+  "why-visual-learning-helps-science": visualLearning,
+  "how-to-create-a-digital-science-notebook": scienceNotebook,
   "how-students-use-ai-to-understand-science": studentAi,
   "ai-tutors-vs-interactive-simulations": comparison,
   "check-ai-generated-science-answers": checking,
@@ -26,7 +39,7 @@ export const articles = articleSummaries.map((summary) => {
     return { title, id: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""), body: part.slice(end).trim() };
   });
   const wordCount = articlePlainText(body).split(/\s+/).length;
-  return { ...summary, body, intro, sections, wordCount, readingMinutes: Math.ceil(wordCount / 200), publishedAt: articlePublishedAt, updatedAt: articlePublishedAt };
+  return { ...summary, body, intro, sections, wordCount, readingMinutes: Math.ceil(wordCount / 200) };
 });
 
 export type Article = typeof articles[number];

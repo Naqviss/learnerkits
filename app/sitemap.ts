@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { articleSummaries, articlePublishedAt } from "@/lib/articles/catalog";
+import { articleSummaries, articlesUpdatedAt } from "@/lib/articles/catalog";
 import { articleImages } from "@/lib/articles/images";
 import { defaultLocale, locales } from "@/lib/i18n/config";
 import { hreflangCodes, localizedUrl, siteUrl } from "@/lib/seo/metadata";
@@ -28,7 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       : articleSummaries.some((article) => path === `/articles/${article.slug}`)
         ? { images: articleSummaries.filter((article) => path === `/articles/${article.slug}`).map((article) => `${siteUrl}${articleImages[article.slug].src}`) }
         : {}),
-    lastModified: path.startsWith("/articles") ? articlePublishedAt : lastModified,
+    lastModified: path === "/articles" ? articlesUpdatedAt : articleSummaries.find((article) => path === `/articles/${article.slug}`)?.updatedAt ?? lastModified,
     changeFrequency: path.includes("simulations") ? "weekly" : "monthly",
     priority: path === "/" ? 1 : path === "/molecule-kit" ? .9 : path.includes("subjects/") || path === "/molecules" ? .85 : path.startsWith("/molecules/") ? .7 : isEnglishOnly(path) ? .85 : path === "/donate" ? .5 : .8,
     alternates: isEnglishOnly(path)

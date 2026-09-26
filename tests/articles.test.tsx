@@ -3,7 +3,7 @@ import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { articles, getArticle } from "@/lib/articles";
-import { getArticlesForSimulation } from "@/lib/articles/catalog";
+import { articleCategories, getArticlesForSimulation } from "@/lib/articles/catalog";
 import { getSimulationCard, getSubjectForSimulation, isVisibleSubjectSlug } from "@/lib/subjects/catalog";
 import { articleJsonLd } from "@/lib/articles/seo";
 import { articleImages } from "@/lib/articles/images";
@@ -12,17 +12,33 @@ import { ArticleBody } from "@/components/articles/ArticleBody";
 import sitemap from "@/app/sitemap";
 import { GET } from "@/app/llms.txt/route";
 import ArticlePage, { generateMetadata } from "@/app/[locale]/articles/[slug]/page";
+import ArticlesPage from "@/app/[locale]/articles/page";
 
 describe("article publishing", () => {
-  it("publishes five distinct, substantial articles with navigable sections", () => {
-    expect(articles).toHaveLength(5);
-    expect(new Set(articles.map((article) => article.slug)).size).toBe(5);
+  it("publishes eleven distinct articles with the requested category lengths and navigable sections", () => {
+    expect(articles).toHaveLength(11);
+    expect(new Set(articles.map((article) => article.slug)).size).toBe(11);
+    expect(articles.filter((article) => article.category === "AI in Education")).toHaveLength(5);
+    expect(articles.filter((article) => article.category === "Educational Technology")).toHaveLength(6);
     for (const article of articles) {
-      expect(article.wordCount, article.slug).toBeGreaterThanOrEqual(1000);
-      expect(article.wordCount, article.slug).toBeLessThanOrEqual(1500);
+      expect(article.wordCount, article.slug).toBeGreaterThanOrEqual(article.category === "Educational Technology" ? 1500 : 1000);
+      if (article.category === "AI in Education") expect(article.wordCount, article.slug).toBeLessThanOrEqual(1500);
       expect(article.sections.length).toBeGreaterThanOrEqual(6);
       expect(new Set(article.sections.map((section) => section.id)).size).toBe(article.sections.length);
       expect(article.sections.every((section) => section.id && section.body)).toBe(true);
+    }
+  });
+
+  it("renders both category groups and preserves individual publication dates", async () => {
+    const html = renderToStaticMarkup(await ArticlesPage({ params: Promise.resolve({ locale: "en" }) }));
+    for (const category of articleCategories) {
+      expect(html).toContain(`href="#${category.id}"`);
+      expect(html).toContain(`id="${category.id}"`);
+    }
+    for (const article of articles) {
+      expect(html).toContain(`/en/articles/${article.slug}`);
+      expect(article.publishedAt).toBe(article.category === "AI in Education" ? "2026-09-25" : "2026-09-26");
+      expect(articleJsonLd(article).articleSection).toBe(article.category);
     }
   });
 
@@ -60,7 +76,7 @@ describe("article publishing", () => {
   it("lists only English article URLs in the sitemap and discovery file", async () => {
     const entries = sitemap().filter((entry) => entry.url.includes("/articles"));
     const guide = await (await GET()).text();
-    expect(entries).toHaveLength(6);
+    expect(entries).toHaveLength(12);
     for (const article of articles) {
       const url = localizedUrl("en", `/articles/${article.slug}`);
       expect(entries.find((entry) => entry.url === url)?.lastModified).toBe(article.updatedAt);
@@ -71,7 +87,7 @@ describe("article publishing", () => {
   });
 
   it("ships distinct, compressed WebP files for full, small and social images", () => {
-    expect(new Set(Object.values(articleImages).map((image) => image.src)).size).toBe(5);
+    expect(new Set(Object.values(articleImages).map((image) => image.src)).size).toBe(11);
     for (const image of Object.values(articleImages)) {
       for (const src of [image.src, image.smallSrc, image.socialSrc]) {
         const file = join(process.cwd(), "public", src);

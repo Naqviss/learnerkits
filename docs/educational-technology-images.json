@@ -1,0 +1,48 @@
+{
+  "method": "Built-in image_gen",
+  "style": "Original landscape 3:2 editorial gouache illustrations; no logos or titles; conceptual art, not literal screenshots.",
+  "images": [
+    {
+      "file": "interactive-learning-classroom-wide",
+      "slug": "what-are-interactive-learning-simulations",
+      "scene": "Wide angle from the back corner of a bright teal classroom. A young woman teacher with dark curly hair gestures to a large wall screen with a simple cart and force arrows, while two teenage students in different colored clothes discuss their predictions at a table. Clear room-wide composition, people relatively small in frame.",
+      "source": "/Users/cp/.codex/generated_images/01a0d579-be41-7c81-8899-159ad6f0b2c1/exec-7f60ee90-a90d-420e-9245-db0e79b1e89f.png",
+      "prompt": "Use case: illustration-story. Asset type: science education article hero, landscape 3:2, 1536x1024. Original tasteful editorial illustration, soft painterly gouache texture, believable human proportions, crisp composition, contemporary educational magazine aesthetic. Wide angle from the back corner of a bright teal classroom. A young woman teacher with dark curly hair gestures to a large wall screen with a simple cart and force arrows, while two teenage students in different colored clothes discuss their predictions at a table. Clear room-wide composition, people relatively small in frame. No logos, no watermarks, no large titles, no AI symbols. Any screen writing should be understated abstract lines, not gibberish words. This is conceptual editorial art, not a literal screenshot. Keep important subjects inside central 80 percent for crops."
+    },
+    {
+      "file": "virtual-science-lab-over-shoulder",
+      "slug": "how-virtual-science-labs-work",
+      "scene": "Close over-the-shoulder camera behind a teenage Black boy with short textured hair and a rust orange sweatshirt in a modern blue school computer lab. He examines a laptop showing an abstract gas particle chamber and a simple pressure-volume curve, next to an open handwritten notebook. Screen and hands in foreground, face barely visible.",
+      "source": "/Users/cp/.codex/generated_images/01a0d579-be41-7c81-8899-159ad6f0b2c1/exec-263927fc-aabe-42eb-bbf0-cc7edee93319.png",
+      "prompt": "Use case: illustration-story. Asset type: science education article hero, landscape 3:2, 1536x1024. Original tasteful editorial illustration, soft painterly gouache texture, believable human proportions, crisp composition, contemporary educational magazine aesthetic. Close over-the-shoulder camera behind a teenage Black boy with short textured hair and a rust orange sweatshirt in a modern blue school computer lab. He examines a laptop showing an abstract gas particle chamber and a simple pressure-volume curve, next to an open handwritten notebook. Screen and hands in foreground, face barely visible. No logos, no watermarks, no large titles, no AI symbols. Any screen writing should be understated abstract lines, not gibberish words. This is conceptual editorial art, not a literal screenshot. Keep important subjects inside central 80 percent for crops."
+    },
+    {
+      "file": "virtual-and-physical-labs-side-view",
+      "slug": "virtual-labs-vs-traditional-labs",
+      "scene": "Side-on eye-level wide composition of a female East Asian science teacher with short hair in a white lab coat in a warm brick-walled school science lab. She compares a real pendulum stand on the left with a laptop pendulum illustration on the right. Safe uncluttered teaching bench, no chemicals or flames.",
+      "source": "/Users/cp/.codex/generated_images/01a0d579-be41-7c81-8899-159ad6f0b2c1/exec-7b1e3f8b-0b24-4355-823b-41970fffff16.png",
+      "prompt": "Use case: illustration-story. Asset type: science education article hero, landscape 3:2, 1536x1024. Original tasteful editorial illustration, soft painterly gouache texture, believable human proportions, crisp composition, contemporary educational magazine aesthetic. Side-on eye-level wide composition of a female East Asian science teacher with short hair in a white lab coat in a warm brick-walled school science lab. She compares a real pendulum stand on the left with a laptop pendulum illustration on the right. Safe uncluttered teaching bench, no chemicals or flames. No logos, no watermarks, no large titles, no AI symbols. Any screen writing should be understated abstract lines, not gibberish words. This is conceptual editorial art, not a literal screenshot. Keep important subjects inside central 80 percent for crops."
+    },
+    {
+      "file": "simulation-self-study-window-profile",
+      "slug": "educational-simulations-for-self-study",
+      "scene": "Low desk-level profile portrait of a teenage girl wearing a navy hijab and mustard cardigan studying beside a tall arched window in a quiet pale green home study. Tablet on a stand displays a simple pendulum with two lengths, pencil and handwritten prediction notebook foreground. Soft afternoon light, diagonal perspective.",
+      "source": "/Users/cp/.codex/generated_images/01a0d579-be41-7c81-8899-159ad6f0b2c1/exec-eb50e283-a73d-484c-9c83-6cab821cd28b.png",
+      "prompt": "Use case: illustration-story. Asset type: science education article hero, landscape 3:2, 1536x1024. Original tasteful editorial illustration, soft painterly gouache texture, believable human proportions, crisp composition, contemporary educational magazine aesthetic. Low desk-level profile portrait of a teenage girl wearing a navy hijab and mustard cardigan studying beside a tall arched window in a quiet pale green home study. Tablet on a stand displays a simple pendulum with two lengths, pencil and handwritten prediction notebook foreground. Soft afternoon light, diagonal perspective. No logos, no watermarks, no large titles, no AI symbols. Any screen writing should be understated abstract lines, not gibberish words. This is conceptual editorial art, not a literal screenshot. Keep important subjects inside central 80 percent for crops."
+    },
+    {
+      "file": "visual-science-community-workshop",
+      "slug": "why-visual-learning-helps-science",
+      "scene": "High oblique view from a mezzanine into a small cream and coral community learning room. A college-age South Asian student in a burgundy shirt stands at a large whiteboard connecting a cart sketch, a force arrow, and a simple rising straight graph, while a seated adult with gray hair discusses it. Diagram-led composition, distinct from desk portraits.",
+      "source": "/Users/cp/.codex/generated_images/01a0d579-be41-7c81-8899-159ad6f0b2c1/exec-9f51cb71-06af-48a1-8441-28a784b8aa09.png",
+      "prompt": "Use case: illustration-story. Asset type: science education article hero, landscape 3:2, 1536x1024. Original tasteful editorial illustration, soft painterly gouache texture, believable human proportions, crisp composition, contemporary educational magazine aesthetic. High oblique view from a mezzanine into a small cream and coral community learning room. A college-age South Asian student in a burgundy shirt stands at a large whiteboard connecting a cart sketch, a force arrow, and a simple rising straight graph, while a seated adult with gray hair discusses it. Diagram-led composition, distinct from desk portraits. No logos, no watermarks, no large titles, no AI symbols. Any screen writing should be understated abstract lines, not gibberish words. This is conceptual editorial art, not a literal screenshot. Keep important subjects inside central 80 percent for crops."
+    },
+    {
+      "file": "digital-science-notebook-overhead",
+      "slug": "how-to-create-a-digital-science-notebook",
+      "scene": "Strict straight-down overhead flat lay on a light oak library worktable, only a student's hands with blue striped sleeves visible. Laptop displays a neatly organized science notebook with small table, graph, and pendulum sketch; paper measurement notes, pencil, small ruler alongside. Strong top-down geometry, no faces, muted lavender and yellow accents.",
+      "source": "/Users/cp/.codex/generated_images/01a0d579-be41-7c81-8899-159ad6f0b2c1/exec-0962c78f-ec0c-4c61-9617-be3a5c3989ee.png",
+      "prompt": "Use case: illustration-story. Asset type: science education article hero, landscape 3:2, 1536x1024. Original tasteful editorial illustration, soft painterly gouache texture, believable human proportions, crisp composition, contemporary educational magazine aesthetic. Strict straight-down overhead flat lay on a light oak library worktable, only a student's hands with blue striped sleeves visible. Laptop displays a neatly organized science notebook with small table, graph, and pendulum sketch; paper measurement notes, pencil, small ruler alongside. Strong top-down geometry, no faces, muted lavender and yellow accents. No logos, no watermarks, no large titles, no AI symbols. Any screen writing should be understated abstract lines, not gibberish words. This is conceptual editorial art, not a literal screenshot. Keep important subjects inside central 80 percent for crops."
+    }
+  ]
+}
