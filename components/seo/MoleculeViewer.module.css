@@ -10,3 +10,7 @@
 .viewer :global(.chemZoomGroup button[aria-pressed="true"]){border-color:#7e9fe8;color:#e7edfd;background:#33456b}
 .viewer :global(.chemRenderFallback){position:absolute;inset:80px 30px auto;padding:20px;line-height:1.7;color:#e9c58f;background:#1c2028;border:1px solid #454e5d;border-radius:8px}
 @media(max-width:560px){.viewer{height:360px;border-radius:14px}.viewer :global(.chemOrbitBar){left:12px;right:12px;font-size:.61rem;flex-direction:column;align-items:flex-start}.viewer :global(.chemWebgl){inset:0 0 84px}}
+.viewer :global(.chemMoleculeCard){position:absolute;top:14px;left:18px;z-index:1;display:grid;gap:2px;pointer-events:none;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+.viewer :global(.chemMoleculeCard strong){font-size:1.5rem;line-height:1.1}
+.viewer :global(.chemMoleculeCard span){font-size:.85rem;color:#b9c7e2}
+.viewer :global(.chemOrbitBar button[aria-pressed="true"]){border-color:#6f8fe0;background:#34466a}

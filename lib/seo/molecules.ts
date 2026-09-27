@@ -1,38 +1,8 @@
-import { molecules } from "@/lib/simulations/chemistry/model";
+import { moleculeNames as names, molecules } from "@/lib/simulations/chemistry/model";
+import { bondLengthText, bondLengths } from "@/lib/simulations/chemistry/bondLengths";
 
 // Per-molecule reference pages are generated from the same dataset that drives the
 // Molecular Geometry 3D lab, so the shape, angle, and 3D model can never disagree.
-const names: Record<string, string> = {
-  "CO₂": "Carbon dioxide", "BF₃": "Boron trifluoride", "CH₄": "Methane", "NH₃": "Ammonia", "H₂O": "Water",
-  "CS₂": "Carbon disulfide", "BeF₂": "Beryllium fluoride", "BeCl₂": "Beryllium chloride", "BeBr₂": "Beryllium bromide",
-  "MgCl₂": "Magnesium chloride", "MgBr₂": "Magnesium bromide", "ZnCl₂": "Zinc chloride", "ZnBr₂": "Zinc bromide",
-  "CdCl₂": "Cadmium chloride", "HgCl₂": "Mercury(II) chloride", "N₃⁻": "Azide ion",
-  "BCl₃": "Boron trichloride", "BBr₃": "Boron tribromide", "BI₃": "Boron triiodide", "AlCl₃": "Aluminum chloride",
-  "AlF₃": "Aluminum fluoride", "GaCl₃": "Gallium trichloride", "SO₃": "Sulfur trioxide", "CO₃²⁻": "Carbonate ion",
-  "NO₃⁻": "Nitrate ion", "BO₃³⁻": "Borate ion",
-  "SO₂": "Sulfur dioxide", "O₃": "Ozone", "NO₂⁻": "Nitrite ion", "SnCl₂": "Tin(II) chloride", "SnBr₂": "Tin(II) bromide",
-  "PbCl₂": "Lead(II) chloride", "GeCl₂": "Germanium dichloride", "GeF₂": "Germanium difluoride",
-  "CCl₄": "Carbon tetrachloride", "CF₄": "Carbon tetrafluoride", "CBr₄": "Carbon tetrabromide", "SiH₄": "Silane",
-  "SiCl₄": "Silicon tetrachloride", "SiF₄": "Silicon tetrafluoride", "SiBr₄": "Silicon tetrabromide", "GeH₄": "Germane",
-  "GeCl₄": "Germanium tetrachloride", "GeF₄": "Germanium tetrafluoride", "SnCl₄": "Tin(IV) chloride", "SnBr₄": "Tin(IV) bromide",
-  "TiCl₄": "Titanium tetrachloride", "NH₄⁺": "Ammonium ion", "PO₄³⁻": "Phosphate ion", "SO₄²⁻": "Sulfate ion",
-  "ClO₄⁻": "Perchlorate ion", "BF₄⁻": "Tetrafluoroborate ion", "MnO₄⁻": "Permanganate ion", "CrO₄²⁻": "Chromate ion",
-  "XeO₄": "Xenon tetroxide",
-  "PH₃": "Phosphine", "AsH₃": "Arsine", "SbH₃": "Stibine", "NF₃": "Nitrogen trifluoride", "PF₃": "Phosphorus trifluoride",
-  "PCl₃": "Phosphorus trichloride", "PBr₃": "Phosphorus tribromide", "AsF₃": "Arsenic trifluoride", "AsCl₃": "Arsenic trichloride",
-  "ClO₃⁻": "Chlorate ion", "IO₃⁻": "Iodate ion",
-  "H₂S": "Hydrogen sulfide", "H₂Se": "Hydrogen selenide", "H₂Te": "Hydrogen telluride", "OF₂": "Oxygen difluoride",
-  "SCl₂": "Sulfur dichloride", "SBr₂": "Sulfur dibromide", "SeCl₂": "Selenium dichloride", "TeCl₂": "Tellurium dichloride",
-  "PCl₅": "Phosphorus pentachloride", "PF₅": "Phosphorus pentafluoride", "PBr₅": "Phosphorus pentabromide",
-  "AsF₅": "Arsenic pentafluoride", "SbCl₅": "Antimony pentachloride", "SbF₅": "Antimony pentafluoride", "NbCl₅": "Niobium pentachloride",
-  "SF₄": "Sulfur tetrafluoride", "SeF₄": "Selenium tetrafluoride", "TeF₄": "Tellurium tetrafluoride",
-  "ClF₃": "Chlorine trifluoride", "BrF₃": "Bromine trifluoride", "IF₃": "Iodine trifluoride",
-  "XeF₂": "Xenon difluoride", "I₃⁻": "Triiodide ion", "ICl₂⁻": "Dichloroiodate ion",
-  "SF₆": "Sulfur hexafluoride", "SeF₆": "Selenium hexafluoride", "TeF₆": "Tellurium hexafluoride", "MoF₆": "Molybdenum hexafluoride",
-  "WF₆": "Tungsten hexafluoride", "UF₆": "Uranium hexafluoride", "PF₆⁻": "Hexafluorophosphate ion", "SiF₆²⁻": "Hexafluorosilicate ion",
-  "BrF₅": "Bromine pentafluoride", "IF₅": "Iodine pentafluoride", "ClF₅": "Chlorine pentafluoride",
-  "XeF₄": "Xenon tetrafluoride", "ICl₄⁻": "Tetrachloroiodate ion", "BrF₄⁻": "Tetrafluorobromate ion",
-};
 
 // Simple s/p/d hybridization labels are a poor description of transition-metal and
 // actinide centers, so those pages omit the label instead of teaching a misconception.
@@ -135,9 +105,50 @@ export function getVseprClasses() {
 const numberWords = ["zero", "one", "two", "three", "four", "five", "six"];
 const pairs = (n: number, noun: string) => `${numberWords[n]} ${noun}${n === 1 ? "" : "s"}`;
 
+// Short bond-angle label for search titles and descriptions.
+function angleShort(m: MoleculeReference) {
+  switch (m.shape) {
+    case "Trigonal bipyramidal": return "90° & 120°";
+    case "Seesaw": return "<90° & <120°";
+    case "T-shaped": case "Square pyramidal": return "<90°";
+    default: return `${m.angleValue}°`;
+  }
+}
+
+const superscriptDigits: Record<string, string> = { "⁰": "0", "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9" };
+const titleCase = (text: string) => text.replace(/(^|[\s-])([a-z])/g, (_, gap: string, letter: string) => gap + letter.toUpperCase());
+// Shape names that start with a letter label ("T-shaped") keep it capitalized mid-sentence.
+const sentenceShape = (shape: string) => (/^[A-Z]-/.test(shape) ? shape : shape.toLowerCase());
+
+// Search results show the plain formula people type ("PF5", "SO4 2-", not "PF₅") so the query
+// terms match, and a description short enough (≤ 160 characters) that the reason to click is not truncated.
+export function moleculeSearchCopy(m: MoleculeReference) {
+  const [, magnitude = "", sign = ""] = m.formula.match(/([⁰¹²³⁴⁵⁶⁷⁸⁹]*)([⁺⁻])$/) ?? [];
+  const ascii = m.asciiFormula.replace(/[+-]$/, "");
+  const charge = `${magnitude.replace(/./g, (d) => superscriptDigits[d])}${sign === "⁻" ? "-" : sign === "⁺" ? "+" : ""}`;
+  // Single charges read like "NO3-"; larger ones get a space so the digit is not read as a subscript ("SO4 2-").
+  const formula = magnitude ? `${ascii} ${charge}` : `${ascii}${charge}`;
+  const angle = angleShort(m);
+  const plural = angle.includes("&") ? "s" : "";
+  const base = `${formula} Molecular Geometry: ${titleCase(m.shape)}`;
+  const withAngle = `${base}, ${angle} Bond Angle${plural}`;
+  const core = withAngle.length <= 56 ? withAngle : `${base}, ${angle}`;
+  const title = core.length <= 60 ? `${core} (3D)` : core;
+  const geometry = m.shape === m.electronGeometry
+    ? `${sentenceShape(m.shape)} molecular and electron geometry`
+    : `${sentenceShape(m.shape)} molecular geometry, ${m.electronGeometry.toLowerCase()} electron geometry`;
+  const polarity = m.polarity === "Ion" ? "polyatomic ion" : m.polarity.toLowerCase();
+  const facts = `${formula} (${m.name.toLowerCase()}): ${geometry}, ${angle} bond angle${plural}${m.hybridization ? `, ${m.hybridization}` : ""}, ${polarity}.`;
+  const description = [`${facts} See why in a free 3D model you can rotate.`, `${facts} Rotate the free 3D model.`, facts].find((text) => text.length <= 160)!;
+  return { title, description };
+}
+
 export function moleculeCopy(m: MoleculeReference) {
   const label = `${m.name} (${m.formula})`;
-  const lead = `${label} has a ${m.shape.toLowerCase()} molecular geometry with a bond angle of ${m.bondAngle.startsWith("≈") ? `about ${m.angleValue}°` : m.bondAngle[0].toLowerCase() + m.bondAngle.slice(1)}. Its central ${m.center} atom has ${pairs(m.bondingPairs, "bonding domain")} and ${pairs(m.lonePairs, "lone pair")}, so its VSEPR notation is ${m.axe}.`;
+  const geometry = m.shape === m.electronGeometry
+    ? `${m.shape.toLowerCase()} molecular geometry and electron geometry`
+    : `${m.shape.toLowerCase()} molecular geometry and a ${m.electronGeometry.toLowerCase()} electron geometry`;
+  const lead = `${label} has a ${geometry}, with a bond angle of ${m.bondAngle.startsWith("≈") ? `about ${m.angleValue}°` : m.bondAngle[0].toLowerCase() + m.bondAngle.slice(1)}. Its central ${m.center} atom has ${pairs(m.bondingPairs, "bonding domain")} and ${pairs(m.lonePairs, "lone pair")}, so its VSEPR notation is ${m.axe}.`;
   const why = m.lonePairs === 0
     ? `The central ${m.center} atom has ${pairs(m.domains, "electron domain")}, all of them bonds to ${m.outer} atoms. With no lone pairs, the domains spread as far apart as possible and the molecular shape matches the electron geometry: ${m.electronGeometry.toLowerCase()}.`
     : `The central ${m.center} atom has ${pairs(m.domains, "electron domain")}: ${pairs(m.bondingPairs, "bonding domain")} and ${pairs(m.lonePairs, "lone pair")}. The domains arrange in a ${m.electronGeometry.toLowerCase()} electron geometry, but the molecular shape describes only where the atoms are, so the lone pairs turn it into a ${m.shape.toLowerCase()} shape. Lone pairs repel more strongly than bonding pairs, which is why the bond angle is squeezed below the ideal ${idealAngles[m.domains]}.`;
@@ -149,6 +160,7 @@ export function moleculeCopy(m: MoleculeReference) {
   const faq = [
     { q: `What is the molecular geometry of ${m.formula}?`, a: `${label} has a ${m.shape.toLowerCase()} molecular geometry (VSEPR class ${m.axe}). The central ${m.center} atom has ${pairs(m.bondingPairs, "bonding domain")} and ${pairs(m.lonePairs, "lone pair")}.` },
     { q: `What is the bond angle of ${m.formula}?`, a: `The ${m.center}–${m.outer} bond angle in ${m.formula} is ${m.bondAngle.replace("≈ ", "about ")}.${m.lonePairs ? ` It is smaller than the ideal ${idealAngles[m.domains]} because lone pairs repel more strongly than bonding pairs.` : ""}` },
+    ...(bondLengths[m.formula] ? [{ q: `What is the bond length in ${m.formula}?`, a: `The ${m.center}–${m.outer} bond length in ${m.formula} is about ${bondLengthText(m.formula)!.replace(" · ", " and ")} (1 pm = 10⁻¹² m).${bondLengths[m.formula].pm === undefined ? ` The ${m.shape.toLowerCase()} shape has two kinds of positions, so the axial and equatorial bonds differ in length.` : ""}` }] : []),
     { q: `What is the electron geometry of ${m.formula}?`, a: `${m.formula} has ${pairs(m.domains, "electron domain")} around the central ${m.center} atom, so its electron geometry is ${m.electronGeometry.toLowerCase()}.${m.lonePairs ? ` The molecular shape differs (${m.shape.toLowerCase()}) because lone pairs are not counted as part of the shape.` : " With no lone pairs, the molecular shape is the same."}` },
     ...(m.hybridization ? [{ q: `What is the hybridization of ${m.formula}?`, a: `In the hybridization model, the central ${m.center} atom in ${m.formula} is ${m.hybridization} hybridized because it has ${pairs(m.domains, "electron domain")}.${m.domains > 4 ? " Many chemists now describe expanded-octet bonding without d-orbital hybridization, but sp³d/sp³d² remains the label used in most school courses." : ""}` }] : []),
     { q: `Is ${m.formula} polar or nonpolar?`, a: polarity },

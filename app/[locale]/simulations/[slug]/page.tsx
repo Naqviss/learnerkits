@@ -7,6 +7,7 @@ import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonL
 import { getSimulationCard, getSubjectForSimulation, isVisibleSubjectSlug } from "@/lib/subjects/catalog";
 import { SimulationGuide } from "@/components/seo/SimulationGuide";
 import { getSimulationGuide } from "@/lib/seo/simulation-guides";
+import { getMoleculeKitCopy, moleculeKitSimSlugs } from "@/lib/seo/molecule-kit-content";
 import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
 
 // Keep subject-specific client engines out of the shared route bundle. The server
@@ -89,7 +90,7 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
             : baseSubject.slug === "physics"
               ? <PhysicsActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
               : baseSubject.slug === "chemistry"
-                ? <ChemistryActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+                ? <ChemistryActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation} kitLabel={(moleculeKitSimSlugs as readonly string[]).includes(slug) ? getMoleculeKitCopy(safeLocale).title : undefined}/>
                 : <ConceptLabClient locale={safeLocale} subject={subject} simulation={simulation} copy={{ lab: copy.lab }}/>;
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { molecules } from "@/lib/simulations/chemistry/model";
-import { getMoleculeReference, getVseprClasses, moleculeCopy, moleculeReferences } from "@/lib/seo/molecules";
+import { getMoleculeReference, getVseprClasses, moleculeCopy, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
 
 describe("molecule reference pages", () => {
   it("covers every lab molecule with a real name and a unique URL-safe slug", () => {
@@ -29,5 +29,19 @@ describe("molecule reference pages", () => {
     const faq = moleculeCopy(getMoleculeReference("water-h2o")!).faq;
     expect(faq.map((f) => f.q)).toContain("Is H₂O polar or nonpolar?");
     expect(faq.every((f) => f.a.includes("H₂O") || f.a.includes("Water"))).toBe(true);
+  });
+  it("writes search titles and descriptions with the plain formula people type", () => {
+    expect(moleculeSearchCopy(getMoleculeReference("phosphorus-pentafluoride-pf5")!).title).toBe("PF5 Molecular Geometry: Trigonal Bipyramidal, 90° & 120° (3D)");
+    expect(moleculeSearchCopy(getMoleculeReference("hydrogen-sulfide-h2s")!).description).toContain("H2S (hydrogen sulfide): bent molecular geometry, tetrahedral electron geometry");
+    expect(moleculeSearchCopy(getMoleculeReference("carbon-dioxide-co2")!).description).toContain("linear molecular and electron geometry");
+    expect(moleculeSearchCopy(getMoleculeReference("sulfate-ion-so4")!).title).toMatch(/^SO4 2- /);
+    expect(moleculeSearchCopy(getMoleculeReference("nitrate-ion-no3")!).title).toMatch(/^NO3- /);
+    for (const m of moleculeReferences) {
+      const { title, description } = moleculeSearchCopy(m);
+      expect(title, m.slug).not.toMatch(/[₀-₉⁰¹²³⁴-⁹]/);
+      expect(title.length, title).toBeLessThanOrEqual(64);
+      expect(description.length, description).toBeLessThanOrEqual(160);
+      expect(description.toLowerCase()).toContain("electron geometry");
+    }
   });
 });

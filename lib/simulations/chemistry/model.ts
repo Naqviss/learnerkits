@@ -128,6 +128,39 @@ export const molecules = [
   { formula: "BrF₄⁻", center: "Br", outer: "F", count: 4, lone: 2, angle: 90, shape: "Square planar", order: 1 },
 ];
 export const builderMolecules = [4, 2, 0];
+// Common names shown beside formulas in the lab picker, the 3D stage, and reference pages.
+export const moleculeNames: Record<string, string> = {
+  "CO₂": "Carbon dioxide", "BF₃": "Boron trifluoride", "CH₄": "Methane", "NH₃": "Ammonia", "H₂O": "Water",
+  "CS₂": "Carbon disulfide", "BeF₂": "Beryllium fluoride", "BeCl₂": "Beryllium chloride", "BeBr₂": "Beryllium bromide",
+  "MgCl₂": "Magnesium chloride", "MgBr₂": "Magnesium bromide", "ZnCl₂": "Zinc chloride", "ZnBr₂": "Zinc bromide",
+  "CdCl₂": "Cadmium chloride", "HgCl₂": "Mercury(II) chloride", "N₃⁻": "Azide ion",
+  "BCl₃": "Boron trichloride", "BBr₃": "Boron tribromide", "BI₃": "Boron triiodide", "AlCl₃": "Aluminum chloride",
+  "AlF₃": "Aluminum fluoride", "GaCl₃": "Gallium trichloride", "SO₃": "Sulfur trioxide", "CO₃²⁻": "Carbonate ion",
+  "NO₃⁻": "Nitrate ion", "BO₃³⁻": "Borate ion",
+  "SO₂": "Sulfur dioxide", "O₃": "Ozone", "NO₂⁻": "Nitrite ion", "SnCl₂": "Tin(II) chloride", "SnBr₂": "Tin(II) bromide",
+  "PbCl₂": "Lead(II) chloride", "GeCl₂": "Germanium dichloride", "GeF₂": "Germanium difluoride",
+  "CCl₄": "Carbon tetrachloride", "CF₄": "Carbon tetrafluoride", "CBr₄": "Carbon tetrabromide", "SiH₄": "Silane",
+  "SiCl₄": "Silicon tetrachloride", "SiF₄": "Silicon tetrafluoride", "SiBr₄": "Silicon tetrabromide", "GeH₄": "Germane",
+  "GeCl₄": "Germanium tetrachloride", "GeF₄": "Germanium tetrafluoride", "SnCl₄": "Tin(IV) chloride", "SnBr₄": "Tin(IV) bromide",
+  "TiCl₄": "Titanium tetrachloride", "NH₄⁺": "Ammonium ion", "PO₄³⁻": "Phosphate ion", "SO₄²⁻": "Sulfate ion",
+  "ClO₄⁻": "Perchlorate ion", "BF₄⁻": "Tetrafluoroborate ion", "MnO₄⁻": "Permanganate ion", "CrO₄²⁻": "Chromate ion",
+  "XeO₄": "Xenon tetroxide",
+  "PH₃": "Phosphine", "AsH₃": "Arsine", "SbH₃": "Stibine", "NF₃": "Nitrogen trifluoride", "PF₃": "Phosphorus trifluoride",
+  "PCl₃": "Phosphorus trichloride", "PBr₃": "Phosphorus tribromide", "AsF₃": "Arsenic trifluoride", "AsCl₃": "Arsenic trichloride",
+  "ClO₃⁻": "Chlorate ion", "IO₃⁻": "Iodate ion",
+  "H₂S": "Hydrogen sulfide", "H₂Se": "Hydrogen selenide", "H₂Te": "Hydrogen telluride", "OF₂": "Oxygen difluoride",
+  "SCl₂": "Sulfur dichloride", "SBr₂": "Sulfur dibromide", "SeCl₂": "Selenium dichloride", "TeCl₂": "Tellurium dichloride",
+  "PCl₅": "Phosphorus pentachloride", "PF₅": "Phosphorus pentafluoride", "PBr₅": "Phosphorus pentabromide",
+  "AsF₅": "Arsenic pentafluoride", "SbCl₅": "Antimony pentachloride", "SbF₅": "Antimony pentafluoride", "NbCl₅": "Niobium pentachloride",
+  "SF₄": "Sulfur tetrafluoride", "SeF₄": "Selenium tetrafluoride", "TeF₄": "Tellurium tetrafluoride",
+  "ClF₃": "Chlorine trifluoride", "BrF₃": "Bromine trifluoride", "IF₃": "Iodine trifluoride",
+  "XeF₂": "Xenon difluoride", "I₃⁻": "Triiodide ion", "ICl₂⁻": "Dichloroiodate ion",
+  "SF₆": "Sulfur hexafluoride", "SeF₆": "Selenium hexafluoride", "TeF₆": "Tellurium hexafluoride", "MoF₆": "Molybdenum hexafluoride",
+  "WF₆": "Tungsten hexafluoride", "UF₆": "Uranium hexafluoride", "PF₆⁻": "Hexafluorophosphate ion", "SiF₆²⁻": "Hexafluorosilicate ion",
+  "BrF₅": "Bromine pentafluoride", "IF₅": "Iodine pentafluoride", "ClF₅": "Chlorine pentafluoride",
+  "XeF₄": "Xenon tetrafluoride", "ICl₄⁻": "Tetrachloroiodate ion", "BrF₄⁻": "Tetrafluorobromate ion",
+};
+export const moleculeName = (formula: string) => moleculeNames[formula] ?? formula;
 const moleculeFormulas = molecules.map(m => m.formula);
 // Word-only color descriptions for the legend (matches MolecularScene's hex swatches).
 export const elementColorNames: Record<string, string> = {
@@ -141,7 +174,7 @@ export const activities: Activity[] = [
   { slug: "gas-law-lab", instrument: "Pressure chamber", mission: "Tune the chamber to 150 ± 3 kPa.", hint: "Compress the gas or warm it to increase pressure. Try 1 mol at 300 K in about 16.6 L.", science: "PV = nRT. Ideal gas; R = 8.314 kPa·L·mol⁻¹·K⁻¹. Particle count is illustrative.", controls: [slider("volume", "Chamber volume", 5, 40, .1, 25, "L"), slider("temperature", "Temperature", 200, 600, 1, 300, "K"), slider("moles", "Gas amount", .2, 2, .1, 1, "mol")] },
   { slug: "reaction-rate-lab", instrument: "Kinetics reactor", mission: "Reach at least 80% conversion within 20 simulated seconds.", hint: "Increase temperature or use a catalyst, then restart the reaction. Conditions are locked during a run.", science: "A → B, first-order model: [A] = [A]₀e⁻ᵏᵗ. k = 0.035 exp[(Eₐ/R)(1/298 − 1/T)] s⁻¹, Eₐ = 40 kJ/mol. Catalyst multiplies k by 3 in this teaching model.", controls: [slider("temperature", "Reactor temperature", 280, 340, 1, 298, "K"), slider("concentration", "Initial A concentration", .1, 2, .1, 1, "mol/L"), choice("catalyst", "Catalyst", ["Absent", "Present"])] },
   { slug: "molecular-geometry-3d", instrument: "Molecular observatory", mission: "Find the bent molecule with two lone pairs and identify its shape.", hint: "Choose water, inspect the lone pairs, and select Bent. Drag the model to inspect it from another angle.", science: "VSEPR models electron-domain repulsion. Displayed bond angles are approximate molecular values. Ball sizes and bond lengths are illustrative.", controls: [choice("molecule", "Inspect molecule", moleculeFormulas), choice("answer", "Identify its shape", ["Choose a shape", "Linear", "Trigonal planar", "Tetrahedral", "Trigonal pyramidal", "Bent", "Trigonal bipyramidal", "Seesaw", "T-shaped", "Octahedral", "Square pyramidal", "Square planar"])] },
-  { slug: "molecule-builder-3d", instrument: "Molecule workshop", mission: "Build the displayed target by attaching the correct atoms and bond orders.", hint: "Water needs two single O–H bonds; methane four single C–H bonds; carbon dioxide two double C=O bonds. Select a socket to remove a bond.", science: "This guided builder uses common neutral valences: H = 1, O = 2, C = 4. It builds three specific target molecules, not arbitrary chemical structures.", controls: [choice("target", "Target molecule", ["H₂O · water", "CH₄ · methane", "CO₂ · carbon dioxide"])] },
+  { slug: "molecule-builder-3d", instrument: "Molecule workshop", mission: "Build the displayed target by attaching the correct atoms and bond orders.", hint: "Water needs two single O–H bonds; methane four single C–H bonds; carbon dioxide two double C=O bonds. Select a socket to remove a bond.", science: "This guided builder uses common neutral valences: H = 1, O = 2, C = 4. It builds three specific target molecules, not arbitrary chemical structures.", controls: [choice("target", "Target molecule", ["H₂O (Water)", "CH₄ (Methane)", "CO₂ (Carbon dioxide)"])] },
   { slug: "chemical-bonding", instrument: "Electron exchange", mission: "Classify the bond in each of three pairs: NaCl, H₂, and HCl.", hint: "NaCl forms ions; H₂ shares equally; HCl shares unequally. Move through all three pairs and check each answer.", science: "Bond character is a continuum. These examples illustrate ionic, nonpolar covalent, and polar covalent bonding; NaCl represents a formula unit of an extended lattice.", controls: [choice("pair", "Atom pair", ["Na + Cl", "H + H", "H + Cl"]), choice("answer", "Bond type", ["Choose a bond", "Ionic", "Nonpolar covalent", "Polar covalent"])] },
   { slug: "acid-base-ph", instrument: "pH analysis bench", mission: "Prepare a strong-acid solution at pH 3.00 ± 0.10.", hint: "Select HCl and set log₁₀ concentration to −3. Compare with acetic acid at the same concentration.", science: "At 25 °C, Kᵥ = 10⁻¹⁴. HCl/NaOH fully dissociate. Acetic acid uses Kₐ = 1.8 × 10⁻⁵ and charge balance including water. Indicator colors are illustrative.", controls: [choice("solution", "Solution", ["HCl · strong acid", "CH₃COOH · weak acid", "NaOH · strong base"]), slider("logC", "log₁₀ concentration", -7, -1, .1, -2, "mol/L exponent")] },
   { slug: "neutralization-station", instrument: "Neutralization bench", mission: "Neutralize 25 mL of 0.100 M HCl with 0.100 M NaOH. Stop at pH 6–8.", hint: "Add 5 mL portions until near 25 mL, then use 0.05 mL drops. Overshot? Reset the experiment.", science: "H⁺ + OH⁻ → H₂O. A 1:1 strong acid–base reaction at 25 °C. Volume is additive; the pH calculation includes water autoionization.", controls: [] },

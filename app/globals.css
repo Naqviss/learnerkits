@@ -678,3 +678,5 @@ body{background:radial-gradient(circle at 8% 4%,rgba(132,177,255,.22),transparen
 @media(max-width:900px){.simulationGuideMore{grid-template-columns:1fr}}
 /* Keep the navigation usable on compact phones, including full-screen lab entry pages. */
 @media(max-width:360px){.navInner{gap:7px;padding-inline:6px}.brandLogo{width:100px}.navActions{gap:5px}.nav .langSelect{max-width:78px;padding-inline:7px}.nav .themeToggle{width:34px;height:36px}.mobileNav summary{width:36px;height:36px;padding:8px}}
+.moleculeKitGroup{margin-top:22px}.moleculeKitGroup h3{margin:0;font-size:1.05rem}.moleculeKitGroup h3 span{margin-left:8px;font-size:.8rem;font-weight:600;color:var(--muted)}.moleculeKitGroup .moleculeKitChart{margin-top:10px}.moleculeKitGroup .moleculeKitChart a{font-size:.85rem;padding:6px 11px}.moleculeKitChart a:hover{border-color:var(--accent);color:var(--accent)}
+.moleculeSource{margin:12px 0 0;font-size:.8rem;color:var(--muted)}.moleculeSource a{color:var(--accent)}

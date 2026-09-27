@@ -3,8 +3,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, siteName, siteUrl } from "@/lib/seo/metadata";
-import { getMoleculeReference, getMoleculesWithShape, moleculeCopy, moleculeReferences } from "@/lib/seo/molecules";
+import { getMoleculeReference, getMoleculesWithShape, moleculeCopy, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
 import { MoleculeViewer } from "@/components/seo/MoleculeViewer";
+import { bondLengthText, bondLengths } from "@/lib/simulations/chemistry/bondLengths";
 
 export function generateStaticParams() {
   return moleculeReferences.map((molecule) => ({ locale: "en", slug: molecule.slug }));
@@ -14,15 +15,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: raw, slug } = await params;
   const molecule = getMoleculeReference(slug);
   if (!molecule || !isLocale(raw) || raw !== "en") return {};
-  const { lead } = moleculeCopy(molecule);
+  const { title, description } = moleculeSearchCopy(molecule);
   return localizedMetadata(
     raw,
     `/molecules/${molecule.slug}`,
-    `${molecule.formula} Molecular Geometry, Shape & Bond Angle (3D)`,
-    `${lead} Rotate the free interactive 3D model.`,
+    title,
+    description,
     {
       keywords: [
-        `${molecule.formula} molecular geometry`, `${molecule.asciiFormula} molecular geometry`, `${molecule.name.toLowerCase()} shape`,
+        `${molecule.formula} molecular geometry`, `${molecule.asciiFormula} molecular geometry`, `${molecule.asciiFormula} electron geometry`, `${molecule.asciiFormula} shape`, `${molecule.name.toLowerCase()} shape`,
         `${molecule.asciiFormula} bond angle`, `${molecule.asciiFormula} lewis structure shape`, `is ${molecule.asciiFormula} polar`,
         `${molecule.asciiFormula} hybridization`, `${molecule.asciiFormula} 3D model`, "VSEPR",
       ],
@@ -43,6 +44,7 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
     ["Molecular geometry", molecule.shape],
     ["Electron geometry", molecule.electronGeometry],
     ["Bond angle", molecule.bondAngle],
+    ...(bondLengthText(molecule.formula) ? [[`${molecule.center}–${molecule.outer} bond length`, bondLengthText(molecule.formula)!] as [string, string]] : []),
     ["VSEPR notation", molecule.axe],
     ["Central atom", molecule.center],
     ["Bonding domains", String(molecule.bondingPairs)],
@@ -81,8 +83,8 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faq)} />
     <article>
       <header className="topicGuideHero">
-        <div className="eyebrow"><Link href="/en/molecules">VSEPR shapes chart</Link> · {molecule.name}</div>
-        <h1>{molecule.formula} molecular geometry</h1>
+        <div className="eyebrow"><Link href="/en/molecules">VSEPR shapes chart</Link> · {molecule.name} ({molecule.asciiFormula})</div>
+        <h1>{molecule.formula} molecular geometry and shape</h1>
         <p className="topicGuideLead">{copy.lead}</p>
         <div className="topicGuideHeroActions">
           <Link className="button primary" href={`/en/simulations/molecular-geometry-3d?molecule=${molecule.slug}`}>Test yourself in the 3D lab</Link>
@@ -95,6 +97,7 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
           <span className="eyebrow">Quick facts</span>
           <h2>{molecule.name} at a glance</h2>
           <dl className="moleculeFacts">{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
+          {bondLengths[molecule.formula] && <p className="moleculeSource">Bond length source: <a href={bondLengths[molecule.formula].source} rel="noopener">{new URL(bondLengths[molecule.formula].source).hostname.replace(/^www\./, "")}</a></p>}
         </section>
         <section className="topicGuideSection">
           <span className="eyebrow">Explain the shape</span>
