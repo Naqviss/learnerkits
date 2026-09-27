@@ -161,9 +161,85 @@ export function moleculeCopy(m: MoleculeReference) {
     { q: `What is the molecular geometry of ${m.formula}?`, a: `${label} has a ${m.shape.toLowerCase()} molecular geometry (VSEPR class ${m.axe}). The central ${m.center} atom has ${pairs(m.bondingPairs, "bonding domain")} and ${pairs(m.lonePairs, "lone pair")}.` },
     { q: `What is the bond angle of ${m.formula}?`, a: `The ${m.center}–${m.outer} bond angle in ${m.formula} is ${m.bondAngle.replace("≈ ", "about ")}.${m.lonePairs ? ` It is smaller than the ideal ${idealAngles[m.domains]} because lone pairs repel more strongly than bonding pairs.` : ""}` },
     ...(bondLengths[m.formula] ? [{ q: `What is the bond length in ${m.formula}?`, a: `The ${m.center}–${m.outer} bond length in ${m.formula} is about ${bondLengthText(m.formula)!.replace(" · ", " and ")} (1 pm = 10⁻¹² m).${bondLengths[m.formula].pm === undefined ? ` The ${m.shape.toLowerCase()} shape has two kinds of positions, so the axial and equatorial bonds differ in length.` : ""}` }] : []),
+    ...(lewisSteps(m) ? [{ q: `How many valence electrons does ${m.formula} have?`, a: `${m.formula} has ${lewisSteps(m)!.total} valence electrons: ${lewisSteps(m)!.steps[0].replace(/^Count the valence electrons\. /, "").replace(/ That gives .*$/, "")} In the Lewis structure they form ${pairs(m.bondingPairs, "bond")} to ${m.center} and leave ${pairs(m.lonePairs, "lone pair")} on the central atom.` }] : []),
     { q: `What is the electron geometry of ${m.formula}?`, a: `${m.formula} has ${pairs(m.domains, "electron domain")} around the central ${m.center} atom, so its electron geometry is ${m.electronGeometry.toLowerCase()}.${m.lonePairs ? ` The molecular shape differs (${m.shape.toLowerCase()}) because lone pairs are not counted as part of the shape.` : " With no lone pairs, the molecular shape is the same."}` },
     ...(m.hybridization ? [{ q: `What is the hybridization of ${m.formula}?`, a: `In the hybridization model, the central ${m.center} atom in ${m.formula} is ${m.hybridization} hybridized because it has ${pairs(m.domains, "electron domain")}.${m.domains > 4 ? " Many chemists now describe expanded-octet bonding without d-orbital hybridization, but sp³d/sp³d² remains the label used in most school courses." : ""}` }] : []),
     { q: `Is ${m.formula} polar or nonpolar?`, a: polarity },
   ];
   return { label, lead, why, polarity, faq };
 }
+
+// Valence electrons for main-group central/outer atoms. Transition-metal and actinide centers are
+// left out: a simple octet count does not describe their bonding.
+const valenceElectrons: Record<string, number> = {
+  H: 1, Be: 2, B: 3, C: 4, N: 5, O: 6, F: 7, Mg: 2, Al: 3, Si: 4, P: 5, S: 6, Cl: 7, Zn: 2, Ga: 3, Ge: 4, As: 5,
+  Se: 6, Br: 7, Cd: 2, Sn: 4, Sb: 5, Te: 6, I: 7, Xe: 8, Hg: 2, Pb: 4,
+};
+const groupOf: Record<string, number> = {
+  H: 1, Be: 2, Mg: 2, Zn: 12, Cd: 12, Hg: 12, B: 13, Al: 13, Ga: 13, C: 14, Si: 14, Ge: 14, Sn: 14, Pb: 14,
+  N: 15, P: 15, As: 15, Sb: 15, O: 16, S: 16, Se: 16, Te: 16, F: 17, Cl: 17, Br: 17, I: 17, Xe: 18,
+};
+const superDigits = "⁰¹²³⁴⁵⁶⁷⁸⁹";
+function chargeOf(formula: string) {
+  const match = formula.match(/([⁰¹²³⁴⁵⁶⁷⁸⁹]*)([⁺⁻])$/);
+  if (!match) return 0;
+  const size = match[1] ? Number([...match[1]].map((d) => superDigits.indexOf(d)).join("")) : 1;
+  return match[2] === "⁻" ? -size : size;
+}
+const electrons = (n: number) => `${n} electron${n === 1 ? "" : "s"}`;
+
+// Step-by-step valence-electron bookkeeping that reproduces the lone pairs used by the model.
+// Returns undefined when the simple count does not match (so the page never shows wrong arithmetic).
+export function lewisSteps(m: MoleculeReference) {
+  const center = valenceElectrons[m.center], outer = valenceElectrons[m.outer];
+  if (center === undefined || outer === undefined) return undefined;
+  const order = molecules[m.index].order, charge = chargeOf(m.formula);
+  const total = center + m.bondingPairs * outer - charge;
+  const bondElectrons = 2 * m.bondingPairs * order;
+  const outerLone = m.outer === "H" ? 0 : 8 - 2 * order;
+  const remaining = total - bondElectrons - m.bondingPairs * outerLone;
+  if (remaining !== 2 * m.lonePairs || outerLone < 0) return undefined;
+  const bondWord = order === 2 ? "double bond" : "single bond";
+  const around = bondElectrons + 2 * m.lonePairs;
+  const steps = [
+    `Count the valence electrons. ${m.center} has ${center}, and ${m.bondingPairs === 1 ? "the" : `each of the ${m.bondingPairs}`} ${m.outer} atom${m.bondingPairs === 1 ? " has" : "s has"} ${outer} (${m.bondingPairs * outer} in total).${charge ? ` ${charge < 0 ? `Add ${-charge}` : `Subtract ${charge}`} for the ${Math.abs(charge) > 1 ? Math.abs(charge) : ""}${charge < 0 ? "−" : "+"} charge.` : ""} That gives ${electrons(total)}.`,
+    `Put ${m.center} in the center and join each ${m.outer} with a ${bondWord}. ${m.bondingPairs} ${bondWord}${m.bondingPairs === 1 ? "" : "s"} use ${bondElectrons}, leaving ${total - bondElectrons}.`,
+    m.outer === "H"
+      ? total - bondElectrons ? `Each H is complete with one bond (2 electrons), so the remaining ${electrons(total - bondElectrons)} go to ${m.center}.` : "Each H is complete with one bond (2 electrons), and every electron has now been used."
+      : `Complete each ${m.outer} with ${outerLone / 2} lone pair${outerLone === 2 ? "" : "s"} (${outerLone} electrons). That uses ${m.bondingPairs * outerLone}, leaving ${remaining}.`,
+    remaining ? `Place the last ${electrons(remaining)} on ${m.center} as ${pairs(m.lonePairs, "lone pair")}.` : `No electrons remain, so ${m.center} has no lone pairs.`,
+    `Check: ${m.center} is surrounded by ${around} electrons${around < 8 ? `, fewer than an octet. That is normal for ${m.center}, which has only ${center} valence electrons of its own.` : around > 8 ? `, more than an octet. Atoms from period 3 and below, such as ${m.center}, can hold more than eight.` : ", a full octet."} Its ${pairs(m.domains, "electron domain")} give the ${m.shape.toLowerCase()} shape.`,
+  ];
+  const resonance = m.outer === "O" && order === 1 && m.bondingPairs > 1
+    ? `This single-bond structure keeps the domain count simple. In the real ${m.isIon ? "ion" : "molecule"} the bonds are equivalent and partly double (resonance), which changes bond lengths but not the shape.`
+    : undefined;
+  return { total, steps, resonance };
+}
+
+// Molecules with the same VSEPR class, the same outer atom, and a central atom from the same group,
+// ordered down the group, so trends in angle and bond length can be compared.
+export function moleculeFamily(m: MoleculeReference) {
+  const group = groupOf[m.center];
+  if (group === undefined) return [];
+  return moleculeReferences
+    .filter((other) => other.axe === m.axe && other.shape === m.shape && other.outer === m.outer && groupOf[other.center] === group && chargeOf(other.formula) === chargeOf(m.formula))
+    .sort((a, b) => (valenceElectrons[a.center] ?? 0) - (valenceElectrons[b.center] ?? 0) || a.index - b.index);
+}
+
+// One common misconception per VSEPR class, explained for that shape.
+const classMistakes: Record<string, string> = {
+  "AX₂|Linear": "A common mistake is counting a double bond as two electron domains. Each bond counts once, whether it is single, double, or triple, so two bonded atoms and no lone pairs on the center always give a straight line at 180°.",
+  "AX₃|Trigonal planar": "A common mistake is assuming every AX₃ molecule is pyramidal. With no lone pair on the central atom, all four atoms lie in one flat plane at 120°. Only a lone pair, as in ammonia, pushes the three bonds down into a pyramid.",
+  "AX₂E|Bent": "A common mistake is calling this shape linear because it has only two bonds. The lone pair still takes up one of the three electron domains, so the two bonds are pushed together to a little under 120°.",
+  "AX₄|Tetrahedral": "A common mistake is reading the flat Lewis drawing literally and giving 90° angles. In three dimensions the four bonds point to the corners of a tetrahedron, 109.5° apart, which is as far apart as four domains can get.",
+  "AX₃E|Trigonal pyramidal": "A common mistake is giving the electron geometry (tetrahedral) as the answer. The lone pair counts toward the electron geometry, but the molecular shape describes only where the atoms are, and those make a pyramid.",
+  "AX₂E₂|Bent": "A common mistake is expecting 180° because there are two bonds, or exactly 109.5° because there are four domains. Two lone pairs repel the bonding pairs more strongly and squeeze the angle below the tetrahedral value.",
+  "AX₅|Trigonal bipyramidal": "A common mistake is treating all five bonds as identical. Three equatorial bonds lie 120° apart in a plane, while two axial bonds sit at 90° to that plane. The positions differ, and the axial bonds are often slightly longer.",
+  "AX₄E|Seesaw": "A common mistake is putting the lone pair in an axial position. A lone pair has more room in an equatorial position, with two neighbors at 90° instead of three, so it goes there and the four atoms form a seesaw.",
+  "AX₃E₂|T-shaped": "A common mistake is predicting trigonal planar because there are three bonds. With five domains, the two lone pairs take equatorial positions, leaving three atoms in a T with angles slightly under 90°.",
+  "AX₂E₃|Linear": "A common mistake is expecting a bent shape because the center has lone pairs. Three lone pairs spread evenly around the equator balance one another, so the two bonded atoms sit directly opposite each other at 180°.",
+  "AX₆|Octahedral": "A common mistake is picturing six bonds as a flat hexagon. The six bonds point along the positive and negative x, y, and z directions, so every neighboring pair of bonds meets at 90°.",
+  "AX₅E|Square pyramidal": "A common mistake is calling this shape trigonal bipyramidal because there are five bonds. There are six electron domains, and one is a lone pair, so the atoms form a square base with a single atom at the apex.",
+  "AX₄E₂|Square planar": "A common mistake is predicting tetrahedral because there are four bonds. The two lone pairs sit on opposite sides of the central atom, leaving the four bonded atoms in a flat square at 90°.",
+};
+export const classMistake = (m: MoleculeReference) => classMistakes[`${m.axe}|${m.shape}`];

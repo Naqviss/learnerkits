@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, siteName, siteUrl } from "@/lib/seo/metadata";
-import { getMoleculeReference, getMoleculesWithShape, moleculeCopy, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
+import { classMistake, getMoleculeReference, getMoleculesWithShape, lewisSteps, moleculeCopy, moleculeFamily, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
+import { moleculeAbout } from "@/lib/seo/molecule-about";
 import { MoleculeViewer } from "@/components/seo/MoleculeViewer";
 import { bondLengthText, bondLengths } from "@/lib/simulations/chemistry/bondLengths";
 
@@ -40,6 +41,11 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
   const path = `/molecules/${molecule.slug}`;
   const copy = moleculeCopy(molecule);
   const sameShape = getMoleculesWithShape(molecule.shape, molecule.axe).filter((m) => m.slug !== molecule.slug).slice(0, 10);
+  const about = moleculeAbout[molecule.formula];
+  const lewis = lewisSteps(molecule);
+  const family = moleculeFamily(molecule);
+  const mistake = classMistake(molecule);
+  const stateSentence = about && (about.stateNote ? `${molecule.formula} is ${about.stateNote}.` : about.state === "unstable" ? `${molecule.formula} is not stable at room temperature.` : about.state === "ion" ? `${molecule.formula} is a polyatomic ion, found in salts and solutions.` : `${molecule.formula} is a ${about.state} at room temperature.`);
   const facts: [string, string][] = [
     ["Molecular geometry", molecule.shape],
     ["Electron geometry", molecule.electronGeometry],
@@ -51,6 +57,8 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
     ["Lone pairs on central atom", String(molecule.lonePairs)],
     ...(molecule.hybridization ? [["Hybridization", molecule.hybridization] as [string, string]] : []),
     ["Polarity", molecule.polarity === "Ion" ? "Polyatomic ion (net charge)" : molecule.polarity],
+    ...(lewis ? [["Valence electrons", String(lewis.total)] as [string, string]] : []),
+    ...(about && about.state !== "ion" ? [["State at room temperature", about.stateNote ? "Solid or liquid (melts near 17 °C)" : about.state === "unstable" ? "Unstable (not isolable)" : about.state[0].toUpperCase() + about.state.slice(1)] as [string, string]] : []),
   ];
 
   const resource = {
@@ -99,11 +107,23 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
           <dl className="moleculeFacts">{facts.map(([term, value]) => <div key={term}><dt>{term}</dt><dd>{value}</dd></div>)}</dl>
           {bondLengths[molecule.formula] && <p className="moleculeSource">Bond length source: <a href={bondLengths[molecule.formula].source} rel="noopener">{new URL(bondLengths[molecule.formula].source).hostname.replace(/^www\./, "")}</a></p>}
         </section>
+        {about && <section className="topicGuideSection">
+          <span className="eyebrow">Background</span>
+          <h2>What is {molecule.name.toLowerCase()}?</h2>
+          <p>{about.about}</p>
+          <p className="moleculeSource">{stateSentence} Source: <a href={about.source} rel="noopener">{new URL(about.source).hostname.replace(/^www\./, "")}</a></p>
+        </section>}
         <section className="topicGuideSection">
           <span className="eyebrow">Explain the shape</span>
           <h2>Why is {molecule.formula} {molecule.shape.toLowerCase()}?</h2>
           <p>{copy.why}</p>
         </section>
+        {lewis && <section className="topicGuideSection">
+          <span className="eyebrow">Lewis structure</span>
+          <h2>{molecule.formula} Lewis structure, step by step</h2>
+          <ol>{lewis.steps.map((step) => <li key={step}>{step}</li>)}</ol>
+          {lewis.resonance && <p>{lewis.resonance}</p>}
+        </section>}
         <section className="topicGuideSection">
           <span className="eyebrow">Polarity</span>
           <h2>Is {molecule.formula} polar or nonpolar?</h2>
@@ -120,6 +140,17 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
             <li>Describe only the positions of the atoms to get the molecular shape: {molecule.shape.toLowerCase()} ({molecule.axe}).</li>
           </ol>
         </section>
+        {family.length > 1 && <section className="topicGuideSection">
+          <span className="eyebrow">Trend</span>
+          <h2>How {molecule.formula} compares with its family</h2>
+          <p>These {molecule.shape.toLowerCase()} {molecule.isIon ? "ions" : "molecules"} share the same VSEPR class and outer atom, with central atoms from the same group of the periodic table. Moving down the group, the central atom gets larger, which usually lengthens the bonds{family.some((m) => m.lonePairs) ? " and, with lone pairs present, often narrows the angle" : ""}.</p>
+          <ul className="moleculeFamily">{family.map((m) => <li key={m.slug}>{m.slug === molecule.slug ? <b>{m.formula} {m.name}</b> : <Link href={`/en/molecules/${m.slug}`}><b>{m.formula}</b> {m.name}</Link>}<span>{m.bondAngle.replace("≈ ", "about ").replace(/ \(.*\)$/, "")}{bondLengthText(m.formula) ? ` · ${bondLengthText(m.formula)}` : ""}</span></li>)}</ul>
+        </section>}
+        {mistake && <section className="topicGuideSection">
+          <span className="eyebrow">Avoid this</span>
+          <h2>A common mistake with {molecule.shape.toLowerCase()} shapes</h2>
+          <p>{mistake}</p>
+        </section>}
         {sameShape.length > 0 && <section className="topicGuideSection">
           <span className="eyebrow">Compare</span>
           <h2>Other {molecule.shape.toLowerCase()} molecules ({molecule.axe})</h2>

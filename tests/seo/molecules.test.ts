@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { molecules } from "@/lib/simulations/chemistry/model";
-import { getMoleculeReference, getVseprClasses, moleculeCopy, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
+import { classMistake, getMoleculeReference, getVseprClasses, lewisSteps, moleculeCopy, moleculeFamily, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
+import { moleculeAbout } from "@/lib/seo/molecule-about";
+import { bondLengths } from "@/lib/simulations/chemistry/bondLengths";
 
 describe("molecule reference pages", () => {
   it("covers every lab molecule with a real name and a unique URL-safe slug", () => {
@@ -43,5 +45,23 @@ describe("molecule reference pages", () => {
       expect(description.length, description).toBeLessThanOrEqual(160);
       expect(description.toLowerCase()).toContain("electron geometry");
     }
+  });
+  it("adds sourced background, Lewis bookkeeping, family trends, and a class-specific mistake", () => {
+    expect(Object.keys(moleculeAbout).length).toBeGreaterThanOrEqual(100);
+    for (const [formula, entry] of Object.entries(moleculeAbout)) {
+      expect(moleculeReferences.some((m) => m.formula === formula), formula).toBe(true);
+      expect(entry.source).toMatch(/^https:\/\//);
+      expect(entry.about.split(/\s+/).length, formula).toBeGreaterThanOrEqual(70);
+    }
+    for (const [formula, entry] of Object.entries(bondLengths)) {
+      expect(moleculeReferences.some((m) => m.formula === formula), formula).toBe(true);
+      expect(entry.source).toMatch(/^https:\/\//);
+    }
+    expect(lewisSteps(getMoleculeReference("water-h2o")!)?.total).toBe(8);
+    expect(lewisSteps(getMoleculeReference("sulfate-ion-so4")!)?.total).toBe(32);
+    expect(lewisSteps(getMoleculeReference("xenon-tetrafluoride-xef4")!)?.total).toBe(36);
+    expect(lewisSteps(getMoleculeReference("permanganate-ion-mno4")!)).toBeUndefined();
+    expect(moleculeFamily(getMoleculeReference("water-h2o")!).map((m) => m.formula)).toEqual(["H₂O", "H₂S", "H₂Se", "H₂Te"]);
+    expect(moleculeReferences.every((m) => classMistake(m))).toBe(true);
   });
 });
