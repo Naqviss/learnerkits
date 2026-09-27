@@ -13,7 +13,7 @@ export function generateStaticParams() { return [{ locale: "en" }]; }
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   if (locale !== "en") return {};
-  const metadata = localizedMetadata("en", "/articles", "Science Learning Articles: Educational Technology & AI", "Explore educational technology and AI in education: science simulations, virtual labs, self-study, visual explanations, and digital science notebooks.", { englishOnly: true });
+  const metadata = localizedMetadata("en", "/articles", "Science Learning Articles: Concepts, Virtual Labs & AI", "Science concepts explained with experiments, plus guides to virtual labs, AI in education, self-study, and digital science notebooks for students and teachers.", { englishOnly: true });
   const image = articleImages[articles[0].slug];
   return { ...metadata, openGraph: { ...metadata.openGraph, images: [{ url: `${siteUrl}${image.socialSrc}`, width: 1200, height: 630, type: "image/webp", alt: image.alt }] }, twitter: { ...metadata.twitter, card: "summary_large_image", images: [{ url: `${siteUrl}${image.socialSrc}`, alt: image.alt }] } };
 }
@@ -31,7 +31,7 @@ export default async function ArticlesPage({ params }: { params: Promise<{ local
     <header className={styles.indexHero}>
       <span className="eyebrow">The learning notebook · Students & teachers</span>
       <h1>Better questions.<br />Deeper science learning.</h1>
-      <p>Practical articles on educational technology and AI in education. Explore virtual labs, build better study habits, and turn an idea into an experiment. Read, make a prediction, then put it to the test.</p>
+      <p>Science concepts explained with experiments, plus practical articles on educational technology and AI in education. Explore virtual labs, build better study habits, and turn an idea into an experiment. Read, make a prediction, then put it to the test.</p>
     </header>
     <ArticleFilter allLabel="All articles" categories={articleCategories.map(({ id, name }) => ({ id, name }))} categoryOf={articles.map((article) => articleCategories.find((category) => category.name === article.category)?.id ?? "")}>
       {articles.map((article) => <ArticleCard key={article.slug} article={article} readingMinutes={article.readingMinutes} headingLevel={2} />)}

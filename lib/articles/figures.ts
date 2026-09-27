@@ -1,6 +1,18 @@
 // Original explanatory diagrams. Their values are repeated in the surrounding
 // article text so that the scientific information is accessible without images.
 export const articleFigures = {
+  "moon-phase-geometry": {
+    title: "Same half lit, different view from Earth",
+    file: "moon-phase-geometry",
+    alt: "Five Moon positions with sunlight from the left: at 0° new moon 0% lit, 45° waxing crescent about 15%, 90° first quarter 50%, 135° waxing gibbous about 85%, and 180° full moon 100%.",
+    caption: "Lit fraction = (1 − cos θ) ÷ 2 in a simple coplanar model; the view shown is from the Northern Hemisphere. Sizes and distances are not to scale.",
+  },
+  "carbon-stock-flow": {
+    title: "CO₂ is a stock; emissions are a flow",
+    file: "carbon-stock-flow",
+    alt: "Two bathtub diagrams. Left: 38 GtCO₂ per year flows in while land removes 9 and ocean 10, so the net +19 raises the atmospheric level. Right: 19 in and 19 out keeps the level steady at the start.",
+    caption: "Illustrative values from the Carbon Cycle Simulator's starting settings. Real sinks change over time; this is a teaching model, not a projection.",
+  },
   "force-comparison": {
     title: "Same net force, different mass",
     file: "same-net-force-different-mass",

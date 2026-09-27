@@ -12,8 +12,18 @@ import { labComparison } from "./content/lab-comparison";
 import { selfStudy } from "./content/self-study";
 import { visualLearning } from "./content/visual-learning";
 import { scienceNotebook } from "./content/science-notebook";
+import { virtualVsRealLabs } from "./content/virtual-vs-real-labs";
+import { learningTools } from "./content/learning-tools";
+import { physicsWithoutFormulas } from "./content/physics-without-formulas";
+import { moonPhases } from "./content/moon-phases";
+import { climateExperiments } from "./content/climate-experiments";
 
 const bodies: Record<ArticleSlug, string> = {
+  "virtual-labs-vs-real-labs-what-students-learn": virtualVsRealLabs,
+  "ai-tutor-vs-teacher-vs-textbook-vs-simulation": learningTools,
+  "learn-physics-without-memorizing-formulas": physicsWithoutFormulas,
+  "why-does-the-moon-change-shape": moonPhases,
+  "climate-change-explained-interactive-experiments": climateExperiments,
   "what-are-interactive-learning-simulations": interactiveLearning,
   "how-virtual-science-labs-work": virtualLabs,
   "virtual-labs-vs-traditional-labs": labComparison,

@@ -77,3 +77,26 @@
 .cardImage{aspect-ratio:16/9;object-fit:cover;margin-bottom:12px}
 .hero{padding-bottom:16px;margin-bottom:20px}
 .hero h1{margin:8px 0 12px}
+/* Filter chips and the card/list layout toggle share one toolbar row. */
+.toolbar{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px 20px;margin-bottom:18px}
+.toolbar .categoryNav{margin-bottom:0}
+.viewToggle{display:inline-flex;flex-shrink:0;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.viewToggle button{display:inline-flex;align-items:center;gap:7px;min-height:32px;padding:0 13px;border:0;border-radius:999px;background:transparent;color:var(--muted);font:inherit;font-size:.85rem;font-weight:700;cursor:pointer;transition:background .15s ease,color .15s ease}
+.viewToggle button:hover{color:var(--accent)}
+.viewToggle button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+.viewToggle button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.viewToggle svg{width:15px;height:15px;fill:currentColor}
+/* List view: one column of horizontal rows with a thumbnail on the left. */
+.grid.list{grid-template-columns:1fr;gap:12px}
+.list .card{display:grid;grid-template-columns:240px minmax(0,1fr);column-gap:22px;align-content:start;padding:14px}
+.list .card>*{grid-column:2;justify-self:start;order:2}
+/* The category tag follows the title in list rows. */
+.list .card>h2,.list .card>h3{order:1}
+.list .card>.cardImage{order:0}
+.list .card>.eyebrow{margin-bottom:6px}
+.list .card>.cardImage{grid-column:1;grid-row:1 / span 5;margin:0;align-self:start}
+.list .card h2,.list .card h3{font-size:1.2rem;margin:4px 0 6px}
+.list .card p{-webkit-line-clamp:2;margin-bottom:8px}
+.list .cardMeta{margin:0 0 6px}
+@media(max-width:700px){.list .card{grid-template-columns:120px minmax(0,1fr);column-gap:14px;padding:12px}.list .card>.cardImage{aspect-ratio:1/1}.list .card p{display:none}.list .card h2,.list .card h3{font-size:1rem}}
+@media(max-width:560px){.viewToggle button span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.viewToggle button{padding:0 11px}}
