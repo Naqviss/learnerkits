@@ -14,7 +14,7 @@ export const seeded = (n: number) => {
 export function volcanoHeight(x: number, z: number) {
   const r = Math.hypot(x, z), a = Math.atan2(z, x);
   if (r < 1.25) return 4.45 + 1.4 * (r / 1.25) ** 2;
-  const flank = 5.85 * Math.exp(-((r - 1.25) / 4.6) ** 1.15);
+  const flank = 5.85 * Math.exp(-(((r - 1.25) / 4.6) ** 1.15));
   const ridges = Math.sin(Math.min(1, (r - 1.25) / 2) * Math.PI / 2)
     * Math.exp(-r / 9) * (.42 * Math.sin(a * 11 + r * .27) + .19 * Math.sin(a * 23 - r * .5));
   const foothills = clamp((r - 12) / 15) * (.25 + .22 * Math.sin(x * .3) * Math.cos(z * .25));
