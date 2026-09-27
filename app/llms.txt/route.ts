@@ -39,6 +39,7 @@ LearnerKits is an education platform with interactive labs, topic guides, and pr
 - [Science learning articles](${siteUrl}/en/articles)
 - [About](${siteUrl}/en/about)
 - [Science simulation guides](${siteUrl}/en/guides)
+- [Environmental city builder game guide](${siteUrl}/en/guides/environmental-city-builder): Illustrated controls, drag-and-drop instructions, baseline comparisons and investigations for all ten environmental labs.
 - [Molecule Kit](${siteUrl}/en/molecule-kit): Free 3D molecule builder and molecular geometry (VSEPR) lab for students, tutors, and teachers.
 - [VSEPR shapes chart](${siteUrl}/en/molecules): Molecular geometry, electron geometry, bond angles, and hybridization for every common VSEPR class, with ${moleculeReferences.length} molecules and ions as rotatable 3D models.
 - [Sitemap](${siteUrl}/sitemap.xml)

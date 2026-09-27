@@ -37,7 +37,7 @@ Units are shown in controls, instruments, plots and main CSV readings. Additiona
 
 ## Student workflow
 
-Predict, run, save a completed baseline, change one input, rerun, compare at the same elapsed time, and explain with evidence. Baselines retain their own inputs and time horizon; chart x positions use physical model time. Graphs automatically pair comparable measurements (e.g. demand with generation), never MW with MWh on a shared axis. A data table provides all recorded primary readings. CSV exports include model version, inputs, full time series and student notes. Notes and baselines stay in page memory; no progress/account storage is introduced.
+Predict, run, save a completed baseline, change one input, rerun, compare at the same elapsed time, and explain with evidence. Baselines retain their own inputs and time horizon; chart x positions use physical model time. Graphs automatically pair comparable measurements (e.g. demand with generation), never MW with MWh on a shared axis. A data table provides all recorded primary readings. CSV exports include model version, inputs and the full time series. Builds and baselines stay in page memory; no progress/account storage is introduced.
 
 Scenes are accessible SVG schematics with a zoom/scroll option on small screens. Artwork shows model state and is explicitly not a geographic or scaled engineering rendering.
 
@@ -49,7 +49,7 @@ The source list and equations are colocated with each activity in `model.ts` and
 
 ## City-builder interface (version 3 UI)
 
-The environmental routes now use a single-viewport Three.js isometric city. The previous inline graph/control column is replaced by a build dock and native modal dialogs for graphs, conditions, notebook, learning guidance and other labs. The underlying version-2 scientific trajectories are preserved.
+The environmental routes now use a single-viewport Three.js isometric city. The previous inline graph/control column is replaced by a build dock and native modal dialogs for graphs, conditions, learning guidance and other labs. The underlying version-2 scientific trajectories are preserved.
 
 `builder.ts` maps each placeable project to one documented model-input delta. A tree grove is a scenario-scale unit (for example +10 canopy percentage points), not a single tree that removes gigatonnes of carbon. Global climate input cards are scenario operators, not claims about individual factories. The guide explains this distinction.
 
@@ -63,3 +63,22 @@ The environmental routes now use a single-viewport Three.js isometric city. The 
 - WebGL resources and animation listeners are disposed when leaving the lab. Reduced-motion preference disables ambient motion; explicit playback still updates scientific results.
 
 Additional builder tests cover editable-project effects, removal reversibility, relocation invariance, bounds, budget and placement restrictions. Browser checks cover actual native drag/drop, moving/removing a project, undo/redo, keyboard placement, modal visibility and mobile viewport fit.
+
+
+### City interaction update (September 2026)
+
+The shared city now uses a 16 × 16 board, waterfront, fixed downtown buildings,
+sidewalks, crossings, street lamps and park edges. Static scenery is merged by
+material to reduce draw calls. Reserved plots and streets share the same layout
+rules as the construction engine.
+
+The dock supports mouse drag, touch drag, select-and-tap, and keyboard placement.
+An actual translucent project follows the snapped plot. Green available-plot
+highlights and the preview use the same terrain, occupancy, model bounds and
+budget validation as construction. Red previews explain why a drop is invalid.
+Moving projects retains model totals. Pointer cancellation clears the preview.
+
+The notebook is removed. Completed experiment CSV downloads are in Graphs.
+The book control opens `/en/guides/environmental-city-builder` in a new tab,
+with instructions, accessible alternatives, controls and ten starter missions.
+The guide is also listed in Guides and the English sitemap.

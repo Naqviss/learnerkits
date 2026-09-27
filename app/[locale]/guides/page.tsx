@@ -34,6 +34,12 @@ export default async function TopicGuidesPage({ params }: { params: Promise<{ lo
       <Link className="textLink" href="/en/articles">Explore articles on AI, study skills, and teaching →</Link>
     </header>
     <section className="topicGuideGrid" aria-label="Priority science topic guides">
+      <article className="topicGuideCard">
+        <span className="eyebrow">Environmental science · Game guide</span>
+        <h2><Link href="/en/guides/environmental-city-builder">Environmental city builder: how to play</Link></h2>
+        <p>Learn the illustrated controls, drag projects onto valid plots, and compare scientific results. Includes a first-build walkthrough and starter investigations for all ten environmental worlds.</p>
+        <div className="topicGuideCardActions"><Link className="textLink" href="/en/guides/environmental-city-builder">Read the game guide →</Link><Link className="textLink" href="/en/simulations/urban-heat-island-simulator">Open simulation</Link></div>
+      </article>
       {guides.map((guide) => <article className="topicGuideCard" key={guide.slug}>
         <span className="eyebrow">{guide.subject.eyebrow}</span>
         <h2><Link href={`/en/guides/${guide.slug}`}>{guide.title}</Link></h2>

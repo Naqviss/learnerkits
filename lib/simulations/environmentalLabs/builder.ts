@@ -16,12 +16,16 @@ export const buildTools:Record<string,BuildTool[]>={
  "urban-heat-island-simulator":[t("trees","Tree grove","trees","trees",10,"Canopy +10 percentage points"),t("roofs","Cool-roof district","roof","coolRoofs",10,"Reflective roofs +10 percentage points"),t("garden","Rain garden","garden","permeable",10,"Permeable ground +10 percentage points"),t("paving","Paved district","road","permeable",-10,"Permeable ground −10 percentage points")],
  "climate-resilience-city-builder":[t("wetland","Wetlands","wetland","wetlands",5,"Wetland investment +5 points"),t("drain","Drainage","drain","drainage",5,"Drainage investment +5 points"),t("shade","Shade trees","trees","shade",5,"Cooling investment +5 points"),t("barrier","Flood barrier","barrier","barriers",5,"Barrier investment +5 points"),t("warning","Warning tower","warning","warning",5,"Warning investment +5 points")],
 };
-export const MAP_SIZE=12;
-export const reservedCells=new Set(["4,1","5,1","4,9","5,9","7,2","8,2","9,2","7,3","9,3","7,8","8,8","9,8"]);
+export const MAP_SIZE=16;
+export const reservedCells=new Set(["4,1","5,1","4,9","5,9","7,2","8,2","9,2","7,3","9,3","7,8","8,8","9,8",
+ ...[12,13,14].flatMap(col=>[1,2,3,7,8,9,13,14].map(row=>`${col},${row}`)),
+ ...[3,4,5,7,8,9,12,13,14,15].map(col=>`${col},15`),"3,0","4,0","5,0","15,0","15,1","15,2"
+]);
+export const isRoad=(col:number,row:number)=>col>=3&&(row===5||row===6||row===11||col===10);
 export function cellZone(col:number,row:number):"land"|"water"|"blocked" {
  if(!Number.isInteger(col)||!Number.isInteger(row)||col<0||row<0||col>=MAP_SIZE||row>=MAP_SIZE)return "blocked";
  if(col<3)return "water";
- if(row===5||row===6||reservedCells.has(`${col},${row}`))return "blocked";
+ if(isRoad(col,row)||reservedCells.has(`${col},${row}`))return "blocked";
  return "land";
 }
 export function createBuildState(slug:string):BuildState{return {values:initialValues(activities.find(a=>a.slug===slug)!),placements:[],nextId:1};}
@@ -36,6 +40,10 @@ function valueProblem(slug:string,values:Values,key:string,delta:number):string|
  if(next<control.min-1e-8||next>control.max+1e-8)return `${control.label} must stay between ${control.min} and ${control.max} ${control.unit}.`;
  if(slug==="climate-resilience-city-builder"&&["wetlands","drainage","shade","barriers","warning"].reduce((sum,k)=>sum+values[k],delta)>100+1e-8)return "The 100-point budget is full. Remove a project or undo an edit first.";
  return null;
+}
+/** Shared by placement and the preview, so a green plot is actually buildable. */
+export function buildProblem(slug:string,state:BuildState,tool:BuildTool,col:number,row:number,movingId?:number):string|null {
+ return placementProblem(state,tool,col,row,movingId)??(movingId===undefined?valueProblem(slug,state.values,tool.key,tool.delta):null);
 }
 export function editBuild(slug:string,state:BuildState,action:{type:"place";tool:string;col:number;row:number}|{type:"move";id:number;col:number;row:number}|{type:"remove";id:number}):{state:BuildState;message:string;ok:boolean} {
  const existing=action.type!=="place"?state.placements.find(p=>p.id===action.id):undefined;

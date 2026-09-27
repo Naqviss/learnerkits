@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { activities } from "@/lib/simulations/environmentalLabs/model";
-import { buildTools, createBuildState, editBuild } from "@/lib/simulations/environmentalLabs/builder";
+import { buildTools, buildProblem, MAP_SIZE, createBuildState, editBuild } from "@/lib/simulations/environmentalLabs/builder";
 import { runExperiment } from "@/lib/simulations/environmentalLabs/engine";
 describe("Environmental city builder",()=>{
  it("provides scenario-linked projects for all ten labs",()=>{for(const a of activities){expect(buildTools[a.slug].length).toBeGreaterThan(0);for(const t of buildTools[a.slug])expect(a.controls.some(c=>c.key===t.key)).toBe(true);}});
@@ -13,11 +13,21 @@ describe("Environmental city builder",()=>{
  });
  it("rejects roads, occupied plots, wrong terrain and out-of-map coordinates without modifying state",()=>{
   const slug="urban-heat-island-simulator",start=createBuildState(slug),built=editBuild(slug,start,{type:"place",tool:"trees",col:4,row:4}).state;
-  for(const [col,row] of [[1,1],[4,5],[4,4],[-1,0],[12,3],[7,2]]){const result=editBuild(slug,built,{type:"place",tool:"trees",col,row});expect(result.ok).toBe(false);expect(result.state).toBe(built);}
+  for(const [col,row] of [[1,1],[4,5],[4,4],[-1,0],[MAP_SIZE,3],[7,2]]){const result=editBuild(slug,built,{type:"place",tool:"trees",col,row});expect(result.ok).toBe(false);expect(result.state).toBe(built);}
  });
  it("enforces scientific control bounds and the city adaptation budget",()=>{
   const heat=createBuildState("urban-heat-island-simulator");heat.values.trees=60;expect(editBuild("urban-heat-island-simulator",heat,{type:"place",tool:"trees",col:4,row:4}).ok).toBe(false);
   const slug="climate-resilience-city-builder",city=createBuildState(slug);city.values={hazard:80,wetlands:20,drainage:20,shade:20,barriers:20,warning:20};const over=editBuild(slug,city,{type:"place",tool:"shade",col:4,row:4});expect(over.ok).toBe(false);expect(over.message).toContain("100-point budget");expect(over.state).toBe(city);
+ });
+ it("keeps placement previews consistent with terrain, occupied plots, model limits and budgets",()=>{
+  for(const slug of ["urban-heat-island-simulator","climate-resilience-city-builder","renewable-energy-grid-simulator"]){
+   const state=createBuildState(slug);
+   if(slug==="climate-resilience-city-builder")for(const key of ["wetlands","drainage","shade","barriers","warning"])state.values[key]=20;
+   if(slug==="urban-heat-island-simulator")state.values.trees=60;
+   for(const tool of buildTools[slug])for(const [col,row] of [[1,4],[4,4],[10,4],[13,2],[15,12],[MAP_SIZE,3]]){
+    expect(buildProblem(slug,state,tool,col,row)===null).toBe(editBuild(slug,state,{type:"place",tool:tool.id,col,row}).ok);
+   }
+  }
  });
  it("allows water infrastructure only on water and adds no free stored energy",()=>{
   const slug="renewable-energy-grid-simulator",state=createBuildState(slug);

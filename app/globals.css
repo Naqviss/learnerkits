@@ -676,3 +676,5 @@ body{background:radial-gradient(circle at 8% 4%,rgba(132,177,255,.22),transparen
 .relatedSimulations>div:last-child{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
 .relatedSimulations>div:last-child>a{padding:12px}
 @media(max-width:900px){.simulationGuideMore{grid-template-columns:1fr}}
+/* Keep the navigation usable on compact phones, including full-screen lab entry pages. */
+@media(max-width:360px){.navInner{gap:7px;padding-inline:6px}.brandLogo{width:100px}.navActions{gap:5px}.nav .langSelect{max-width:78px;padding-inline:7px}.nav .themeToggle{width:34px;height:36px}.mobileNav summary{width:36px;height:36px;padding:8px}}
