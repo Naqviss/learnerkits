@@ -76,6 +76,5 @@ export function PhysicsActivitiesClient({locale,subject,simulation}:{locale:stri
         <details className={styles.science}><summary>How the physics works</summary><p>{activity.science}</p></details>
       </aside>
     </div>
-    <section className={styles.library}><span className={styles.eyebrow}>KEEP EXPERIMENTING</span><h2>Explore all {activities.length} physics labs</h2><div className={styles.labLinks}>{subject.simulations.map((sim,i)=><Link key={sim.slug} href={`/${locale}/simulations/${sim.slug}`} aria-current={sim.slug===slug?"page":undefined}><span>{String(i+1).padStart(2,"0")}</span><strong>{sim.title}</strong><small>{completed.includes(sim.slug)?"✓ Completed":"Open lab ↗"}</small></Link>)}</div></section>
   </main>;
 }

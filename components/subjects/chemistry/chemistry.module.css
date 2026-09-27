@@ -17,3 +17,10 @@
 .back{margin-bottom:8px}
 .header{margin-bottom:16px}
 .header h1{font-size:clamp(1.8rem,3vw,2.6rem);margin:6px 0 8px}
+/* Missions and the lab notebook (progress tracking) are hidden until sign-in ships.
+   Every subject lab uses these classes; delete this block to bring them back. */
+.notebook,.mission,.checkButton,.feedback,.saveWarning{display:none}
+.header{justify-content:flex-start}
+/* Same content width as the rest of the site so the lab lines up with the nav and the guide below. */
+.page{max-width:none;width:min(1200px,calc(100% - 40px));padding:14px 0 8px}
+@media(max-width:700px){.page{width:calc(100% - 24px)}}

@@ -663,3 +663,16 @@ body{background:radial-gradient(circle at 8% 4%,rgba(132,177,255,.22),transparen
 @media(max-width:900px){.educationHero{padding:24px 20px}}
 /* Phones: skip the decorative subject illustration so the labs start sooner. */
 @media(max-width:650px){.subjectStudyPanel>figure{display:none}.educationSubjectHero{gap:16px}}
+/* Simulation page: lab first, then a compact guide (how to use → what to investigate → level),
+   FAQ beside article links, and one list of the subject's other labs. */
+.simulationGuide{margin-top:18px;padding-top:24px;border-top:1px solid var(--line)}
+.simulationGuideHeader{margin-bottom:14px}
+.simulationGuideHeader h2{font-size:clamp(1.4rem,2.4vw,1.9rem);margin:6px 0 6px}
+.simulationGuideHeader p{margin:0;font-size:.95rem}
+.simulationGuideCard{min-height:0;padding:18px}
+.simulationGuideMore{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;align-items:start;margin:24px 0}
+.simulationGuideMore .simulationFaq{margin:0;max-width:none}
+.simulationGuideMore .simulationArticleLinks{margin:0}
+.relatedSimulations>div:last-child{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.relatedSimulations>div:last-child>a{padding:12px}
+@media(max-width:900px){.simulationGuideMore{grid-template-columns:1fr}}

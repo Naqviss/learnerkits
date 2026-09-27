@@ -5,6 +5,7 @@ import { articles } from "@/lib/articles";
 import { articleCategories } from "@/lib/articles/catalog";
 import { articleImages } from "@/lib/articles/images";
 import { ArticleCard } from "@/components/articles/ArticleCard";
+import { ArticleFilter } from "@/components/articles/ArticleFilter";
 import { breadcrumbJsonLd, jsonLd, localizedMetadata, localizedUrl, siteUrl } from "@/lib/seo/metadata";
 import styles from "@/components/articles/articles.module.css";
 
@@ -31,13 +32,10 @@ export default async function ArticlesPage({ params }: { params: Promise<{ local
       <span className="eyebrow">The learning notebook · Students & teachers</span>
       <h1>Better questions.<br />Deeper science learning.</h1>
       <p>Practical articles on educational technology and AI in education. Explore virtual labs, build better study habits, and turn an idea into an experiment. Read, make a prediction, then put it to the test.</p>
-      <div className={styles.tags}><span>{articles.length} in-depth articles</span><span>Worked examples</span><span>Free simulation activities</span></div>
     </header>
-    <nav className={styles.categoryNav} aria-label="Article categories">{articleCategories.map((category) => <a key={category.id} href={`#${category.id}`}>{category.name}<span>{articles.filter((article) => article.category === category.name).length}</span></a>)}</nav>
-    {articleCategories.map((category) => <section key={category.id} id={category.id} className={styles.categorySection} aria-labelledby={`${category.id}-title`}>
-      <header className={styles.categoryHeader}><h2 id={`${category.id}-title`}>{category.name}</h2><p>{category.description}</p></header>
-      <div className={styles.grid}>{articles.filter((article) => article.category === category.name).map((article) => <ArticleCard key={article.slug} article={article} readingMinutes={article.readingMinutes} headingLevel={3} />)}</div>
-    </section>)}
+    <ArticleFilter allLabel="All articles" categories={articleCategories.map(({ id, name }) => ({ id, name }))} categoryOf={articles.map((article) => articleCategories.find((category) => category.name === article.category)?.id ?? "")}>
+      {articles.map((article) => <ArticleCard key={article.slug} article={article} readingMinutes={article.readingMinutes} headingLevel={2} />)}
+    </ArticleFilter>
     <aside className={styles.note}><h2>Learn it. Then try it.</h2><p>Pair these articles with our focused science guides and interactive labs. Every model has assumptions; make them part of your explanation.</p><div className={styles.links}><Link href="/en/simulations">Explore simulations →</Link><Link href="/en/guides">Read science guides →</Link><Link href="/en/editorial-policy">Editorial policy →</Link></div></aside>
   </main>;
 }

@@ -1,4 +1,5 @@
 import "../globals.css";
+import { ScrollToTop } from "@/components/navigation/ScrollToTop";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { locales, isLocale, localeDirection } from "@/lib/i18n/config";
@@ -15,5 +16,5 @@ const themeBoot = `(function(){try{var raw=localStorage.getItem('science-sim-set
 const googleAnalyticsId = "G-VZ63RT6XYN";
 export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{locale:string}> }) {
   const { locale: raw } = await params; if (!isLocale(raw)) notFound(); const m = getMessages(raw); const dir = localeDirection(raw); const htmlLang = raw === "zh" ? "zh-Hans" : raw;
-  return <html lang={htmlLang} dir={dir} data-theme="light" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:themeBoot}}/></head><body className={dir === "rtl" ? "rtl" : undefined}><Nav locale={raw} m={m}/>{children}<Footer locale={raw} m={m}/><ConsentManager locale={raw} googleAnalyticsId={googleAnalyticsId} clarityId="ygwnomr7fd"/></body></html>;
+  return <html lang={htmlLang} dir={dir} data-theme="light" data-scroll-behavior="smooth" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:themeBoot}}/></head><body className={dir === "rtl" ? "rtl" : undefined}><ScrollToTop/><Nav locale={raw} m={m}/>{children}<Footer locale={raw} m={m}/><ConsentManager locale={raw} googleAnalyticsId={googleAnalyticsId} clarityId="ygwnomr7fd"/></body></html>;
 }

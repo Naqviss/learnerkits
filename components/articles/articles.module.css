@@ -57,3 +57,23 @@
 .categoryNav{margin-bottom:24px}
 .categorySection{margin-bottom:36px}
 .categoryHeader{margin-bottom:16px}
+/* Category filter chips over one mixed grid; three columns on wide screens to cut scrolling. */
+.categoryNav{gap:8px;margin-bottom:18px}
+.categoryNav button{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 15px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text);font:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:border-color .15s ease,background .15s ease,color .15s ease}
+.categoryNav button:hover{border-color:var(--accent);color:var(--accent)}
+.categoryNav button span{font-size:.74rem;font-weight:800;color:var(--muted);background:var(--surface-2);border-radius:999px;padding:2px 7px}
+.categoryNav button[aria-pressed="true"]{background:var(--text);border-color:var(--text);color:var(--bg)}
+.categoryNav button[aria-pressed="true"] span{background:color-mix(in srgb,var(--bg) 22%,transparent);color:var(--bg)}
+.categoryNav button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.grid{gap:16px}
+@media(min-width:1000px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.card{padding:18px}
+.card h2,.card h3{font-size:1.15rem;line-height:1.3;margin:6px 0 8px}
+.card p{font-size:.9rem;line-height:1.55;margin:0 0 10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.note{padding:20px 22px;margin-top:24px}
+/* Tighter index and article headers, shorter card images. */
+.indexHero{padding-bottom:12px}
+.indexHero>p{margin:0}
+.cardImage{aspect-ratio:16/9;object-fit:cover;margin-bottom:12px}
+.hero{padding-bottom:16px;margin-bottom:20px}
+.hero h1{margin:8px 0 12px}

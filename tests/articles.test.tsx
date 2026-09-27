@@ -29,11 +29,13 @@ describe("article publishing", () => {
     }
   });
 
-  it("renders both category groups and preserves individual publication dates", async () => {
+  it("lists every article in one grid with a filter chip per category and preserves publication dates", async () => {
     const html = renderToStaticMarkup(await ArticlesPage({ params: Promise.resolve({ locale: "en" }) }));
+    expect(html).toContain('aria-label="Article categories"');
+    expect(html).not.toContain("in-depth articles");
     for (const category of articleCategories) {
-      expect(html).toContain(`href="#${category.id}"`);
-      expect(html).toContain(`id="${category.id}"`);
+      expect(html).toMatch(new RegExp(`<button type="button" aria-pressed="false">${category.name}<span>\\d+</span></button>`));
+      expect(html).not.toContain(`id="${category.id}-title"`);
     }
     for (const article of articles) {
       expect(html).toContain(`/en/articles/${article.slug}`);
