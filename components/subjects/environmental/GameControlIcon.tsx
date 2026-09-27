@@ -16,7 +16,7 @@ export function GameControlIcon({kind}:{kind:ControlKind}) {
  case "plus":case "minus":art=<g><circle cx="22" cy="21" r="14" fill="#c9eff0"/><path d="m33 32 9 9" stroke="#e6aa56" strokeWidth="8"/><path d="M14 21H30" stroke="#447e92" strokeWidth="4"/>{kind==="plus"&&<path d="M22 13V29" stroke="#447e92" strokeWidth="4"/>}</g>;break;
  case "home":case "labs":art=<g><path d="M10 22H38V40H10Z" fill="#ffe6a9"/><path d="m5 23 19-18 19 18Z" fill="#df8165"/><path d="M20 40V28H28V40" fill="#73a8aa"/>{kind==="labs"&&<path d="M12 26H17V31H12M31 26H36V31H31" fill="#73a8aa"/>}</g>;break;
  case "fullscreen":art=<path d="M6 19V7H19M29 7H41V19M41 29V41H29M19 41H7V29" fill="none" stroke="#a3dbea" strokeWidth="7"/>;break;
- case "close":art=<path d="m13 13 22 22m0-22L13 35" stroke="#f6bb87" strokeWidth="8"/>;break;
+ case "close":art=<path d="m13 13 22 22m0-22L13 35" stroke="#78aee6" strokeWidth="8"/>;break;
  case "speed":art=<g><path d="M6 36A19 19 0 1 1 42 36Z" fill="#d2eeee"/><path d="m23 30 11-15-5 19Z" fill="#ee9470"/><circle cx="24" cy="32" r="4" fill="#54869a"/></g>;break;
  }
  return <svg viewBox="0 0 48 48" width="36" height="36" aria-hidden="true" focusable="false"><g transform="translate(0 2)" opacity=".28" stroke="#294744" strokeWidth="3" strokeLinejoin="round">{art}</g><g stroke="#44616c" strokeWidth="1.3" strokeLinejoin="round" strokeLinecap="round">{art}</g></svg>;

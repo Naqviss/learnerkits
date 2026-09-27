@@ -19,13 +19,13 @@ export const EnvironmentalWorld=forwardRef<WorldHandle,Props>(function Environme
   const container=host.current;if(!container)return;
   let renderer:THREE.WebGLRenderer;
   try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});}catch{setFailed(true);return;}
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.75));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.75));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;
   const canvas=renderer.domElement;canvas.tabIndex=0;canvas.setAttribute("role","application");canvas.setAttribute("aria-label","Interactive city map. Arrow keys choose a plot; Enter places the selected project; Delete removes a placed project. Drag projects to move them.");container.appendChild(canvas);
-  const scene=new THREE.Scene();scene.background=new THREE.Color("#cbdedb");scene.fog=new THREE.Fog("#cbdedb",65,115);
+  const scene=new THREE.Scene();scene.background=new THREE.Color("#d5e8fb");scene.fog=new THREE.Fog("#d5e8fb",65,115);
   const camera=new THREE.OrthographicCamera(-20,20,15,-15,.1,150);camera.position.set(30,29,34);
   const orbit=new OrbitControls(camera,canvas);orbit.target.set(0,0,0);orbit.enableDamping=true;orbit.enableRotate=false;orbit.enablePan=false;orbit.minZoom=.7;orbit.maxZoom=2.4;orbit.update();orbit.saveState();
-  const hemi=new THREE.HemisphereLight("#e8f5ff","#718568",2.4);scene.add(hemi);
-  const sun=new THREE.DirectionalLight("#fff2d8",3.6);sun.position.set(-12,25,8);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-23;sun.shadow.camera.right=23;sun.shadow.camera.top=23;sun.shadow.camera.bottom=-23;sun.shadow.normalBias=.04;sun.shadow.bias=-.0002;scene.add(sun);
+  const hemi=new THREE.HemisphereLight("#e8f5ff","#70849d",2.4);scene.add(hemi);
+  const sun=new THREE.DirectionalLight("#f1f6ff",3.6);sun.position.set(-12,25,8);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-23;sun.shadow.camera.right=23;sun.shadow.camera.top=23;sun.shadow.camera.bottom=-23;sun.shadow.normalBias=.04;sun.shadow.bias=-.0002;scene.add(sun);
   const materials=new Map<string,THREE.MeshStandardMaterial>(),geometries=new Map<string,THREE.BufferGeometry>();
   const mat=(color:string,metal=0)=>{const key=color+metal;if(!materials.has(key))materials.set(key,new THREE.MeshStandardMaterial({color,roughness:.78,metalness:metal}));return materials.get(key)!;};
   function box(group:THREE.Object3D,w:number,h:number,d:number,x:number,y:number,z:number,color:string){const key=`b${w},${h},${d}`;if(!geometries.has(key))geometries.set(key,new THREE.BoxGeometry(w,h,d));const mesh=new THREE.Mesh(geometries.get(key),mat(color));mesh.position.set(x,y,z);mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);return mesh;}
@@ -52,36 +52,36 @@ export const EnvironmentalWorld=forwardRef<WorldHandle,Props>(function Environme
    else {box(g,1.45,.08,1.45,0,.04,0,"#b49d77");cylinder(g,.14,.18,.15,-.3,.14,.2,"#9b7851");cylinder(g,.13,.15,.12,.3,.12,-.3,"#967249");}
    return g;
   }
-  const ground=new THREE.Group();scene.add(ground);box(ground,SPAN+.3,.55,SPAN+.3,0,-.43,0,"#8c9380");box(ground,SPAN+.45,.22,SPAN+.45,0,-.81,0,"#68796e");
+  const ground=new THREE.Group();scene.add(ground);box(ground,SPAN+.3,.55,SPAN+.3,0,-.43,0,"#8798ac");box(ground,SPAN+.45,.22,SPAN+.45,0,-.81,0,"#667c9a");
   for(let col=0;col<MAP_SIZE;col++)for(let row=0;row<MAP_SIZE;row++){
    const x=col*CELL-offset,z=row*CELL-offset,water=col<3,road=isRoad(col,row);
-   if(!water)box(ground,1.595,.34,1.595,x,.0,z,road?"#8d9890":["#9db47b","#a3b981","#98ae78"][(col*7+row*3)%3]);
+   if(!water)box(ground,1.595,.34,1.595,x,.0,z,road?"#899bac":["#9db47b","#a3b981","#98ae78"][(col*7+row*3)%3]);
    if(road){
     if(row===5||row===11)box(ground,.65,.012,.045,x,.18,z+(row===5?.77:0),"#f6efc8");
     if(col===10&&!isRoad(col-1,row))box(ground,.045,.012,.65,x,.18,z,"#f6efc8");
    }
    if(!water&&!road){
     // Raised sidewalk edges separate construction plots from the streets.
-    if(isRoad(col,row+1))box(ground,1.6,.07,.15,x,.205,z+.72,"#d5d6c3");
-    if(isRoad(col,row-1))box(ground,1.6,.07,.15,x,.205,z-.72,"#d5d6c3");
-    if(isRoad(col+1,row))box(ground,.15,.07,1.6,x+.72,.205,z,"#d5d6c3");
-    if(isRoad(col-1,row))box(ground,.15,.07,1.6,x-.72,.205,z,"#d5d6c3");
+    if(isRoad(col,row+1))box(ground,1.6,.07,.15,x,.205,z+.72,"#ccd9e4");
+    if(isRoad(col,row-1))box(ground,1.6,.07,.15,x,.205,z-.72,"#ccd9e4");
+    if(isRoad(col+1,row))box(ground,.15,.07,1.6,x+.72,.205,z,"#ccd9e4");
+    if(isRoad(col-1,row))box(ground,.15,.07,1.6,x-.72,.205,z,"#ccd9e4");
    }
   }
-  const waterGeometry=new THREE.PlaneGeometry(SPAN,SPAN,1,1),waterMaterial=new THREE.MeshStandardMaterial({color:"#65aaa9",roughness:.28,metalness:.15,transparent:true,opacity:.9});const water=new THREE.Mesh(waterGeometry,waterMaterial);water.rotation.x=-Math.PI/2;water.position.set(0,-.06,0);water.receiveShadow=true;scene.add(water);
-  for(let i=0;i<25;i++){const mesh=box(ground,.25+(i%3)*.16,.015,.022,-offset-.2+(i*1.7)%4.1,.0,-offset+(i*3.17)%(SPAN-1),"#a6d2c3");mesh.userData.wave=true;}
+  const waterGeometry=new THREE.PlaneGeometry(SPAN,SPAN,1,1),waterMaterial=new THREE.MeshStandardMaterial({color:"#428fca",roughness:.28,metalness:.15,transparent:true,opacity:.9});const water=new THREE.Mesh(waterGeometry,waterMaterial);water.rotation.x=-Math.PI/2;water.position.set(0,-.06,0);water.receiveShadow=true;scene.add(water);
+  for(let i=0;i<25;i++){const mesh=box(ground,.25+(i%3)*.16,.015,.022,-offset-.2+(i*1.7)%4.1,.0,-offset+(i*3.17)%(SPAN-1),"#a7d6f4");mesh.userData.wave=true;}
   const scenery=new THREE.Group();ground.add(scenery);
   for(const key of [...reservedCells].filter(key=>!["4,1","5,1","4,9","5,9"].includes(key))){
    const [col,row]=key.split(",").map(Number),g=new THREE.Group();g.position.set(col*CELL-offset,.18,row*CELL-offset);
    if(row===15||row===0||(col===15&&row<3)){tree(g,-.3,-.15,.8);tree(g,.34,.35,.6);box(g,.65,.1,.22,0,.28,.56,"#aa8259");box(g,.06,.24,.18,-.24,.12,.56,"#667666");box(g,.06,.24,.18,.24,.12,.56,"#667666");}
    else {const h=col>=12?1.3+((col*3+row*7)%5)*.48:.8+((col+row)%3)*.5;
-    box(g,1.5,.06,1.5,0,.03,0,"#c5cebd");house(g,h,["#a96750","#708c87","#777a8e"][col%3]);
+    box(g,1.5,.06,1.5,0,.03,0,"#c4d4e2");house(g,h,["#a96750","#708c87","#777a8e"][col%3]);
     if(col>=12){for(let y=1.8;y<h;y+=.45)for(const x of [-.3,.3]){box(g,.21,.24,.025,x,y,.52,"#679ba7");box(g,.025,.24,.21,.52,y,x,"#679ba7");}box(g,1.08,.12,.28,0,.64,.61,["#d4a157","#68a9a0","#cb8977"][row%3]);}
     cylinder(g,.12,.15,.15,-.6,.12,.5,"#b89470");crown(g,.19,-.6,.34,.5,"#75995d");
    }scenery.add(g);
   }
   // Quay, jetties, street furniture and crossings make the town readable at a glance.
-  box(ground,.18,.36,SPAN,3*CELL-offset-.83,.01,0,"#bdc5b3");
+  box(ground,.18,.36,SPAN,3*CELL-offset-.83,.01,0,"#b8cbdc");
   for(const row of [2,8,13]){const z=row*CELL-offset;box(ground,1.9,.15,.65,2*CELL-offset,.0,z,"#a28c6b");for(const x of [1.4,2.5])cylinder(ground,.05,.05,.8,x*CELL-offset,-.05,z+.22,"#82765c");}
   for(const col of [4,7,9,12,14])for(const row of [5,11]){const x=col*CELL-offset,z=row*CELL-offset-.85;cylinder(ground,.025,.045,1.15,x,.73,z,"#647d7a");box(ground,.3,.05,.14,x+.1,1.32,z,"#f3d697");}
   for(const row of [5,6,11])for(let i=0;i<5;i++)box(ground,.15,.015,1.25,10*CELL-offset-.52+i*.25,.18,row*CELL-offset,"#eeeaca");
@@ -106,7 +106,7 @@ export const EnvironmentalWorld=forwardRef<WorldHandle,Props>(function Environme
    "climate-resilience-city-builder":[["wetland","wetlands"],["drain","drainage"],["trees","shade"],["barrier","barriers"]],
   };
   const rainGeometry=new THREE.BufferGeometry(),rainPositions=new Float32Array(180*6);rainGeometry.setAttribute("position",new THREE.BufferAttribute(rainPositions,3));const rainMaterial=new THREE.LineBasicMaterial({color:"#b7d9e1",transparent:true,opacity:.65});const rain=new THREE.LineSegments(rainGeometry,rainMaterial);rain.frustumCulled=false;scene.add(rain);
-  const floodGeometry=new THREE.PlaneGeometry((MAP_SIZE-3)*CELL,3.2),floodMaterial=new THREE.MeshStandardMaterial({color:"#76b7b9",transparent:true,opacity:.7,roughness:.28});const flood=new THREE.Mesh(floodGeometry,floodMaterial);flood.rotation.x=-Math.PI/2;flood.position.set(2.4,.21,5.5*CELL-offset);flood.visible=false;scene.add(flood);
+  const floodGeometry=new THREE.PlaneGeometry((MAP_SIZE-3)*CELL,3.2),floodMaterial=new THREE.MeshStandardMaterial({color:"#74b5e7",transparent:true,opacity:.7,roughness:.28});const flood=new THREE.Mesh(floodGeometry,floodMaterial);flood.rotation.x=-Math.PI/2;flood.position.set(2.4,.21,5.5*CELL-offset);flood.visible=false;scene.add(flood);
   const hazeGeometry=new THREE.BoxGeometry(SPAN-1,3.6,SPAN-1),hazeMaterial=new THREE.MeshBasicMaterial({color:"#c3ad8d",transparent:true,opacity:0,depthWrite:false});const haze=new THREE.Mesh(hazeGeometry,hazeMaterial);haze.position.y=1.3;scene.add(haze);
   const grid=new THREE.GridHelper(SPAN,MAP_SIZE,"#ebf0ca","#d3deb0");grid.position.y=.192;const gm=grid.material as THREE.Material;gm.transparent=true;gm.opacity=.22;scene.add(grid);
   const ghost=box(scene,1.5,.035,1.5,0,.23,0,"#88dfb4");(ghost.material as THREE.MeshStandardMaterial)=new THREE.MeshStandardMaterial({color:"#70d5a4",transparent:true,opacity:.75,depthWrite:false});ghost.visible=false;
@@ -134,7 +134,12 @@ export const EnvironmentalWorld=forwardRef<WorldHandle,Props>(function Environme
    tooltip.hidden=false;tooltip.dataset.valid=String(!error);previewName.textContent=`${existing?"Move · ":""}${tool.label}`;
    previewHint.textContent=error??`Plot ${col+1}, ${row+1} · ${existing?"Release to relocate":"Drop or tap to build"}`;
    if(x!==undefined&&y!==undefined)lastPointer={x,y};
-   if(lastPointer){const {x,y}=lastPointer;const rect=canvas.getBoundingClientRect();tooltip.style.left=`${Math.max(8,Math.min(rect.width-225,x-rect.left+20))}px`;tooltip.style.top=`${Math.max(90,Math.min(rect.height-92,y-rect.top-82))}px`;}
+   if(lastPointer){const {x,y}=lastPointer;const rect=canvas.getBoundingClientRect(),width=tooltip.offsetWidth,height=tooltip.offsetHeight;
+    const dock=container?.parentElement?.querySelector(`.${styles.camera}`)?.getBoundingClientRect();
+    const rightLimit=dock?dock.left-rect.left-12:rect.width-8;
+    // Reserve the camera dock's entire column: carried-item labels never cover controls.
+    const left=Math.max(8,Math.min(rightLimit-width,x-rect.left+20));
+    tooltip.style.left=`${left}px`;tooltip.style.top=`${Math.max(84,Math.min(rect.height-height-8,y-rect.top-height-18))}px`;}
    else {tooltip.style.left="14px";tooltip.style.top="90px";}
   }
   const pointerDown=(event:PointerEvent)=>{if(event.button!==0)return;down={x:event.clientX,y:event.clientY};const id=projectAt(event.clientX,event.clientY);if(id!==null&&live.current.mode!=="remove"){drag={id,x:event.clientX,y:event.clientY};canvas.setPointerCapture(event.pointerId);orbit.enabled=false;}};
@@ -155,7 +160,7 @@ export const EnvironmentalWorld=forwardRef<WorldHandle,Props>(function Environme
    if(p.running&&!reduce)animation+=dt;for(const rotor of rotors)rotor.rotation.z=animation*1.5;for(const fill of batteryFills){const ratio=Math.max(.025,Math.min(1,(p.sample.soc??0)/Math.max(1,p.state.values.storage??100)));fill.scale.y=ratio;fill.position.y=.18+.21*ratio;}
    cars.forEach((car,i)=>{car.position.x=3*CELL-offset+((animation*(i%2?-.8:.7)+i*4.1+200)%((MAP_SIZE-3)*CELL));car.position.z=(i<3?5.5:11)*CELL-offset+(i%2?-.38:.38);});boat.position.z=3+Math.sin(animation*.1)*4;
    const coastal=p.slug==="sea-level-rise-simulator"?(p.sample.total??0)*.75:0;water.position.y=-.06+coastal;
-   const warmth=p.slug==="urban-heat-island-simulator"?(p.sample.anomaly??0)/10:0;sun.color.set(warmth>.2?"#ffdfb4":"#fff2d8");
+   const warmth=p.slug==="urban-heat-island-simulator"?(p.sample.anomaly??0)/10:0;sun.color.set(warmth>.2?"#ffdfb4":"#f1f6ff");
    const rainRate=p.sample.rainRate??0;rain.visible=rainRate>.1;rainGeometry.setDrawRange(0,Math.min(180,Math.round(rainRate*3))*2);if(rain.visible){for(let i=0;i<180;i++){const x=-offset+(i*7.31)%(SPAN-1),z=-offset+(i*5.17)%(SPAN-1),y=.3+(i*.731-animation*5+1000)%5;rainPositions.set([x,y,z,x+.07,y+.45,z],i*6);}rainGeometry.attributes.position.needsUpdate=true;}
    flood.visible=p.slug==="climate-resilience-city-builder"&&(p.sample.ponding??0)>.1;flood.position.y=.20+Math.min(.4,(p.sample.ponding??0)*.005);
    hazeMaterial.opacity=p.slug==="air-pollution-smog-simulator"?Math.min(.24,(p.sample.pm??0)/500):0;
