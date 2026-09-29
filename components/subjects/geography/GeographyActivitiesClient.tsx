@@ -4,6 +4,8 @@ import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import type { SubjectDefinition, SimulationCard } from "@/lib/subjects/catalog";
 import { activities, arrivals, front, hurricane, initialJourney, initialValues, mission, ocean, plate, river, rockEdges, stationData, travel, tsunami, volcano, waterEdges, type Values, type Journey } from "@/lib/simulations/geographyLabs/model";
 import { TsunamiScene } from "./tsunami/TsunamiScene";
+import { VolcanoScene } from "./volcano/VolcanoScene";
+import { eruptionExamples } from "./volcano/volcanoModel";
 import { GeographyScene } from "./GeographyScene";
 import { FieldDisplay } from "./FieldDisplay";
 import { GameControlIcon } from "../environmental/GameControlIcon";
@@ -71,8 +73,8 @@ export function GeographyActivitiesClient({locale,subject,simulation}:{locale:st
    <div className={geo.mission}><div><span>{activity.tag}</span><strong>{activity.mission}</strong></div><button className={geo.badge} onClick={()=>setPanel("guide")} aria-label="Mission help">{complete?"Badge earned":`${Math.min(stamps.length,result.required)} / ${result.required} stamps`}</button></div>
    <div className={geo.metrics}>{readings.map(([label,value])=><div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div>
    <section className={geo.stage} aria-label="Interactive Earth field station">
-    {slug==="tsunami-3d"?<TsunamiScene values={values} time={time}/>:is3D?<GeographyScene slug={slug} values={values} time={time}/>:<FieldDisplay slug={slug} values={values} time={time} journey={journey} onTravel={journeyMove} onPin={(x,y)=>{setValues(v=>({...v,x,y}));setFeedback(null);}}/>}
-    {slug!=="tsunami-3d"&&<span className={geo.sceneLabel}>{journeyGame?"CONNECTED EARTH SYSTEMS":is3D?"3D FIELD MODEL":"LIVE FIELD INSTRUMENT"}</span>}
+    {slug==="volcano-eruption-3d"?<VolcanoScene values={values} time={time} onExample={example=>{setValues({...eruptionExamples[example]});setTime(0);setRunning(true);setSpeed(1);setFeedback(null);}}/>:slug==="tsunami-3d"?<TsunamiScene values={values} time={time}/>:is3D?<GeographyScene slug={slug} values={values} time={time}/>:<FieldDisplay slug={slug} values={values} time={time} journey={journey} onTravel={journeyMove} onPin={(x,y)=>{setValues(v=>({...v,x,y}));setFeedback(null);}}/>}
+    {slug!=="tsunami-3d"&&slug!=="volcano-eruption-3d"&&<span className={geo.sceneLabel}>{journeyGame?"CONNECTED EARTH SYSTEMS":is3D?"3D FIELD MODEL":"LIVE FIELD INSTRUMENT"}</span>}
    </section>
    <div className={geo.controlsPanel}>
     <div className={geo.controlHeading}><span>{journeyGame?`YOUR NEXT MOVE · ${journey.state}`:"EXPERIMENT CONTROLS"}</span><small>{journeyGame?`${journey.moves} transformations`:time>=10?"Record complete":running&&!panel?"Experiment running":"Ready to explore"}</small></div>

@@ -75,6 +75,7 @@
 .indexHero{padding-bottom:12px}
 .indexHero>p{margin:0}
 .cardImage{aspect-ratio:16/9;object-fit:cover;margin-bottom:12px}
+.cardImage[data-diagram="true"]{object-fit:contain}
 .hero{padding-bottom:16px;margin-bottom:20px}
 .hero h1{margin:8px 0 12px}
 /* Filter chips and the card/list layout toggle share one toolbar row. */

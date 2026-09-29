@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import sharp from "sharp";
 import { renderToStaticMarkup } from "react-dom/server";
 import { articles, getArticle } from "@/lib/articles";
 import { articleCategories, getArticlesForSimulation } from "@/lib/articles/catalog";
@@ -66,14 +67,16 @@ describe("article publishing", () => {
       const metadata = await generateMetadata({ params: Promise.resolve({ locale: "en", slug: article.slug }) });
       const structured = articleJsonLd(article);
       expect(metadata.alternates?.canonical).toBe(structured.url);
+      expect(metadata.title).toEqual({ absolute: `${"seoTitle" in article ? article.seoTitle : article.title} | LearnerKits` });
       expect(structured.headline).toBe(article.title);
       expect(structured.datePublished).toBe(article.publishedAt);
+      expect(structured.dateModified).toBe(article.updatedAt);
       expect(structured.citation.length).toBeGreaterThan(0);
       expect(Object.keys(metadata.alternates!.languages!)).toEqual(["en", "x-default"]);
       const image = articleImages[article.slug];
       expect(metadata.openGraph).toMatchObject({ type: "article", images: [{ url: `${siteUrl}${image.socialSrc}`, type: "image/webp", width: 1200, height: 630, alt: image.alt }] });
       expect(metadata.twitter).toMatchObject({ card: "summary_large_image", images: [{ url: `${siteUrl}${image.socialSrc}`, alt: image.alt }] });
-      expect(structured.image[0]).toMatchObject({ contentUrl: `${siteUrl}${image.src}`, width: 1200, height: 800, encodingFormat: "image/webp" });
+      expect(structured.image[0]).toMatchObject({ contentUrl: `${siteUrl}${image.src}`, thumbnailUrl: `${siteUrl}${image.smallSrc}`, width: 1200, height: 800, encodingFormat: "image/webp", creditText: "LearnerKits", representativeOfPage: true });
       expect(metadata.robots).toMatchObject({ index: true, follow: true, googleBot: { "max-image-preview": "large" } });
     }
   });
@@ -91,15 +94,18 @@ describe("article publishing", () => {
     expect(entries.every((entry) => entry.url.includes("/en/articles"))).toBe(true);
   });
 
-  it("ships distinct, compressed WebP files for full, small and social images", () => {
+  it("ships distinct, compressed WebP files with the dimensions advertised in HTML and social metadata", async () => {
     expect(new Set(Object.values(articleImages).map((image) => image.src)).size).toBe(16);
     for (const image of Object.values(articleImages)) {
-      for (const src of [image.src, image.smallSrc, image.socialSrc]) {
+      for (const [src, width, height] of [[image.src, image.width, image.height], [image.smallSrc, 640, 427], [image.socialSrc, 1200, 630]] as const) {
         const file = join(process.cwd(), "public", src);
         const bytes = readFileSync(file);
         expect(bytes.toString("ascii", 0, 4)).toBe("RIFF");
         expect(bytes.toString("ascii", 8, 12)).toBe("WEBP");
         expect(statSync(file).size).toBeLessThan(200 * 1024);
+        const actual = await sharp(bytes).metadata();
+        expect(actual.format, src).toBe("webp");
+        expect([actual.width, actual.height], src).toEqual([width, height]);
       }
     }
   });

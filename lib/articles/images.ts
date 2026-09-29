@@ -8,6 +8,7 @@ type ArticleImage = {
   height: number;
   alt: string;
   caption: string;
+  preserveDiagram?: boolean;
 };
 
 function illustration(file: string, alt: string, caption: string): ArticleImage {
@@ -22,12 +23,16 @@ function illustration(file: string, alt: string, caption: string): ArticleImage 
   };
 }
 
+function diagram(file: string, alt: string, caption: string): ArticleImage {
+  return { ...illustration(file, alt, caption), preserveDiagram: true };
+}
+
 export const articleImages: Record<ArticleSlug, ArticleImage> = {
-  "virtual-labs-vs-real-labs-what-students-learn": illustration("virtual-and-real-circuit-labs", "Diagram-style illustration: a laptop shows a circuit schematic with a battery, resistor, and ammeter beside a real battery, bulb, and multimeter reading 2.9.", "Predict a current with a model, then measure a real circuit and explain the difference. Original explanatory illustration."),
-  "ai-tutor-vs-teacher-vs-textbook-vs-simulation": illustration("four-learning-tools", "Four panels labeled AI tutor, Teacher, Textbook, and Simulation surround a question mark: chat bubbles, a teacher at a board, an open book, and a tablet graph.", "Each study tool does a different job; choose by what you need next. Original explanatory illustration."),
-  "learn-physics-without-memorizing-formulas": illustration("physics-reasoning-notebook", "Graph-paper illustration of projectile paths at 30, 45, and 60 degrees, a swinging pendulum, a pushed cart, and cards reading T ∝ √L, F = m × a, m/s, and ½mv² = mgh.", "The 30° and 60° launches land together; 45° goes farthest on level ground without drag. Original explanatory illustration."),
-  "why-does-the-moon-change-shape": illustration("moon-phases-orbit-view", "Space diagram: sunlight from the left lights half of the Moon at eight positions around Earth, with a column showing the matching phases seen from Earth, from new moon to waning crescent.", "The Sun always lights half the Moon; its orbital position changes how much of that half faces Earth. Sizes and distances are not to scale. Original explanatory illustration."),
-  "climate-change-explained-interactive-experiments": illustration("climate-energy-balance", "Illustration of sunlight arrows reaching Earth, wavy infrared heat leaving the surface with some returned by the atmosphere, beside a rising CO₂ curve and a thermometer with rising bars.", "Greenhouse gases slow the loss of heat to space, so Earth gains energy until it warms enough to rebalance. Schematic, not measured data. Original explanatory illustration."),
+  "virtual-labs-vs-real-labs-what-students-learn": diagram("virtual-vs-real-science-labs", "Virtual circuit predicting 0.030 A from 3 V and 100 ohms beside a physical series circuit with an illustrative 0.029 A meter reading.", "Compare a circuit model with a physical setup. Both displayed readings are illustrative, not collected lab data. Original LearnerKits diagram."),
+  "ai-tutor-vs-teacher-vs-textbook-vs-simulation": diagram("choosing-science-study-tools", "Four study tools compared: an AI conversation, a teacher at a board, a textbook, and an interactive simulation.", "Each study tool does a different job; choose by what you need next. Original LearnerKits diagram."),
+  "learn-physics-without-memorizing-formulas": diagram("physics-concepts-and-experiments", "Physics notebook connecting 30°, 45°, and 60° projectile paths, a pendulum, a cart, net force, units, and conservation of energy.", "For equal launch speeds and heights without air resistance, 30° and 60° have equal range and 45° goes farthest. Original LearnerKits diagram of idealized models."),
+  "why-does-the-moon-change-shape": diagram("moon-phases-sunlight-and-orbit", "Numbered Moon positions around Earth matched to eight named phases, with sunlight illuminating the Sun-facing half at every position.", "Orbital position changes how much of the Moon’s sunlit half we see. Phase orientation is for the Northern Hemisphere; orbital tilt is omitted and sizes and distances are not to scale. Original LearnerKits diagram."),
+  "climate-change-explained-interactive-experiments": diagram("climate-change-earth-energy-balance", "Earth’s energy balance with incoming sunlight, outgoing and downward infrared radiation, and illustrative rising CO₂ and temperature trends.", "Greenhouse gases reduce outgoing heat at a given surface temperature; Earth warms toward a new energy balance. Schematic trends, not measured data. Original LearnerKits diagram."),
   "what-are-interactive-learning-simulations": illustration("interactive-learning-classroom-wide", "Wide classroom illustration of a teacher and students discussing a cart simulation.", "Discuss a prediction before testing the model. AI-generated editorial illustration."),
   "how-virtual-science-labs-work": illustration("virtual-science-lab-over-shoulder", "Over-the-shoulder illustration of a student investigating gas pressure on a laptop in a computer lab.", "Connect control settings, numerical outputs, and a scientific explanation. AI-generated editorial illustration."),
   "virtual-labs-vs-traditional-labs": illustration("virtual-and-physical-labs-side-view", "Side-view illustration of a teacher comparing a physical pendulum with a laptop model in a science lab.", "Compare what a model predicts with what physical measurements can show. AI-generated editorial illustration."),

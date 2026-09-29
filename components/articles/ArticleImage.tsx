@@ -17,6 +17,7 @@ export function ArticleImage({ slug, thumbnail = false }: { slug: ArticleSlug; t
     fetchPriority={thumbnail ? "auto" : "high"}
     decoding="async"
     className={thumbnail ? styles.cardImage : styles.articleImage}
+    data-diagram={image.preserveDiagram || undefined}
   />;
   return thumbnail ? picture : <figure className={styles.figure}>{picture}<figcaption>{image.caption}</figcaption></figure>;
 }

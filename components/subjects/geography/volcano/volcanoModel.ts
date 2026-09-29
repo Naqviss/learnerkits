@@ -18,7 +18,8 @@ export function volcanoHeight(x: number, z: number) {
   const ridges = Math.sin(Math.min(1, (r - 1.25) / 2) * Math.PI / 2)
     * Math.exp(-r / 9) * (.42 * Math.sin(a * 11 + r * .27) + .19 * Math.sin(a * 23 - r * .5));
   const foothills = clamp((r - 12) / 15) * (.25 + .22 * Math.sin(x * .3) * Math.cos(z * .25));
-  return flank + ridges + foothills;
+  const distantRidges = clamp((r - 26) / 24) * (2.8 + 2.1 * Math.sin(x * .083 + z * .061) + 1.1 * Math.cos(z * .17 - x * .053));
+  return flank + ridges + foothills + Math.max(0, distantRidges);
 }
 
 export function eruptionVisuals(values: Values, time: number) {
@@ -29,7 +30,7 @@ export function eruptionVisuals(values: Values, time: number) {
     ash: explosive ? .85 : model.style === "Mixed" ? .5 : .08,
     // Long fluid flows versus a short, thick deposit near a viscous vent.
     flowReach: clamp(time / (explosive ? 18 : 9)) * (explosive ? .28 : 1),
-    fountain: (.65 + values.gas * .17 + model.index * 1.8) * active,
+    fountain: (.65 + values.gas * .17 + model.index * 1.8) * Math.sqrt(clamp(values.gas / 2)) * active,
   };
 }
 
@@ -41,5 +42,5 @@ export function lavaFragment(index: number, time: number, values: Values) {
   const upward = 1.3 + state.fountain * (1 + seeded(index + 19));
   const x = Math.cos(angle) * (.18 + horizontal * age), z = Math.sin(angle) * (.18 + horizontal * age);
   const y = 5.8 + upward * age - 2.8 * age * age;
-  return { x, y, z, age, visible: time > delay && y > volcanoHeight(x, z) + .08 };
+  return { x, y, z, age, visible: values.gas > 0 && time > delay && y > volcanoHeight(x, z) + .08 };
 }

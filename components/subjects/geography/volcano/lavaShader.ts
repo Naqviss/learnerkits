@@ -16,7 +16,7 @@ export const lavaFragmentShader = `
   float hot=1.-smoothstep(.48,.77,rock);
   float edge=mix(smoothstep(0.,.12,vUv.x)*smoothstep(0.,.12,1.-vUv.x),1.,uLake);
   vec3 crust=vec3(.07,.019,.014);
-  vec3 orange=mix(vec3(1.5,.12,.006),vec3(3.,1.2,.065),hot);
+  vec3 orange=mix(vec3(1.5,.055,.003),vec3(2.3,.55,.025),hot);
   vec3 color=mix(crust,orange,smoothstep(.14,.85,hot)*edge);
   gl_FragColor=vec4(color,1.);
   #include <tonemapping_fragment>

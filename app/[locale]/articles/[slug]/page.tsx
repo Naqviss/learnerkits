@@ -25,6 +25,7 @@ export default async function ArticlePage({ params }: Props) {
   const article = getArticle(slug);
   if (locale !== "en" || !article) notFound();
   const dateLabel = new Intl.DateTimeFormat("en", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(article.publishedAt));
+  const updatedLabel = new Intl.DateTimeFormat("en", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(article.updatedAt));
   return <main className={`container ${styles.page}`}>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(articleJsonLd(article))} />
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbJsonLd("en", [{ name: "Home", path: "/" }, { name: "Articles", path: "/articles" }, { name: article.title, path: `/articles/${slug}` }]))} />
@@ -33,7 +34,7 @@ export default async function ArticlePage({ params }: Props) {
       <header className={styles.hero}>
         <span className="eyebrow">{article.category} · {article.audience}</span>
         <h1>{article.title}</h1>
-        <div className={styles.byline}><Link href="/en/about" rel="author">By LearnerKits</Link><time dateTime={article.publishedAt}>{dateLabel}</time><span>{article.readingMinutes} min read</span></div>
+        <div className={styles.byline}><Link href="/en/about" rel="author">By LearnerKits</Link><time dateTime={article.publishedAt}>Published {dateLabel}</time>{article.updatedAt !== article.publishedAt && <time dateTime={article.updatedAt}>Updated {updatedLabel}</time>}<span>{article.readingMinutes} min read</span></div>
       </header>
       <div className={styles.layout}>
         <aside className={styles.sidebar}>

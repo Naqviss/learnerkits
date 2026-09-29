@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+    <rect width="1200" height="800" fill="#eef2ff"/>
+    <g transform="translate(36 10) scale(.94)">
 <title>Compare a model circuit with a physical circuit</title>
 <rect width="600" height="800" fill="#eef2ff"/><rect x="600" width="600" height="800" fill="#f8f1e7"/>
 <g font-family="Arial, Helvetica, sans-serif" fill="#17264b">
@@ -34,4 +36,10 @@
 <text x="900" y="652" font-size="22" fill="#526482" text-anchor="middle">Example reading, not measured data</text>
 <circle cx="600" cy="380" r="42" fill="#fff" stroke="#c2cce0" stroke-width="2"/>
 <path d="M577 371 H622 L612 361 M622 389 H578 L588 399" fill="none" stroke="#4263dc" stroke-width="4" stroke-linecap="round"/>
-</g></svg>
+</g></g>
+    <g font-family="Arial, Helvetica, sans-serif">
+      <path d="M36 766 H1164" stroke="#d6deef"/>
+      <text x="38" y="791" font-size="16" fill="#536483">Predict. Experiment. Explain.</text>
+      <text x="1162" y="791" text-anchor="end" font-size="21" font-weight="700" fill="#263b78">LearnerKits</text>
+    </g>
+  </svg>
