@@ -469,6 +469,8 @@ html[data-theme="dark"] .learningNote{background:#3b3215}
 .simulationGuideHeader h2{font-size:clamp(1.8rem,3.4vw,2.8rem);letter-spacing:-.04em;margin:.7rem 0 .8rem}
 .simulationGuideHeader p,.simulationGuideCard p,.simulationFaq p{max-width:72ch;color:var(--muted);line-height:1.7}
 .simulationTopicLink{display:inline-flex;margin-top:12px;font-size:.9rem;font-weight:760}
+.simulationGuidePublic{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+@media(max-width:600px){.simulationGuidePublic{grid-template-columns:1fr!important}}
 .simulationGuideGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .simulationGuideCard{border:1px solid var(--line);border-radius:20px;background:var(--surface);padding:22px;min-height:230px}
 .simulationGuideCard h3{margin:0 0 .75rem;font-size:1.03rem;letter-spacing:-.015em}

@@ -1,3 +1,5 @@
+import { courseSimulationCards } from "@/lib/simulations/chemistry/course/catalog";
+
 export const subjectSlugs = ["space", "physics", "geography", "environmental-science", "biology", "chemistry", "mathematics"] as const;
 export type SubjectSlug = (typeof subjectSlugs)[number];
 
@@ -5,6 +7,8 @@ export type SubjectSlug = (typeof subjectSlugs)[number];
 // Remove a slug from this set when it is ready to be published again.
 export const hiddenSubjectSlugs: ReadonlySet<SubjectSlug> = new Set(["biology", "mathematics"]);
 export const visibleSubjectSlugs = subjectSlugs.filter((slug) => !hiddenSubjectSlugs.has(slug));
+// Temporarily unpublished simulations remain implemented and can be restored here.
+export const hiddenSimulationSlugs: ReadonlySet<string> = new Set(["periodic-table-hunt"]);
 
 export type SimulationCard = {
   slug: string;
@@ -33,7 +37,7 @@ export type SubjectDefinition = {
   simulations: SimulationCard[];
 };
 
-export const subjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
+const fullSubjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
   space: {
     slug: "space",
     labelKey: "space",
@@ -162,25 +166,26 @@ export const subjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
     labelKey: "chemistry",
     eyebrow: "Chemistry",
     headline: "Change conditions and see matter respond.",
-    description: "Connect molecular structure, bonding, concentration, pH, and reaction conditions with interactive particle and laboratory models.",
+    description: "Explore atoms, periodic trends, matter, reactions, energy, electrochemistry, organic molecules, and biochemistry through interactive particle and laboratory models.",
     prompt: "How does changing matter at the particle level change what we measure?",
-    concepts: ["Molecules", "Bonding", "Reactions", "Solutions"],
+    concepts: ["Atomic structure", "Matter", "Reactions", "Energy", "Organic chemistry", "Biochemistry"],
     gradeBand: "Grades 8–12",
     learningObjectives: ["Relate molecular structure to observable properties", "Use quantitative evidence to reason about reactions and solutions", "Connect particle-level models with laboratory measurements"],
     simulations: [
       { slug: "gas-law-lab", title: "Gas Law Lab", concepts: "Pressure · volume · temperature · moles", difficulty: "Beginner", duration: "5–10 min", kind: "Matter lab", outcome: "Predict pressure and volume changes using the ideal gas relationship.", visualMode: "simulation" },
-      { slug: "reaction-rate-lab", title: "Reaction Rate Lab", concepts: "Temperature · activation energy · concentration · half-life", difficulty: "Intermediate", duration: "7–12 min", kind: "Kinetics lab", outcome: "Explain how temperature and concentration influence reaction speed.", visualMode: "graph" },
+      { slug: "reaction-rate-lab", title: "Reaction Rate Lab", concepts: "Collision theory · activation energy · catalysts · surface area · reaction-rate graphs", difficulty: "Intermediate", duration: "7–12 min", kind: "Kinetics lab", outcome: "Explain how temperature and concentration influence reaction speed.", visualMode: "graph" },
       { slug: "molecular-geometry-3d", title: "Molecular Geometry 3D Explorer", concepts: "VSEPR · bond angles · lone pairs · molecular shape", difficulty: "Intermediate", duration: "7–12 min", kind: "3D simulation", outcome: "Predict and inspect molecular shapes from electron groups and lone pairs.", seoTarget: "molecular geometry simulator 3D", opportunity: "Very High", featured: true, visualMode: "3d" },
       { slug: "molecule-builder-3d", title: "Molecule Builder 3D", concepts: "Atoms · valence · bonds · molecular models", difficulty: "Beginner", duration: "8–15 min", kind: "3D game", outcome: "Build stable molecules by satisfying common valence and bonding patterns.", seoTarget: "build molecules game", opportunity: "High", featured: true, visualMode: "game" },
       { slug: "chemical-bonding", title: "Chemical Bonding Challenge", concepts: "Ionic · covalent · electronegativity · valence electrons", difficulty: "Intermediate", duration: "7–12 min", kind: "Game", outcome: "Classify and construct bonds from valence electrons and electronegativity differences.", seoTarget: "chemical bonding game", opportunity: "High", visualMode: "game" },
-      { slug: "acid-base-ph", title: "Acid–Base & pH Simulator", concepts: "pH · H⁺ · OH⁻ · strong and weak acids", difficulty: "Intermediate", duration: "7–12 min", kind: "Simulation", outcome: "Relate hydrogen-ion concentration to pH and acid–base strength.", seoTarget: "pH simulator acids bases", opportunity: "Very High", visualMode: "simulation" },
+      { slug: "acid-base-ph", title: "Acid–Base & pH Simulator", concepts: "pH · dissociation · strong and weak acids · strong and weak bases", difficulty: "Intermediate", duration: "7–12 min", kind: "Simulation", outcome: "Relate hydrogen-ion concentration to pH and acid–base strength.", seoTarget: "pH simulator acids bases", opportunity: "Very High", visualMode: "simulation" },
       { slug: "neutralization-station", title: "Neutralization Station", concepts: "Moles · acid–base · endpoint · indicators", difficulty: "Beginner", duration: "7–12 min", kind: "Chemistry game", outcome: "Use particle and mole evidence to reach a neutral endpoint without overshooting.", seoTarget: "acid base neutralization game", opportunity: "High", featured: true, visualMode: "3d" },
       { slug: "titration-simulator", title: "Titration Simulator", concepts: "Equivalence point · indicator · concentration · neutralization", difficulty: "Advanced", duration: "10–18 min", kind: "Interactive simulation", outcome: "Determine an unknown concentration from titration volume and stoichiometry.", seoTarget: "acid base titration simulator", opportunity: "Very High", visualMode: "simulation" },
       { slug: "states-of-matter-3d", title: "States of Matter 3D Lab", concepts: "Particles · phase change · temperature · pressure", difficulty: "Beginner", duration: "6–10 min", kind: "3D simulation", outcome: "Compare particle motion and spacing in solids, liquids, and gases.", seoTarget: "states of matter particle simulator", opportunity: "High", visualMode: "3d" },
       { slug: "solubility-curve", title: "Solubility Curve Simulator", concepts: "Solubility · temperature · saturation · crystallization", difficulty: "Intermediate", duration: "7–12 min", kind: "Simulation", outcome: "Read and manipulate solubility curves to predict saturation and crystal formation.", seoTarget: "solubility curve simulator", opportunity: "Very High", featured: true, visualMode: "graph" },
-      { slug: "limiting-reagent", title: "Limiting Reagent Challenge", concepts: "Stoichiometry · mole ratios · excess reagent · yield", difficulty: "Advanced", duration: "8–15 min", kind: "Chemistry game", outcome: "Identify the limiting reactant and predict product yield from mole ratios.", seoTarget: "limiting reagent game", opportunity: "Very High", visualMode: "game" },
+      { slug: "limiting-reagent", title: "Limiting Reagent Challenge", concepts: "Stoichiometry · mole ratios · limiting reactant · excess reactant · percentage yield", difficulty: "Advanced", duration: "8–15 min", kind: "Chemistry game", outcome: "Identify the limiting reactant and predict product yield from mole ratios.", seoTarget: "limiting reagent game", opportunity: "Very High", visualMode: "game" },
       { slug: "balance-equation", title: "Balance the Equation", concepts: "Conservation of mass · coefficients · atoms · reactions", difficulty: "Beginner", duration: "5–10 min", kind: "Chemistry game", outcome: "Balance reaction equations while preserving the number of each atom.", seoTarget: "balancing chemical equations game", opportunity: "Medium", visualMode: "game" },
       { slug: "periodic-table-hunt", title: "Periodic Table Element Hunt", concepts: "Groups · periods · atomic number · element properties", difficulty: "Beginner", duration: "6–10 min", kind: "Game", outcome: "Locate elements from clues about groups, periods, and atomic properties.", seoTarget: "periodic table element game", opportunity: "Medium", visualMode: "game" },
+      ...courseSimulationCards,
     ],
   },
   mathematics: {
@@ -209,6 +214,13 @@ export const subjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
     ],
   },
 };
+
+// All public consumers (localized listings, search, related labs, routes, and sitemap)
+// share this filtered catalog so unpublished activities cannot leak into discovery.
+export const subjectsCatalog = Object.fromEntries(subjectSlugs.map((slug) => [slug, {
+  ...fullSubjectsCatalog[slug],
+  simulations: fullSubjectsCatalog[slug].simulations.filter((simulation) => !hiddenSimulationSlugs.has(simulation.slug)),
+}])) as Record<SubjectSlug, SubjectDefinition>;
 
 export function isSubjectSlug(value: string): value is SubjectSlug {
   return (subjectSlugs as readonly string[]).includes(value);

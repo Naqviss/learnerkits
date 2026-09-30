@@ -35,7 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       : articleSummaries.some((article) => path === `/articles/${article.slug}`)
         ? { images: articleSummaries.filter((article) => path === `/articles/${article.slug}`).flatMap((article) => [`${siteUrl}${articleImages[article.slug].src}`, ...(getArticle(article.slug)?.figures ?? []).map((figure) => `${siteUrl}${figure.src}`)]) }
         : {}),
-    lastModified: path === "/guides/environmental-city-builder" ? "2026-09-27" : path === "/subjects" || subjectImageEntries[path] ? subjectImagesUpdatedAt : path === "/articles" ? articlesUpdatedAt : articleSummaries.find((article) => path === `/articles/${article.slug}`)?.updatedAt ?? lastModified,
+    lastModified: path === "/subjects/chemistry" || subjectsCatalog.chemistry.simulations.some(sim => path === `/simulations/${sim.slug}`) ? "2026-09-30" : path === "/guides/environmental-city-builder" ? "2026-09-27" : path === "/subjects" || subjectImageEntries[path] ? subjectImagesUpdatedAt : path === "/articles" ? articlesUpdatedAt : articleSummaries.find((article) => path === `/articles/${article.slug}`)?.updatedAt ?? lastModified,
     changeFrequency: path.includes("simulations") ? "weekly" : "monthly",
     priority: path === "/" ? 1 : path === "/molecule-kit" ? .9 : path.includes("subjects/") || path === "/molecules" ? .85 : path.startsWith("/molecules/") ? .7 : isEnglishOnly(path) ? .85 : path === "/donate" ? .5 : .8,
     alternates: isEnglishOnly(path)

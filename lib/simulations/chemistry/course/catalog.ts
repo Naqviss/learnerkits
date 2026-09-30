@@ -1,0 +1,175 @@
+import type { SimulationCard } from "@/lib/subjects/catalog";
+import type { Control } from "../model";
+
+export type CourseLab = {
+  slug: string; title: string; topic: string; concepts: string[]; description: string;
+  controls: Control[]; formula: string; explanation: string; assumptions: string;
+  steps: string[]; source: string; sourceTitle: string;
+};
+const range = (key:string,label:string,min:number,max:number,step:number,value:number,unit=""):Control => ({key,label,min,max,step,value,unit});
+const choice = (key:string,label:string,options:string[],value=0):Control => ({key,label,options,min:0,max:options.length-1,step:1,value});
+const source = (chapter:string) => `https://openstax.org/books/chemistry-2e/pages/${chapter}`;
+const ref = (chapter:string) => ({source:source(chapter),sourceTitle:"OpenStax · Chemistry 2e"});
+export const courseLabs: CourseLab[] = [
+  {
+    slug:"atomic-structure",title:"Atomic Structure & Orbital Explorer",topic:"Atomic Structure",
+    concepts:["Protons, neutrons and electrons","Isotopes","Ion formation","Electronic configuration","Shells and subshells","Atomic orbitals"],
+    description:"Build atoms and ions, compare isotopes, and connect electron counts to shells, subshells, and orbital occupancy.",
+    controls:[range("protons","Protons",1,18,1,6),range("neutrons","Neutrons",0,24,1,6),range("electrons","Electrons",0,18,1,6),choice("orbital","Orbital shape",["1s · spherical","2s · radial node","2p · two lobes"])],
+    formula:"Z = protons · A = protons + neutrons · charge = protons − electrons",
+    explanation:"Proton count identifies an element. Neutrons change its isotope; gaining or losing electrons forms ions. Subshells fill in energy order, with at most two opposite-spin electrons per orbital. The three p orbitals fill singly before pairing (Hund’s rule).",
+    assumptions:"First 18 elements and 0–18 electrons only. Counts describe a hypothetical species; arbitrary isotopes or highly charged ions may be unstable. Shell rings organize electron counts, not electron paths. Orbital colors show wavefunction sign, not electric charge; drawings are schematic probability regions.",
+    steps:["Keep six protons and change neutrons from six to eight to compare carbon-12 and carbon-14.","Keep eleven protons and remove one electron from neutral sodium: the nucleus stays the same.","Compare nitrogen and oxygen orbital boxes; note when the first pair appears in 2p."],...ref("6-4-electronic-structure-of-atoms-electron-configurations"),
+  },
+  {
+    slug:"periodic-trends",title:"Periodic Trends Explorer",topic:"Periodic Table",
+    concepts:["Periodic trends","Atomic radius","Ionization energy","Electron affinity","Electronegativity","Metallic and non-metallic character"],
+    description:"Compare element properties across periods and down groups using a selectable periodic table and property graph.",
+    controls:[range("element","Atomic number",1,20,1,11),choice("property","Compare property",["Covalent radius (pm)","First ionization energy (kJ/mol)","Electronegativity (Pauling)","Electron affinity (kJ/mol released)"])],
+    formula:"Across a period: stronger effective nuclear attraction · Down a group: additional occupied shells",
+    explanation:"Covalent radius generally decreases across a period and increases down a group. First ionization energy usually follows the opposite trend, with real subshell and pairing exceptions. Electronegativity describes attraction for shared electrons; electron affinity concerns adding an electron to an isolated gaseous atom.",
+    assumptions:"Selected reference values for the first 20 elements are rounded. Radius means covalent radius, not a hard atomic boundary (Cordero et al., 2008). Positive electron affinity here means energy released. A dash means no favorable stable-anion value or no assigned Pauling electronegativity; it does not mean zero. Noble-gas radii are estimates.",
+    steps:["Select sodium, magnesium, and aluminum. Notice the ionization-energy exception at aluminum.","Compare lithium, sodium, and potassium to see how an added shell changes size.","Compare fluorine and chlorine electron affinities: the trend has exceptions."],...ref("6-5-periodic-variations-in-element-properties"),
+  },
+  {
+    slug:"phase-changes-diffusion",title:"Phase Changes & Diffusion Lab",topic:"States of Matter",
+    concepts:["Melting and freezing","Evaporation and condensation","Sublimation and deposition","Latent heat","Diffusion","Temperature and particle motion"],
+    description:"Add or remove heat to follow water through phase changes, then compare diffusion at different temperatures.",
+    controls:[choice("mode","Experiment",["Water heating and cooling","Diffusion in a gas","Sublimation and deposition","Evaporation and condensation"]),range("heat","Heat added to 1 g ice at −20 °C",0,3300,10,500,"J"),range("temperature","Diffusion temperature",200,600,5,300,"K"),range("elapsed","Diffusion time",0,30,1,0,"s"),choice("direction","Sublimation direction",["Solid → gas","Gas → solid"]),range("progress","Phase transformation",0,100,1,40,"%"),range("surfaceTemperature","Water surface temperature",10,80,1,25,"°C"),range("humidity","Vapor saturation relative to surface",0,150,1,50,"%")],
+    formula:"q = mcΔT within a phase · q = mL during a phase change · diffusion distance ∝ √(Dt)",
+    explanation:"At a melting or boiling plateau, added heat changes the phase instead of raising the temperature. Reverse the heat input to observe freezing and condensation. Evaporation can occur at a liquid surface below the boiling point. Sublimation skips the liquid phase under appropriate pressure and temperature conditions.",
+    assumptions:"Heating curve: 1 g water at 1 atm, approximate constant heat capacities and latent heats; no heat loss or supercooling. Diffusion is a separate illustrative dilute-gas model with D ∝ T^1.5 at fixed pressure, not a measured gas. Sublimation is a schematic low-pressure pathway, not water at 1 atm. Surface exchange uses NIST/Stull Antoine vapor pressure over 10–80 °C. Humidity is relative to saturation at the water surface; values above 100% represent vapor supersaturated relative to that surface. Pressure difference predicts transfer direction, not mass flow or elapsed time.",
+    steps:["Increase heat slowly near 42 J and 376 J: observe the melting plateau.","Move backward from steam through the 100 °C plateau to show condensation.","Switch to diffusion and compare the same elapsed time at 200 and 600 K.","In surface exchange, compare 50%, 100%, and 120% saturation to see evaporation, equilibrium, and condensation."],...ref("10-3-phase-transitions"),
+  },
+  {
+    slug:"mole-mass-converter",title:"Moles, Molar Mass & Particles Lab",topic:"Stoichiometry",
+    concepts:["Mole concept","Molar mass","Mole-to-mass conversions","Avogadro constant","Concentration calculations"],
+    description:"Connect measurable mass with moles, particle counts, and molarity for common molecular and ionic substances.",
+    controls:[choice("compound","Substance",["H₂O · water","NaCl · sodium chloride","CO₂ · carbon dioxide","C₆H₁₂O₆ · glucose","CaCO₃ · calcium carbonate"]),range("mass","Sample mass",0,200,.1,18,"g"),range("volume","Final solution volume",.1,5,.1,1,"L")],
+    formula:"n = m/M · N = nNₐ · c = n/V · Nₐ = 6.02214076 × 10²³ mol⁻¹",
+    explanation:"One mole contains Avogadro’s number of specified entities. Molar mass is the sum of atomic molar masses in the formula. Ionic solids are counted as formula units, while molecular substances are counted as molecules.",
+    assumptions:"Molar masses use rounded conventional atomic weights. The calculated molarity is a formal amount-per-volume calculation assuming all the sample is present in the final volume; it does not predict dissolution, ionization, or chemical reaction. CO₂ and CaCO₃ may not dissolve to that concentration.",
+    steps:["Choose water and set 18.0 g; compare with approximately one mole.","Keep mass fixed and change the substance. Heavier formula units give fewer moles.","Double final volume without changing mass and observe the concentration halve."],...ref("3-1-formula-mass-and-the-mole-concept"),
+  },
+  {
+    slug:"chemical-reactions",title:"Chemical Reaction Explorer",topic:"Chemical Reactions",
+    concepts:["Reaction types","Reactants and products","Precipitation","Acid-base reactions","Redox","Single and double displacement","Combustion","Energy changes"],
+    description:"Follow balanced reactant-to-product transformations and identify the evidence and driving forces of common reactions.",
+    controls:[choice("reaction","Reaction",["Precipitation · AgNO₃ + NaCl","Neutralization · HCl + NaOH","Displacement · Zn + CuSO₄","Combustion · methane","Decomposition · calcium carbonate"]),range("extent","Reaction progress",0,100,1,0,"%")],
+    formula:"Atoms and charge are conserved; coefficients specify the reacting mole ratio.",
+    explanation:"Reaction labels can overlap. Precipitation is often a double-displacement reaction; combustion is also redox. Net ionic equations remove spectator ions and make the chemical change easier to see.",
+    assumptions:"Progress is manually controlled and assumes the displayed stoichiometric starting mixture reacts as written; it is not a reaction-rate prediction. Particle icons represent relative amounts. Calcium carbonate decomposition requires heating; reaction direction and completion depend on conditions.",
+    steps:["Select precipitation and move the progress control: silver chloride becomes a solid while spectator ions remain aqueous.","Compare zinc displacement with neutralization: only the first transfers electrons.","Compare methane combustion with carbonate decomposition: one releases heat; the other requires heat."],...ref("4-2-classifying-chemical-reactions"),
+  },
+  {
+    slug:"buffer-solutions",title:"Buffer Solutions Lab",topic:"Acids, Bases & pH",
+    concepts:["Weak-acid equilibria","Conjugate base","Buffer capacity","Added acid and base","Henderson–Hasselbalch relationship"],
+    description:"Mix acetic acid and acetate, add strong acid or base, and observe both buffering and buffer exhaustion.",
+    controls:[range("acid","Initial CH₃COOH",1,100,1,50,"mmol"),range("base","Initial CH₃COO⁻ (sodium salt)",1,100,1,50,"mmol"),range("dose","Strong-base dose (negative = acid)",-120,120,1,0,"mmol"),range("volume","Final volume",.5,2,.1,1,"L")],
+    formula:"pH ≈ pKₐ + log₁₀([A⁻]/[HA]) in the buffer region · Kₐ = 1.8 × 10⁻⁵",
+    explanation:"Added acid converts acetate to acetic acid; added base consumes acetic acid to form acetate. Their equilibrium resists large pH changes while both forms are available. The exact charge-balance calculation continues beyond buffer capacity, where the simple ratio approximation fails.",
+    assumptions:"Ideal dilute solutions at 25 °C. Final volume includes any titrant; changing dose adds moles at that specified final volume. Activities and heat effects are omitted. The solver includes water autoionization and the sodium/chloride charge balance.",
+    steps:["Start with equal acid and acetate: pH is close to pKₐ.","Add 10 mmol of base, then reset and add 10 mmol of acid. Compare changes.","Add more base than the original acid amount to see buffering fail."],...ref("14-6-buffers"),
+  },
+  {
+    slug:"chemical-equilibrium",title:"Dynamic Chemical Equilibrium Lab",topic:"Chemical Equilibrium",
+    concepts:["Dynamic equilibrium","Reversible reactions","Le Chatelier’s principle","Concentration","Temperature","Pressure","Equilibrium constant"],
+    description:"Explore a reversible gas reaction and compare forward and reverse rates as concentration, volume, and temperature change.",
+    controls:[range("a","Initial A",.1,3,.1,1,"mol"),range("b","Initial B",0,3,.1,.2,"mol"),range("volume","Vessel volume",.5,5,.1,1,"L"),range("temperature","Temperature",270,400,1,298,"K"),choice("enthalpy","Forward reaction",["Endothermic · +20 kJ/mol","Exothermic · −20 kJ/mol"]),range("elapsed","Time after mixing",0,100,1,0,"s")],
+    formula:"A(g) ⇌ 2 B(g) · Kc = ([B]/c°)² / ([A]/c°) · c° = 1 mol/L",
+    explanation:"At equilibrium, forward and reverse reactions continue at equal rates; concentrations need not be equal. Compression favors the side with fewer gas particles. Temperature changes K, whereas changing starting amounts or volume changes the reaction quotient. An endothermic forward reaction is favored by heating.",
+    assumptions:"Illustrative ideal-gas reaction, not a named substance. Kc = 4 at 298 K and follows a constant-enthalpy van ’t Hoff model. Mass-action rates use a fixed forward rate parameter and reverse parameter consistent with Kc. Each control change prepares a new initial mixture; the time slider shows its relaxation.",
+    steps:["Advance time until the two reaction rates converge, then compare the unequal concentrations.","Compare the equilibrium prediction at 0.5 and 5 L with the same starting moles.","Change temperature for both signs of reaction enthalpy and compare Kc."],...ref("13-3-shifting-equilibria-le-chateliers-principle"),
+  },
+  {
+    slug:"thermochemistry-calorimetry",title:"Thermochemistry & Calorimetry Lab",topic:"Thermochemistry",
+    concepts:["Exothermic and endothermic reactions","Enthalpy","Heat transfer","Calorimetry","Bond energy","Energy-level diagrams"],
+    description:"Compare reaction energy with heat gained by a calorimeter and estimate enthalpy from bonds broken and formed.",
+    controls:[choice("mode","Experiment",["Reaction calorimetry","Bond-energy estimate · H₂ + Cl₂ → 2 HCl"]),range("enthalpy","Reaction enthalpy",-100,100,1,-57,"kJ/mol"),range("moles","Amount reacting",.01,.05,.005,.05,"mol"),range("mass","Water mass",100,500,10,200,"g"),range("initial","Initial temperature",15,35,1,25,"°C"),range("cup","Calorimeter heat capacity",0,200,5,30,"J/K"),range("formed","H–Cl bond energy",400,450,1,431,"kJ/mol")],
+    formula:"qreaction = nΔH · ΔT = −qreaction/(mc + Ccal) · ΔH ≈ ΣD(broken) − ΣD(formed)",
+    explanation:"An exothermic reaction has negative ΔH and warms the surroundings. An endothermic reaction absorbs heat and cools them. Breaking bonds requires energy; forming bonds releases energy. Reaction enthalpy compares the total costs and releases.",
+    assumptions:"Constant-pressure ideal calorimeter, no heat loss, and water heat capacity 4.184 J g⁻¹ K⁻¹. Temperature ranges remain in the liquid-water region. Bond energies are average gas-phase values: H–H 436, Cl–Cl 243 kJ/mol; changing H–Cl explores sensitivity, not a new measured constant.",
+    steps:["Reverse the sign of ΔH while keeping all other settings fixed and compare temperature changes.","Double water mass to see how thermal capacity changes the response.","Switch to bond energies: compare energy needed to break two bonds with energy released forming two H–Cl bonds."],...ref("5-2-calorimetry"),
+  },
+  {
+    slug:"electrochemistry",title:"Electrochemical Cells & Electrolysis Lab",topic:"Electrochemistry",
+    concepts:["Galvanic cells","Electrolysis","Electrodes","Electron flow","Cell potential","Faraday’s laws","Oxidation and reduction"],
+    description:"Connect electron flow to the voltage of a zinc–copper cell and the mass deposited during copper electrolysis.",
+    controls:[choice("mode","Cell type",["Zn/Cu galvanic cell","Copper electroplating"]),range("zinc","[Zn²⁺]",.01,1,.01,1,"mol/L"),range("copper","[Cu²⁺]",.01,1,.01,1,"mol/L"),range("current","Electrolysis current",.1,5,.1,1,"A"),range("minutes","Electrolysis time",0,60,1,10,"min"),range("efficiency","Current efficiency",50,100,1,100,"%")],
+    formula:"E = 1.10 − (RT/2F) ln([Zn²⁺]/[Cu²⁺]) · mCu = ηItMCu/(2F)",
+    explanation:"Oxidation always occurs at the anode and reduction at the cathode. In a galvanic Zn/Cu cell, electrons travel through the wire from zinc to copper; the salt bridge carries ions. Electroplating uses an external supply to drive reduction of Cu²⁺ at the object being plated.",
+    assumptions:"25 °C, ideal activities approximated by molar concentrations, E°cell = 1.10 V, F = 96485.33212 C/mol, and Cu molar mass 63.546 g/mol. Cell voltage is open-circuit, not loaded voltage. Plating assumes a copper anode replenishes Cu²⁺; concentration depletion, overpotential, and resistance are omitted.",
+    steps:["Change ion concentration ratio and compare voltage with the 1.10 V standard value.","Switch to electroplating and double either current or time; deposited mass doubles.","Lower current efficiency and account for the charge that does not deposit copper."],...ref("17-7-electrolysis"),
+  },
+  {
+    slug:"organic-chemistry",title:"Organic Molecules & Reactions Explorer",topic:"Organic Chemistry",
+    concepts:["Hydrocarbons","Alkanes, alkenes and alkynes","Isomerism","Functional groups","Addition","Substitution","Combustion","Polymerization","Reaction mechanisms"],
+    description:"Inspect structural formulas, compare isomers, and step through representative organic reaction mechanisms.",
+    controls:[choice("family","Explore",["Alkane · ethane","Alkene · ethene","Alkyne · ethyne","Isomers · butane / 2-methylpropane","Functional groups","Addition · ethene + HBr","Substitution · methane + chlorine","Combustion · methane","Polymerization · ethene"]),range("step","Mechanism / structure step",0,3,1,0),choice("group","Functional group",["Alcohol · ethanol","Aldehyde · ethanal","Ketone · propanone","Carboxylic acid · ethanoic acid","Ester · ethyl ethanoate","Amine · methylamine"])],
+    formula:"Acyclic alkane CₙH₂ₙ₊₂ · one alkene CₙH₂ₙ · one alkyne CₙH₂ₙ₋₂",
+    explanation:"Bond order and connectivity determine an organic structure. Structural isomers have the same molecular formula but different connections. Functional groups help organize characteristic reactivity. Reaction steps show bonds broken and formed, including representative intermediates and electron movement.",
+    assumptions:"Selected structural examples rather than an arbitrary synthesis predictor. Mechanism drawings are schematic; not all competing pathways are shown. Hydrocarbon formulas apply to acyclic compounds with the stated single unsaturation. Radical chlorination can produce further substitution products; ethene addition here assumes no peroxides.",
+    steps:["Compare ethane, ethene, and ethyne and count bonds at each carbon.","Switch between the two C₄H₁₀ isomers using the step control.","Select addition or substitution and advance the mechanism one step at a time."],...ref("20-1-hydrocarbons"),
+  },
+  {
+    slug:"solution-concentration",title:"Solutions, Concentration & Dilution Lab",topic:"Solutions",
+    concepts:["Solute and solvent","Molarity","Dilution","Concentration calculations","Conservation of solute"],
+    description:"Prepare a solution from a stock aliquot and see how adding solvent changes molarity while conserving solute.",
+    controls:[range("stock","Stock concentration",.01,2,.01,1,"mol/L"),range("aliquot","Stock aliquot",5,100,1,25,"mL"),range("water","Added water",0,900,5,225,"mL")],
+    formula:"C₁V₁ = C₂V₂ · nsolute = C₁V₁ · V₂ = V₁ + Vwater",
+    explanation:"The solute is the dissolved substance; water is the solvent in this model. Dilution changes concentration by increasing volume without removing solute. Use the final total volume, not just the added water, when calculating molarity.",
+    assumptions:"Ideal mixing with additive volumes, no reaction or evaporation, and all solute dissolved. The tint represents relative concentration, not a universal color of solutions. Dissolution limits and crystallization are explored in the separate solubility lab.",
+    steps:["Mix 25 mL of 1.00 M stock with 225 mL of water to make 0.100 M solution.","Keep the aliquot fixed and add more water; solute moles remain unchanged.","Compare two preparations with the same final concentration but different total amounts."],...ref("3-3-molarity"),
+  },
+  {
+    slug:"redox-reactions",title:"Redox & Oxidation States Lab",topic:"Redox Chemistry",
+    concepts:["Electron transfer","Oxidation numbers","Oxidizing and reducing agents","Half-reactions","Redox balancing"],
+    description:"Track changes in oxidation state and combine balanced half-reactions so electron losses equal electron gains.",
+    controls:[choice("reaction","Redox system",["Zn + Cu²⁺","Fe²⁺ + MnO₄⁻ in acid","I⁻ + Cr₂O₇²⁻ in acid"]),range("step","Balancing step",0,3,1,0)],
+    formula:"Oxidation: electrons lost · Reduction: electrons gained · Total electron loss = total electron gain",
+    explanation:"Oxidation numbers are a bookkeeping device for electron transfer. The reducing agent is itself oxidized; the oxidizing agent is reduced. Half-reactions balance atoms and charge separately before electrons cancel in the overall equation.",
+    assumptions:"The selected permanganate and dichromate reactions are in acidic aqueous solution. H₂O balances oxygen and H⁺ balances hydrogen; these equations cannot be transferred unchanged to basic solution. Oxidation numbers are formal assignments, not measured charges on covalently bonded atoms.",
+    steps:["Compare each reactant’s oxidation number with its product value.","Advance to the half-reactions and count the electron loss and gain.","Multiply half-reactions and cancel electrons, then inspect atom and charge conservation."],...ref("17-1-review-of-redox-chemistry"),
+  },
+  {
+    slug:"metal-reactivity",title:"Metal Reactivity & Displacement Lab",topic:"Metal Reactivity",
+    concepts:["Reactivity series","Metal displacement","Electron transfer","Standard electrode potentials","Oxidizing and reducing agents"],
+    description:"Place a metal in another metal’s ion solution and predict displacement from the standard electrode potentials.",
+    controls:[choice("metal","Solid metal strip",["Mg","Zn","Fe","Cu","Ag"],1),choice("ion","Dissolved metal ion",["Mg²⁺","Zn²⁺","Fe²⁺","Cu²⁺","Ag⁺"],3),range("progress","Reaction progress",0,100,1,0,"%")],
+    formula:"E°cell = E°reduction(ion) − E°reduction(strip) · ΔG° = −nFE°cell",
+    explanation:"A more readily oxidized metal can reduce ions of a less reactive metal. A positive calculated E°cell predicts a thermodynamically favorable standard-state displacement; the strip dissolves while the other metal deposits.",
+    assumptions:"Standard conditions with unit ion activities and pure metals at 25 °C. Potentials are rounded. Positive voltage does not guarantee a fast visible reaction: oxide coatings, passivation, solvent reactions, and kinetics are omitted. Reaction progress is schematic, not elapsed time.",
+    steps:["Select Zn metal and Cu²⁺ ions: identify the dissolving strip and deposited metal.","Reverse the pair. The standard-state reaction is no longer favorable.","Compare magnesium and silver to place them at opposite ends of the displayed series."],...ref("17-3-electrode-and-cell-potentials"),
+  },
+  {
+    slug:"biochemistry",title:"Biomolecules & Enzyme Kinetics Lab",topic:"Biochemistry",
+    concepts:["Carbohydrates","Proteins","Lipids","DNA structure","Enzyme-substrate interaction","Biological reactions","Enzyme kinetics"],
+    description:"Explore the building blocks of major biomolecules and model enzyme binding, saturation, and competitive inhibition.",
+    controls:[choice("molecule","Biomolecule",["Enzyme and substrate","Carbohydrate","Protein","Lipid","DNA"]),range("substrate","Substrate concentration",0,10,.1,2,"mmol/L"),range("enzyme","Relative enzyme amount",.1,3,.1,1,"×"),range("inhibitor","Competitive inhibitor",0,5,.1,0,"mmol/L"),choice("base","DNA base on first strand",["A","T","G","C"])],
+    formula:"v = Vmax[S] / (Km(1 + [I]/Ki) + [S]) · E + S ⇌ ES → E + P",
+    explanation:"Carbohydrates contain sugar units; proteins are amino-acid chains; triglycerides join glycerol to three fatty acids. DNA has antiparallel sugar-phosphate backbones with complementary base pairs. Enzymes lower activation barriers and can become saturated with substrate without being consumed.",
+    assumptions:"Illustrative Michaelis–Menten initial-rate model: Km = Ki = 1 mmol/L and Vmax = 1 mmol L⁻¹ min⁻¹ at enzyme amount 1×. Temperature and pH are fixed at suitable conditions. Competitive inhibition changes apparent Km but not Vmax. Biomolecule drawings show organization, not atom-by-atom geometry.",
+    steps:["Raise substrate concentration and observe the rate approach Vmax.","Add competitive inhibitor, then increase substrate: compare with the uninhibited curve.","Select DNA and change the first base to inspect its complementary partner and hydrogen bonds."],source:"https://openstax.org/books/biology-2e/pages/6-5-enzymes",sourceTitle:"OpenStax · Biology 2e",
+  },
+];
+
+export const courseSimulationCards: SimulationCard[] = courseLabs.map(lab=>({slug:lab.slug,title:lab.title,concepts:lab.concepts.join(" · "),difficulty:["chemical-equilibrium","buffer-solutions","electrochemistry","redox-reactions"].includes(lab.slug)?"Advanced":"Intermediate",duration:"5–15 min",kind:"Interactive simulation",outcome:lab.description,seoTarget:`${lab.topic.toLowerCase()} simulator`,visualMode:"simulation"}));
+export const getCourseLab = (slug:string) => courseLabs.find(lab=>lab.slug===slug);
+
+export const chemistryTopics = [
+  {title:"Atomic Structure",slugs:["atomic-structure","molecular-geometry-3d","molecule-builder-3d"],text:"Atom structure, protons, neutrons, electrons, isotopes, ions, electron configurations, shells, subshells, and orbitals."},
+  {title:"Periodic Table",slugs:["periodic-trends","chemical-bonding"],text:"Atomic radius, ionization energy, electron affinity, electronegativity, and metallic or non-metallic character."},
+  {title:"States of Matter",slugs:["states-of-matter-3d","phase-changes-diffusion","gas-law-lab"],text:"Particle models, solid/liquid/gas, melting, freezing, evaporation, condensation, sublimation, diffusion, temperature, pressure, and gas laws."},
+  {title:"Stoichiometry",slugs:["mole-mass-converter","balance-equation","limiting-reagent"],text:"Balancing equations, the mole, molar mass, mole–mass conversions, limiting and excess reactants, percentage yield, and concentration."},
+  {title:"Chemical Reactions",slugs:["chemical-reactions","balance-equation"],text:"Reaction types, reactant–product transformations, precipitation, acid–base and redox reactions, displacement, combustion, and energy changes."},
+  {title:"Acids, Bases & pH",slugs:["acid-base-ph","neutralization-station","titration-simulator","buffer-solutions"],text:"Dissociation, pH, strong and weak acids and bases, neutralization, indicators, titration, and buffers."},
+  {title:"Chemical Equilibrium",slugs:["chemical-equilibrium","buffer-solutions"],text:"Dynamic and reversible equilibria, Le Chatelier’s principle, concentration, temperature, pressure, and equilibrium constants."},
+  {title:"Reaction Kinetics",slugs:["reaction-rate-lab"],text:"Collision theory, activation energy, temperature, concentration, surface area, catalysts, reaction-rate graphs, and energy profiles."},
+  {title:"Thermochemistry",slugs:["thermochemistry-calorimetry","reaction-rate-lab"],text:"Exothermic and endothermic reactions, enthalpy, heat transfer, calorimetry, bond energies, and energy-level diagrams."},
+  {title:"Electrochemistry",slugs:["electrochemistry","redox-reactions"],text:"Oxidation and reduction, oxidation numbers, galvanic/voltaic cells, electrolysis, electrodes, electron flow, cell potential, and Faraday’s laws."},
+  {title:"Organic Chemistry",slugs:["organic-chemistry","molecular-geometry-3d"],text:"Hydrocarbons, alkanes, alkenes, alkynes, isomerism, functional groups, addition, substitution, combustion, polymerization, and mechanisms."},
+  {title:"Solutions",slugs:["solution-concentration","solubility-curve","mole-mass-converter"],text:"Solutes and solvents, solubility, concentration, dilution, saturation, solubility curves, and temperature effects."},
+  {title:"Redox Chemistry",slugs:["redox-reactions","chemical-reactions"],text:"Electron transfer, oxidation and reduction, oxidizing and reducing agents, oxidation states, and balanced half-reactions."},
+  {title:"Metal Reactivity",slugs:["metal-reactivity","electrochemistry"],text:"Metal reactivity series, displacement, electron donation, and the link between electrode potentials and reaction direction."},
+  {title:"Biochemistry",slugs:["biochemistry"],text:"Carbohydrates, proteins, lipids, DNA structure, enzymes, substrate interactions, biological reactions, and enzyme kinetics."},
+];

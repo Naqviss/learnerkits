@@ -1,5 +1,6 @@
 "use client";
 
+import { SIMULATION_LEARNING_TOOLS_ENABLED } from "@/lib/settings/simulationFeatures";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import * as THREE from "three";
@@ -47,7 +48,7 @@ function createCrater(x: number, z: number, radius: number) {
 
 export function MoonLandingClient({ m }: { m: Messages }) {
   const searchParams = useSearchParams();
-  const selectedMission = missions.find((mission) => mission.id === searchParams.get("mission") && mission.simulation === "moonLanding");
+  const selectedMission = SIMULATION_LEARNING_TOOLS_ENABLED ? missions.find((mission) => mission.id === searchParams.get("mission") && mission.simulation === "moonLanding") : undefined;
   const host = useRef<HTMLDivElement>(null);
   const engineRef = useRef(new MoonLandingEngine());
   const runnerRef = useRef(new FixedStepRunner(1 / 120));

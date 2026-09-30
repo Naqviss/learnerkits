@@ -1,4 +1,5 @@
 "use client";
+import { SIMULATION_LEARNING_TOOLS_ENABLED } from "@/lib/settings/simulationFeatures";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { SimulationCard, SubjectDefinition } from "@/lib/subjects/catalog";
@@ -64,16 +65,16 @@ export function PhysicsActivitiesClient({locale,subject,simulation}:{locale:stri
         {slug==="electromagnet-3d"&&<div className={styles.legend}><span>Blue field loops · direction cones follow current</span><span>Winding display samples the actual turn count</span></div>}
         {slug==="newtons-laws-force-lab"&&<div className={styles.legend}><span>Blue arrow: applied force</span><span>Amber arrow: resistance</span><span>Travel is fitted to the viewport</span></div>}
       </section>
-      <aside className={styles.controlsPanel}><div className={styles.mission}><div className={styles.missionLabel}><span>YOUR MISSION</span><b>{completed.includes(slug)?"✓ COMPLETE":"IN PROGRESS"}</b></div><h2>{activity.mission}</h2><button className={styles.hintButton} aria-expanded={showHint} onClick={()=>setShowHint(v=>!v)}>{showHint?"Hide hint":"Need a hint?"}</button>{showHint&&<p>{activity.hint}</p>}</div>
-        <div className={styles.controlTitle}><h2>Experiment controls</h2><button onClick={reset}>↺ Reset</button></div>
+      <aside className={styles.controlsPanel}>{SIMULATION_LEARNING_TOOLS_ENABLED&&<><div className={styles.mission}><div className={styles.missionLabel}><span>YOUR MISSION</span><b>{completed.includes(slug)?"✓ COMPLETE":"IN PROGRESS"}</b></div><h2>{activity.mission}</h2><button className={styles.hintButton} aria-expanded={showHint} onClick={()=>setShowHint(v=>!v)}>{showHint?"Hide hint":"Need a hint?"}</button>{showHint&&<p>{activity.hint}</p>}</div>
+        </>}<div className={styles.controlTitle}><h2>Experiment controls</h2><button onClick={reset}>↺ Reset</button></div>
         {running&&<p className={physics.locked}>Conditions stay fixed during a run. Reset to change them.</p>}
         <div className={styles.controls}>{activity.controls.map(c=><label key={c.key} className={styles.control}><span><b>{tr(c.label)}</b>{!c.options&&<output>{format(values[c.key],c.step<.1?2:c.step<1?1:0)} {c.unit}</output>}</span>{c.options?<select value={values[c.key]} disabled={running} onChange={e=>update(c.key,Number(e.target.value))}>{c.options.map((o,i)=><option key={o} value={i}>{tr(o)}</option>)}</select>:<input type="range" min={c.min} max={c.max} step={c.step} value={values[c.key]} disabled={running} onChange={e=>update(c.key,Number(e.target.value))}/>}</label>)}</div>
         {slug==="circuit-builder"&&<div className={physics.switches}><button aria-pressed={installed} onClick={()=>{setInstalled(v=>!v);setFeedback(null);}}>{installed?"✓ Resistor installed · remove":"+ Install resistor in socket"}</button><button aria-pressed={closed} onClick={()=>{setClosed(v=>!v);setFeedback(null);}}>{closed?"● Circuit closed · open switch":"○ Circuit open · close switch"}</button></div>}
         {slug==="electromagnet-3d"&&<div className={physics.switches}><button aria-pressed={closed} onClick={()=>{setClosed(v=>!v);setFeedback(null);}}>{closed?"● Coil energized · power off":"○ Power off · energize coil"}</button></div>}
         {activity.duration>0&&<button className={styles.action} disabled={running} onClick={start}>{running?"Experiment running…":slug==="projectile-lab"?"▶ Launch ball":slug==="momentum-collision"?"▶ Run collision":slug==="bridge-builder-challenge"?"▶ Test structure":slug==="pendulum-physics"?"▶ Measure three swings":slug==="simple-machines-challenge"?"▶ Lift load":"▶ Run experiment"}</button>}
-        <button className={styles.checkButton} onClick={check}>Check mission <span>→</span></button><div className={styles.feedback} aria-live="polite" aria-atomic="true">{feedback?<div data-success={feedback.ok}><strong>{feedback.ok?"✓ Target achieved":"Try another approach"}</strong><p>{feedback.text}</p></div>:<p>Adjust the controls, observe the experiment, then check your mission.</p>}</div>
+        {SIMULATION_LEARNING_TOOLS_ENABLED&&<><button className={styles.checkButton} onClick={check}>Check mission <span>→</span></button><div className={styles.feedback} aria-live="polite" aria-atomic="true">{feedback?<div data-success={feedback.ok}><strong>{feedback.ok?"✓ Target achieved":"Try another approach"}</strong><p>{feedback.text}</p></div>:<p>Adjust the controls, observe the experiment, then check your mission.</p>}</div>
         {!saved&&<p className={styles.saveWarning}>Completed for this session. Browser storage is unavailable, so progress could not be saved.</p>}
-        <details className={styles.science}><summary>How the physics works</summary><p>{activity.science}</p></details>
+        </>}<details className={styles.science}><summary>How the physics works</summary><p>{activity.science}</p></details>
       </aside>
     </div>
   </main>;

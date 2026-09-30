@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SIMULATION_LEARNING_TOOLS_ENABLED } from "@/lib/settings/simulationFeatures";
 import { getArticlesForSimulation } from "@/lib/articles/catalog";
 import type { Locale } from "@/lib/i18n/config";
 import { getSimulationGuide } from "@/lib/seo/simulation-guides";
@@ -22,7 +23,7 @@ export function SimulationGuide({ locale, subject, simulation }: { locale: Local
       {kitCopy && <Link className="textLink simulationTopicLink" href={`/${locale}/molecule-kit`}>{kitCopy.partOfBadge} →</Link>}
       {topicGuide && <Link className="textLink simulationTopicLink" href={`/en/guides/${topicGuide.slug}`}>Read the focused topic guide →</Link>}
     </header>
-    <div className="simulationGuideGrid">
+    <div className={`simulationGuideGrid${SIMULATION_LEARNING_TOOLS_ENABLED?"":" simulationGuidePublic"}`}>
       <article className="simulationGuideCard">
         <h3>{guide.howTo}</h3>
         <ol>{guide.steps.map((step, index) => <li key={step}><b>{index + 1}</b><span>{step}</span></li>)}</ol>
@@ -32,11 +33,11 @@ export function SimulationGuide({ locale, subject, simulation }: { locale: Local
         <p>{guide.investigateBody}</p>
         <div className="conceptRow">{simulation.concepts.split(" · ").map((concept) => <span className="conceptChip" key={concept}>{concept}</span>)}</div>
       </article>
-      <article className="simulationGuideCard classroomGuide">
+      {SIMULATION_LEARNING_TOOLS_ENABLED && <article className="simulationGuideCard classroomGuide">
         <h3>{guide.classroom}</h3>
         <p>{guide.classroomBody}</p>
         <dl><div><dt>{guide.level}</dt><dd>{simulation.difficulty}</dd></div><div><dt>{guide.time}</dt><dd>{simulation.duration}</dd></div><div><dt>{guide.format}</dt><dd>{simulation.kind}</dd></div></dl>
-      </article>
+      </article>}
     </div>
     <div className="simulationGuideMore">
     <div className="simulationFaq">

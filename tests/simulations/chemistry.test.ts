@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { activities, atomBalance, initialValues, rateConstant, reactions, solutionPH, strongPH, titrationPH, yieldResult } from "@/lib/simulations/chemistry/model";
-import { subjectsCatalog } from "@/lib/subjects/catalog";
+import { courseLabs } from "@/lib/simulations/chemistry/course/catalog";
+import { hiddenSimulationSlugs, subjectsCatalog } from "@/lib/subjects/catalog";
 
 describe("chemistry experiments", () => {
   it("covers every chemistry catalog route with distinct activity controls", () => {
-    expect(activities.map(a=>a.slug).sort()).toEqual(subjectsCatalog.chemistry.simulations.map(s=>s.slug).sort());
+    expect([...activities,...courseLabs].filter(a=>!hiddenSimulationSlugs.has(a.slug)).map(a=>a.slug).sort()).toEqual(subjectsCatalog.chemistry.simulations.map(s=>s.slug).sort());
     expect(new Set(activities.map(a=>a.slug)).size).toBe(13);
     for (const a of activities) for (const c of a.controls) expect(initialValues(a)[c.key]).toBeGreaterThanOrEqual(c.min);
   });

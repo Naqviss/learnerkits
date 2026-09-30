@@ -1,4 +1,5 @@
 "use client";
+import { SIMULATION_LEARNING_TOOLS_ENABLED } from "@/lib/settings/simulationFeatures";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import * as THREE from "three";
@@ -16,7 +17,7 @@ const initialEngine = new OrbitalRescueEngine();
 const fmt=(n:number,d=1)=>Number.isFinite(n)?n.toFixed(d):"—";
 export function OrbitalRescueClient({m}:{m:Messages}){
   const searchParams=useSearchParams();
-  const selectedMission=missions.find((mission)=>mission.id===searchParams.get("mission")&&mission.simulation==="orbitalRescue");
+  const selectedMission=SIMULATION_LEARNING_TOOLS_ENABLED?missions.find((mission)=>mission.id===searchParams.get("mission")&&mission.simulation==="orbitalRescue") : undefined;
   const host=useRef<HTMLDivElement>(null); const engineRef=useRef(new OrbitalRescueEngine()); const runnerRef=useRef(new FixedStepRunner(.25,32,5));
   const [state,setState]=useState<OrbitalState>(initialEngine.getState()); const [telemetry,setTelemetry]=useState(initialEngine.telemetry());
   const [paused,setPaused]=useState(false); const [timeScale,setTimeScale]=useState(10); const [mode,setMode]=useState<"play"|"learn"|"experiment">("play");

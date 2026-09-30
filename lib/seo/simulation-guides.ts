@@ -1,3 +1,4 @@
+import { getCourseLab } from "@/lib/simulations/chemistry/course/catalog";
 import type { Locale } from "@/lib/i18n/config";
 import type { SimulationCard, SubjectDefinition } from "@/lib/subjects/catalog";
 
@@ -92,14 +93,15 @@ export type SimulationGuide = {
 export function getSimulationGuide(locale: Locale, subject: SubjectDefinition, simulation: SimulationCard): SimulationGuide {
   const copy = copies[locale];
   const concepts = simulation.concepts.replaceAll(" · ", ", ");
+  const chemistry = locale === "en" ? getCourseLab(simulation.slug) : undefined;
   return {
     freeLabel: locale === "en" && simulation.seoTarget ? `Free online ${simulation.seoTarget}` : copy.freeLabel,
     title: copy.title(simulation.title),
     intro: copy.intro(simulation.kind, simulation.outcome, subject.gradeBand),
     investigate: copy.investigate,
-    investigateBody: copy.investigateBody(concepts),
+    investigateBody: chemistry?.explanation ?? copy.investigateBody(concepts),
     howTo: copy.howTo,
-    steps: copy.steps,
+    steps: chemistry?.steps ?? copy.steps,
     classroom: copy.classroom,
     classroomBody: copy.classroomBody(simulation.duration),
     questions: copy.questions,
