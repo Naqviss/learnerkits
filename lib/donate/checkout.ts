@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { isLocale } from "@/lib/i18n/config";
 import { siteName, siteUrl } from "@/lib/seo/metadata";
 
@@ -17,13 +16,14 @@ const donationProductNames = {
   de: `${siteName} unterstützen`,
 } as const;
 
-export async function POST(request: Request) {
+// Served by worker/index.ts at POST /api/donate (static exports cannot run request handlers).
+export async function createDonationCheckout(request: Request) {
   try {
     const body = await request.json() as { amount?: number; locale?: string };
     const locale = body.locale && isLocale(body.locale) ? body.locale : "en";
     const amount = Math.round(Number(body.amount) * 100);
     if (!Number.isFinite(amount) || amount < MIN_CENTS || amount > MAX_CENTS) {
-      return NextResponse.json({ error: "invalid_amount" }, { status: 400 });
+      return Response.json({ error: "invalid_amount" }, { status: 400 });
     }
 
     const hostedDonationUrl = process.env.DONATION_HOSTED_URL;
@@ -31,8 +31,8 @@ export async function POST(request: Request) {
     const currency = (process.env.DONATION_CURRENCY ?? "usd").toLowerCase();
 
     if (!stripeSecret) {
-      if (hostedDonationUrl) return NextResponse.json({ url: hostedDonationUrl });
-      return NextResponse.json({ error: "donations_not_configured" }, { status: 503 });
+      if (hostedDonationUrl) return Response.json({ url: hostedDonationUrl });
+      return Response.json({ error: "donations_not_configured" }, { status: 503 });
     }
 
     const params = new URLSearchParams();
@@ -60,11 +60,11 @@ export async function POST(request: Request) {
     const result = await response.json() as { url?: string; error?: { message?: string } };
     if (!response.ok || !result.url) {
       console.error("Donation checkout error", result.error?.message ?? response.statusText);
-      return NextResponse.json({ error: "checkout_failed" }, { status: 502 });
+      return Response.json({ error: "checkout_failed" }, { status: 502 });
     }
-    return NextResponse.json({ url: result.url });
+    return Response.json({ url: result.url });
   } catch (error) {
     console.error("Donation route error", error);
-    return NextResponse.json({ error: "checkout_failed" }, { status: 500 });
+    return Response.json({ error: "checkout_failed" }, { status: 500 });
   }
 }

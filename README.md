@@ -205,6 +205,17 @@ npm run dev
 
 Open `http://localhost:3000`; the root route resolves to a locale and `/en` is the English general entry page.
 
+## Deploy (Cloudflare Workers, static)
+
+The site is a static export (`output: "export"`). `npm run build` writes every page to `out/`, and Cloudflare serves those files as static assets, which are free and never count toward Worker request limits. `worker/index.ts` runs only when no file matches: `POST /api/donate`, locale-less paths such as `/about` (redirected to the visitor's language), and 404s.
+
+```bash
+npm run preview   # build + wrangler dev on http://localhost:8787 (the only way to test donations locally)
+npm run deploy    # build + wrangler deploy
+```
+
+`npm run build` uses `https://www.learnerkits.com` for `NEXT_PUBLIC_SITE_URL` unless the shell sets another origin, so the `localhost` value in `.env.local` never reaches a deploy. Everything read from the environment at build time (site URL, contact email, AdSense ID) is baked into the HTML, so rebuild after changing it. `STRIPE_SECRET_KEY`, `DONATION_CURRENCY` and `DONATION_HOSTED_URL` stay runtime secrets on the Worker. `next dev` has no locale redirects or donation API; use `npm run preview` for those.
+
 ## Science learning articles
 
 `/en/articles` contains sixteen original, AI-assisted educational articles: six in AI in Education, seven in Educational Technology, and three in Science Concepts (all 1,500+ words; the five added on 2026-09-27 are 2,700+ words with FAQ sections). Each includes practical situations and activities; selected articles also contain original explanatory WebP diagrams. Categories are grouped on the article index. Each article has individual publication and modification dates. Article pages are prerendered with visible source links, worked examples, a table of contents, related labs, and Article/Breadcrumb structured data. The practice article includes native expandable answer keys. Navigation search loads only the lightweight article index.

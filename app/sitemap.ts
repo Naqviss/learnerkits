@@ -9,6 +9,8 @@ import { moleculeReferences } from "@/lib/seo/molecules";
 import { subjectImages, subjectImagesUpdatedAt } from "@/lib/subjects/images";
 import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   // User-specific tools and previews are noindex and should not consume crawl budget.
   const core = ["/", "/simulations", "/subjects", "/molecule-kit", "/donate", "/about", "/contact", "/privacy", "/cookies", "/terms", "/disclaimer", "/editorial-policy"];

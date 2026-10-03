@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/lib/seo/metadata";
 
+export const dynamic = "force-static";
+
 // Named explicitly (not just via "*") so search engines and AI assistants can crawl, cite,
 // and recommend the free labs. Each entry is allowed everywhere except the API.
 const crawlers = [

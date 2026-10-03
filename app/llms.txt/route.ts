@@ -4,6 +4,8 @@ import { getTopicGuides } from "@/lib/seo/topic-guides";
 import { moleculeReferences } from "@/lib/seo/molecules";
 import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 
+export const dynamic = "force-static";
+
 // Machine-readable site guide for LLMs and AI agents (see https://llmstxt.org).
 // Regenerated from the same catalog that drives the sitemap, so it can't drift out of sync.
 export async function GET() {

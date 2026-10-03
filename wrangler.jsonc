@@ -1,11 +1,13 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "learnerkits",
-  "main": ".open-next/worker.js",
+  // Only runs for requests that match no file in out/ (donations, locale redirects, 404s).
+  "main": "worker/index.ts",
   "compatibility_date": "2026-09-27",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  // The static export. Requests served from here are free and do not count toward Worker limits.
   "assets": {
-    "directory": ".open-next/assets",
+    "directory": "out",
     "binding": "ASSETS"
   },
   "observability": { "enabled": true }
