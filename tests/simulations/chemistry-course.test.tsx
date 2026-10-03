@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { courseLabs, chemistryTopics } from "@/lib/simulations/chemistry/course/catalog";
+import { chemistryCoursePublished, courseLabs, chemistryTopics } from "@/lib/simulations/chemistry/course/catalog";
 import { atom, AVOGADRO, heating, vaporExchange, diffusionProfile, moleAmounts, dilution, buffer, equilibrium, equilibriumK, calorimetry, electrochemistry, enzyme, metalReaction } from "@/lib/simulations/chemistry/course/models";
 import { rateConstant, solutionPH, solubilityResult } from "@/lib/simulations/chemistry/model";
 import { courseReadings } from "@/components/subjects/chemistry/course/ChemistryCourseClient";
@@ -113,10 +113,15 @@ describe("chemistry course models",()=>{
   const s=solubilityResult({temperature:50,water:50,solute:80});
   expect(s).toEqual({capacity:30,dissolved:30,crystals:50});
  });
- it("provides valid public links for every topic and excludes the hidden hunt",()=>{
+ it.runIf(chemistryCoursePublished)("provides valid public links for every topic and excludes the hidden hunt",()=>{
   const slugs=subjectsCatalog.chemistry.simulations.map(s=>s.slug);
   expect(slugs).toHaveLength(26);
   for(const topic of chemistryTopics)for(const slug of topic.slugs){expect(slugs).toContain(slug);expect(hiddenSimulationSlugs.has(slug)).toBe(false);}
+ });
+ it.skipIf(chemistryCoursePublished)("unpublishes every course lab while keeping the original chemistry labs",()=>{
+  const slugs=subjectsCatalog.chemistry.simulations.map(s=>s.slug);
+  expect(slugs).toHaveLength(12);
+  for(const lab of courseLabs){expect(slugs).not.toContain(lab.slug);expect(hiddenSimulationSlugs.has(lab.slug)).toBe(true);}
  });
  it.each(courseLabs.map(l=>[l.slug,l] as const))("renders every %s control endpoint without invalid model output",(_slug,lab)=>{
   const initial=defaults(lab.slug);

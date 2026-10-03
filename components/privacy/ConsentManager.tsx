@@ -15,6 +15,6 @@ export function ConsentManager({locale,googleAnalyticsId,clarityId}:{locale:stri
 }
 
 export function CookieSettingsButton(){
- function reopen(){try{localStorage.removeItem(KEY);}catch{/* Browser storage controls remain available. */}window.dispatchEvent(new Event("learnerkits-consent-change"));}
+ function reopen(){try{const wasAllowed=localStorage.getItem(KEY)==="all";localStorage.removeItem(KEY);if(wasAllowed){window.location.reload();return;}}catch{/* Browser storage controls remain available. */}window.dispatchEvent(new Event("learnerkits-consent-change"));}
  return <button type="button" className="button" onClick={reopen}>Change cookie choices</button>;
 }

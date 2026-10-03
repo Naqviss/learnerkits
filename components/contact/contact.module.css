@@ -1,0 +1,17 @@
+.form { margin-block: 24px; }
+.form fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 18px; min-width: 0; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.form label { display: grid; gap: 8px; color: var(--text); font-weight: 650; font-size: .92rem; }
+.form input:not([type=checkbox]), .form select, .form textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--text); font: inherit; padding: 13px 14px; }
+.form textarea { resize: vertical; min-height: 160px; }
+.form :is(input,select,textarea,button):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.form small { color: var(--muted); line-height: 1.6; }
+.form .consent { display: flex; align-items: flex-start; font-weight: 400; line-height: 1.65; }
+.consent input { flex-shrink: 0; margin-top: 5px; width: 18px; height: 18px; accent-color: var(--accent); }
+.form button { justify-self: start; min-height: 46px; }
+.form fieldset:disabled { opacity: .65; }
+.success, .error { padding: 16px; border: 1px solid currentColor; border-radius: 12px; }
+.success { color: var(--accent); }
+.error { color: var(--danger); }
+.trap, .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 600px) { .row { grid-template-columns: 1fr; } .form button { width: 100%; } }

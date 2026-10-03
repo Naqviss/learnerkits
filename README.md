@@ -100,7 +100,7 @@ DONATION_CURRENCY=usd
 
 ## AdSense and publisher readiness
 
-The site includes About, Contact, Privacy, Cookie, Terms, Disclaimer, and Editorial Policy pages in the global footer. Google Analytics and Microsoft Clarity are consent-gated and do not load when a visitor selects essential storage only.
+The site includes About, Contact, Privacy, Cookie, Terms, Disclaimer, Editorial Policy, FAQ, and Accessibility pages in the global footer. Google Analytics and Microsoft Clarity are consent-gated and do not load when a visitor selects essential storage only.
 
 Set the following production variables before requesting review:
 
@@ -108,6 +108,8 @@ Set the following production variables before requesting review:
 NEXT_PUBLIC_CONTACT_EMAIL=contact@your-domain.com
 ADSENSE_PUBLISHER_ID=pub-0000000000000000
 ```
+
+`NEXT_PUBLIC_ADSENSE_ADS_ENABLED` defaults to disabled. Set it to `true` only after configuring the advertising consent flow and audience settings in AdSense; the analytics banner is not an advertising CMP.
 
 `ADSENSE_PUBLISHER_ID` automatically publishes the AdSense account verification meta tag and a matching `/ads.txt` authorized-seller record. Ad units are intentionally not inserted by this setup; configure Google's certified Privacy & Messaging consent flow and child-directed treatment settings, where applicable, before serving ads.
 
@@ -207,14 +209,14 @@ Open `http://localhost:3000`; the root route resolves to a locale and `/en` is t
 
 ## Deploy (Cloudflare Workers, static)
 
-The site is a static export (`output: "export"`). `npm run build` writes every page to `out/`, and Cloudflare serves those files as static assets, which are free and never count toward Worker request limits. `worker/index.ts` runs only when no file matches: `POST /api/donate`, locale-less paths such as `/about` (redirected to the visitor's language), and 404s.
+The site is a static export (`output: "export"`). `npm run build` writes every page to `out/`, and Cloudflare serves those files as static assets, which are free and never count toward Worker request limits. `worker/index.ts` runs only when no file matches: `POST /api/donate`, `POST /api/contact`, locale-less paths such as `/about` (redirected to the visitor's language), and 404s.
 
 ```bash
-npm run preview   # build + wrangler dev on http://localhost:8787 (the only way to test donations locally)
+npm run preview   # build + wrangler dev on http://localhost:8787 (test production API handling locally)
 npm run deploy    # build + wrangler deploy
 ```
 
-`npm run build` uses `https://www.learnerkits.com` for `NEXT_PUBLIC_SITE_URL` unless the shell sets another origin, so the `localhost` value in `.env.local` never reaches a deploy. Everything read from the environment at build time (site URL, contact email, AdSense ID) is baked into the HTML, so rebuild after changing it. `STRIPE_SECRET_KEY`, `DONATION_CURRENCY` and `DONATION_HOSTED_URL` stay runtime secrets on the Worker. `next dev` has no locale redirects or donation API; use `npm run preview` for those.
+`npm run build` uses `https://www.learnerkits.com` for `NEXT_PUBLIC_SITE_URL` unless the shell sets another origin, so the `localhost` value in `.env.local` never reaches a deploy. Everything read from the environment at build time (site URL, contact email, AdSense ID) is baked into the HTML, so rebuild after changing it. `STRIPE_SECRET_KEY`, `DONATION_CURRENCY` and `DONATION_HOSTED_URL` stay runtime secrets on the Worker. `next dev` includes the contact API but has no locale redirects or donation API; use `npm run preview` for those.
 
 ## Science learning articles
 
@@ -233,3 +235,19 @@ npm run deploy    # build + wrangler deploy
 - Run `npm test` and `npm run build` after changes. Article checks cover length, internal destinations, rendering, schema, canonical URLs, discovery, and missing-page handling.
 
 After deployment, confirm the production canonical host and inspect the article URLs and sitemap in Search Console. Ranking, indexing, and AdSense approval are external decisions; word count is not an approval threshold. Google documents [people-first content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content), [AI search eligibility](https://developers.google.com/search/docs/appearance/ai-features), and [AdSense eligibility](https://support.google.com/adsense/answer/9724). The existing `llms.txt` is a discovery aid, not a requirement or guarantee for AI search inclusion.
+
+
+## Contact form and Supabase
+
+The contact form at `/{locale}/contact` calls `POST /api/contact`. Next.js handles this in development via `app/api/contact/route.ts`. The existing static Cloudflare deployment handles the same URL in `worker/index.ts`; both call `lib/contact/submit.ts`. No Supabase credentials are sent to the browser. Messages are stored, not automatically emailed to the owners.
+
+1. Create or select a Supabase project and apply `supabase/migrations/202610030001_contact_messages.sql` in its SQL Editor (or use `supabase db push` with a linked project).
+2. Set `SUPABASE_URL` and `SUPABASE_SECRET_KEY` in `.env.local` for `npm run dev`. A legacy `SUPABASE_SERVICE_ROLE_KEY` is supported instead. Use a server secret key, never a public/anon key.
+3. Set the same variables in a local `.dev.vars` file for Wrangler preview, and set production secrets with `wrangler secret put SUPABASE_URL` and `wrangler secret put SUPABASE_SECRET_KEY`.
+4. Submit a test enquiry, verify it appears in `public.contact_messages` in the Supabase Table Editor, and delete the test row. Restrict dashboard access to people handling enquiries. Review messages there and reply through the published contact mailbox.
+
+The table has row-level security and no anonymous/authenticated access policies. Only the server role can call the submission function. The endpoint validates all fields, requires privacy acknowledgement, rejects cross-origin browser requests, limits request size, hides upstream errors, and includes a honeypot. The database enforces three messages per email address per 15 minutes, including concurrent requests. This limit is not a full bot-defense service: configure a Cloudflare rate-limiting rule for `/api/contact` if traffic warrants it. The form uses a Clarity masking marker and does not store IP addresses or user agents with messages.
+
+Without configured credentials or the migration, the form returns an honest unavailable/error message and offers the public email address. No live Supabase connection is bundled. Review old correspondence and remove it when no longer needed; no automatic retention period or cleanup job is configured. Handle deletion requests in both the database and relevant mailbox.
+
+Publisher readiness also requires account-side work: verify the public contact mailbox, configure AdSense Privacy & messaging (including a Google-certified CMP where applicable), review child-directed treatment settings, and review the policies against actual operations. These pages and tests do not guarantee AdSense approval. Google's [publisher policies](https://support.google.com/adsense/answer/10502938) and [consent requirements](https://support.google.com/adsense/answer/13554116) explain those obligations.

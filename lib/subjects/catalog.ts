@@ -1,4 +1,4 @@
-import { courseSimulationCards } from "@/lib/simulations/chemistry/course/catalog";
+import { chemistryCoursePublished, courseLabs, courseSimulationCards } from "@/lib/simulations/chemistry/course/catalog";
 
 export const subjectSlugs = ["space", "physics", "geography", "environmental-science", "biology", "chemistry", "mathematics"] as const;
 export type SubjectSlug = (typeof subjectSlugs)[number];
@@ -8,7 +8,7 @@ export type SubjectSlug = (typeof subjectSlugs)[number];
 export const hiddenSubjectSlugs: ReadonlySet<SubjectSlug> = new Set(["biology", "mathematics"]);
 export const visibleSubjectSlugs = subjectSlugs.filter((slug) => !hiddenSubjectSlugs.has(slug));
 // Temporarily unpublished simulations remain implemented and can be restored here.
-export const hiddenSimulationSlugs: ReadonlySet<string> = new Set(["periodic-table-hunt"]);
+export const hiddenSimulationSlugs: ReadonlySet<string> = new Set(["periodic-table-hunt", ...(chemistryCoursePublished ? [] : courseLabs.map((lab) => lab.slug))]);
 
 export type SimulationCard = {
   slug: string;

@@ -2,9 +2,12 @@
 node_modules/
 coverage/
 .env*
+!.env.example
 .DS_Store
 
 *.tsbuildinfo
 .open-next/
 .wrangler/
 out/
+
+.dev.vars*

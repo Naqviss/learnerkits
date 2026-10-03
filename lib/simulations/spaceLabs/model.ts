@@ -22,15 +22,83 @@ export const planets=[{name:"Mercury",radius:2440,color:0xa9a19a},{name:"Venus",
 export const phaseFraction=(angle:number)=>(1-Math.cos(rad(angle)))/2;
 export function eclipse(v:Values){const sun=Math.asin(695700/149597870)*180/Math.PI,moon=Math.asin(1737.4/(v.distance-6371))*180/Math.PI,d=Math.abs(v.offset);let area=0;if(d>=sun+moon)area=0;else if(d<=Math.abs(sun-moon))area=Math.PI*Math.min(sun,moon)**2;else{area=sun*sun*Math.acos((d*d+sun*sun-moon*moon)/(2*d*sun))+moon*moon*Math.acos((d*d+moon*moon-sun*sun)/(2*d*moon))-.5*Math.sqrt((-d+sun+moon)*(d+sun-moon)*(d-sun+moon)*(d+sun+moon));}const kind=d>=sun+moon?"No eclipse":d+sun<=moon?"Total":d+moon<sun?"Annular":"Partial";return{sun,moon,coverage:Math.max(0,Math.min(1,area/(Math.PI*sun*sun))),kind};}
 export function orbital(v:Values,satellite=false){const world=worlds[satellite?0:v.world],radius=world.radius+v.altitude,circular=Math.sqrt(world.mu/radius),speed=satellite?circular*v.speedScale/100:v.speed,energy=speed*speed/2-world.mu/radius,q=speed/circular,eccentricity=Math.abs(q*q-1),p=radius*q*q,perigee=p/(1+eccentricity)-world.radius,axis=energy<0?-world.mu/(2*energy):Infinity;return{world,radius,circular,escape:Math.SQRT2*circular,speed,energy,q,eccentricity,perigee,period:Number.isFinite(axis)?2*Math.PI*Math.sqrt(axis**3/world.mu):Infinity};}
-export type OrbitPoint={x:number;y:number;t:number};
-export function orbitTrace(v:Values,satellite=false):{points:OrbitPoint[];status:string}{const o=orbital(v,satellite),points:OrbitPoint[]=[{x:1,y:0,t:0}];let x=1,y=0,vx=0,vy=o.q;const dt=.008;for(let i=1;i<=1200;i++){const r=Math.hypot(x,y),ax=-x/r**3,ay=-y/r**3;x+=vx*dt+.5*ax*dt*dt;y+=vy*dt+.5*ay*dt*dt;const next=Math.hypot(x,y);vx+=.5*(ax-x/next**3)*dt;vy+=.5*(ay-y/next**3)*dt;points.push({x,y,t:i*dt*o.radius/o.circular});if(next<=o.world.radius/o.radius)return{points,status:"Surface impact"};if(next>=8)return{points,status:"Outbound"};}return{points,status:o.energy>=0?"Outbound":"Bound orbit"};}
+export type OrbitPoint={x:number;y:number;t:number;vx?:number;vy?:number};
+/** Dimensionless velocity-Verlet; one full bound orbit or an outbound viewport crossing. */
+export function orbitTrace(v:Values,satellite=false):{points:OrbitPoint[];status:string}{
+  const o=orbital(v,satellite),unitTime=o.radius/o.circular;
+  const duration=Number.isFinite(o.period)?Math.min(o.period/unitTime,80):40;
+  const dt=.002,points:OrbitPoint[]=[{x:1,y:0,t:0,vx:0,vy:o.q}];
+  let x=1,y=0,vx=0,vy=o.q;
+  for(let i=1;i<=Math.ceil(duration/dt);i++){
+    const h=Math.min(dt,duration-(i-1)*dt),r=Math.hypot(x,y),ax=-x/r**3,ay=-y/r**3;
+    const oldX=x,oldY=y;
+    x+=vx*h+.5*ax*h*h;y+=vy*h+.5*ay*h*h;
+    const next=Math.hypot(x,y);vx+=.5*(ax-x/next**3)*h;vy+=.5*(ay-y/next**3)*h;
+    if(next<=o.world.radius/o.radius){
+      // Solve the segment/sphere intersection so contact lies on the surface.
+      const dx=x-oldX,dy=y-oldY,R=o.world.radius/o.radius;
+      const A=dx*dx+dy*dy,B=2*(oldX*dx+oldY*dy),C=oldX*oldX+oldY*oldY-R*R;
+      const f=Math.max(0,Math.min(1,(-B-Math.sqrt(Math.max(0,B*B-4*A*C)))/(2*A)));
+      points.push({x:oldX+dx*f,y:oldY+dy*f,t:((i-1)*dt+h*f)*unitTime,vx,vy});
+      return{points,status:"Surface impact"};
+    }
+    if(i%4===0||i===Math.ceil(duration/dt)||next>=8)points.push({x,y,t:((i-1)*dt+h)*unitTime,vx,vy});
+    if(next>=8)return{points,status:o.energy>=0?"Outbound":"Bound orbit"};
+  }
+  return{points,status:o.energy>=0?"Outbound":"Bound orbit"};
+}
+/** Equal-time samples of a hyperbolic flyby, from Kepler's hyperbolic equation. */
+export function flybyTrace(v:Values):OrbitPoint[]{
+  const f=flyby(v),rp=6371+v.altitude,a=398600.44/v.speed**2;
+  const Hmax=Math.acosh((12*rp/a+1)/f.e),Mmax=f.e*Math.sinh(Hmax)-Hmax;
+  const sign=v.side?1:-1,rotation=rad(v.angle)-sign*(Math.PI/2-f.turn/2),unitTime=a/v.speed;
+  return Array.from({length:481},(_,i)=>{
+    const M=-Mmax+2*Mmax*i/480;let H=Math.asinh(M/f.e);
+    for(let j=0;j<16;j++)H-=(f.e*Math.sinh(H)-H-M)/(f.e*Math.cosh(H)-1);
+    const x=a*(f.e-Math.cosh(H))/rp,y=sign*a*Math.sqrt(f.e*f.e-1)*Math.sinh(H)/rp;
+    return{x:x*Math.cos(rotation)-y*Math.sin(rotation),y:x*Math.sin(rotation)+y*Math.cos(rotation),t:(M+Mmax)*unitTime};
+  });
+}
+export function sampleTrajectory(points:OrbitPoint[],fraction:number):OrbitPoint{
+  const target=points[points.length-1].t*Math.max(0,Math.min(1,fraction));
+  let lo=0,hi=points.length-1;
+  while(lo+1<hi){const mid=(lo+hi)>>1;if(points[mid].t<=target)lo=mid;else hi=mid;}
+  const a=points[lo],b=points[hi],f=b.t===a.t?0:(target-a.t)/(b.t-a.t);
+  return{x:a.x+(b.x-a.x)*f,y:a.y+(b.y-a.y)*f,t:target};
+}
 export function flyby(v:Values){const relative=v.speed,rp=6371+v.altitude,e=1+rp*relative*relative/398600.44,turn=2*Math.asin(1/e),a=rad(v.angle),b=a+(v.side?1:-1)*turn,planet=29.78;const before=Math.hypot(planet+relative*Math.cos(a),relative*Math.sin(a)),after=Math.hypot(planet+relative*Math.cos(b),relative*Math.sin(b));return{e,turn,before,after,gain:after-before,incoming:[relative*Math.cos(a),relative*Math.sin(a)],outgoing:[relative*Math.cos(b),relative*Math.sin(b)]};}
 export function kepler(axis:number,e:number,mean:number){let E=mean%(2*Math.PI);for(let i=0;i<15;i++)E-=(E-e*Math.sin(E)-mean%(2*Math.PI))/(1-e*Math.cos(E));const x=axis*(Math.cos(E)-e),y=axis*Math.sqrt(1-e*e)*Math.sin(E),radius=Math.hypot(x,y);return{x,y,radius,period:axis**1.5,speed:29.7847*Math.sqrt(2/radius-1/axis)};}
 export function seasons(v:Values){const declination=Math.asin(Math.sin(rad(v.tilt))*Math.sin(rad(v.longitude))),argument=-Math.tan(rad(v.latitude))*Math.tan(declination),daylight=24*Math.acos(Math.max(-1,Math.min(1,argument)))/Math.PI;return{declination:declination*180/Math.PI,daylight,noon:90-Math.abs(v.latitude-declination*180/Math.PI)};}
 export function blackHole(v:Values){const rs=2.95325*v.mass,r=v.radius;return{rs,orbitKm:rs*r,localSpeed:1/Math.sqrt(2*(r-1)),clock:Math.sqrt(1-1/r),stable:r>3,period:2*Math.PI*Math.sqrt((rs*r)**3/(132712440018*v.mass))};}
 export type MarsState={altitude:number;velocity:number;fuel:number;time:number;throttle:number;status:"ready"|"flying"|"landed"|"crashed";impact:number};
 export const initialMars=():MarsState=>({altitude:800,velocity:-45,fuel:400,time:0,throttle:0,status:"ready",impact:0});
-export function stepMars(s:MarsState,v:Values,dt:number):MarsState{if(s.status!=="flying"||dt<=0)return s;const mass=900+s.fuel,density=.020*Math.exp(-s.altitude/11100),drag=-.5*density*1.5*12*s.velocity*Math.abs(s.velocity)/mass,target=-Math.max(1,Math.min(35,Math.sqrt(2*Math.max(0,s.altitude))));const command=v.assist?Math.max(0,Math.min(1,((target-s.velocity)*.8+3.71-drag)*mass/9000)):v.throttle/100;const requested=9000*command/(225*9.80665)*dt,used=Math.min(s.fuel,requested),thrust=requested>0?9000*command*used/requested:0,velocity=s.velocity+(thrust/mass-3.71+drag)*dt,altitude=s.altitude+velocity*dt;const next:MarsState={...s,altitude:Math.max(0,altitude),velocity,fuel:s.fuel-used,time:s.time+dt,throttle:thrust/9000};if(altitude<=0){next.impact=Math.abs(velocity);next.status=next.impact<=3?"landed":"crashed";next.velocity=0;next.throttle=0;}return next;}
+/** Substep even external callers; fuel and touchdown remain bounded at fast playback. */
+export function stepMars(s:MarsState,v:Values,dt:number):MarsState{
+  if(s.status!=="flying"||!Number.isFinite(dt)||dt<=0)return s;
+  let next=s,remaining=Math.min(dt,5);
+  while(remaining>1e-9&&next.status==="flying"){
+    const h=Math.min(remaining,1/120);next=marsSubstep(next,v,h);remaining-=h;
+  }
+  return next;
+}
+function marsSubstep(s:MarsState,v:Values,dt:number):MarsState{
+  const mass=900+s.fuel,density=.020*Math.exp(-s.altitude/11100);
+  const drag=-.5*density*1.5*12*s.velocity*Math.abs(s.velocity)/mass;
+  const target=-Math.max(1,Math.min(35,Math.sqrt(2*Math.max(0,s.altitude))));
+  const raw=v.assist?((target-s.velocity)*.8+3.71-drag)*mass/9000:(v.throttle??0)/100;
+  const command=Number.isFinite(raw)?Math.max(0,Math.min(1,raw)):0;
+  const flow=9000*command/(225*9.80665),used=Math.min(s.fuel,flow*dt);
+  const thrust=used/dt*225*9.80665,acceleration=thrust/(mass-used/2)-3.71+drag;
+  let elapsed=dt,altitude=s.altitude+s.velocity*dt+.5*acceleration*dt*dt;
+  if(altitude<=0){
+    // Locate touchdown within the step, rather than recording an underground velocity.
+    let lo=0,hi=dt;for(let i=0;i<30;i++){const mid=(lo+hi)/2;if(s.altitude+s.velocity*mid+.5*acceleration*mid*mid>0)lo=mid;else hi=mid;}
+    elapsed=(lo+hi)/2;altitude=0;
+  }
+  const velocity=s.velocity+acceleration*elapsed,impact=altitude===0?Math.abs(velocity):0;
+  return{...s,altitude,velocity:altitude===0?0:velocity,fuel:Math.max(0,s.fuel-used*elapsed/dt),time:s.time+elapsed,
+    throttle:altitude===0?0:Math.min(1,thrust/9000),impact,status:altitude===0?(impact<=3?"landed":"crashed"):"flying"};
+}
 export function checkMission(slug:string,v:Values,ran:boolean,mars:MarsState){let ok=false,text="",step="done",required=1;switch(slug){
   case"moon-phases-3d":{const a=((v.angle%360)+360)%360,k=Math.round(a/90)%4,d=Math.min(Math.abs(a-k*90),Math.abs(a-k*90-360));ok=d<=5;step=String(k);required=4;text=ok?["New moon: the sunlit half faces away.","First quarter: half the visible disk is lit.","Full moon: the Earth-facing disk is lit.","Last quarter: the other half is lit."][k]:"Move to a main phase near 0°, 90°, 180°, or 270°.";break;}
   case"solar-eclipse-3d":{const e=eclipse(v);ok=e.kind==="Total"||e.kind==="Annular";step=e.kind;required=2;text=`${e.kind}: ${(e.coverage*100).toFixed(1)}% of the Sun's disk covered. Align centers and change Moon distance.`;break;}

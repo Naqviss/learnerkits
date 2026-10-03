@@ -153,6 +153,10 @@ export const courseLabs: CourseLab[] = [
   },
 ];
 
+// Off until AdSense review is done: hides the "From atoms to living systems" topic section and
+// unpublishes every course lab (no route, sitemap entry, or listing). Set to true to restore.
+export const chemistryCoursePublished = false;
+
 export const courseSimulationCards: SimulationCard[] = courseLabs.map(lab=>({slug:lab.slug,title:lab.title,concepts:lab.concepts.join(" · "),difficulty:["chemical-equilibrium","buffer-solutions","electrochemistry","redox-reactions"].includes(lab.slug)?"Advanced":"Intermediate",duration:"5–15 min",kind:"Interactive simulation",outcome:lab.description,seoTarget:`${lab.topic.toLowerCase()} simulator`,visualMode:"simulation"}));
 export const getCourseLab = (slug:string) => courseLabs.find(lab=>lab.slug===slug);
 

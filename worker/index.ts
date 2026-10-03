@@ -1,15 +1,18 @@
+import { submitContact } from "../lib/contact/submit";
 import { createDonationCheckout } from "../lib/donate/checkout";
 import { defaultLocale, locales } from "../lib/i18n/config";
 
-type Env = { ASSETS: { fetch(input: Request | URL | string): Promise<Response> } };
+type Env = { SUPABASE_URL?: string; SUPABASE_SECRET_KEY?: string; SUPABASE_SERVICE_ROLE_KEY?: string; ASSETS: { fetch(input: Request | URL | string): Promise<Response> } };
 
 // Cloudflare serves every file in out/ directly, and those requests are free and never count
-// toward Worker limits. This Worker only runs when no file matches: the donation API,
+// toward Worker limits. This Worker only runs when no file matches: the donation and contact APIs,
 // locale-less paths such as /about, and 404s.
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     const { pathname } = url;
+
+    if (pathname === "/api/contact") return submitContact(request, env);
 
     if (pathname === "/api/donate") {
       if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405, headers: { allow: "POST" } });

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { effectiveActivation, rateConstant, solutionPH, solubilityResult, yieldResult, type Values } from "@/lib/simulations/chemistry/model";
+import { chemistryCoursePublished, getCourseLab } from "@/lib/simulations/chemistry/course/catalog";
 import { ScientificPlot } from "./ScientificPlot";
 import styles from "./course.module.css";
 function Readings({items}:{items:[string,string][]}){return <div className={styles.legacyMetrics}>{items.map(([k,v])=><div key={k}><span>{k}</span><strong>{v}</strong></div>)}</div>;}
@@ -12,7 +13,8 @@ function GasLaws({v}:{v:Values}){
  return <section className={styles.legacyPanel}><h2>Explore the gas laws</h2><div className={styles.gasLawTabs}>{["Boyle’s law","Charles’s law","Pressure–temperature law"].map((name,i)=><button key={name} aria-pressed={law===i} onClick={()=>setLaw(i)}>{name}</button>)}</div><ScientificPlot series={[{name:["P ∝ 1/V at fixed T and n","V ∝ T at fixed P and n","P ∝ T at fixed V and n"][law],points}]} xLabel={law===0?"Volume (L)":"Absolute temperature (K)"} yLabel={law===1?"Volume (L)":"Pressure (kPa)"} xMax={law===0?40:600} yMax={Math.max(...points.map(p=>p[1]))*1.05} marker={law===0?[v.volume,pressure(v.temperature,v.volume)]:law===1?[v.temperature,v.volume]:[v.temperature,pressure(v.temperature,v.volume)]}/><p>{["At fixed temperature and gas amount, halving volume doubles pressure. More frequent wall collisions account for the pressure increase.","At the pressure of your current chamber, volume is proportional to absolute temperature. Doubling kelvin temperature doubles volume.","With volume and gas amount fixed, pressure is proportional to kelvin temperature. Hotter particles transfer more momentum to the walls."][law]} These ideal-gas relationships become less accurate near condensation and at high pressure. The zero-kelvin intercept is an extrapolation.</p></section>;
 }
 export function LegacyEnhancements({slug,values:v,time,reacted,locale}:{slug:string;values:Values;time:number;reacted:boolean;locale:string}){
- const link=(id:string,label:string)=><Link href={`/${locale}/simulations/${id}`}>{label} →</Link>;
+ // Course labs have no route while the course is unpublished, so drop links to them.
+ const link=(id:string,label:string)=>!chemistryCoursePublished&&getCourseLab(id)?null:<Link href={`/${locale}/simulations/${id}`}>{label} →</Link>;
  if(slug==="gas-law-lab")return <GasLaws v={v}/>;
  if(slug==="reaction-rate-lab"){
   const ea=effectiveActivation(v)/1000,k=rateConstant(v),rate=k*v.concentration*Math.exp(-k*time);

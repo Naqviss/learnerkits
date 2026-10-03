@@ -1,3 +1,4 @@
+import { informationUpdatedAt, infoMeta } from "@/components/legal/InfoPage";
 import type { MetadataRoute } from "next";
 import { articleSummaries, articlesUpdatedAt } from "@/lib/articles/catalog";
 import { articleImages } from "@/lib/articles/images";
@@ -13,7 +14,7 @@ export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // User-specific tools and previews are noindex and should not consume crawl budget.
-  const core = ["/", "/simulations", "/subjects", "/molecule-kit", "/donate", "/about", "/contact", "/privacy", "/cookies", "/terms", "/disclaimer", "/editorial-policy"];
+  const core = ["/", "/simulations", "/subjects", "/molecule-kit", "/donate", "/about", "/contact", "/privacy", "/cookies", "/terms", "/disclaimer", "/editorial-policy", "/faq", "/accessibility"];
   const subjectPaths = visibleSubjectSlugs.map((slug) => `/subjects/${slug}`);
   const subjectImageEntries = Object.fromEntries(visibleSubjectSlugs.flatMap((slug) => {
     const image = subjectImages[slug];
@@ -37,7 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       : articleSummaries.some((article) => path === `/articles/${article.slug}`)
         ? { images: articleSummaries.filter((article) => path === `/articles/${article.slug}`).flatMap((article) => [`${siteUrl}${articleImages[article.slug].src}`, ...(getArticle(article.slug)?.figures ?? []).map((figure) => `${siteUrl}${figure.src}`)]) }
         : {}),
-    lastModified: path === "/subjects/chemistry" || subjectsCatalog.chemistry.simulations.some(sim => path === `/simulations/${sim.slug}`) ? "2026-09-30" : path === "/guides/environmental-city-builder" ? "2026-09-27" : path === "/subjects" || subjectImageEntries[path] ? subjectImagesUpdatedAt : path === "/articles" ? articlesUpdatedAt : articleSummaries.find((article) => path === `/articles/${article.slug}`)?.updatedAt ?? lastModified,
+    lastModified: Object.keys(infoMeta).some(key => path === `/${key}`) ? informationUpdatedAt : path === "/subjects/chemistry" || subjectsCatalog.chemistry.simulations.some(sim => path === `/simulations/${sim.slug}`) ? "2026-09-30" : path === "/guides/environmental-city-builder" ? "2026-09-27" : path === "/subjects" || subjectImageEntries[path] ? subjectImagesUpdatedAt : path === "/articles" ? articlesUpdatedAt : articleSummaries.find((article) => path === `/articles/${article.slug}`)?.updatedAt ?? lastModified,
     changeFrequency: path.includes("simulations") ? "weekly" : "monthly",
     priority: path === "/" ? 1 : path === "/molecule-kit" ? .9 : path.includes("subjects/") || path === "/molecules" ? .85 : path.startsWith("/molecules/") ? .7 : isEnglishOnly(path) ? .85 : path === "/donate" ? .5 : .8,
     alternates: isEnglishOnly(path)
