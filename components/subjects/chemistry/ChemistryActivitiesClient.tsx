@@ -12,6 +12,7 @@ import { getCourseLab } from "@/lib/simulations/chemistry/course/catalog";
 import { LegacyEnhancements } from "./course/LegacyEnhancements";
 import { BenchScene, Chart } from "./BenchScene";
 import { MolecularScene, type Attachment } from "./MolecularScene";
+import { MoleculeBuilder } from "./builder/MoleculeBuilder";
 import { MoleculePicker } from "./MoleculePicker";
 import { bondLengthShort } from "@/lib/simulations/chemistry/bondLengths";
 import { getMoleculeReference } from "@/lib/seo/molecules";
@@ -26,6 +27,7 @@ const format = (v:number, digits=2) => v.toFixed(digits);
 
 type ChemistryProps = { locale:string; subject:SubjectDefinition; simulation:SimulationCard; kitLabel?:string };
 export function ChemistryActivitiesClient(props: ChemistryProps) {
+  if (props.simulation.slug === "molecule-builder-3d") return <MoleculeBuilder locale={props.locale}/>;
   return getCourseLab(props.simulation.slug) ? <ChemistryCourseClient key={props.simulation.slug} {...props}/> : <LegacyChemistryActivitiesClient key={props.simulation.slug} {...props}/>;
 }
 function LegacyChemistryActivitiesClient({ locale, subject, simulation, kitLabel }: ChemistryProps) {

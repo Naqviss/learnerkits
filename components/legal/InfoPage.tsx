@@ -125,7 +125,6 @@ export function InfoPage({ page, locale }: { page: InfoPageKey; locale: string }
   const content = { about: <About locale={locale}/>, contact: <Contact locale={locale}/>, privacy: <Privacy locale={locale}/>, cookies: <Cookies/>, terms: <Terms locale={locale}/>, disclaimer: <Disclaimer locale={locale}/>, "editorial-policy": <Editorial locale={locale}/>, faq: <FAQ locale={locale}/>, accessibility: <Accessibility locale={locale}/> };
   return <main className="container legalPage" lang="en" dir="ltr">
     <header className="legalHero"><span className="eyebrow">LearnerKits information</span><h1>{meta.title}</h1><p>{meta.description}</p></header>
-    <nav className="legalNav" aria-label="Information pages">{(Object.keys(infoMeta) as InfoPageKey[]).map(key => <Link key={key} href={`/${locale}/${key}`} aria-current={page === key ? "page" : undefined}>{key === "about" ? "About" : key === "contact" ? "Contact" : key === "faq" ? "FAQ" : infoMeta[key].title}</Link>)}</nav>
     <article className="legalArticle">{content[page]}</article>
     <aside className="legalHelp"><strong>{page === "contact" ? "Looking for help getting started?" : "Need clarification or want to report a correction?"}</strong><Link href={`/${locale}/${page === "contact" ? "faq" : "contact"}`}>{page === "contact" ? "Read common questions" : "Contact LearnerKits"} →</Link></aside>
   </main>;

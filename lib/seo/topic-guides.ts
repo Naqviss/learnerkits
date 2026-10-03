@@ -174,16 +174,16 @@ const editorial: Record<string, TopicEditorial> = {
     ],
   },
   "molecule-builder-3d": {
-    title: "Molecule builder game: build stable molecules in 3D",
+    title: "Molecule builder: build and edit molecular structures in 3D",
     target: "build molecules game",
-    answer: "A stable molecule forms when its atoms combine so that each one satisfies its typical valence — often the octet rule for main-group atoms — by sharing or transferring electrons through bonds.",
+    answer: "Build a molecular structure by choosing from all 118 elements and connecting atoms with single, double, or triple bonds. Inspect formal charges and common neutral valences, measure the drawn geometry, and export your work.",
     whyItMatters: "Building a molecule piece by piece, instead of only labeling a finished diagram, turns valence and bonding capacity into a testable constraint rather than a fact to memorize.",
-    investigate: ["Try adding more bonds to an atom than its valence allows and see what happens.", "Compare how many bonds hydrogen, oxygen, and carbon typically form.", "Build the same set of atoms two different ways and check which arrangement is stable."],
-    method: ["Pick a target molecule or a set of available atoms.", "Predict how many bonds each atom needs before connecting anything.", "Build the structure and use the model's feedback to fix any unstable atom."],
-    modelNote: "The builder enforces common valence and bonding patterns for teaching purposes; it does not model every exception, resonance structure, or expanded-octet case found in real chemistry.",
+    investigate: ["Compare the valence notes for hydrogen, oxygen, nitrogen, and carbon.", "Build chains and rings with the Bond tool, then inspect their connectivity.", "Compare two structures with the same formula; a valence match alone does not establish stability."],
+    method: ["Load a molecule from the library or add your first atom from the element palette.", "Select an atom and attach another element, or use Bond to connect two existing atoms.", "Review the inspector and structure notes. Save your workspace as JSON or export MOL or XYZ."],
+    modelNote: "This is a freeform structure editor. Common neutral valences provide guidance for a limited set of covalent atoms; charges and other elements are not validated. Coordinates and atom sizes are illustrative, not energy minimized. The editor does not predict stability or simulate reactions.",
     faq: [
       { q: "What determines how many bonds an atom can form?", a: "For most main-group atoms, the number of bonds relates to valence electrons and the tendency to reach a stable octet (or a pair, for hydrogen)." },
-      { q: "Why did my structure fail?", a: "Usually because an atom has too few or too many bonds for its valence — check each atom's bond count against its typical valence." },
+      { q: "What do the structure notes mean?", a: "Notes flag a mismatch with a common neutral valence or an atom outside the supported checks. They do not prove that a structure is stable or unstable. You can continue editing any element." },
     ],
   },
   "neutralization-station": {
