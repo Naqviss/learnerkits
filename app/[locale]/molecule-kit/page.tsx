@@ -110,6 +110,12 @@ export default async function MoleculeKitPage({ params }: { params: Promise<{ lo
           </div>
           <div className="topicGuideHeroActions"><Link className="button subjectButton" href="/en/molecules">{copy.chart.cta} →</Link></div>
         </section>
+        {locale === "en" && <section className="topicGuideSection">
+          <span className="eyebrow">For teachers</span>
+          <h2>Teaching with the Molecule Kit</h2>
+          <p>A ready-to-run 45-minute lesson on valence, bonding, and VSEPR shape, with common misconceptions and exit questions.</p>
+          <div className="topicGuideHeroActions"><Link className="textLink" href="/en/articles/how-to-teach-molecules-with-a-3d-molecule-kit">How to teach molecules with a 3D molecule kit →</Link></div>
+        </section>}
         <section className="topicGuideSection" id="all-molecules">
           <span className="eyebrow">VSEPR</span>
           <h2>{allMoleculesCopy[locale].title(moleculeReferences.length)}</h2>

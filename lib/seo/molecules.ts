@@ -130,16 +130,21 @@ export function moleculeSearchCopy(m: MoleculeReference) {
   const formula = magnitude ? `${ascii} ${charge}` : `${ascii}${charge}`;
   const angle = angleShort(m);
   const plural = angle.includes("&") ? "s" : "";
-  const base = `${formula} Molecular Geometry: ${titleCase(m.shape)}`;
-  const withAngle = `${base}, ${angle} Bond Angle${plural}`;
-  const core = withAngle.length <= 56 ? withAngle : `${base}, ${angle}`;
-  const title = core.length <= 60 ? `${core} (3D)` : core;
-  const geometry = m.shape === m.electronGeometry
-    ? `${sentenceShape(m.shape)} molecular and electron geometry`
-    : `${sentenceShape(m.shape)} molecular geometry, ${m.electronGeometry.toLowerCase()} electron geometry`;
-  const polarity = m.polarity === "Ion" ? "polyatomic ion" : m.polarity.toLowerCase();
-  const facts = `${formula} (${m.name.toLowerCase()}): ${geometry}, ${angle} bond angle${plural}${m.hybridization ? `, ${m.hybridization}` : ""}, ${polarity}.`;
-  const description = [`${facts} See why in a free 3D model you can rotate.`, `${facts} Rotate the free 3D model.`, facts].find((text) => text.length <= 160)!;
+  // Titles promise what the page adds (Lewis steps, 3D model) instead of stating the shape: the SERP
+  // answer alone was satisfying "x molecular geometry" searches without a click.
+  const extra = lewisSteps(m) ? "Lewis Structure" : "Shape";
+  const title = [
+    `${formula} Molecular Geometry, ${extra} & Bond Angle${plural} (3D)`,
+    `${formula} Molecular Geometry, ${extra} & Bond Angle${plural}`,
+    `${formula} Molecular Geometry & ${extra} (3D Model)`,
+  ].find((text) => text.length <= 60) ?? `${formula} Molecular Geometry & ${extra}`;
+  const checks = m.polarity === "Ion" ? "electron geometry, bond angles and hybridization" : "electron geometry, bond angles, hybridization and polarity";
+  const lewis = lewisSteps(m) ? ", draw its Lewis structure step by step," : "";
+  const description = [
+    `Why is ${formula} ${m.shape.toLowerCase()}? Rotate a free 3D model of ${m.name.toLowerCase()}${lewis} and check its ${checks}.`,
+    `Why is ${formula} ${m.shape.toLowerCase()}? Rotate a free 3D model${lewis} and check its ${checks}.`,
+    `Why is ${formula} ${m.shape.toLowerCase()}? Rotate a free 3D model and check its ${checks}.`,
+  ].find((text) => text.length <= 160)!;
   return { title, description };
 }
 

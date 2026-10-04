@@ -17,8 +17,10 @@ import { learningTools } from "./content/learning-tools";
 import { physicsWithoutFormulas } from "./content/physics-without-formulas";
 import { moonPhases } from "./content/moon-phases";
 import { climateExperiments } from "./content/climate-experiments";
+import { moleculeKitTeaching } from "./content/molecule-kit-teaching";
 
 const bodies: Record<ArticleSlug, string> = {
+  "how-to-teach-molecules-with-a-3d-molecule-kit": moleculeKitTeaching,
   "virtual-labs-vs-real-labs-what-students-learn": virtualVsRealLabs,
   "ai-tutor-vs-teacher-vs-textbook-vs-simulation": learningTools,
   "learn-physics-without-memorizing-formulas": physicsWithoutFormulas,

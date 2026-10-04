@@ -33,15 +33,15 @@ describe("molecule reference pages", () => {
     expect(faq.every((f) => f.a.includes("H₂O") || f.a.includes("Water"))).toBe(true);
   });
   it("writes search titles and descriptions with the plain formula people type", () => {
-    expect(moleculeSearchCopy(getMoleculeReference("phosphorus-pentafluoride-pf5")!).title).toBe("PF5 Molecular Geometry: Trigonal Bipyramidal, 90° & 120° (3D)");
-    expect(moleculeSearchCopy(getMoleculeReference("hydrogen-sulfide-h2s")!).description).toContain("H2S (hydrogen sulfide): bent molecular geometry, tetrahedral electron geometry");
-    expect(moleculeSearchCopy(getMoleculeReference("carbon-dioxide-co2")!).description).toContain("linear molecular and electron geometry");
+    expect(moleculeSearchCopy(getMoleculeReference("phosphorus-pentafluoride-pf5")!).title).toBe("PF5 Molecular Geometry, Lewis Structure & Bond Angles (3D)");
+    expect(moleculeSearchCopy(getMoleculeReference("hydrogen-sulfide-h2s")!).description).toMatch(/^Why is H2S bent\? .*Lewis structure step by step/);
+    expect(moleculeSearchCopy(getMoleculeReference("carbon-dioxide-co2")!).description).toContain("Why is CO2 linear?");
     expect(moleculeSearchCopy(getMoleculeReference("sulfate-ion-so4")!).title).toMatch(/^SO4 2- /);
     expect(moleculeSearchCopy(getMoleculeReference("nitrate-ion-no3")!).title).toMatch(/^NO3- /);
     for (const m of moleculeReferences) {
       const { title, description } = moleculeSearchCopy(m);
       expect(title, m.slug).not.toMatch(/[₀-₉⁰¹²³⁴-⁹]/);
-      expect(title.length, title).toBeLessThanOrEqual(64);
+      expect(title.length, title).toBeLessThanOrEqual(60);
       expect(description.length, description).toBeLessThanOrEqual(160);
       expect(description.toLowerCase()).toContain("electron geometry");
     }

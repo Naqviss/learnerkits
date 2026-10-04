@@ -10,10 +10,13 @@ const images = [
   ['physics-reasoning-notebook', 'physics-concepts-and-experiments', '#f7f4ec'],
   ['moon-phases-orbit-view', 'moon-phases-sunlight-and-orbit', '#101a38'],
   ['climate-energy-balance', 'climate-change-earth-energy-balance', '#f5f7ff'],
+  ['molecule-kit-electron-domains', 'teaching-molecules-3d-molecule-kit', '#f3f6fc'],
 ];
 const destination = path.join(root, 'public/images/articles');
 await mkdir(destination, { recursive: true });
-for (const [source, filename, background] of images) {
+// Optional output names (e.g. `node scripts/build-article-images.mjs teaching-molecules-3d-molecule-kit`) rebuild only those images.
+const only = process.argv.slice(2);
+for (const [source, filename, background] of images.filter(([, filename]) => !only.length || only.includes(filename))) {
   const svg = await readFile(path.join(root, 'output/article-images', `${source}.svg`), 'utf8');
   const art = svg.replace(/^.*?<svg[^>]*>/s, '').replace(/<\/svg>\s*$/, '');
   const dark = background === '#101a38';

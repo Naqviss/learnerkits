@@ -3,13 +3,14 @@ import type { Structure } from '@/lib/simulations/chemistry/builder';
 import { elementBySymbol } from '@/lib/simulations/chemistry/elements';
 import styles from './builder.module.css';
 
-export type BuilderIconName = 'select' | 'bond' | 'measure' | 'delete' | 'undo' | 'redo' | 'import' | 'export' | 'new' | 'table' | 'attach' | 'atom' | 'close' | 'zoomIn' | 'zoomOut' | 'fit' | 'camera' | 'labels' | 'rotate' | 'molecule' | 'check' | 'info' | 'back';
+export type BuilderIconName = 'select' | 'move' | 'bond' | 'measure' | 'delete' | 'undo' | 'redo' | 'import' | 'export' | 'new' | 'table' | 'attach' | 'atom' | 'close' | 'zoomIn' | 'zoomOut' | 'fit' | 'camera' | 'labels' | 'rotate' | 'molecule' | 'check' | 'info' | 'back';
 
 /** Solid SVG artwork with an extruded edge and a shared blue enamel finish. */
 export function BuilderIcon({ name, className = '' }: { name: BuilderIconName; className?: string }) {
   const id = useId().replace(/:/g, '');
   const art = (() => {
     switch (name) {
+      case 'move': return <path d="m16 1 6 6h-4v7h7v-4l6 6-6 6v-4h-7v7h4l-6 6-6-6h4v-7H7v4l-6-6 6-6v4h7V7h-4Z"/>;
       case 'select': return <path d="M8 5v21l6-6 5 10 5-3-5-9h8Z"/>;
       case 'bond': return <><path d="m9 20 12-12 4 4-12 12Z"/><circle cx="8" cy="24" r="6"/><circle cx="25" cy="8" r="6"/></>;
       case 'measure': return <path d="m4 23 19-19 7 7-19 19Zm6-2 3 3m1-7 3 3m1-7 3 3m1-7 3 3" fillRule="evenodd"/>;

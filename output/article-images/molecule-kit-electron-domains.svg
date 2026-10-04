@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+<defs>
+<radialGradient id="gH" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4ee"/></radialGradient>
+<radialGradient id="gC" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#6b7180"/><stop offset="1" stop-color="#2c303a"/></radialGradient>
+<radialGradient id="gN" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#7d98f0"/><stop offset="1" stop-color="#2c4fc4"/></radialGradient>
+<radialGradient id="gO" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#f08a80"/><stop offset="1" stop-color="#c8342b"/></radialGradient>
+</defs>
+<g font-family="Arial, Helvetica, sans-serif">
+<text x="600" y="70" text-anchor="middle" font-size="42" font-weight="700" fill="#1f2d52">Four electron domains, three molecular shapes</text>
+<text x="600" y="114" text-anchor="middle" font-size="24" fill="#4a5878">Each central atom has a tetrahedral electron geometry. Lone pairs change the shape and narrow the angle.</text>
+<rect x="30" y="150" width="340" height="560" rx="26" fill="#ffffff" stroke="#d6deef" stroke-width="2"/>
+<line x1="200" y1="360" x2="200" y2="240" stroke="#6b7385" stroke-width="11" stroke-linecap="round"/>
+<line x1="200" y1="360" x2="304" y2="386" stroke="#6b7385" stroke-width="11" stroke-linecap="round"/>
+<line x1="200" y1="360" x2="92" y2="402" stroke="#6b7385" stroke-width="11" stroke-linecap="round"/>
+<line x1="200" y1="360" x2="228" y2="452" stroke="#6b7385" stroke-width="11" stroke-linecap="round"/>
+<circle cx="200" cy="360" r="40" fill="url(#gC)" stroke="#1f232b" stroke-width="2"/><text x="200" y="371" text-anchor="middle" font-size="30" font-weight="700" fill="#fff">C</text>
+<circle cx="200" cy="240" r="26" fill="url(#gH)" stroke="#8b95a8" stroke-width="2"/><text x="200" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="#33405c">H</text>
+<circle cx="304" cy="386" r="26" fill="url(#gH)" stroke="#8b95a8" stroke-width="2"/><text x="304" y="394" text-anchor="middle" font-size="22" font-weight="700" fill="#33405c">H</text>
+<circle cx="92" cy="402" r="26" fill="url(#gH)" stroke="#8b95a8" stroke-width="2"/><text x="92" y="410" text-anchor="middle" font-size="22" font-weight="700" fill="#33405c">H</text>
+<circle cx="228" cy="452" r="30" fill="url(#gH)" stroke="#8b95a8" stroke-width="2"/><text x="228" y="460" text-anchor="middle" font-size="22" font-weight="700" fill="#33405c">H</text>
+<text x="200" y="550" text-anchor="middle" font-size="40" font-weight="700" fill="#1f2d52">CH₄</text>
+<text x="200" y="590" text-anchor="middle" font-size="25" fill="#33405c">Methane · tetrahedral</text>
+<text x="200" y="628" text-anchor="middle" font-size="20" fill="#5b6987">4 bonding pairs · 0 lone pairs</text>
+<rect x="120" y="648" width="160" height="42" rx="21" fill="#e9edfb"/><text x="200" y="676" text-anchor="middle" font-size="22" font-weight="700" fill="#2b3f8f">≈ 109.5°</text>
+<rect x="430" y="150" width="340" height="560" rx="26" fill="#ffffff" stroke="#d6deef" stroke-width="2"/>
+<g transform="translate(600 360) rotate(0.0)"><ellipse cx="0" cy="-62" rx="30" ry="58" fill="#c9b8fb" fill-opacity=".75" stroke="#8a6ff0" stroke-width="2" stroke-dasharray="6 5"/><circle cx="-9" cy="-78" r="6" fill="#5b3fd1"/><circle cx="9" cy="-78" r="6" fill="#5b3fd1"/></g>
+<line x1="600" y1="360" x2="704" y2="386" stroke="#6b7385" stroke-width="11" stroke-linecap="round"/>
+<line x1="600" y1="360" x2="492" y2="402" stroke="#6b7385" stroke-width="11" stroke-linecap="round"/>
+<line x1="600" y1="360" x2="628" y2="452" stroke="#6b7385" stroke-width="11" stroke-linecap="round"/>
+<circle cx="600" cy="360" r="40" fill="url(#gN)" stroke="#203c9c" stroke-width="2"/><text x="600" y="371" text-anchor="middle" font-size="30" font-weight="700" fill="#fff">N</text>
+<circle cx="704" cy="386" r="26" fill="url(#gH)" stroke="#8b95a8" stroke-width="2"/><text x="704" y="394" text-anchor="middle" font-size="22" font-weight="700" fill="#33405c">H</text>
+<circle cx="492" cy="402" r="26" fill="url(#gH)" stroke="#8b95a8" stroke-width="2"/><text x="492" y="410" text-anchor="middle" font-size="22" font-weight="700" fill="#33405c">H</text>
+<circle cx="628" cy="452" r="30" fill="url(#gH)" stroke="#8b95a8" stroke-width="2"/><text x="628" y="460" text-anchor="middle" font-size="22" font-weight="700" fill="#33405c">H</text>
+<text x="600" y="550" text-anchor="middle" font-size="40" font-weight="700" fill="#1f2d52">NH₃</text>
+<text x="600" y="590" text-anchor="middle" font-size="25" fill="#33405c">Ammonia · trigonal pyramidal</text>
+<text x="600" y="628" text-anchor="middle" font-size="20" fill="#5b6987">3 bonding pairs · 1 lone pair</text>
+<rect x="520" y="648" width="160" height="42" rx="21" fill="#e9edfb"/><text x="600" y="676" text-anchor="middle" font-size="22" font-weight="700" fill="#2b3f8f">≈ 107°</text>
+<rect x="830" y="150" width="340" height="560" rx="26" fill="#ffffff" stroke="#d6deef" stroke-width="2"/>
+<g transform="translate(1000 360) rotate(0.0)"><ellipse cx="0" cy="-62" rx="30" ry="58" fill="#c9b8fb" fill-opacity=".75" stroke="#8a6ff0" stroke-width="2" stroke-dasharray="6 5"/><circle cx="-9" cy="-78" r="6" fill="#5b3fd1"/><circle cx="9" cy="-78" r="6" fill="#5b3fd1"/></g>
+<g transform="translate(1000 360) rotate(104.0)"><ellipse cx="0" cy="-62" rx="30" ry="58" fill="#c9b8fb" fill-opacity=".75" stroke="#8a6ff0" stroke-width="2" stroke-dasharray="6 5"/><circle cx="-9" cy="-78" r="6" fill="#5b3fd1"/><circle cx="9" cy="-78" r="6" fill="#5b3fd1"/></g>
+<line x1="1000" y1="360" x2="892" y2="402" stroke="#6b7385" stroke-width="11" stroke-linecap="round"/>
+<line x1="1000" y1="360" x2="1028" y2="452" stroke="#6b7385" stroke-width="11" stroke-linecap="round"/>
+<circle cx="1000" cy="360" r="40" fill="url(#gO)" stroke="#9c241d" stroke-width="2"/><text x="1000" y="371" text-anchor="middle" font-size="30" font-weight="700" fill="#fff">O</text>
+<circle cx="892" cy="402" r="26" fill="url(#gH)" stroke="#8b95a8" stroke-width="2"/><text x="892" y="410" text-anchor="middle" font-size="22" font-weight="700" fill="#33405c">H</text>
+<circle cx="1028" cy="452" r="30" fill="url(#gH)" stroke="#8b95a8" stroke-width="2"/><text x="1028" y="460" text-anchor="middle" font-size="22" font-weight="700" fill="#33405c">H</text>
+<text x="1000" y="550" text-anchor="middle" font-size="40" font-weight="700" fill="#1f2d52">H₂O</text>
+<text x="1000" y="590" text-anchor="middle" font-size="25" fill="#33405c">Water · bent</text>
+<text x="1000" y="628" text-anchor="middle" font-size="20" fill="#5b6987">2 bonding pairs · 2 lone pairs</text>
+<rect x="920" y="648" width="160" height="42" rx="21" fill="#e9edfb"/><text x="1000" y="676" text-anchor="middle" font-size="22" font-weight="700" fill="#2b3f8f">≈ 104.5°</text>
+<g font-size="19" fill="#5b6987"><ellipse cx="350" cy="740" rx="11" ry="20" fill="#c9b8fb" stroke="#8a6ff0" stroke-width="2" stroke-dasharray="4 3"/><text x="372" y="747">Lone pair (electron domain, not an atom)</text><text x="760" y="747">Schematic model; not to scale</text></g>
+</g></svg>

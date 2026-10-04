@@ -38,14 +38,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const simulation = localizedSubject.simulations.find((item) => item.slug === slug);
   if (!simulation) return {};
   const copy = getEducationCopy(locale);
-  const targetPhrase = locale === "en" && baseSimulation.seoTarget ? ` ${baseSimulation.seoTarget}.` : "";
   const keywords = [simulation.title, localizedSubject.eyebrow, ...(simulation.concepts ? simulation.concepts.split(" · ") : [])];
   if (locale === "en" && baseSimulation.seoTarget) keywords.unshift(baseSimulation.seoTarget);
   return localizedMetadata(
     locale,
     `/simulations/${slug}`,
     copy.seo.simulationTitle(simulation.title),
-    copy.seo.simulationDescription(simulation.title, `${simulation.outcome}${targetPhrase}`),
+    copy.seo.simulationDescription(simulation.title, simulation.outcome),
     { keywords }
   );
 }

@@ -16,14 +16,15 @@ import { GET } from "@/app/llms.txt/route";
 import ArticlePage, { generateMetadata } from "@/app/[locale]/articles/[slug]/page";
 import ArticlesPage from "@/app/[locale]/articles/page";
 
+const thirdWave = new Set(["how-to-teach-molecules-with-a-3d-molecule-kit"]);
 const secondWave = new Set(["virtual-labs-vs-real-labs-what-students-learn", "ai-tutor-vs-teacher-vs-textbook-vs-simulation", "learn-physics-without-memorizing-formulas", "why-does-the-moon-change-shape", "climate-change-explained-interactive-experiments"]);
 
 describe("article publishing", () => {
-  it("publishes sixteen distinct articles with the requested category lengths and navigable sections", () => {
-    expect(articles).toHaveLength(16);
-    expect(new Set(articles.map((article) => article.slug)).size).toBe(16);
+  it("publishes seventeen distinct articles with the requested category lengths and navigable sections", () => {
+    expect(articles).toHaveLength(17);
+    expect(new Set(articles.map((article) => article.slug)).size).toBe(17);
     expect(articles.filter((article) => article.category === "AI in Education")).toHaveLength(6);
-    expect(articles.filter((article) => article.category === "Educational Technology")).toHaveLength(7);
+    expect(articles.filter((article) => article.category === "Educational Technology")).toHaveLength(8);
     expect(articles.filter((article) => article.category === "Science Concepts")).toHaveLength(3);
     for (const article of articles) {
       expect(article.wordCount, article.slug).toBeGreaterThanOrEqual(1500);
@@ -43,7 +44,7 @@ describe("article publishing", () => {
     }
     for (const article of articles) {
       expect(html).toContain(`/en/articles/${article.slug}`);
-      expect(article.publishedAt).toBe(secondWave.has(article.slug) ? "2026-09-27" : article.category === "AI in Education" ? "2026-09-25" : "2026-09-26");
+      expect(article.publishedAt).toBe(thirdWave.has(article.slug) ? "2026-10-04" : secondWave.has(article.slug) ? "2026-09-27" : article.category === "AI in Education" ? "2026-09-25" : "2026-09-26");
       expect(articleJsonLd(article).articleSection).toBe(article.category);
     }
   });
@@ -84,7 +85,7 @@ describe("article publishing", () => {
   it("lists only English article URLs in the sitemap and discovery file", async () => {
     const entries = sitemap().filter((entry) => entry.url.includes("/articles"));
     const guide = await (await GET()).text();
-    expect(entries).toHaveLength(17);
+    expect(entries).toHaveLength(18);
     for (const article of articles) {
       const url = localizedUrl("en", `/articles/${article.slug}`);
       expect(entries.find((entry) => entry.url === url)?.lastModified).toBe(article.updatedAt);
@@ -95,7 +96,7 @@ describe("article publishing", () => {
   });
 
   it("ships distinct, compressed WebP files with the dimensions advertised in HTML and social metadata", async () => {
-    expect(new Set(Object.values(articleImages).map((image) => image.src)).size).toBe(16);
+    expect(new Set(Object.values(articleImages).map((image) => image.src)).size).toBe(17);
     for (const image of Object.values(articleImages)) {
       for (const [src, width, height] of [[image.src, image.width, image.height], [image.smallSrc, 640, 427], [image.socialSrc, 1200, 630]] as const) {
         const file = join(process.cwd(), "public", src);

@@ -121,6 +121,13 @@ export function websiteJsonLd(locale: Locale, description: string) {
         url: `${siteUrl}/`,
         slogan: siteSlogan,
         logo: `${siteUrl}/learnerkits-mark.svg`,
+        description: "Free, browser-based interactive science simulations and virtual labs for students and teachers.",
+        founder: [
+          { "@type": "Person", name: "Shafaq Sheikh", sameAs: "https://www.linkedin.com/in/shafaq-shaikh/" },
+          { "@type": "Person", name: "Abbas Haider", sameAs: "https://www.linkedin.com/in/abbashaider-n/" },
+          { "@type": "Person", name: "Ali Faraz", sameAs: "https://www.linkedin.com/in/ali-faraz-358162209/" },
+        ],
+        contactPoint: { "@type": "ContactPoint", contactType: "customer support", url: `${siteUrl}/en/contact` },
       },
     ],
   };

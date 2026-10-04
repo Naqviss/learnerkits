@@ -126,6 +126,20 @@ export const molecules = [
   { formula: "XeF₄", center: "Xe", outer: "F", count: 4, lone: 2, angle: 90, shape: "Square planar", order: 1 },
   { formula: "ICl₄⁻", center: "I", outer: "Cl", count: 4, lone: 2, angle: 90, shape: "Square planar", order: 1 },
   { formula: "BrF₄⁻", center: "Br", outer: "F", count: 4, lone: 2, angle: 90, shape: "Square planar", order: 1 },
+  // Added from search demand; appended so existing indexes stay stable.
+  { formula: "XeCl₄", center: "Xe", outer: "Cl", count: 4, lone: 2, angle: 90, shape: "Square planar", order: 1 },
+  { formula: "H₃O⁺", center: "O", outer: "H", count: 3, lone: 1, angle: 113, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "SO₃²⁻", center: "S", outer: "O", count: 3, lone: 1, angle: 106, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "BrO₃⁻", center: "Br", outer: "O", count: 3, lone: 1, angle: 104, shape: "Trigonal pyramidal", order: 1 },
+  { formula: "PCl₄⁺", center: "P", outer: "Cl", count: 4, lone: 0, angle: 109.5, shape: "Tetrahedral", order: 1 },
+  { formula: "NO₂⁺", center: "N", outer: "O", count: 2, lone: 0, angle: 180, shape: "Linear", order: 2 },
+  { formula: "NH₂⁻", center: "N", outer: "H", count: 2, lone: 2, angle: 104, shape: "Bent", order: 1 },
+  { formula: "ClO₂⁻", center: "Cl", outer: "O", count: 2, lone: 2, angle: 111, shape: "Bent", order: 1 },
+  { formula: "SCl₄", center: "S", outer: "Cl", count: 4, lone: 1, angle: 90, shape: "Seesaw", order: 1 },
+  { formula: "ICl₄⁺", center: "I", outer: "Cl", count: 4, lone: 1, angle: 90, shape: "Seesaw", order: 1 },
+  { formula: "IBr₃", center: "I", outer: "Br", count: 3, lone: 2, angle: 90, shape: "T-shaped", order: 1 },
+  { formula: "Br₃⁻", center: "Br", outer: "Br", count: 2, lone: 3, angle: 180, shape: "Linear", order: 1 },
+  { formula: "IF₂⁻", center: "I", outer: "F", count: 2, lone: 3, angle: 180, shape: "Linear", order: 1 },
 ];
 export const builderMolecules = [4, 2, 0];
 // Common names shown beside formulas in the lab picker, the 3D stage, and reference pages.
@@ -159,6 +173,10 @@ export const moleculeNames: Record<string, string> = {
   "WF₆": "Tungsten hexafluoride", "UF₆": "Uranium hexafluoride", "PF₆⁻": "Hexafluorophosphate ion", "SiF₆²⁻": "Hexafluorosilicate ion",
   "BrF₅": "Bromine pentafluoride", "IF₅": "Iodine pentafluoride", "ClF₅": "Chlorine pentafluoride",
   "XeF₄": "Xenon tetrafluoride", "ICl₄⁻": "Tetrachloroiodate ion", "BrF₄⁻": "Tetrafluorobromate ion",
+  "XeCl₄": "Xenon tetrachloride", "H₃O⁺": "Hydronium ion", "SO₃²⁻": "Sulfite ion", "BrO₃⁻": "Bromate ion",
+  "PCl₄⁺": "Tetrachlorophosphonium ion", "NO₂⁺": "Nitronium ion", "NH₂⁻": "Amide ion", "ClO₂⁻": "Chlorite ion",
+  "SCl₄": "Sulfur tetrachloride", "ICl₄⁺": "Tetrachloroiodonium ion", "IBr₃": "Iodine tribromide", "Br₃⁻": "Tribromide ion",
+  "IF₂⁻": "Difluoroiodate ion",
 };
 export const moleculeName = (formula: string) => moleculeNames[formula] ?? formula;
 const moleculeFormulas = molecules.map(m => m.formula);

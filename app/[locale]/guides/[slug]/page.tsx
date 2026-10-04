@@ -14,11 +14,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: raw, slug } = await params;
   const guide = getTopicGuide(slug);
   if (!guide || !isLocale(raw) || raw !== "en") return {};
+  // Search results cut descriptions at ~160 characters, so lead with the answer's first sentence.
+  const firstSentence = guide.answer.match(/^.+?[.!?](?=\s|$)/)?.[0] ?? guide.answer;
+  const description = [
+    `${firstSentence} Test it in a free interactive ${guide.simulation.kind.replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase())}.`,
+    firstSentence,
+  ].find((text) => text.length <= 160) ?? `${firstSentence.slice(0, 157).replace(/\s+\S*$/, "")}…`;
   return localizedMetadata(
     raw,
     `/guides/${guide.slug}`,
-    guide.title,
-    `${guide.answer} Use the free interactive ${guide.simulation.kind.toLowerCase()} to test your prediction.`,
+    guide.title.charAt(0).toUpperCase() + guide.title.slice(1),
+    description,
     { type: "article", keywords: [guide.target, guide.simulation.title, guide.subject.eyebrow], englishOnly: true },
   );
 }
