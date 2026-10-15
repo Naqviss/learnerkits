@@ -218,6 +218,10 @@ npm run deploy    # build + wrangler deploy
 
 `npm run build` uses `https://www.learnerkits.com` for `NEXT_PUBLIC_SITE_URL` unless the shell sets another origin, so the `localhost` value in `.env.local` never reaches a deploy. Everything read from the environment at build time (site URL, contact email, AdSense ID) is baked into the HTML, so rebuild after changing it. `STRIPE_SECRET_KEY`, `DONATION_CURRENCY` and `DONATION_HOSTED_URL` stay runtime secrets on the Worker. `next dev` includes the contact API but has no locale redirects or donation API; use `npm run preview` for those.
 
+The English homepage stays at `/` for every browser language; visitors choose translations with the language selector. Cloudflare's `public/_redirects` sends `/en` and `/en/` permanently to `/`. After export cleanup, the build verifies that every sitemap page has HTML, allows indexing, and has a matching canonical on the production host. A failed check stops deployment.
+
+The apex domain (`learnerkits.com`) must redirect to `https://www.learnerkits.com` using a Cloudflare domain redirect rule that preserves the path and query string. Workers static-asset `_redirects` does not support domain-level redirects. Configure this at the edge rather than running every static request through the Worker.
+
 ## Science learning articles
 
 `/en/articles` contains sixteen original, AI-assisted educational articles: six in AI in Education, seven in Educational Technology, and three in Science Concepts (all 1,500+ words; the five added on 2026-09-27 are 2,700+ words with FAQ sections). Each includes practical situations and activities; selected articles also contain original explanatory WebP diagrams. Categories are grouped on the article index. Each article has individual publication and modification dates. Article pages are prerendered with visible source links, worked examples, a table of contents, related labs, and Article/Breadcrumb structured data. The practice article includes native expandable answer keys. Navigation search loads only the lightweight article index.

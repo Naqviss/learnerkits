@@ -1,18 +1,17 @@
 // Runs after `next build` (output: "export") to finish the static site in out/.
 import { readdirSync, readFileSync, rmSync, rmdirSync, writeFileSync } from "node:fs";
+import { verifyStaticSeo } from "./verify-static-seo.mjs";
 
 const out = new URL("../out/", import.meta.url);
 const config = readFileSync(new URL("../lib/i18n/config.ts", import.meta.url), "utf8");
-const locales = JSON.parse(config.match(/export const locales = (\[[^\]]*\])/)[1]);
 const defaultLocale = config.match(/export const defaultLocale: Locale = "([^"]+)"/)[1];
 
 // The bare domain is the canonical English homepage (see localizedUrl), so "/" serves the
-// same HTML as /en. Crawlers always get English; returning visitors who picked a language, or
-// whose browser prefers one, are sent to it, matching the Worker's locale choice.
-const localeBoot = `<script>(function(){try{var l=${JSON.stringify(locales)},c=document.cookie.match(/(?:^|;\\s*)science-sim-locale=([^;]+)/),r=c&&c[1],a=(navigator.language||"").split("-")[0],t=l.indexOf(r)>=0?r:l.indexOf(a)>=0?a:${JSON.stringify(defaultLocale)};if(t!==${JSON.stringify(defaultLocale)})location.replace("/"+t+location.search+location.hash)}catch(e){}})();</script>`;
+// same HTML as /en. Keep that URL stable for every browser and crawler. Visitors
+// can choose another language using the existing language selector.
 const home = readFileSync(new URL(`${defaultLocale}.html`, out), "utf8");
 if (!home.includes("<head>")) throw new Error(`out/${defaultLocale}.html has no <head> to inject into`);
-writeFileSync(new URL("index.html", out), home.replace("<head>", `<head>${localeBoot}`));
+writeFileSync(new URL("index.html", out), home);
 
 // A page that calls notFound() at build time (e.g. missions/progress while switched off) is
 // still exported, as 404 content that would be served with status 200. Remove it and its
@@ -39,3 +38,5 @@ if (process.env.ALLOW_LOCAL_SITE_URL !== "1" && /localhost|127\.0\.0\.1/.test(si
   throw new Error("sitemap.xml points at localhost. Build with NEXT_PUBLIC_SITE_URL=https://www.learnerkits.com (npm run build does this).");
 }
 console.log(`Static site ready in out/ (homepage = /${defaultLocale}, ${removed} not-found pages removed)`);
+const verified = verifyStaticSeo(out, process.env.ALLOW_LOCAL_SITE_URL === "1" ? undefined : "https://www.learnerkits.com");
+console.log(`Verified ${verified} sitemap pages: exported, indexable, and canonical`);

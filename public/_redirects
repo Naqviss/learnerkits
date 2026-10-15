@@ -1,0 +1,3 @@
+# Match the canonical English homepage without changing other language URLs.
+/en / 301
+/en/ / 301
