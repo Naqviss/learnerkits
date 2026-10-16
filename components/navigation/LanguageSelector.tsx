@@ -5,6 +5,7 @@ import { localeNames, locales } from "@/lib/i18n/config";
 export function LanguageSelector({ locale, label }: { locale: string; label: string }) {
   const router = useRouter();
   const pathname = usePathname();
+  if (locales.length < 2) return null;
   return <span className="langSelectWrap"><select className="langSelect" aria-label={label} value={locale} onChange={(e) => {
     const next = e.target.value;
     const segments = pathname.split("/");

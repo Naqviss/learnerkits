@@ -776,7 +776,7 @@ html[data-theme="dark"] .learningNote{background:#3b3215}
 .aboutLK h2{font-size:clamp(2.1rem,3.8vw,3.1rem);letter-spacing:-.045em;line-height:1.02;margin:0;background:linear-gradient(100deg,var(--text) 45%,var(--accent) 80%,var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .educationHome .aboutLKIntro p{font-size:1.06rem;line-height:1.75;color:var(--muted);margin:0}
 .aboutLKIntro p strong{color:var(--text);font-weight:750}
-.aboutLKImpact{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:48px;align-items:center;padding-top:30px;border-top:1px solid var(--line)}
+.aboutLKImpact{padding-top:30px;border-top:1px solid var(--line)}
 .educationHome .aboutLKStatement{margin:0;font-size:1.1rem;line-height:1.5;font-weight:750;letter-spacing:-.01em;color:var(--text)}
 .aboutLKStats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));list-style:none;padding:0;margin:0}
 .aboutLKStats li{display:grid;gap:6px;padding:4px 24px;border-inline-start:1px solid var(--line)}

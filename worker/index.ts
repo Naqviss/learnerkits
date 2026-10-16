@@ -1,6 +1,6 @@
 import { submitContact } from "../lib/contact/submit";
 import { createDonationCheckout } from "../lib/donate/checkout";
-import { defaultLocale, locales } from "../lib/i18n/config";
+import { defaultLocale, locales, supportedLocales } from "../lib/i18n/config";
 
 type Env = { SUPABASE_URL?: string; SUPABASE_SECRET_KEY?: string; SUPABASE_SERVICE_ROLE_KEY?: string; ASSETS: { fetch(input: Request | URL | string): Promise<Response> } };
 
@@ -11,6 +11,15 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     const { pathname } = url;
+
+    // Disabled translations have no exported assets. Keep their old URLs usable
+    // while publication is paused, without permanently retiring the language.
+    const requestedLocale = supportedLocales.find((locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
+    if (requestedLocale && !locales.includes(requestedLocale)) {
+      const suffix = pathname.slice(requestedLocale.length + 1);
+      url.pathname = !suffix || suffix === "/" ? "/" : `/${defaultLocale}${suffix}`;
+      return Response.redirect(url.toString(), 307);
+    }
 
     if (pathname === "/api/contact") return submitContact(request, env);
 

@@ -11,7 +11,7 @@ A browser-based educational simulation platform built around **learn by experime
 - **71 simulations total**
 - **16 SEO-priority simulations** surfaced as the first build/promote collection
 - Light theme by default, plus Dark and System appearance modes
-- Locale-aware routing for `en`, `es`, `zh`, `ar`, `pt`, `fr`, `ru`, `ja`, `de`
+- English-only publication for now; translations remain in the source for later re-enablement
 
 The original labs are retained. The published catalog currently contains 71 indexable simulations; verify the catalog count when adding or removing a lab.
 
@@ -218,7 +218,9 @@ npm run deploy    # build + wrangler deploy
 
 `npm run build` uses `https://www.learnerkits.com` for `NEXT_PUBLIC_SITE_URL` unless the shell sets another origin, so the `localhost` value in `.env.local` never reaches a deploy. Everything read from the environment at build time (site URL, contact email, AdSense ID) is baked into the HTML, so rebuild after changing it. `STRIPE_SECRET_KEY`, `DONATION_CURRENCY` and `DONATION_HOSTED_URL` stay runtime secrets on the Worker. `next dev` includes the contact API but has no locale redirects or donation API; use `npm run preview` for those.
 
-The English homepage stays at `/` for every browser language; visitors choose translations with the language selector. Cloudflare's `public/_redirects` sends `/en` and `/en/` permanently to `/`. After export cleanup, the build verifies that every sitemap page has HTML, allows indexing, and has a matching canonical on the production host. A failed check stops deployment.
+The English homepage stays at `/` for every browser language. Cloudflare's `public/_redirects` sends `/en` and `/en/` permanently to `/`. After export cleanup, the build verifies that every sitemap page has HTML, allows indexing, and has a matching canonical on the production host. A failed check stops deployment.
+
+Language publication is controlled by `locales` in `lib/i18n/config.ts`, currently `["en"]`. The selector is hidden, translated pages are not exported or listed in the sitemap/hreflang, and the Worker temporarily redirects old translated URLs to the equivalent English URL (307, preserving query strings). Restore selected languages in `locales`, or set it to `supportedLocales`, then rebuild and deploy to enable them again. Keep the translation dictionaries intact. Existing language cookies cannot select an unpublished language.
 
 The apex domain (`learnerkits.com`) must redirect to `https://www.learnerkits.com` using a Cloudflare domain redirect rule that preserves the path and query string. Workers static-asset `_redirects` does not support domain-level redirects. Configure this at the edge rather than running every static request through the Worker.
 

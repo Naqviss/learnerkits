@@ -1,4 +1,5 @@
 import { articleSummaries } from "@/lib/articles/catalog";
+import { locales, localeNames } from "@/lib/i18n/config";
 import { siteSlogan, siteUrl } from "@/lib/seo/metadata";
 import { getTopicGuides } from "@/lib/seo/topic-guides";
 import { moleculeReferences } from "@/lib/seo/molecules";
@@ -32,7 +33,7 @@ ${siteSlogan}
 
 > Free, interactive science simulations for grades 6-12. Students predict, experiment, observe, and explain across space, physics, geography, environmental science, and chemistry — no sign-up required.
 
-LearnerKits is an education platform with interactive labs, topic guides, and practical science-learning articles. Articles and focused topic guides are currently available in English only. Each simulation page is a self-contained interactive lab with a stated learning outcome, difficulty level, and the concepts it teaches. Content is available in English, Spanish, Simplified Chinese, Arabic, Portuguese, French, Russian, Japanese, and German at /{locale}/... paths (default locale: en).
+LearnerKits is an education platform with interactive labs, topic guides, and practical science-learning articles. Articles and focused topic guides are currently available in English only. Each simulation page is a self-contained interactive lab with a stated learning outcome, difficulty level, and the concepts it teaches. Currently published languages: ${locales.map((locale) => localeNames[locale]).join(", ")}. The English homepage is at / and English learning pages are at /en/... paths.
 
 ## Key pages
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { locales } from "@/lib/i18n/config";
+import { locales, supportedLocales } from "@/lib/i18n/config";
 import { getLocalizedSubject } from "@/lib/i18n/content";
 import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { matchesTerms, normalizeSearch, searchTerms } from "@/lib/search/normalize";
@@ -27,7 +27,7 @@ describe("simulation library page", () => {
   });
 
   it("translates environmental science labs outside English", () => {
-    for (const locale of locales.filter((code) => code !== "en")) {
+    for (const locale of supportedLocales.filter((code) => code !== "en")) {
       const subject = getLocalizedSubject(locale, "environmental-science");
       expect(subject.description, locale).not.toBe(subjectsCatalog["environmental-science"].description);
       subject.simulations.forEach((sim, index) => expect(sim.title, `${locale}/${sim.slug}`).not.toBe(subjectsCatalog["environmental-science"].simulations[index].title));

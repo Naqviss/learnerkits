@@ -28,7 +28,7 @@ export default async function Home({params}:{params:Promise<{locale:string}>}){
   ]};
   const kit=getMoleculeKitCopy(raw);
   const chemistryName=getLocalizedSubjectName(raw,"chemistry");
-  const impact=homeImpact[raw];const fmt=(n:number)=>new Intl.NumberFormat(raw).format(n);
+  const impact=homeImpact[raw];
   return <main className="educationHome">
     <div className="homeScrollProgress" aria-hidden="true"/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(structured)}/>
@@ -51,11 +51,6 @@ export default async function Home({params}:{params:Promise<{locale:string}>}){
         </div>
         <div className="aboutLKImpact">
           <p className="aboutLKStatement">{impact.statement}</p>
-          <ul className="aboutLKStats">
-            <li><i className="aboutLKIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 10v6"/></svg></i><b>{fmt(5000)}+</b><span>{impact.students}</span></li>
-            <li><i className="aboutLKIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/><path d="m7 11 3-3 3 2 4-4"/></svg></i><b>{fmt(1300)}+</b><span>{impact.teachers}</span></li>
-            <li><i className="aboutLKIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 22v-4a2 2 0 1 0-4 0v4"/><path d="m18 10 3.4 1.7a1 1 0 0 1 .6.9V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7.4a1 1 0 0 1 .6-.9L6 10"/><path d="M18 5v17"/><path d="m4 6 7.1-3.6a2 2 0 0 1 1.8 0L20 6"/><path d="M6 5v17"/><circle cx="12" cy="9" r="2"/></svg></i><b>{fmt(150)}+</b><span>{impact.schools}</span></li>
-          </ul>
         </div>
       </div>
     </section>
