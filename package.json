@@ -7,7 +7,8 @@
     "build": "NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-https://www.learnerkits.com} next build && node scripts/postbuild-static.mjs",
     "start": "wrangler dev",
     "preview": "npm run build && wrangler dev",
-    "deploy": "npm run build && wrangler deploy",
+    "deploy": "node scripts/deploy.mjs",
+    "check:paddle": "node scripts/check-paddle.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -16,6 +17,7 @@
     "build:vinext": "vite build"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
     "next": "^16.3.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

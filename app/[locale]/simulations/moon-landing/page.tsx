@@ -8,6 +8,7 @@ import { getMessages } from "@/lib/i18n/getMessages";
 import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
 import { SimulationGuide } from "@/components/seo/SimulationGuide";
+import { SimulationAssistant } from "@/components/premium/SimulationAssistant";
 
 const MoonLandingClient = dynamic(() => import("@/components/simulation/MoonLandingClient").then((module) => module.MoonLandingClient));
 
@@ -40,6 +41,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
     <section className="container section" aria-labelledby="moon-objectives"><h2 id="moon-objectives">{m.moonLanding.seo.objectivesTitle}</h2><div className="grid2">{m.moonLanding.seo.objectives.map((objective) => <article className="card" key={objective}><h3>{objective}</h3></article>)}</div></section>
     <section className="container section"><h2>{m.moonLanding.seo.faqTitle}</h2><div className="grid3">{m.moonLanding.seo.faq.map((item) => <article className="card" key={item.q}><h3>{item.q}</h3><p className="muted">{item.a}</p></article>)}</div></section>
     <section className="container section"><div className="card"><h2>{m.moonLanding.seo.relatedTitle}</h2><p className="muted">{m.moonLanding.seo.related}</p><Link className="button" href={`/${locale}/simulations`}>{m.navigation.simulations}</Link></div></section>
+    <SimulationAssistant locale={locale} simulation={{ title: simulation?.title ?? m.moonLanding.title, subject: subject.eyebrow, concepts: simulation?.concepts }}/>
     {simulation && <SimulationGuide locale={locale} subject={subject} simulation={simulation}/>}
   </>;
 }

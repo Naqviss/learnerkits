@@ -7,6 +7,8 @@ import { getMessages } from "@/lib/i18n/getMessages";
 import { Nav } from "@/components/navigation/Nav";
 import { Footer } from "@/components/navigation/Footer";
 import { ConsentManager } from "@/components/privacy/ConsentManager";
+import { PremiumHost } from "@/components/premium/PremiumHost";
+import { AdsLoader } from "@/components/premium/AdsLoader";
 import { adsenseClientId } from "@/lib/adsense/config";
 import { siteUrl } from "@/lib/seo/metadata";
 
@@ -15,7 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{locale:str
 const themeBoot = `(function(){try{var raw=localStorage.getItem('science-sim-settings-v1');var s=raw?JSON.parse(raw):{};var t=s.theme||'light';if(t==='system')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;document.documentElement.dataset.motion=s.motion||'system'}catch(e){document.documentElement.dataset.theme='light'}})();`;
 const googleAnalyticsId = "G-VZ63RT6XYN";
 // Ad delivery is enabled only after the publisher configures advertising consent in AdSense.
+// AdsLoader skips the AdSense script for Premium subscribers ("No ads").
 export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{locale:string}> }) {
   const { locale: raw } = await params; if (!isLocale(raw)) notFound(); const m = getMessages(raw); const adsenseClient = adsenseClientId(); const dir = localeDirection(raw); const htmlLang = raw === "zh" ? "zh-Hans" : raw;
-  return <html lang={htmlLang} dir={dir} data-theme="light" data-scroll-behavior="smooth" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:themeBoot}}/>{adsenseClient && process.env.NEXT_PUBLIC_ADSENSE_ADS_ENABLED === "true" && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`} crossOrigin="anonymous"/>}</head><body className={dir === "rtl" ? "rtl" : undefined}><ScrollToTop/><Nav locale={raw} m={m}/>{children}<Footer locale={raw} m={m}/><ConsentManager locale={raw} googleAnalyticsId={googleAnalyticsId} clarityId="ygwnomr7fd"/></body></html>;
+  return <html lang={htmlLang} dir={dir} data-theme="light" data-scroll-behavior="smooth" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:themeBoot}}/></head><body className={dir === "rtl" ? "rtl" : undefined}><ScrollToTop/><Nav locale={raw} m={m}/>{children}<Footer locale={raw} m={m}/><ConsentManager locale={raw} googleAnalyticsId={googleAnalyticsId} clarityId="ygwnomr7fd"/><PremiumHost locale={raw}/>{adsenseClient && process.env.NEXT_PUBLIC_ADSENSE_ADS_ENABLED === "true" && <AdsLoader client={adsenseClient}/>}</body></html>;
 }

@@ -6,6 +6,7 @@ import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
 import { getSimulationCard, getSubjectForSimulation, isVisibleSubjectSlug } from "@/lib/subjects/catalog";
 import { SimulationGuide } from "@/components/seo/SimulationGuide";
+import { SimulationAssistant } from "@/components/premium/SimulationAssistant";
 import { getSimulationGuide } from "@/lib/seo/simulation-guides";
 import { getMoleculeKitCopy, moleculeKitSimSlugs } from "@/lib/seo/molecule-kit-content";
 import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
@@ -96,6 +97,7 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faq)}/>
     {activity}
+    <SimulationAssistant locale={safeLocale} simulation={{ title: simulation.title, subject: subject.eyebrow, concepts: simulation.concepts }}/>
     <SimulationGuide locale={safeLocale} subject={subject} simulation={simulation}/>
   </>;
 }

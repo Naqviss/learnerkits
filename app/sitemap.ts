@@ -14,7 +14,7 @@ export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // User-specific tools and previews are noindex and should not consume crawl budget.
-  const core = ["/", "/simulations", "/subjects", "/molecule-kit", "/donate", "/about", "/contact", "/privacy", "/cookies", "/terms", "/disclaimer", "/editorial-policy", "/faq", "/accessibility"];
+  const core = ["/", "/simulations", "/subjects", "/molecule-kit", "/donate", "/premium", "/about", "/contact", "/privacy", "/cookies", "/terms", "/refunds", "/disclaimer", "/editorial-policy", "/faq", "/accessibility"];
   const subjectPaths = visibleSubjectSlugs.map((slug) => `/subjects/${slug}`);
   const subjectImageEntries = Object.fromEntries(visibleSubjectSlugs.flatMap((slug) => {
     const image = subjectImages[slug];

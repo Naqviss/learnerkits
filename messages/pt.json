@@ -13,6 +13,13 @@
     "language": "Idioma",
     "settings": "Configurações"
   },
+  "auth": {
+    "signIn": "Entrar",
+    "signInWithGoogle": "Entrar com o Google",
+    "signOut": "Sair",
+    "account": "Sua conta",
+    "failed": "O login não foi concluído. Tente novamente."
+  },
   "search": {
     "placeholder": "Buscar simulações e disciplinas…",
     "ariaLabel": "Buscar simulações e disciplinas",

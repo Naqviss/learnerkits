@@ -13,6 +13,13 @@
     "language": "Sprache",
     "settings": "Einstellungen"
   },
+  "auth": {
+    "signIn": "Anmelden",
+    "signInWithGoogle": "Mit Google anmelden",
+    "signOut": "Abmelden",
+    "account": "Dein Konto",
+    "failed": "Die Anmeldung wurde nicht abgeschlossen. Bitte versuche es erneut."
+  },
   "search": {
     "placeholder": "Simulationen und Fächer durchsuchen…",
     "ariaLabel": "Simulationen und Fächer durchsuchen",

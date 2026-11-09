@@ -13,6 +13,13 @@
     "language": "言語",
     "settings": "設定"
   },
+  "auth": {
+    "signIn": "ログイン",
+    "signInWithGoogle": "Googleでログイン",
+    "signOut": "ログアウト",
+    "account": "アカウント",
+    "failed": "ログインが完了しませんでした。もう一度お試しください。"
+  },
   "search": {
     "placeholder": "シミュレーションと分野を検索…",
     "ariaLabel": "シミュレーションと分野を検索",

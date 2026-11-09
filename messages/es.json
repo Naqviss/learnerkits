@@ -13,6 +13,13 @@
     "language": "Idioma",
     "settings": "Ajustes"
   },
+  "auth": {
+    "signIn": "Iniciar sesión",
+    "signInWithGoogle": "Iniciar sesión con Google",
+    "signOut": "Cerrar sesión",
+    "account": "Tu cuenta",
+    "failed": "No se completó el inicio de sesión. Inténtalo de nuevo."
+  },
   "search": {
     "placeholder": "Buscar simulaciones y materias…",
     "ariaLabel": "Buscar simulaciones y materias",

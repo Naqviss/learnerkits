@@ -11,7 +11,7 @@ A browser-based educational simulation platform built around **learn by experime
 - **71 simulations total**
 - **16 SEO-priority simulations** surfaced as the first build/promote collection
 - Light theme by default, plus Dark and System appearance modes
-- English-only publication for now; translations remain in the source for later re-enablement
+- Published in English and Spanish (`en`, `es`); other translations remain in the source for later re-enablement
 
 The original labs are retained. The published catalog currently contains 71 indexable simulations; verify the catalog count when adding or removing a lab.
 
@@ -220,7 +220,7 @@ npm run deploy    # build + wrangler deploy
 
 The English homepage stays at `/` for every browser language. Cloudflare's `public/_redirects` sends `/en` and `/en/` permanently to `/`. After export cleanup, the build verifies that every sitemap page has HTML, allows indexing, and has a matching canonical on the production host. A failed check stops deployment.
 
-Language publication is controlled by `locales` in `lib/i18n/config.ts`, currently `["en"]`. The selector is hidden, translated pages are not exported or listed in the sitemap/hreflang, and the Worker temporarily redirects old translated URLs to the equivalent English URL (307, preserving query strings). Restore selected languages in `locales`, or set it to `supportedLocales`, then rebuild and deploy to enable them again. Keep the translation dictionaries intact. Existing language cookies cannot select an unpublished language.
+Language publication is controlled by `locales` in `lib/i18n/config.ts`, currently `["en", "es"]`. The selector lists only published languages. Unpublished translations are not exported or listed in the sitemap/hreflang, and the Worker temporarily redirects their old URLs to the equivalent English URL (307, preserving query strings). Restore selected languages in `locales`, or set it to `supportedLocales`, then rebuild and deploy to enable them again. Keep the translation dictionaries intact. Existing language cookies cannot select an unpublished language.
 
 The apex domain (`learnerkits.com`) must redirect to `https://www.learnerkits.com` using a Cloudflare domain redirect rule that preserves the path and query string. Workers static-asset `_redirects` does not support domain-level redirects. Configure this at the edge rather than running every static request through the Worker.
 
@@ -255,5 +255,47 @@ The contact form at `/{locale}/contact` calls `POST /api/contact`. Next.js handl
 The table has row-level security and no anonymous/authenticated access policies. Only the server role can call the submission function. The endpoint validates all fields, requires privacy acknowledgement, rejects cross-origin browser requests, limits request size, hides upstream errors, and includes a honeypot. The database enforces three messages per email address per 15 minutes, including concurrent requests. This limit is not a full bot-defense service: configure a Cloudflare rate-limiting rule for `/api/contact` if traffic warrants it. The form uses a Clarity masking marker and does not store IP addresses or user agents with messages.
 
 Without configured credentials or the migration, the form returns an honest unavailable/error message and offers the public email address. No live Supabase connection is bundled. Review old correspondence and remove it when no longer needed; no automatic retention period or cleanup job is configured. Handle deletion requests in both the database and relevant mailbox.
+
+## Google sign-in
+
+The header shows an optional **Sign in with Google** button (`components/navigation/AuthButton.tsx`). Production is a static export with no Next.js server, so sign-in runs in the browser through Supabase Auth using the PKCE flow. Google redirects back to Supabase, which returns the browser to the page where the user clicked. supabase-js is only downloaded when the visitor clicks the button or already has a session, so other visitors don't load it. Signing in currently only identifies the user; progress and settings still stay in local storage.
+
+1. In Google Cloud Console, open **APIs & Services → OAuth consent screen**, then configure the app name, support email, logo, and links to `/en/privacy` and `/en/terms`. Request only the default `openid`, `email`, and `profile` scopes.
+2. Under **Credentials**, create an **OAuth client ID** of type *Web application*. Add `https://<project-ref>.supabase.co/auth/v1/callback` as an authorized redirect URI. You can copy the exact URL from the Supabase Google provider page.
+3. In Supabase, go to **Authentication → Sign In / Providers → Google**, enable it, and paste the client ID and secret. The Google client secret lives only in Supabase.
+4. In **Authentication → URL Configuration**, set the Site URL to `https://www.learnerkits.com`. Add these redirect URLs: `https://www.learnerkits.com/**`, `http://localhost:3000/**` for `npm run dev`, and `http://localhost:8787/**` for Wrangler preview.
+5. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (Supabase **Project Settings → API Keys**, publishable key) in `.env.local`. They are inlined at build time, so set them wherever `npm run build` runs. They are not Wrangler secrets. If either is unset, the button is hidden.
+
+The publishable key is designed to be public. It only grants what row-level security allows, and the existing `contact_messages` table has no anon/authenticated policies, so signed-in users cannot read it. Before storing any per-user data, add tables with RLS policies scoped to `auth.uid()`. Review the Privacy Policy's "Optional Google sign-in" section against your actual settings. Because many learners are children, check Google's and your local rules on accounts for users under 13 before promoting sign-in.
+
+## LearnerKits Premium (Paddle + AI tutor)
+
+Premium is an optional $10/month subscription, sold at $4.90/month with a 51% launch discount. Paddle sells it as merchant of record, so it handles sales tax and VAT. Everything educational stays free, including all simulations, the molecule builder, and the molecule kit. Premium adds:
+
+- an **AI science tutor** on every simulation page (`components/premium/SimulationAssistant.tsx`),
+- **no ads**: `components/premium/AdsLoader.tsx` skips AdSense for subscribers,
+- **no upgrade reminders**. Free visitors see the Premium dialog once per browser session, after 30 seconds of visible time on a simulation.
+
+How it works: subscribing requires Google sign-in. `POST /api/billing/checkout` verifies the user's Supabase session and creates a Paddle transaction on the server, with the user's id in `custom_data` and the discount applied. The browser loads Paddle.js only at that moment and opens the checkout overlay for that transaction. Paddle then calls `POST /api/billing/webhook`. The handler verifies the `Paddle-Signature` HMAC and records `subscription.*` events in `public.subscriptions`, ordered by `updated_at` so out-of-order deliveries are harmless. `transaction.completed` also links the new subscription to the user as a fallback. Browsers can read only their own rows. `POST /api/billing/portal` returns a fresh Paddle customer-portal link for cancelling or updating the card. `POST /api/ai/tutor` re-checks the subscription and a per-user daily limit before calling the model. `worker/index.ts` serves these routes in production, and `app/api/**` serves them under `npm run dev`.
+
+Setup (everything is configured in `.env.local`; `npm run deploy` uploads it to Cloudflare):
+
+1. Apply `supabase/migrations/202611090001_premium_subscriptions.sql` and then `202611100001_subscription_environment.sql` in the Supabase SQL Editor.
+2. In **each** Paddle account, sandbox (sandbox-vendors.paddle.com) and live (vendors.paddle.com):
+   - **Catalog → Products**: create **LearnerKits Premium** with a **$10.00 USD monthly** price and no trial. Copy the price id (`pri_…`).
+   - **Catalog → Discounts**: create a **51% percentage** discount, recurring for as many billing periods as `lib/premium/copy.ts` says (currently 6), restricted to that price. Copy the id (`dsc_…`).
+   - **Checkout → Checkout settings**: set the default payment link to `https://www.learnerkits.com/en`. In live mode, also approve `learnerkits.com` and `www.learnerkits.com` under website approval.
+   - **API keys**: create a key with Transactions *write*, Subscriptions *read*, Customers *read*, and Customer portal sessions *write*. Also create a client-side token.
+   - **Events → Notifications**: add `https://www.learnerkits.com/api/billing/webhook` with usage type **Platform**, every `subscription.*` event, and `transaction.completed`. Copy its secret key (`pdl_ntfset_…`).
+3. Fill in `PADDLE_SANDBOX_*` and `PADDLE_LIVE_*` in `.env.local` (see `.env.example`), plus `SUPABASE_URL` and `SUPABASE_SECRET_KEY`.
+4. Choose the mode with **`PADDLE_TEST_MODE=true`** (sandbox: test card `4242 4242 4242 4242`, any future date, CVC `100`) or **`false`** (live: real payments). Run `npm run check:paddle` to verify the selected set against Paddle, or `npm run check:paddle live` to check the other set.
+5. Set `NEXT_PUBLIC_PREMIUM_ENABLED=true` to show Premium, then run `npm run deploy`. It prints the mode and refuses to deploy with Premium on if the selected set is incomplete or uses keys from the wrong environment. It builds the site, uploads both Paddle sets and the Supabase secrets with the Worker version, and passes `PADDLE_TEST_MODE`.
+
+How the switch works: only the Worker decides the mode. The browser gets the matching client token from `/api/billing/config` and `/api/billing/checkout`, so a visitor cannot force test mode. In live mode, sandbox webhooks are rejected. Every subscription row records its `environment`, and only rows from the active mode grant Premium, so test purchases never unlock the live site. While the sandbox is active, the Premium dialog shows a "Test mode" note with the test card.
+
+AI tutor: production uses the Workers AI binding (`"ai"` in `wrangler.jsonc`) with `@cf/qwen/qwen3-30b-a3b-fp8`. No API key is needed. Every Cloudflare account gets 10,000 free Neurons per day, roughly 1,000 short tutor answers with this model. Above that, Workers AI needs the Workers Paid plan and costs about $0.05 per million input tokens and $0.34 per million output tokens. Subscribers get 40 questions per UTC day, which `AI_DAILY_LIMIT` can change. `AI_MODEL` switches the model. Workers AI always runs on Cloudflare, so `wrangler dev` requires `wrangler login`. `npm run dev` cannot use the binding: set `AI_BASE_URL`, `AI_API_KEY`, and `AI_MODEL` for any OpenAI-compatible provider (OpenAI, Qwen/DashScope, OpenRouter) to try the tutor locally, or to replace Workers AI in production. If you change provider, update the Privacy Policy's "AI science tutor" section, which names Cloudflare Workers AI.
+
+Keep the prices in `lib/premium/copy.ts` in sync with Paddle. Have the owners review the Premium sections of the Terms and Privacy Policy before launch, including the discount duration and refund handling.
+
 
 Publisher readiness also requires account-side work: verify the public contact mailbox, configure AdSense Privacy & messaging (including a Google-certified CMP where applicable), review child-directed treatment settings, and review the policies against actual operations. These pages and tests do not guarantee AdSense approval. Google's [publisher policies](https://support.google.com/adsense/answer/10502938) and [consent requirements](https://support.google.com/adsense/answer/13554116) explain those obligations.

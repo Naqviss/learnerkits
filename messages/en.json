@@ -13,6 +13,13 @@
     "language": "Language",
     "settings": "Settings"
   },
+  "auth": {
+    "signIn": "Sign in",
+    "signInWithGoogle": "Sign in with Google",
+    "signOut": "Sign out",
+    "account": "Your account",
+    "failed": "Sign-in didn't finish. Please try again."
+  },
   "search": {
     "placeholder": "Search simulations and subjects…",
     "ariaLabel": "Search simulations and subjects",

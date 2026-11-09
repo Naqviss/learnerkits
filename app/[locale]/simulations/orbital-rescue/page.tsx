@@ -8,6 +8,7 @@ import { getMessages } from "@/lib/i18n/getMessages";
 import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
 import { SimulationGuide } from "@/components/seo/SimulationGuide";
+import { SimulationAssistant } from "@/components/premium/SimulationAssistant";
 
 const OrbitalRescueClient = dynamic(() => import("@/components/simulation/OrbitalRescueClient").then((module) => module.OrbitalRescueClient));
 
@@ -40,6 +41,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
     <section className="container section" aria-labelledby="orbit-objectives"><h2 id="orbit-objectives">{m.orbitalRescue.seo.objectivesTitle}</h2><div className="grid2">{m.orbitalRescue.seo.objectives.map((objective) => <article className="card" key={objective}><h3>{objective}</h3></article>)}</div></section>
     <section className="container section"><h2>{m.orbitalRescue.seo.faqTitle}</h2><div className="grid3">{m.orbitalRescue.seo.faq.map((item) => <article className="card" key={item.q}><h3>{item.q}</h3><p className="muted">{item.a}</p></article>)}</div></section>
     <section className="container section"><div className="card"><h2>{m.orbitalRescue.seo.relatedTitle}</h2><p className="muted">{m.orbitalRescue.seo.related}</p><Link className="button" href={`/${locale}/simulations`}>{m.navigation.simulations}</Link></div></section>
+    <SimulationAssistant locale={locale} simulation={{ title: simulation?.title ?? m.orbitalRescue.title, subject: subject.eyebrow, concepts: simulation?.concepts }}/>
     {simulation && <SimulationGuide locale={locale} subject={subject} simulation={simulation}/>}
   </>;
 }

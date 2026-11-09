@@ -14,20 +14,27 @@ vi.mock("next/navigation", () => ({
 const disabledLocales = supportedLocales.filter((locale) => !locales.includes(locale));
 const env = { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } };
 
-describe("English-only publication", () => {
-  it("publishes only English URLs and alternate-language references", () => {
-    expect(locales).toEqual(["en"]);
-    for (const entry of sitemap()) {
-      expect(new URL(entry.url).pathname).toMatch(/^(\/|\/en\/.*)$/);
-      expect(Object.keys(entry.alternates?.languages ?? {}).sort()).toEqual(["en", "x-default"]);
-    }
-    const metadata = localizedMetadata("en", "/simulations", "Simulations", "Science labs");
-    expect(Object.keys(metadata.alternates?.languages ?? {}).sort()).toEqual(["en", "x-default"]);
-    expect(metadata.openGraph).toMatchObject({ alternateLocale: [] });
+describe("published locales", () => {
+  it("publishes English and Spanish", () => {
+    expect(locales).toEqual(["en", "es"]);
   });
 
-  it("hides the language selector", () => {
-    expect(renderToStaticMarkup(<LanguageSelector locale="en" label="Language"/>)).toBe("");
+  it("lists only published locales in the sitemap and alternates", () => {
+    for (const entry of sitemap()) {
+      expect(new URL(entry.url).pathname).toMatch(/^(\/|\/(en|es)(\/.*)?)$/);
+      expect(Object.keys(entry.alternates?.languages ?? {}).every((code) => ["en", "es", "x-default"].includes(code))).toBe(true);
+    }
+    expect(sitemap().some((entry) => new URL(entry.url).pathname.startsWith("/es/simulations/"))).toBe(true);
+    const metadata = localizedMetadata("en", "/simulations", "Simulations", "Science labs");
+    expect(Object.keys(metadata.alternates?.languages ?? {}).sort()).toEqual(["en", "es", "x-default"]);
+    expect(metadata.openGraph).toMatchObject({ alternateLocale: ["es_ES"] });
+  });
+
+  it("shows the language selector with published languages only", () => {
+    const html = renderToStaticMarkup(<LanguageSelector locale="en" label="Language"/>);
+    expect(html).toContain('value="en"');
+    expect(html).toContain('value="es"');
+    for (const locale of disabledLocales) expect(html).not.toContain(`value="${locale}"`);
   });
 
   it.each(disabledLocales)("temporarily redirects %s deep links and preserves the query", async (locale) => {
@@ -44,9 +51,21 @@ describe("English-only publication", () => {
     }
   });
 
-  it("ignores old language preferences when redirecting locale-less links", async () => {
+  it("does not redirect Spanish pages", async () => {
+    const response = await worker.fetch(new Request("https://www.learnerkits.com/es/not-a-page"), env);
+    expect(response.status).toBe(404);
+  });
+
+  it("honours a Spanish language preference for locale-less links", async () => {
     const response = await worker.fetch(new Request("https://www.learnerkits.com/about", {
-      headers: { cookie: "science-sim-locale=es", "accept-language": "ja-JP" },
+      headers: { cookie: "science-sim-locale=es" },
+    }), env);
+    expect(response.headers.get("location")).toBe("https://www.learnerkits.com/es/about");
+  });
+
+  it("ignores preferences for unpublished languages", async () => {
+    const response = await worker.fetch(new Request("https://www.learnerkits.com/about", {
+      headers: { cookie: "science-sim-locale=ja", "accept-language": "ja-JP" },
     }), env);
     expect(response.headers.get("location")).toBe("https://www.learnerkits.com/en/about");
   });

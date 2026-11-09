@@ -13,6 +13,13 @@
     "language": "Язык",
     "settings": "Настройки"
   },
+  "auth": {
+    "signIn": "Войти",
+    "signInWithGoogle": "Войти через Google",
+    "signOut": "Выйти",
+    "account": "Ваш аккаунт",
+    "failed": "Вход не завершён. Попробуйте ещё раз."
+  },
   "search": {
     "placeholder": "Поиск симуляций и предметов…",
     "ariaLabel": "Поиск симуляций и предметов",
