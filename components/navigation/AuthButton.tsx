@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { authEnabled } from "@/lib/auth/client";
 import { clearAuthFailure, signInWithGoogle, signOut, useAuth } from "@/lib/auth/session";
@@ -7,7 +8,7 @@ import { getPremiumCopy } from "@/lib/premium/copy";
 
 type Labels = { signIn: string; signInWithGoogle: string; signOut: string; account: string; failed: string };
 
-export function AuthButton({ labels, locale = "en" }: { labels: Labels; locale?: string }) {
+export function AuthButton({ labels, locale = "en", settingsLabel }: { labels: Labels; locale?: string; settingsLabel?: string }) {
   const { status, session, failed } = useAuth();
   const premium = usePremium();
   const premiumCopy = getPremiumCopy(locale);
@@ -85,6 +86,7 @@ export function AuthButton({ labels, locale = "en" }: { labels: Labels; locale?:
         <p><strong>{name}{premiumEnabled && premium === "premium" && <span className="premiumBadge">{premiumCopy.badge}</span>}</strong>{user.email && user.email !== name && <span>{user.email}</span>}</p>
         {premiumEnabled && premium === "premium" && <button type="button" className="authMenuAction" onClick={manageSubscription} disabled={busy}>{premiumCopy.manage}</button>}
         {premiumEnabled && premium === "free" && <button type="button" className="authMenuAction isUpgrade" onClick={() => { if (menu.current) menu.current.open = false; openPremium("menu"); }}>{premiumCopy.goPremium}</button>}
+        {settingsLabel && <Link className="authMenuAction authMenuLink" href={`/${locale}/settings`} onClick={() => { if (menu.current) menu.current.open = false; }}>{settingsLabel}</Link>}
         {menuError && <p role="alert" className="authMenuError">{menuError}</p>}
         <button type="button" className="authSignOut" onClick={leave} disabled={busy}>{labels.signOut}</button>
       </div>

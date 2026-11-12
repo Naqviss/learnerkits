@@ -42,11 +42,10 @@ export default async function TopicGuidesPage({ params }: { params: Promise<{ lo
       </article>
       {guides.map((guide) => <article className="topicGuideCard" key={guide.slug}>
         <span className="eyebrow">{guide.subject.eyebrow}</span>
-        <h2><Link href={`/en/guides/${guide.slug}`}>{guide.title}</Link></h2>
+        <h2><Link href={`/en/simulations/${guide.slug}#topic-guide`}>{guide.title}</Link></h2>
         <p>{guide.answer}</p>
         <div className="topicGuideCardActions">
-          <Link className="textLink" href={`/en/guides/${guide.slug}`}>Read the guide →</Link>
-          <Link className="textLink" href={`/en/simulations/${guide.slug}`}>Open simulation</Link>
+          <Link className="textLink" href={`/en/simulations/${guide.slug}#topic-guide`}>Read the guide in the simulation →</Link>
         </div>
       </article>)}
     </section>

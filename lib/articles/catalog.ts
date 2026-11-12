@@ -30,6 +30,12 @@ export const articleCategories = [
 ] as const;
 export const articlesUpdatedAt = articleSummaries.reduce((latest, article) => article.updatedAt > latest ? article.updatedAt : latest, "");
 
+// "News" marks a dated summary of an official exam-board or science announcement; everything else is a guide.
+// Add `kind: "News"`, `board`, `source` (official URL) and `sourceLabel` to a summary to publish one.
+export type ArticleKind = "News" | "Guide";
+export type ArticleNewsFields = { slug: string; kind?: ArticleKind; board?: string; source?: string; sourceLabel?: string };
+export function articleKind(article: ArticleNewsFields): ArticleKind { return article.kind ?? "Guide"; }
+
 export function getArticleSummary(slug: string) {
   return articleSummaries.find((article) => article.slug === slug);
 }

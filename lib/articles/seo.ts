@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { Article } from "./index";
 import { articleImages } from "./images";
+import { articleKind } from "./catalog";
 import { localizedMetadata, localizedUrl, siteName, siteUrl } from "@/lib/seo/metadata";
 
 export function articleMetadata(article: Article): Metadata {
@@ -31,7 +32,7 @@ export function articleJsonLd(article: Article) {
   const image = articleImages[article.slug];
   return {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": articleKind(article) === "News" ? "NewsArticle" : "Article",
     "@id": `${url}#article`,
     headline: article.title,
     description: article.description,
@@ -55,6 +56,6 @@ export function articleJsonLd(article: Article) {
     wordCount: article.wordCount,
     audience: { "@type": "Audience", audienceType: article.audience },
     citation: [...new Set([...article.body.matchAll(/\]\((https:\/\/[^)]+)\)/g)].map((match) => match[1]))],
-    isPartOf: { "@type": "CollectionPage", "@id": localizedUrl("en", "/articles"), name: "Science learning articles" },
+    isPartOf: { "@type": "CollectionPage", "@id": localizedUrl("en", "/articles"), name: "Science news and learning articles" },
   };
 }

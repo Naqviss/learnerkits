@@ -21,7 +21,7 @@ export function SimulationGuide({ locale, subject, simulation }: { locale: Local
       <h2 id="simulation-guide-title">{guide.title}</h2>
       <p>{guide.intro}</p>
       {kitCopy && <Link className="textLink simulationTopicLink" href={`/${locale}/molecule-kit`}>{kitCopy.partOfBadge} →</Link>}
-      {topicGuide && <Link className="textLink simulationTopicLink" href={`/en/guides/${topicGuide.slug}`}>Read the focused topic guide →</Link>}
+      {topicGuide && <a className="textLink simulationTopicLink" href="#topic-guide">Jump to the topic guide ↓</a>}
     </header>
     <div className={`simulationGuideGrid${SIMULATION_LEARNING_TOOLS_ENABLED?"":" simulationGuidePublic"}`}>
       <article className="simulationGuideCard">
@@ -39,6 +39,19 @@ export function SimulationGuide({ locale, subject, simulation }: { locale: Local
         <dl><div><dt>{guide.level}</dt><dd>{simulation.difficulty}</dd></div><div><dt>{guide.time}</dt><dd>{simulation.duration}</dd></div><div><dt>{guide.format}</dt><dd>{simulation.kind}</dd></div></dl>
       </article>}
     </div>
+    {topicGuide && <article className="simTopicGuide" id="topic-guide" aria-labelledby="topic-guide-title">
+      <header>
+        <span className="eyebrow">Topic guide</span>
+        <h2 id="topic-guide-title">{topicGuide.title}</h2>
+        <p>{topicGuide.answer}</p>
+      </header>
+      <div className="simTopicGuideGrid">
+        <section><h3>Why this matters</h3><p>{topicGuide.whyItMatters}</p></section>
+        <section><h3>Questions to explore</h3><ul>{topicGuide.investigate.map((item) => <li key={item}>{item}</li>)}</ul></section>
+        <section><h3>Suggested method</h3><ol>{topicGuide.method.map((item) => <li key={item}>{item}</li>)}</ol></section>
+      </div>
+      <aside className="topicGuideModelNote"><strong>Model scope</strong><p>{topicGuide.modelNote}</p><Link href="/en/editorial-policy">Read our model and editorial policy →</Link></aside>
+    </article>}
     <div className="simulationGuideMore">
     <div className="simulationFaq">
       <h2>{guide.questions}</h2>

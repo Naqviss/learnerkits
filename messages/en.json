@@ -21,7 +21,7 @@
     "failed": "Sign-in didn't finish. Please try again."
   },
   "search": {
-    "placeholder": "Search simulations and subjects…",
+    "placeholder": "What are you looking for?",
     "ariaLabel": "Search simulations and subjects",
     "noResults": "No results found."
   },

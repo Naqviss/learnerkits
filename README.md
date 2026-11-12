@@ -299,3 +299,30 @@ Keep the prices in `lib/premium/copy.ts` in sync with Paddle. Have the owners re
 
 
 Publisher readiness also requires account-side work: verify the public contact mailbox, configure AdSense Privacy & messaging (including a Google-certified CMP where applicable), review child-directed treatment settings, and review the policies against actual operations. These pages and tests do not guarantee AdSense approval. Google's [publisher policies](https://support.google.com/adsense/answer/10502938) and [consent requirements](https://support.google.com/adsense/answer/13554116) explain those obligations.
+
+## Exam Prep, Mock Exams, Teacher Kit and classrooms
+
+English-only sections, prerendered like the rest of the site:
+
+- `/en/exam-prep` — board → level → subject → topic lessons, paper navigator and two practical stations. Data lives in `lib/exam-prep/`. Only verified syllabi are indexable; illustrative mappings are `noindex` and stay out of the sitemap.
+- `/en/mock-exams` — timed mock exams with original questions (`lib/mock-exams/`).
+- `/en/teacher-kit` (public page) and `/en/teacher-kit/dashboard` — classes, lesson planner, subject kits, question bank, papers, assignments, marking and class insights.
+- `/en/classroom` — students join a class with a code and submit assignments.
+
+Setup:
+
+1. Enable Google sign-in (above).
+2. Apply `supabase/migrations/202611120001_classroom.sql` in the Supabase SQL Editor. The tables are server-key only; the browser reaches them through `POST /api/classroom` (`lib/classroom/api.ts`), which checks ownership for every action.
+3. AI lesson drafts use the same provider as the AI tutor (Workers AI in production, `AI_BASE_URL`/`AI_API_KEY`/`AI_MODEL` in `npm run dev`). Without one, teachers still get the built-in template.
+
+Teacher plans (`lib/classroom/plans.ts`) set the student seat limit. They are not sold through Paddle yet: new teachers start on Basic and an admin changes the plan.
+
+## Admin panel
+
+`/en/admin` shows teacher, classroom, student, practice and subscription activity; completed Paddle revenue; and tools to publish articles and manage the question bank used by mock exams and Teacher Kit papers. It can also open a teacher dashboard read-only and change plans or access.
+
+- Sign-in uses `ADMIN_USERNAME`, `ADMIN_PASSWORD` (16+ characters) and `ADMIN_SESSION_SECRET` (32+ characters) from `.env.local`. They are server-only; the panel stays disabled (503) until all three are set.
+- Apply `supabase/migrations/202611120002_admin_content.sql` to enable article publishing and question-bank edits. Published articles appear in News & Articles; edited mock-exam questions also appear in Teacher Kit's paper builder. New article pages use `/en/articles/read?slug=...`; the page is public after publishing.
+- Revenue is read from completed transactions in the active Paddle environment and shown by payout currency. The active Paddle API key needs the `transaction.read` permission. The report is limited to the most recent 2,400 completed transactions from the last 12 months and marks when that cap is reached. Subscriptions still must be managed or refunded in Paddle.
+- `npm run deploy` uploads them to the Worker with the other secrets. For `npm run preview`, copy them to `.dev.vars`.
+- To rotate access, change the password or the session secret and redeploy; changing the secret signs out every open admin session.

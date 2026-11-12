@@ -22,7 +22,7 @@ const defaultDailyLimit = 40;
 const maxMessages = 12;
 const maxMessageLength = 1_200;
 
-type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
+export type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
 const clip = (value: unknown, max: number) => typeof value === "string" ? value.replace(/\s+/g, " ").trim().slice(0, max) : "";
 
 /** POST /api/ai/tutor — Premium-only science tutor for the simulation on screen. */
@@ -96,15 +96,15 @@ export function tutorPrompt({ title, subject, concepts, language }: { title: str
   ].join("\n");
 }
 
-async function runModel(env: TutorEnv, messages: ChatMessage[]): Promise<string> {
+export async function runModel(env: TutorEnv, messages: ChatMessage[], maxTokens = 700): Promise<string> {
   let output: unknown;
   if (env.AI) {
-    output = await env.AI.run(env.AI_MODEL || defaultWorkersAiModel, { messages, max_tokens: 700, temperature: 0.4 });
+    output = await env.AI.run(env.AI_MODEL || defaultWorkersAiModel, { messages, max_tokens: maxTokens, temperature: 0.4 });
   } else {
     const response = await fetch(`${env.AI_BASE_URL!.replace(/\/+$/, "")}/chat/completions`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${env.AI_API_KEY}` },
-      body: JSON.stringify({ model: env.AI_MODEL, messages, max_tokens: 700, temperature: 0.4 }),
+      body: JSON.stringify({ model: env.AI_MODEL, messages, max_tokens: maxTokens, temperature: 0.4 }),
       signal: AbortSignal.timeout(45_000),
     });
     if (!response.ok) throw new Error(`AI provider responded ${response.status}: ${(await response.text()).slice(0, 300)}`);

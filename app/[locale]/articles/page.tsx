@@ -2,10 +2,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { articles } from "@/lib/articles";
-import { articleCategories } from "@/lib/articles/catalog";
+import { articleCategories, articleKind } from "@/lib/articles/catalog";
 import { articleImages } from "@/lib/articles/images";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 import { ArticleFilter } from "@/components/articles/ArticleFilter";
+import { ManagedArticleList } from "@/components/articles/ManagedArticleContent";
 import { breadcrumbJsonLd, jsonLd, localizedMetadata, localizedUrl, siteUrl } from "@/lib/seo/metadata";
 import styles from "@/components/articles/articles.module.css";
 
@@ -13,7 +14,7 @@ export function generateStaticParams() { return [{ locale: "en" }]; }
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   if (locale !== "en") return {};
-  const metadata = localizedMetadata("en", "/articles", "Science Learning Articles: Concepts, Virtual Labs & AI", "Science concepts explained with experiments, plus guides to virtual labs, AI in education, self-study, and digital science notebooks for students and teachers.", { englishOnly: true });
+  const metadata = localizedMetadata("en", "/articles", "Science News & Articles: Concepts, Virtual Labs & AI", "Science concepts explained with experiments, plus guides to virtual labs, AI in education, self-study, and digital science notebooks for students and teachers.", { englishOnly: true });
   const image = articleImages[articles[0].slug];
   return { ...metadata, openGraph: { ...metadata.openGraph, images: [{ url: `${siteUrl}${image.socialSrc}`, width: 1200, height: 630, type: "image/webp", alt: image.alt }] }, twitter: { ...metadata.twitter, card: "summary_large_image", images: [{ url: `${siteUrl}${image.socialSrc}`, alt: image.alt }] } };
 }
@@ -21,21 +22,22 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function ArticlesPage({ params }: { params: Promise<{ locale: string }> }) {
   if ((await params).locale !== "en") notFound();
   const collection = {
-    "@context": "https://schema.org", "@type": "CollectionPage", name: "Science learning articles", url: localizedUrl("en", "/articles"), inLanguage: "en",
+    "@context": "https://schema.org", "@type": "CollectionPage", name: "Science news and learning articles", url: localizedUrl("en", "/articles"), inLanguage: "en",
     mainEntity: { "@type": "ItemList", numberOfItems: articles.length, itemListElement: articles.map((article, index) => ({ "@type": "ListItem", position: index + 1, name: article.title, url: localizedUrl("en", `/articles/${article.slug}`) })) },
   };
   return <main className={`container ${styles.page}`}>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(collection)} />
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbJsonLd("en", [{ name: "Home", path: "/" }, { name: "Articles", path: "/articles" }]))} />
-    <nav className={styles.breadcrumbs} aria-label="Breadcrumb"><Link href="/en">Home</Link><span aria-hidden="true">/</span><span aria-current="page">Articles</span></nav>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbJsonLd("en", [{ name: "Home", path: "/" }, { name: "News & Articles", path: "/articles" }]))} />
+    <nav className={styles.breadcrumbs} aria-label="Breadcrumb"><Link href="/en">Home</Link><span aria-hidden="true">/</span><span aria-current="page">News &amp; Articles</span></nav>
     <header className={styles.indexHero}>
-      <span className="eyebrow">The learning notebook · Students & teachers</span>
+      <span className="eyebrow">News &amp; Articles · Students &amp; teachers</span>
       <h1>Better questions.<br />Deeper science learning.</h1>
       <p>Science concepts explained with experiments, plus practical articles on educational technology and AI in education. Explore virtual labs, build better study habits, and turn an idea into an experiment. Read, make a prediction, then put it to the test.</p>
     </header>
-    <ArticleFilter allLabel="All articles" categories={articleCategories.map(({ id, name }) => ({ id, name }))} categoryOf={articles.map((article) => articleCategories.find((category) => category.name === article.category)?.id ?? "")}>
+    <ArticleFilter allLabel="All articles" categories={[...(articles.some((article) => articleKind(article) === "News") ? [{ id: "news", name: "News" }] : []), ...articleCategories.map(({ id, name }) => ({ id, name }))]} categoryOf={articles.map((article) => articleKind(article) === "News" ? "news" : articleCategories.find((category) => category.name === article.category)?.id ?? "")}>
       {articles.map((article) => <ArticleCard key={article.slug} article={article} readingMinutes={article.readingMinutes} headingLevel={2} />)}
     </ArticleFilter>
+    <ManagedArticleList sourceSlugs={articles.map((article) => article.slug)} />
     <aside className={styles.note}><h2>Learn it. Then try it.</h2><p>Pair these articles with our focused science guides and interactive labs. Every model has assumptions; make them part of your explanation.</p><div className={styles.links}><Link href="/en/simulations">Explore simulations →</Link><Link href="/en/guides">Read science guides →</Link><Link href="/en/editorial-policy">Editorial policy →</Link></div></aside>
   </main>;
 }

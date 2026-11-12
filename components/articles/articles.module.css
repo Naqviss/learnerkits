@@ -101,3 +101,8 @@
 .list .cardMeta{margin:0 0 6px}
 @media(max-width:700px){.list .card{grid-template-columns:120px minmax(0,1fr);column-gap:14px;padding:12px}.list .card>.cardImage{aspect-ratio:1/1}.list .card p{display:none}.list .card h2,.list .card h3{font-size:1rem}}
 @media(max-width:560px){.viewToggle button span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.viewToggle button{padding:0 11px}}
+.managedSection{width:min(1200px,calc(100% - 40px));margin:38px auto 0;padding-top:28px;border-top:1px solid var(--line)}
+.managedSection>header{margin-bottom:16px}.managedSection>header h2{margin:9px 0 0;font-size:clamp(1.5rem,2.8vw,2rem);letter-spacing:-.035em}
+.managedSection .cardLink{margin-top:auto;color:var(--accent);font-size:.84rem;font-weight:780;text-decoration:none}
+.managedSection .cardLink:hover{text-decoration:underline;text-underline-offset:3px}
+.managedSection .grid{margin-top:0}

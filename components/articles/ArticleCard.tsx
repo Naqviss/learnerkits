@@ -1,13 +1,14 @@
 import Link from "next/link";
-import type { ArticleSummary } from "@/lib/articles/catalog";
+import type { ArticleNewsFields, ArticleSummary } from "@/lib/articles/catalog";
 import styles from "./articles.module.css";
 import { ArticleImage } from "./ArticleImage";
 
 export function ArticleCard({ article, readingMinutes, headingLevel = 2 }: { article: ArticleSummary; readingMinutes?: number; headingLevel?: 2 | 3 }) {
   const Heading = headingLevel === 3 ? "h3" : "h2";
+  const news: ArticleNewsFields = article;
   return <article className={styles.card}>
     <ArticleImage slug={article.slug} thumbnail />
-    <span className="eyebrow">{article.category}</span>
+    <span className="eyebrow">{news.kind === "News" ? `News${news.board ? ` · ${news.board}` : ""}` : article.category}</span>
     <Heading><Link href={`/en/articles/${article.slug}`}>{article.title}</Link></Heading>
     <p>{article.description}</p>
     <div className={styles.cardMeta}>{article.audience}{readingMinutes && ` · ${readingMinutes} min read`}</div>

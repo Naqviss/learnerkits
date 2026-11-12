@@ -26,9 +26,18 @@ export function SimulationLibrary({ groups, upcoming = [], items, levels, labels
 
   // Links such as /simulations#chemistry open the library filtered to that subject. Filtering
   // shortens the page under the browser's anchor jump, so bring the toolbar back into view.
+  // The header's Simulations menu sends the same choice as an event when this page is already open.
   useEffect(() => {
-    const hash = decodeURIComponent(window.location.hash.slice(1));
-    if (groups.some((group) => group.slug === hash)) { setSubject(hash); setScrollToToolbar(true); }
+    const apply = (slug: string) => {
+      if (slug === "") setSubject("");
+      else if (groups.some((group) => group.slug === slug)) { setSubject(slug); setScrollToToolbar(true); }
+    };
+    const fromHash = () => { const hash = decodeURIComponent(window.location.hash.slice(1)); if (hash) apply(hash); };
+    const fromMenu = (event: Event) => apply(String((event as CustomEvent).detail ?? ""));
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
+    window.addEventListener("sim-library-subject", fromMenu);
+    return () => { window.removeEventListener("hashchange", fromHash); window.removeEventListener("sim-library-subject", fromMenu); };
   }, [groups]);
   useEffect(() => {
     if (!scrollToToolbar) return;

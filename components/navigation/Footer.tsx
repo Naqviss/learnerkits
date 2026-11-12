@@ -4,7 +4,7 @@ import { siteName } from "@/lib/seo/metadata";
 
 type FooterGroup={title:string;links:readonly (readonly [string,string])[];enOnly?:boolean};
 const groups:readonly FooterGroup[]=[
-  {title:'Learn',enOnly:true,links:[['guides','Science guides'],['articles','Articles']]},
+  {title:'Learn',enOnly:true,links:[['exam-prep','Exam Prep'],['mock-exams','Mock Exams'],['teacher-kit','Teacher Kit'],['classroom','My classroom'],['guides','Science guides'],['articles','News & Articles']]},
   {title:'About',links:[['about','About'],['premium','Premium'],['faq','FAQ'],['accessibility','Accessibility'],['contact','Contact'],['editorial-policy','Editorial policy']]},
   {title:'Legal',links:[['privacy','Privacy'],['cookies','Cookies'],['terms','Terms'],['refunds','Refunds'],['disclaimer','Disclaimer']]},
 ];

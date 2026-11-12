@@ -5,6 +5,7 @@ import { articles, getArticle } from "@/lib/articles";
 import { getArticleSummary } from "@/lib/articles/catalog";
 import { articleJsonLd, articleMetadata } from "@/lib/articles/seo";
 import { ArticleBody } from "@/components/articles/ArticleBody";
+import { ManagedArticleOverlay } from "@/components/articles/ManagedArticleContent";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 import { ArticleImage } from "@/components/articles/ArticleImage";
 import { breadcrumbJsonLd, jsonLd } from "@/lib/seo/metadata";
@@ -26,10 +27,10 @@ export default async function ArticlePage({ params }: Props) {
   if (locale !== "en" || !article) notFound();
   const dateLabel = new Intl.DateTimeFormat("en", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(article.publishedAt));
   const updatedLabel = new Intl.DateTimeFormat("en", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(article.updatedAt));
-  return <main className={`container ${styles.page}`}>
+  return <ManagedArticleOverlay slug={slug}><main className={`container ${styles.page}`}>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(articleJsonLd(article))} />
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbJsonLd("en", [{ name: "Home", path: "/" }, { name: "Articles", path: "/articles" }, { name: article.title, path: `/articles/${slug}` }]))} />
-    <nav className={styles.breadcrumbs} aria-label="Breadcrumb"><Link href="/en">Home</Link><span aria-hidden="true">/</span><Link href="/en/articles">Articles</Link><span aria-hidden="true">/</span><span aria-current="page">{article.category}</span></nav>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbJsonLd("en", [{ name: "Home", path: "/" }, { name: "News & Articles", path: "/articles" }, { name: article.title, path: `/articles/${slug}` }]))} />
+    <nav className={styles.breadcrumbs} aria-label="Breadcrumb"><Link href="/en">Home</Link><span aria-hidden="true">/</span><Link href="/en/articles">News &amp; Articles</Link><span aria-hidden="true">/</span><span aria-current="page">{article.category}</span></nav>
     <article>
       <header className={styles.hero}>
         <span className="eyebrow">{article.category} · {article.audience}</span>
@@ -57,5 +58,5 @@ export default async function ArticlePage({ params }: Props) {
       const related = getArticleSummary(relatedSlug);
       return related && <ArticleCard key={relatedSlug} article={related} />;
     })}</div></section>
-  </main>;
+  </main></ManagedArticleOverlay>;
 }

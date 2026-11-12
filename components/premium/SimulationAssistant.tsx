@@ -10,8 +10,17 @@ type Message = { role: "user" | "assistant"; content: string };
 const promptShownKey = "learnerkits-premium-prompt-shown";
 const promptDelaySeconds = 30;
 
+// TEMPORARY: hides the AI tutor button and stops the timed Premium popup.
+// Set to false to bring both back.
+const assistantTemporarilyHidden = true;
+
 /** Mounted on simulation pages: the Premium reminder timer and the AI tutor panel. */
-export function SimulationAssistant({ locale, simulation }: { locale: string; simulation: Simulation }) {
+export function SimulationAssistant(props: { locale: string; simulation: Simulation }) {
+  if (assistantTemporarilyHidden) return null;
+  return <ActiveSimulationAssistant {...props}/>;
+}
+
+function ActiveSimulationAssistant({ locale, simulation }: { locale: string; simulation: Simulation }) {
   const copy = getPremiumCopy(locale);
   const premium = usePremium();
   const [open, setOpen] = useState(false);

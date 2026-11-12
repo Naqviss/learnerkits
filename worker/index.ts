@@ -2,12 +2,16 @@ import { submitContact } from "../lib/contact/submit";
 import { createDonationCheckout } from "../lib/donate/checkout";
 import { billingConfig, createCheckout, customerPortal, paddleWebhook, type BillingEnv } from "../lib/billing/paddle";
 import { handleTutor, type TutorEnv } from "../lib/ai/tutor";
+import { handleClassroom } from "../lib/classroom/api";
+import { handleAdmin, type AdminEnv } from "../lib/admin/api";
+import { publicContent } from "../lib/admin/public-content";
+import { supabaseAdmin } from "../lib/server/supabase";
 import { defaultLocale, locales, supportedLocales } from "../lib/i18n/config";
 
-type Env = BillingEnv & TutorEnv & { ASSETS: { fetch(input: Request | URL | string): Promise<Response> } };
+type Env = BillingEnv & TutorEnv & AdminEnv & { ASSETS: { fetch(input: Request | URL | string): Promise<Response> } };
 
 // Cloudflare serves every file in out/ directly, and those requests are free and never count
-// toward Worker limits. This Worker only runs when no file matches: the donation, contact, billing and AI APIs,
+// toward Worker limits. This Worker only runs when no file matches: the donation, contact, billing, AI, classroom and admin APIs,
 // locale-less paths such as /about, and 404s.
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -29,6 +33,9 @@ export default {
     if (pathname === "/api/billing/portal") return customerPortal(request, env);
     if (pathname === "/api/billing/webhook") return paddleWebhook(request, env);
     if (pathname === "/api/ai/tutor") return handleTutor(request, env);
+    if (pathname === "/api/classroom") return handleClassroom(request, env);
+    if (pathname === "/api/admin") return handleAdmin(request, env);
+    if (pathname === "/api/content") return publicContent(request, supabaseAdmin(env));
 
     if (pathname === "/api/donate") {
       if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405, headers: { allow: "POST" } });

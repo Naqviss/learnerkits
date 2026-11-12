@@ -43,7 +43,7 @@ run("npm", ["run", "build"]);
 
 // Upload server-only secrets with this version. Both Paddle sets go up, so switching mode later only
 // needs PADDLE_TEST_MODE. Omitted names keep their existing Worker values.
-const secretNames = ["SUPABASE_URL", "SUPABASE_SECRET_KEY", "SUPABASE_SERVICE_ROLE_KEY", ...paddleSecretNames];
+const secretNames = ["SUPABASE_URL", "SUPABASE_SECRET_KEY", "SUPABASE_SERVICE_ROLE_KEY", "ADMIN_USERNAME", "ADMIN_PASSWORD", "ADMIN_SESSION_SECRET", ...paddleSecretNames];
 const secrets = Object.fromEntries(secretNames.filter((name) => env[name]?.trim()).map((name) => [name, env[name].trim()]));
 const dir = mkdtempSync(join(tmpdir(), "learnerkits-deploy-"));
 const secretsFile = join(dir, "secrets.json");

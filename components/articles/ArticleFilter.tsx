@@ -1,5 +1,5 @@
 "use client";
-import { Children, useEffect, useState, type ReactNode } from "react";
+import { Children, isValidElement, useEffect, useState, type ReactNode } from "react";
 import styles from "./articles.module.css";
 
 type Category = { id: string; name: string };
@@ -16,6 +16,7 @@ const views: { id: View; label: string; icon: ReactNode }[] = [
 export function ArticleFilter({ categories, categoryOf, allLabel, children }: { categories: Category[]; categoryOf: string[]; allLabel: string; children: ReactNode }) {
   const [active, setActive] = useState("");
   const [view, setView] = useState<View>("list");
+  const [hiddenSlugs, setHiddenSlugs] = useState<string[]>([]);
   const cards = Children.toArray(children);
   // Older links such as /articles#ai-in-education open with that category selected.
   useEffect(() => {
@@ -26,7 +27,9 @@ export function ArticleFilter({ categories, categoryOf, allLabel, children }: { 
   useEffect(() => {
     try { if (localStorage.getItem(viewKey) === "cards") setView("cards"); } catch {}
   }, []);
-  const count = (id: string) => (id ? categoryOf.filter((value) => value === id).length : cards.length);
+  useEffect(() => { let live = true; fetch("/api/content", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "articles" }) }).then((response) => response.ok ? response.json() as Promise<{ hiddenSlugs?: string[] }> : null).then((result) => { if (live) setHiddenSlugs(result?.hiddenSlugs ?? []); }).catch(() => {}); return () => { live = false; }; }, []);
+  const visibleCards = cards.filter((card) => { const slug = isValidElement<{ article?: { slug?: string } }>(card) ? card.props.article?.slug : undefined; return !slug || !hiddenSlugs.includes(slug); });
+  const count = (id: string) => visibleCards.filter((card) => { const index = cards.indexOf(card); return !id || categoryOf[index] === id; }).length;
   const select = (id: string) => {
     setActive(id);
     history.replaceState(null, "", id ? `#${id}` : window.location.pathname);
@@ -44,6 +47,6 @@ export function ArticleFilter({ categories, categoryOf, allLabel, children }: { 
         {views.map((option) => <button type="button" key={option.id} aria-pressed={view === option.id} title={`${option.label} view`} onClick={() => choose(option.id)}>{option.icon}<span>{option.label}</span></button>)}
       </div>
     </div>
-    <div className={`${styles.grid} ${view === "list" ? styles.list : ""}`}>{cards.filter((_, index) => !active || categoryOf[index] === active)}</div>
+    <div className={`${styles.grid} ${view === "list" ? styles.list : ""}`}>{visibleCards.filter((card) => { const index = cards.indexOf(card); return !active || categoryOf[index] === active; })}</div>
   </>;
 }

@@ -39,7 +39,10 @@ LearnerKits is an education platform with interactive labs, topic guides, and pr
 
 - [All subjects](${siteUrl}/en/subjects)
 - [All simulations](${siteUrl}/en/simulations)
-- [Science learning articles](${siteUrl}/en/articles)
+- [News and science learning articles](${siteUrl}/en/articles)
+- [Exam Prep](${siteUrl}/en/exam-prep): Syllabus topic lessons with interactive models and practice questions for Cambridge, AQA, Pearson Edexcel and IB science courses. Independent of the exam boards; practice material is original.
+- [Mock Exams](${siteUrl}/en/mock-exams): Short timed mock exams with original questions, instant marking and worked explanations.
+- [Teacher Kit](${siteUrl}/en/teacher-kit): Lesson planner, question papers, class assignments and marking for science teachers.
 - [About](${siteUrl}/en/about)
 - [Science simulation guides](${siteUrl}/en/guides)
 - [Environmental city builder game guide](${siteUrl}/en/guides/environmental-city-builder): Illustrated controls, drag-and-drop instructions, baseline comparisons and investigations for all ten environmental labs.

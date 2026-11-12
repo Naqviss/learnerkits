@@ -3,6 +3,9 @@ import type { MetadataRoute } from "next";
 import { articleSummaries, articlesUpdatedAt } from "@/lib/articles/catalog";
 import { articleImages } from "@/lib/articles/images";
 import { getArticle } from "@/lib/articles";
+import { examPrepIndexablePaths } from "@/lib/exam-prep/paths";
+import { mockExamIndexablePaths } from "@/lib/mock-exams/catalog";
+import { getHomeCopy } from "@/lib/home/content";
 import { defaultLocale, locales } from "@/lib/i18n/config";
 import { hreflangCodes, localizedUrl, siteUrl } from "@/lib/seo/metadata";
 import { getTopicGuides } from "@/lib/seo/topic-guides";
@@ -24,12 +27,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const topicGuidePaths = ["/guides", "/guides/environmental-city-builder", ...getTopicGuides().map((guide) => `/guides/${guide.slug}`)];
   const articlePaths = ["/articles", ...articleSummaries.map((article) => `/articles/${article.slug}`)];
   const moleculePaths = ["/molecules", ...moleculeReferences.map((molecule) => `/molecules/${molecule.slug}`)];
-  const isEnglishOnly = (path: string) => path.startsWith("/guides") || path.startsWith("/articles") || path.startsWith("/molecules");
+  const learningToolPaths = [...examPrepIndexablePaths, ...mockExamIndexablePaths, "/teacher-kit"];
+  const isEnglishOnly = (path: string) => ["/guides", "/articles", "/molecules", "/exam-prep", "/mock-exams", "/teacher-kit"].some((prefix) => path.startsWith(prefix));
   const lastModified = process.env.NEXT_PUBLIC_CONTENT_UPDATED_AT ?? "2026-09-19";
   return locales.flatMap((locale) => {
     // The focused guides are intentionally English-only until translated; do not publish
     // duplicate localized URLs that point to the same English editorial content.
-    const paths = locale === defaultLocale ? [...core, ...subjectPaths, ...simulationPaths, ...topicGuidePaths, ...articlePaths, ...moleculePaths] : [...core, ...subjectPaths, ...simulationPaths];
+    const paths = locale === defaultLocale ? [...core, ...subjectPaths, ...simulationPaths, ...topicGuidePaths, ...articlePaths, ...moleculePaths, ...learningToolPaths] : [...core, ...subjectPaths, ...simulationPaths];
     return paths.map((path) => ({
     url: localizedUrl(locale, path),
     ...(path === "/subjects" ? { images: Object.values(subjectImages).map((image) => `${siteUrl}${image.src}`) } : subjectImageEntries[path] ? { images: [subjectImageEntries[path]] } : {}),
@@ -38,7 +42,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       : articleSummaries.some((article) => path === `/articles/${article.slug}`)
         ? { images: articleSummaries.filter((article) => path === `/articles/${article.slug}`).flatMap((article) => [`${siteUrl}${articleImages[article.slug].src}`, ...(getArticle(article.slug)?.figures ?? []).map((figure) => `${siteUrl}${figure.src}`)]) }
         : {}),
-    lastModified: Object.keys(infoMeta).some(key => path === `/${key}`) ? informationUpdatedAt : path === "/subjects/chemistry" || subjectsCatalog.chemistry.simulations.some(sim => path === `/simulations/${sim.slug}`) ? "2026-09-30" : path === "/guides/environmental-city-builder" ? "2026-09-27" : path === "/subjects" || subjectImageEntries[path] ? subjectImagesUpdatedAt : path === "/articles" ? articlesUpdatedAt : articleSummaries.find((article) => path === `/articles/${article.slug}`)?.updatedAt ?? lastModified,
+    lastModified: path === "/" ? getHomeCopy(locale).updatedAt : Object.keys(infoMeta).some(key => path === `/${key}`) ? informationUpdatedAt : path === "/subjects/chemistry" || subjectsCatalog.chemistry.simulations.some(sim => path === `/simulations/${sim.slug}`) ? "2026-09-30" : path === "/guides/environmental-city-builder" ? "2026-09-27" : path === "/subjects" || subjectImageEntries[path] ? subjectImagesUpdatedAt : path === "/articles" ? articlesUpdatedAt : learningToolPaths.includes(path) ? "2026-11-12" : articleSummaries.find((article) => path === `/articles/${article.slug}`)?.updatedAt ?? lastModified,
     changeFrequency: path.includes("simulations") ? "weekly" : "monthly",
     priority: path === "/" ? 1 : path === "/molecule-kit" ? .9 : path.includes("subjects/") || path === "/molecules" ? .85 : path.startsWith("/molecules/") ? .7 : isEnglishOnly(path) ? .85 : path === "/donate" ? .5 : .8,
     alternates: isEnglishOnly(path)
