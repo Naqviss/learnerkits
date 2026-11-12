@@ -10,8 +10,13 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { paddleSecretNames, resolvePaddle } from "../lib/billing/paddle-config.ts";
 
+// .env.local sets NEXT_PUBLIC_SITE_URL to localhost for `npm run dev`. A deploy must not inherit
+// that, so only a value set in the shell is kept; otherwise the build uses the production URL.
+const shellSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
 const env = process.env;
+if (shellSiteUrl) env.NEXT_PUBLIC_SITE_URL = shellSiteUrl;
+else delete env.NEXT_PUBLIC_SITE_URL;
 
 const run = (command, args) => {
   const result = spawnSync(command, args, { stdio: "inherit", env });
