@@ -5,7 +5,10 @@ import { canonicalTopicCourse, coursePath, courseTitle, courses, getBoard, getLe
 import { Breadcrumbs, IllustrativeNotice, IndependenceNotice } from "@/components/exam-prep/Shell";
 import { MiniSim } from "@/components/exam-prep/MiniSim";
 import { PremiumGate } from "@/components/exam-prep/PremiumGate";
-import { TopicQuiz } from "@/components/exam-prep/TopicQuiz";
+import { TopicExam } from "@/components/exam-prep/TopicExam";
+import { TopicTutor } from "@/components/exam-prep/TopicTutor";
+import { lessonDetail } from "@/lib/exam-prep/lessons";
+import { questionBank } from "@/lib/exam-prep/question-bank";
 import { jsonLd, localizedMetadata, localizedUrl, siteName, siteUrl } from "@/lib/seo/metadata";
 import styles from "@/components/exam-prep/examPrep.module.css";
 
@@ -41,18 +44,17 @@ export default async function TopicPage({ params }: Props) {
     audience: { "@type": "EducationalAudience", educationalRole: "student" }, provider: { "@type": "Organization", name: siteName, url: siteUrl },
     ...(lab ? { hasPart: { "@type": "LearningResource", name: lab.name, learningResourceType: "Interactive simulation", url: localizedUrl("en", `/simulations/${lab.slug}`) } } : {}),
   };
+  const detail = lessonDetail[topic.content];
+  // The lesson's own check question joins the bank, so every topic has at least five to draw from.
+  const pool = [{ question: content.question, options: content.options, answer: content.answer, why: content.why }, ...questionBank[topic.content]];
   const lesson = <>
     <section className={styles.panel} aria-labelledby="worked">
       <div className={styles.panelTop}><h2 id="worked">Key relationship and worked example</h2></div>
       <div className={styles.formula}>{content.formula}</div>
       <div className={styles.example}><strong>Worked example</strong>{content.example}</div>
     </section>
-    {lab && <section className={styles.panel} aria-labelledby="experiment">
-      <div className={styles.panelTop}><h2 id="experiment">Experiment with the concept</h2><span className={`${styles.badge} ${styles.free}`}>Mini interactive model</span></div>
-      <p>Change one variable, predict the result, then check the reading.</p>
-      <MiniSim kind={lab.kind} />
-    </section>}
-    <TopicQuiz question={content.question} options={content.options} answer={content.answer} hint={content.hint} why={content.why} />
+    <TopicExam topicId={path} topicName={topic.name} content={topic.content} pool={pool} hint={content.hint} />
+    <TopicTutor topic={topic.name} course={courseTitle(course)} subject={subject.name} concepts={content.brief} />
   </>;
   return <main className={`container ${styles.page}`}>
     {verified && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(resource)} />}
@@ -72,9 +74,15 @@ export default async function TopicPage({ params }: Props) {
       </aside>
       <div className={styles.main}>
         <section className={styles.panel} aria-labelledby="concept">
-          <div className={styles.panelTop}><h2 id="concept">The concept in brief</h2><span className={`${styles.badge} ${styles.free}`}>2-minute read</span></div>
+          <div className={styles.panelTop}><h2 id="concept">{topic.name} explained simply</h2><span className={`${styles.badge} ${styles.free}`}>3-minute read</span></div>
           <p>{content.brief}</p>
-          <div className={styles.labCard}>
+          <ol className={styles.points}>{detail.explain.map((point) => <li key={point}>{point}</li>)}</ol>
+          <div className={styles.mistake}><strong>Common mistake</strong>{detail.mistake}</div>
+        </section>
+        <section className={styles.panel} aria-labelledby="experiment">
+          <div className={styles.panelTop}><h2 id="experiment">Try it: interactive simulation</h2>{lab && <span className={`${styles.badge} ${styles.free}`}>Free lab</span>}</div>
+          {lab && <><p>Change one variable, predict the result, then check the reading.</p><MiniSim kind={lab.kind} /></>}
+          <div className={styles.labCard} style={lab ? { marginTop: 14 } : undefined}>
             {lab ? <>
               <div className={styles.labTop}><div><div className={styles.status}>● FREE LEARNERKITS LAB{!topic.direct && " · RELATED LAB"}</div><h3>{lab.name}</h3></div></div>
               <p>Use the full interactive lab to observe, measure and test this idea.{!topic.direct && " This lab is related to the topic but does not cover all of its syllabus requirements."}</p>
@@ -86,7 +94,7 @@ export default async function TopicPage({ params }: Props) {
             </>}
           </div>
         </section>
-        {free ? lesson : <PremiumGate title="The rest of this lesson is part of Premium" description="Unlock the key formula, a worked example, the mini experiment and a practice question with a worked solution for this topic.">{lesson}</PremiumGate>}
+        {free ? lesson : <PremiumGate title="The rest of this lesson is part of Premium" description="Unlock the key formula and worked example, the randomised topic test with your understanding score, and the AI tutor for this topic.">{lesson}</PremiumGate>}
         <IndependenceNotice />
       </div>
     </div>

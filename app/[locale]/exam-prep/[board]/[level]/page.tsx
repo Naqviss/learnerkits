@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, board: boardId, level: levelId } = await params, board = getBoard(boardId), level = getLevel(boardId, levelId);
   if (locale !== "en" || !board || !level) return {};
   const name = `${board.short} ${level.name.replace(" · ", " ")}`;
-  return localizedMetadata("en", `/exam-prep/${boardId}/${levelId}`, `${name} Science Exam Prep: Physics & Chemistry Topics`, `${name} exam preparation: choose Physics or Chemistry to browse syllabus topics with short lessons, interactive labs and practice questions.`, { englishOnly: true, noIndex: !isLevelIndexable(boardId, levelId) });
+  return localizedMetadata("en", `/exam-prep/${boardId}/${levelId}`, `${name} Exam Prep: Science and Maths Topics`, `${name} exam preparation: choose Physics, Chemistry, Biology or Mathematics to browse syllabus topics with short lessons, interactive labs and practice questions.`, { englishOnly: true, noIndex: !isLevelIndexable(boardId, levelId) });
 }
 
 export default async function LevelPage({ params }: Props) {

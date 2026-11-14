@@ -2,12 +2,19 @@ import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { boards, courses, coursePath, courseTitle, getSyllabus, isBoardIndexable, isFreeTopic, isVerified, labs, lessonContent, subjectCode, syllabi, syllabusKey, topicPath } from "@/lib/exam-prep/catalog";
 import { getPapers, paperCatalog } from "@/lib/exam-prep/papers";
+import { buildExam, examLength, generators } from "@/lib/exam-prep/generators";
+import { lessonDetail } from "@/lib/exam-prep/lessons";
+import { questionBank } from "@/lib/exam-prep/question-bank";
+import { tutorPrompt } from "@/lib/ai/tutor";
 import { examPrepIndexablePaths } from "@/lib/exam-prep/paths";
 import { bestFit, graphPoints, markPractical, practicalKinds, takeReading } from "@/lib/exam-prep/practical";
-import { getSimulationCard } from "@/lib/subjects/catalog";
+import { getSimulationCard, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import TopicPage, { generateMetadata, generateStaticParams } from "@/app/[locale]/exam-prep/[board]/[level]/[subject]/[topic]/page";
 import CoursePage from "@/app/[locale]/exam-prep/[board]/[level]/[subject]/page";
 import PapersPage, { generateStaticParams as paperParams } from "@/app/[locale]/exam-prep/[board]/[level]/[subject]/papers/page";
+import ExamPrepPage, { generateMetadata as generateExamPrepMetadata } from "@/app/[locale]/exam-prep/page";
+import BoardPage, { generateMetadata as generateBoardMetadata } from "@/app/[locale]/exam-prep/[board]/page";
+import AnyBoardPage, { generateMetadata as generateAnyBoardMetadata } from "@/app/[locale]/exam-prep/any-board/page";
 
 const asPhysics = { board: "cambridge", level: "as", subject: "physics" };
 
@@ -42,8 +49,9 @@ describe("exam prep catalog", () => {
     expect(isVerified({ board: "cambridge", level: "olevel", subject: "physics" })).toBe(false);
     expect(isVerified({ board: "cambridge", level: "as", subject: "chemistry" })).toBe(false);
     expect(isVerified({ board: "aqa", level: "as", subject: "physics" })).toBe(false);
-    expect(isVerified({ board: "fbise", level: "ssc1", subject: "physics" })).toBe(false);
-    expect(isBoardIndexable("fbise")).toBe(false);
+    expect(isVerified({ board: "cambridge", level: "igcse", subject: "biology" })).toBe(false);
+    expect(boards.map((board) => board.id)).toEqual(["cambridge", "pearson", "aqa", "ib"]);
+    for (const board of boards) expect(isBoardIndexable(board.id), board.id).toBe(true);
   });
 
   it("keeps two lessons free per syllabus", () => {
@@ -55,10 +63,11 @@ describe("exam prep catalog", () => {
   it("lists only verified, unique pages in the sitemap paths", () => {
     expect(new Set(examPrepIndexablePaths).size).toBe(examPrepIndexablePaths.length);
     expect(examPrepIndexablePaths).toContain("/exam-prep");
+    expect(examPrepIndexablePaths).toContain("/exam-prep/any-board");
     expect(examPrepIndexablePaths).toContain("/exam-prep/cambridge/as/physics/kinematics");
     expect(examPrepIndexablePaths).toContain("/exam-prep/cambridge/as/physics/papers");
     expect(examPrepIndexablePaths).toContain("/exam-prep/practicals/circuit");
-    expect(examPrepIndexablePaths.some((path) => path.includes("/fbise") || path.includes("/olevel/") || path.startsWith("/exam-prep/aqa/as"))).toBe(false);
+    expect(examPrepIndexablePaths.some((path) => path.includes("/biology") || path.includes("/maths") || path.includes("/olevel/") || path.startsWith("/exam-prep/aqa/as"))).toBe(false);
     for (const course of courses.filter((item) => !isVerified(item))) expect(examPrepIndexablePaths).not.toContain(coursePath(course));
   });
 
@@ -68,6 +77,59 @@ describe("exam prep catalog", () => {
     expect(getPapers({ board: "ib", level: "dp-sl", subject: "physics" })).toBeNull();
     expect(paperCatalog.cambridge9702.map((paper) => paper.marks)).toEqual(["40 marks", "60 marks", "40 marks", "100 marks", "30 marks"]);
     expect(paperParams()).toHaveLength(5);
+  });
+});
+
+describe("topic explanation, test and tutor", () => {
+  // A repeatable stand-in for Math.random.
+  const seeded = (seed: number) => () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296;
+  const contents = Object.keys(lessonContent) as (keyof typeof lessonContent)[];
+
+  it("has an easy explanation and at least five test questions for every lesson", () => {
+    for (const id of contents) {
+      expect(lessonDetail[id].explain.length, id).toBeGreaterThanOrEqual(3);
+      expect(lessonDetail[id].mistake, id).toBeTruthy();
+      expect(1 + questionBank[id].length + (generators[id] ? 2 : 0), id).toBeGreaterThanOrEqual(examLength);
+      for (const item of questionBank[id]) {
+        expect(new Set(item.options).size, item.question).toBe(4);
+        expect(item.options[item.answer], item.question).toBeTruthy();
+      }
+    }
+  });
+
+  it("generates calculation questions with four different options", () => {
+    for (const [id, make] of Object.entries(generators)) {
+      const rand = seeded(id.length * 7919);
+      for (let run = 0; run < 40; run++) {
+        const item = make(rand);
+        expect(new Set(item.options).size, `${id}: ${item.question}`).toBe(4);
+        expect(item.answer, id).toBe(0);
+        expect(item.question, id).not.toMatch(/NaN|undefined|Infinity/);
+        expect(item.options.join(" ") + item.why, id).not.toMatch(/NaN|undefined|Infinity/);
+      }
+    }
+  });
+
+  it("builds a five-question test in a different order each time, keeping the right answer", () => {
+    for (const id of contents) {
+      const base = lessonContent[id], pool = [{ question: base.question, options: base.options, answer: base.answer, why: base.why }, ...questionBank[id]];
+      const first = buildExam(id, pool, seeded(1)), second = buildExam(id, pool, seeded(99));
+      expect(first, id).toHaveLength(examLength);
+      expect(new Set(first.map((item) => item.question)).size, id).toBe(examLength);
+      for (const item of first) {
+        const source = pool.find((entry) => entry.question === item.question);
+        if (source) expect(item.options[item.answer], item.question).toBe(source.options[source.answer]);
+        expect(item.options[item.answer], item.question).toBeTruthy();
+      }
+      expect(JSON.stringify(first), id).not.toBe(JSON.stringify(second));
+    }
+  });
+
+  it("tells the AI tutor which exam topic the student is revising", () => {
+    const prompt = tutorPrompt({ title: "Kinematics", subject: "Physics", concepts: "v = u + at", language: "English", topic: "Kinematics", course: "Cambridge AS Level Physics 9702" });
+    expect(prompt).toContain('revising the exam topic "Kinematics" for Cambridge AS Level Physics 9702');
+    expect(prompt).toContain("exam-style question");
+    expect(tutorPrompt({ title: "Projectile Lab", subject: "Physics", concepts: "", language: "English" })).toContain('interactive simulation "Projectile Lab"');
   });
 });
 
@@ -99,6 +161,16 @@ describe("exam prep pages", () => {
   it("renders a free lesson in full with structured data and an SEO title", async () => {
     const html = renderToStaticMarkup(await TopicPage({ params: params(asPhysics, "kinematics") }));
     expect(html).toContain("v = u + at");
+    expect(html).toContain("Kinematics explained simply");
+    expect(html).toContain(lessonDetail.kinematics.explain[0]);
+    expect(html).toContain("Common mistake");
+    expect(html).toContain("Try it: interactive simulation");
+    expect(html).toContain("Your understanding of this topic");
+    expect(html).toContain("Start the topic test");
+    expect(html).toContain("Ask the AI tutor about Kinematics");
+    expect(html.indexOf("explained simply")).toBeLessThan(html.indexOf("Try it: interactive simulation"));
+    expect(html.indexOf("Try it: interactive simulation")).toBeLessThan(html.indexOf("Topic test"));
+    expect(html.indexOf("Topic test")).toBeLessThan(html.indexOf("Ask the AI tutor"));
     expect(html).toContain("/en/simulations/projectile-lab");
     expect(html).toContain("LearningResource");
     expect(html).toContain("not affiliated with or endorsed by any exam board");
@@ -110,13 +182,15 @@ describe("exam prep pages", () => {
   it("soft-locks a Premium lesson but keeps the concept and lab link in the HTML", async () => {
     const html = renderToStaticMarkup(await TopicPage({ params: params(asPhysics, "waves") }));
     expect(html).toContain(lessonContent.waves.brief);
+    expect(html).toContain(lessonDetail.waves.explain[0]);
+    expect(html).not.toContain("Your understanding of this topic");
     expect(html).toContain("/en/simulations/pendulum-physics");
     expect(html).toContain("part of Premium");
     expect(html).not.toContain(lessonContent.waves.example);
   });
 
   it("marks illustrative syllabi noindex with a visible notice", async () => {
-    const course = { board: "fbise", level: "hssc1", subject: "physics" };
+    const course = { board: "cambridge", level: "olevel", subject: "physics" };
     const metadata = await generateMetadata({ params: params(course, getSyllabus(course)[0].slug) });
     expect(metadata.robots).toEqual({ index: false, follow: false });
     const html = renderToStaticMarkup(await CoursePage({ params: Promise.resolve({ locale: "en", ...course }) }));
@@ -132,5 +206,53 @@ describe("exam prep pages", () => {
     const papers = renderToStaticMarkup(await PapersPage({ params: Promise.resolve({ locale: "en", ...asPhysics }) }));
     expect(papers).toContain("Planning, Analysis and Evaluation");
     expect(papers).toContain("/en/exam-prep/practicals/pendulum");
+  });
+
+  it("gives the exam-prep hub useful answer content and matching structured data", async () => {
+    const html = renderToStaticMarkup(await ExamPrepPage({ params: Promise.resolve({ locale: "en" }) }));
+    expect(html).toContain("Revise for your science exam by board and topic");
+    expect(html).toContain("How does interactive exam preparation work?");
+    expect(html).toContain('"@type":"FAQPage"');
+    expect(html).toContain('"@type":"BreadcrumbList"');
+    expect(html).toContain('"numberOfItems":5');
+    const metadata = await generateExamPrepMetadata({ params: Promise.resolve({ locale: "en" }) });
+    expect(metadata.title).toBe("Science Exam Prep by Exam Board");
+    expect(String(metadata.description).length).toBeGreaterThanOrEqual(100);
+    expect(String(metadata.description).length).toBeLessThanOrEqual(160);
+  });
+
+  it("uses unique board search snippets and indexes only verified board hubs", async () => {
+    const titles = new Set<string>();
+    for (const board of boards) {
+      const metadata = await generateBoardMetadata({ params: Promise.resolve({ locale: "en", board: board.id }) });
+      const title = String(metadata.title), description = String(metadata.description);
+      expect(title.length, board.id).toBeLessThanOrEqual(60);
+      expect(description.length, board.id).toBeGreaterThanOrEqual(100);
+      expect(description.length, board.id).toBeLessThanOrEqual(160);
+      titles.add(title);
+      expect(metadata.robots).toMatchObject({ index: isBoardIndexable(board.id) });
+    }
+    expect(titles.size).toBe(boards.length);
+  });
+
+  it("renders substantive board guidance", async () => {
+    const cambridge = renderToStaticMarkup(await BoardPage({ params: Promise.resolve({ locale: "en", board: "cambridge" }) }));
+    expect(cambridge).toContain("What can I study for Cambridge?");
+    expect(cambridge).toContain("Verified courses available now");
+    expect(cambridge).toContain('"@type":"FAQPage"');
+  });
+
+  it("gives students from other boards an indexable, honest preparation route", async () => {
+    const html = renderToStaticMarkup(await AnyBoardPage({ params: Promise.resolve({ locale: "en" }) }));
+    expect(html).toContain("Prepare for exams—even if your board is not listed");
+    expect(html).toContain("Can LearnerKits help students from any exam board?");
+    expect(html).toContain("Only pages labelled “Published syllabus”");
+    for (const subject of visibleSubjectSlugs) expect(html).toContain(`/en/subjects/${subject}`);
+    expect(html).toContain(`"numberOfItems":${visibleSubjectSlugs.length}`);
+    expect(html).toContain('"@type":"FAQPage"');
+    const metadata = await generateAnyBoardMetadata({ params: Promise.resolve({ locale: "en" }) });
+    expect(metadata).toMatchObject({ title: "Exam Prep for Any Exam Board", robots: { index: true } });
+    expect(String(metadata.description).length).toBeGreaterThanOrEqual(100);
+    expect(String(metadata.description).length).toBeLessThanOrEqual(160);
   });
 });

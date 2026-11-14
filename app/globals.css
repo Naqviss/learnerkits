@@ -263,6 +263,20 @@ html[data-theme="dark"] .educationFeature>span{background:#202a43}
 .studyPanelBody ul{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px}
 .studyPanelBody li{display:grid;grid-template-columns:24px 1fr;gap:9px;align-items:start;font-size:.86rem;line-height:1.45}
 .studyPanelBody li span{width:20px;height:20px;border-radius:50%;background:color-mix(in srgb,var(--subject) 12%,var(--surface));color:var(--subject);display:grid;place-items:center;font-size:.68rem;font-weight:800}
+.subjectJourney{margin-top:14px;margin-bottom:38px;padding:30px;border:1px solid color-mix(in srgb,var(--subject) 24%,var(--line));border-radius:26px;background:linear-gradient(135deg,color-mix(in srgb,var(--subject) 7%,var(--surface)),var(--surface) 64%)}
+.subjectJourneyHead{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:34px;align-items:end;margin-bottom:20px}
+.subjectJourneyHead h2{font-size:clamp(1.65rem,3vw,2.4rem);line-height:1.08;letter-spacing:-.04em;margin:8px 0 0;max-width:620px}
+.subjectJourneyHead>p{color:var(--muted);font-size:.92rem;line-height:1.7;margin:0;max-width:680px}
+.subjectJourneyGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.subjectJourneyGrid article{min-height:200px;padding:18px;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.journeyCardTop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.journeyCardTop>span{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:color-mix(in srgb,var(--subject) 11%,var(--surface));color:var(--subject);font-size:.78rem;font-weight:850}
+.journeyCardTop b{padding:4px 9px;border:1px solid color-mix(in srgb,var(--accent2) 30%,var(--line));border-radius:999px;background:color-mix(in srgb,var(--accent2) 8%,var(--surface));color:var(--accent2);font-size:.64rem}
+.subjectJourneyGrid h3{font-size:1rem;letter-spacing:-.02em;margin:20px 0 7px}
+.subjectJourneyGrid p{color:var(--muted);font-size:.79rem;line-height:1.58;margin:0}
+.subjectJourneyFoot{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.subjectJourneyFoot>p{max-width:610px;color:var(--muted);font-size:.76rem;line-height:1.55;margin:0}
+.subjectJourneyFoot>div{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
 .inquiryCard{border:1px solid color-mix(in srgb,var(--subject) 28%,var(--line));border-left:4px solid var(--subject);border-radius:12px;background:color-mix(in srgb,var(--subject) 4%,var(--surface));padding:22px 24px;display:grid;grid-template-columns:.75fr 1.25fr;gap:28px;align-items:center}
 .inquiryCard p{font-size:.82rem;color:var(--muted);margin:6px 0 0}
 .inquiryCard strong{font-size:clamp(1.1rem,2vw,1.45rem);line-height:1.4;color:var(--subject);font-weight:700}
@@ -322,16 +336,22 @@ html[data-theme="dark"] .educationFeature>span{background:#202a43}
 
 @media(max-width:1050px){
   .educationFeatureGrid{grid-template-columns:repeat(2,1fr)}
+  .subjectJourneyGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .studyTipsGrid{grid-template-columns:1fr}
 }
 @media(max-width:900px){
   .educationHero,.educationSubjectPage .subjectHero,.educationSubjectPage.subject-physics .subjectHero,.educationSubjectPage.subject-geography .subjectHero,.educationSubjectPage.subject-biology .subjectHero,.educationSubjectPage.subject-chemistry .subjectHero,.educationSubjectPage.subject-mathematics .subjectHero,.educationSubjectPage.subject-space .subjectHero{grid-template-columns:1fr}
   .educationHero{min-height:0;padding-top:48px}
+  .subjectJourneyHead{grid-template-columns:1fr;gap:12px}
   .classroomBand,.subjectStudyTips,.inquiryCard{grid-template-columns:1fr}
 }
 @media(max-width:650px){
   .educationHeroCopy h1{font-size:clamp(2.7rem,13vw,4rem)}
   .educationFeatureGrid{grid-template-columns:1fr}
+  .subjectJourney{padding:20px}
+  .subjectJourneyGrid{grid-template-columns:1fr}
+  .subjectJourneyFoot{align-items:flex-start;flex-direction:column}
+  .subjectJourneyFoot>div{justify-content:flex-start}
   .learningCycleCard{padding:18px}
   .classroomBand{padding:22px}
   .subjectStudyPanel .subjectVisual{height:250px!important}

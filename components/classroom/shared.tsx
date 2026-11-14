@@ -7,8 +7,8 @@ import type { TeacherState } from "@/lib/classroom/types";
 import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import styles from "./classroom.module.css";
 
-export const boards = ["Cambridge International", "Pearson Edexcel", "AQA", "International Baccalaureate", "FBISE", "Other"];
-export const levels = ["IGCSE", "O Level", "GCSE", "AS Level", "A Level", "IB SL", "IB HL", "SSC", "HSSC", "Other"];
+export const boards = ["Cambridge International", "Pearson Edexcel", "AQA", "International Baccalaureate", "Other"];
+export const levels = ["IGCSE", "O Level", "GCSE", "AS Level", "A Level", "IB SL", "IB HL", "Other"];
 export const subjects = ["Physics", "Chemistry", "Biology", "Mathematics"];
 export const labs = visibleSubjectSlugs.flatMap((slug) => subjectsCatalog[slug].simulations.map((simulation) => ({ slug: simulation.slug, title: simulation.title })));
 export const labTitle = (slug: string) => labs.find((lab) => lab.slug === slug)?.title ?? slug;

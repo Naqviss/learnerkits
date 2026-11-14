@@ -42,4 +42,16 @@ describe("subject search snippets", () => {
       expect(json.find((item) => item["@type"] === "CollectionPage").mainEntity.numberOfItems).toBe(visibleSubjectSlugs.length);
     }
   });
+
+  it("presents the complete learning journey on every published subject page", async () => {
+    for (const locale of locales) {
+      for (const subject of visibleSubjectSlugs) {
+        const html = renderToStaticMarkup(await SubjectPage({ params: Promise.resolve({ locale, subject }) }));
+        expect(html, `${locale}/${subject}`).toContain(locale === "es" ? "Un recorrido de aprendizaje completo" : "A complete learning journey");
+        expect(html).toContain(locale === "es" ? "Pregunta al tutor de IA del tema" : "Ask the topic-aware AI tutor");
+        expect(html).toContain(locale === "es" ? "Consulta tu progreso" : "See learning progress");
+        expect(html).toContain(`/${locale}/premium`);
+      }
+    }
+  });
 });

@@ -1,4 +1,6 @@
 import { articleSummaries } from "@/lib/articles/catalog";
+import { boards, isBoardIndexable } from "@/lib/exam-prep/catalog";
+import { getBoardSeo } from "@/lib/exam-prep/seo";
 import { locales, localeNames } from "@/lib/i18n/config";
 import { siteSlogan, siteUrl } from "@/lib/seo/metadata";
 import { getTopicGuides } from "@/lib/seo/topic-guides";
@@ -27,6 +29,11 @@ export async function GET() {
     .map((m) => `- [${m.formula} ${m.name}](${siteUrl}/en/molecules/${m.slug}): ${m.shape} (${m.axe}), bond angle ${m.bondAngle.replace("≈ ", "about ")}${m.hybridization ? `, ${m.hybridization}` : ""}, ${m.polarity === "Ion" ? "polyatomic ion" : m.polarity.toLowerCase()}`)
     .join("\n");
 
+  const examBoardLinks = boards
+    .filter((board) => isBoardIndexable(board.id))
+    .map((board) => `- [${getBoardSeo(board.id)!.title}](${siteUrl}/en/exam-prep/${board.id}): ${getBoardSeo(board.id)!.description}`)
+    .join("\n");
+
   const body = `# LearnerKits
 
 ${siteSlogan}
@@ -40,7 +47,8 @@ LearnerKits is an education platform with interactive labs, topic guides, and pr
 - [All subjects](${siteUrl}/en/subjects)
 - [All simulations](${siteUrl}/en/simulations)
 - [News and science learning articles](${siteUrl}/en/articles)
-- [Exam Prep](${siteUrl}/en/exam-prep): Syllabus topic lessons with interactive models and practice questions for Cambridge, AQA, Pearson Edexcel and IB science courses. Independent of the exam boards; practice material is original.
+- [Exam Prep](${siteUrl}/en/exam-prep): Syllabus topic lessons, interactive models, topic checks, optional AI tutor support and on-device activity progress for Cambridge, AQA, Pearson Edexcel and IB science courses. Independent of the exam boards; practice material is original.
+- [Exam prep for any board](${siteUrl}/en/exam-prep/any-board): A board-neutral route for students whose curriculum is not listed. Students match an official syllabus topic to any published subject library, with lessons, interactive activities, supported checks and optional AI help.
 - [Mock Exams](${siteUrl}/en/mock-exams): Short timed mock exams with original questions, instant marking and worked explanations.
 - [Teacher Kit](${siteUrl}/en/teacher-kit): Lesson planner, question papers, class assignments and marking for science teachers.
 - [About](${siteUrl}/en/about)
@@ -49,6 +57,12 @@ LearnerKits is an education platform with interactive labs, topic guides, and pr
 - [Molecule Kit](${siteUrl}/en/molecule-kit): Free 3D molecule builder and molecular geometry (VSEPR) lab for students, tutors, and teachers.
 - [VSEPR shapes chart](${siteUrl}/en/molecules): Molecular geometry, electron geometry, bond angles, and hybridization for every common VSEPR class, with ${moleculeReferences.length} molecules and ions as rotatable 3D models.
 - [Sitemap](${siteUrl}/sitemap.xml)
+
+## Exam preparation by board
+
+LearnerKits exam preparation is organised by board, qualification, subject and syllabus topic. Students can learn in a supported language, use interactive models, complete available checks, ask the optional topic-aware AI tutor for help and keep supported activity progress in their browser. Published syllabus mappings are separated from labelled illustrative previews. LearnerKits is independent of every exam board and all practice material is original.
+
+${examBoardLinks}
 
 ## Science learning articles
 

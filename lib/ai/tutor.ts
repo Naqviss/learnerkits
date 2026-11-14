@@ -42,6 +42,8 @@ export async function handleTutor(request: Request, env: TutorEnv): Promise<Resp
   const messages = parseMessages(body?.messages);
   if (!body || !messages) return json(400, { error: "Please type a question first." });
   const simulation = (body.simulation && typeof body.simulation === "object" ? body.simulation : {}) as Record<string, unknown>;
+  // Exam Prep topic pages send the topic and course instead of a simulation on screen.
+  const topic = (body.topic && typeof body.topic === "object" ? body.topic : {}) as Record<string, unknown>;
   const locale = typeof body.locale === "string" && isLocale(body.locale) ? body.locale : "en";
 
   const limit = Number.parseInt(env.AI_DAILY_LIMIT ?? "", 10);
@@ -54,6 +56,8 @@ export async function handleTutor(request: Request, env: TutorEnv): Promise<Resp
     subject: clip(simulation.subject, 60),
     concepts: clip(simulation.concepts, 300),
     language: localeNames[locale],
+    topic: clip(topic.name, 120),
+    course: clip(topic.course, 120),
   });
   try {
     const reply = await runModel(env, [{ role: "system", content: system }, ...messages]);
@@ -77,16 +81,22 @@ function parseMessages(value: unknown): ChatMessage[] | null {
   return valid[valid.length - 1].role === "user" ? valid : null;
 }
 
-export function tutorPrompt({ title, subject, concepts, language }: { title: string; subject: string; concepts: string; language: string }) {
-  const context = title
+export function tutorPrompt({ title, subject, concepts, language, topic = "", course = "" }: { title: string; subject: string; concepts: string; language: string; topic?: string; course?: string }) {
+  const context = topic
+    ? `The student is revising the exam topic "${topic}"${course ? ` for ${course}` : ""}${subject ? ` (${subject})` : ""}${concepts ? `. Key ideas: ${concepts}` : ""}.`
+    : title
     ? `The student is using the interactive simulation "${title}"${subject ? ` (${subject})` : ""}${concepts ? `. Key ideas: ${concepts}` : ""}.`
     : "The student is exploring LearnerKits science simulations.";
   return [
-    "You are the LearnerKits science tutor, helping a school student (roughly 10 to 16 years old).",
+    topic
+      ? "You are the LearnerKits tutor, helping a school student (roughly 14 to 18 years old) prepare for an exam."
+      : "You are the LearnerKits science tutor, helping a school student (roughly 10 to 16 years old).",
     context,
     "Guidelines:",
     "- Explain clearly in short paragraphs (usually under 150 words) with simple words and everyday examples.",
-    "- Help them think: suggest something to try or change in the simulation, and ask one follow-up question. For homework, guide the reasoning rather than only giving the final answer.",
+    topic
+      ? "- Help them think: when asked for practice, give one exam-style question on this topic, wait for their answer, then mark it and explain. Guide the reasoning rather than only giving the final answer. Do not claim to quote real past papers or mark schemes."
+      : "- Help them think: suggest something to try or change in the simulation, and ask one follow-up question. For homework, guide the reasoning rather than only giving the final answer.",
     "- Stay on science, mathematics, and learning. Gently bring other topics back to the lesson.",
     "- Never ask for personal information, and tell the student not to share it.",
     "- Do not give instructions for dangerous real-world experiments, weapons, drugs, or self-harm. If a student seems unsafe or upset, encourage them to talk to a trusted adult.",

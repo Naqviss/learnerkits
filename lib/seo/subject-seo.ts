@@ -10,18 +10,18 @@ type VisibleSubject = "space" | "physics" | "geography" | "environmental-science
 
 export const subjectSeo: Record<Locale, Record<VisibleSubject, SubjectSeo>> = {
   en: {
-    space: { title: "Space & Astronomy Simulations for Students", description: (n) => `${n} free space simulations: moon phases, eclipses, Kepler's laws, orbits, escape velocity and lunar landings. Interactive 3D labs for grades 7–12.` },
-    physics: { title: "Physics Simulations & Virtual Labs", description: (n) => `${n} free physics simulations on forces, friction, momentum, circuits, lenses, waves and energy. Change variables and watch the results in interactive labs.` },
-    geography: { title: "Earth Science & Geography Simulations", description: (n) => `${n} free Earth science simulations on plate tectonics, earthquakes, volcanoes, tsunamis, weather, erosion and the water cycle. For grades 6–10.` },
-    "environmental-science": { title: "Environmental Science & Climate Simulations", description: (n) => `${n} free climate and environmental science simulations: greenhouse effect, carbon cycle, sea level rise, pollution and renewable energy.` },
-    chemistry: { title: "Chemistry Simulations & Virtual Labs", description: (n) => `${n} free chemistry simulations on gas laws, reaction rates, bonding, pH, titration, stoichiometry and 3D molecules. Virtual labs for grades 8–12.` },
+    space: { title: "Space & Astronomy Simulations for Students", description: (n) => `${n} interactive space lessons and 3D labs with guided activities, topic checks, on-device progress and optional AI tutor support for grades 7–12.` },
+    physics: { title: "Physics Simulations & Virtual Labs", description: (n) => `${n} interactive physics labs with guided explanations, topic challenges, on-device progress and optional AI tutor support for students.` },
+    geography: { title: "Earth Science & Geography Simulations", description: (n) => `${n} interactive Earth science labs with guided activities, topic checks, on-device progress and optional AI tutor support for grades 6–10.` },
+    "environmental-science": { title: "Environmental Science & Climate Simulations", description: (n) => `${n} interactive climate labs with guided investigations, topic challenges, on-device progress and optional AI tutor support for students.` },
+    chemistry: { title: "Chemistry Simulations & Virtual Labs", description: (n) => `${n} interactive chemistry labs with guided explanations, topic checks, on-device progress and optional AI tutor support for grades 8–12.` },
   },
   es: {
-    space: { title: "Simulaciones de espacio y astronomía", description: (n) => `${n} simulaciones gratuitas de espacio: fases lunares, eclipses, leyes de Kepler, órbitas, velocidad de escape y alunizajes en 3D.` },
-    physics: { title: "Simulaciones de física y laboratorios virtuales", description: (n) => `${n} simulaciones gratuitas de física: fuerzas, fricción, momento, circuitos, lentes, ondas y energía. Cambia variables y observa los resultados.` },
-    geography: { title: "Simulaciones de geografía y ciencias de la Tierra", description: (n) => `${n} simulaciones gratuitas de ciencias de la Tierra: placas tectónicas, terremotos, volcanes, tsunamis, clima, erosión y ciclo del agua.` },
-    "environmental-science": { title: "Simulaciones de ciencias ambientales y clima", description: (n) => `${n} simulaciones gratuitas de clima y medio ambiente: efecto invernadero, ciclo del carbono, subida del mar, contaminación y energía renovable.` },
-    chemistry: { title: "Simulaciones de química y laboratorios virtuales", description: (n) => `${n} simulaciones gratuitas de química: leyes de los gases, velocidad de reacción, enlaces, pH, titulación, estequiometría y moléculas 3D.` },
+    space: { title: "Simulaciones de espacio y astronomía", description: (n) => `${n} lecciones y laboratorios 3D de espacio con actividades guiadas, comprobaciones, progreso local y apoyo opcional de un tutor de IA.` },
+    physics: { title: "Simulaciones de física y laboratorios virtuales", description: (n) => `${n} laboratorios interactivos de física con explicaciones, retos, progreso guardado en el dispositivo y apoyo opcional de un tutor de IA.` },
+    geography: { title: "Simulaciones de geografía y ciencias de la Tierra", description: (n) => `${n} laboratorios de ciencias de la Tierra con actividades, comprobaciones, progreso local y apoyo opcional de un tutor de IA.` },
+    "environmental-science": { title: "Simulaciones de ciencias ambientales y clima", description: (n) => `${n} laboratorios interactivos del clima con investigaciones, retos, progreso local y apoyo opcional de un tutor de IA.` },
+    chemistry: { title: "Simulaciones de química y laboratorios virtuales", description: (n) => `${n} laboratorios interactivos de química con explicaciones, comprobaciones, progreso local y apoyo opcional de un tutor de IA.` },
   },
   fr: {
     space: { title: "Simulations d’espace et d’astronomie", description: (n) => `${n} simulations gratuites sur l’espace : phases de la Lune, éclipses, lois de Kepler, orbites, vitesse de libération et alunissage en 3D.` },
