@@ -27,8 +27,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const topicGuidePaths = ["/guides", "/guides/environmental-city-builder", ...getTopicGuides().map((guide) => `/guides/${guide.slug}`)];
   const articlePaths = ["/articles", ...articleSummaries.map((article) => `/articles/${article.slug}`)];
   const moleculePaths = ["/molecules", ...moleculeReferences.map((molecule) => `/molecules/${molecule.slug}`)];
-  const learningToolPaths = [...examPrepIndexablePaths, ...mockExamIndexablePaths, "/teacher-kit"];
-  const isEnglishOnly = (path: string) => ["/guides", "/articles", "/molecules", "/exam-prep", "/mock-exams", "/teacher-kit"].some((prefix) => path.startsWith(prefix));
+  const learningToolPaths = [...examPrepIndexablePaths, ...mockExamIndexablePaths, "/teacher-kit", "/pricing"];
+  const isEnglishOnly = (path: string) => ["/guides", "/articles", "/molecules", "/exam-prep", "/mock-exams", "/teacher-kit", "/pricing"].some((prefix) => path.startsWith(prefix));
   const lastModified = process.env.NEXT_PUBLIC_CONTENT_UPDATED_AT ?? "2026-09-19";
   return locales.flatMap((locale) => {
     // The focused guides are intentionally English-only until translated; do not publish

@@ -12,6 +12,8 @@ import { paddleSecretNames, resolvePaddle } from "../lib/billing/paddle-config.t
 
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
 const env = process.env;
+// .env.local's localhost site URL is for `next dev` only; drop it so the build falls back to production.
+if (/localhost|127\.0\.0\.1/.test(env.NEXT_PUBLIC_SITE_URL ?? "")) delete env.NEXT_PUBLIC_SITE_URL;
 
 const run = (command, args) => {
   const result = spawnSync(command, args, { stdio: "inherit", env });
@@ -54,3 +56,16 @@ try {
   rmSync(dir, { recursive: true, force: true });
 }
 console.log(`\nDeployed with Paddle in ${paddle.mode.toUpperCase()} mode.`);
+
+if (!env.INDEXNOW_KEY?.trim()) {
+  console.warn("Skipping IndexNow: INDEXNOW_KEY is not set in .env.local or the environment.");
+} else {
+  console.log("\nSubmitting the production sitemap to IndexNow...");
+  const indexnow = spawnSync("npm", ["run", "indexnow"], {
+    stdio: "inherit",
+    env: { ...env, NEXT_PUBLIC_SITE_URL: env.NEXT_PUBLIC_SITE_URL ?? "https://www.learnerkits.com" },
+  });
+  if (indexnow.status !== 0) {
+    console.warn("IndexNow submission failed after deployment. The site is deployed; you can retry with `npm run indexnow`.");
+  }
+}

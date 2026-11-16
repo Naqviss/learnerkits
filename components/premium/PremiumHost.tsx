@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { signInWithGoogle, useAuth } from "@/lib/auth/session";
-import { getBillingConfig, postWithSession, premiumEnabled, premiumEvent, refreshPremium, usePremium, type PremiumReason } from "@/lib/billing/premium";
+import { checkoutComingSoon, getBillingConfig, postWithSession, premiumEnabled, premiumEvent, refreshPremium, usePremium, type PremiumReason } from "@/lib/billing/premium";
 import { openPaddleCheckout } from "@/lib/billing/paddle-client";
 import { getPremiumCopy, premiumPrice } from "@/lib/premium/copy";
 
@@ -71,6 +71,7 @@ export function PremiumHost({ locale }: { locale: string }) {
   }, [auth.session, copy.checkoutError, locale]);
 
   const subscribe = async () => {
+    if (checkoutComingSoon) return;
     if (auth.status === "signedIn") return startCheckout();
     setBusy(true);
     try { sessionStorage.setItem(checkoutIntentKey, "1"); } catch { /* continue without resuming */ }
@@ -82,7 +83,7 @@ export function PremiumHost({ locale }: { locale: string }) {
     if (!premiumEnabled || auth.status !== "signedIn" || premium === "unknown") return;
     let intent: string | null = null;
     try { intent = sessionStorage.getItem(checkoutIntentKey); sessionStorage.removeItem(checkoutIntentKey); } catch { /* ignore */ }
-    if (!intent || premium === "premium") return;
+    if (!intent || premium === "premium" || checkoutComingSoon) return;
     setReason("menu");
     setWaitLeft(0);
     setMode("offer");
@@ -178,8 +179,8 @@ export function PremiumHost({ locale }: { locale: string }) {
         {testMode && <p className="premiumTestMode">{copy.testMode}</p>}
         {error && <p role="alert" className="premiumError">{error}</p>}
         <div className="premiumActions">
-          <button type="button" className="button primary" onClick={subscribe} disabled={busy}>
-            {busy ? copy.working : auth.status === "signedIn" ? copy.subscribe : copy.signInToSubscribe}
+          <button type="button" className="button primary" onClick={subscribe} disabled={busy || checkoutComingSoon}>
+            {checkoutComingSoon ? copy.comingSoon : busy ? copy.working : auth.status === "signedIn" ? copy.subscribe : copy.signInToSubscribe}
           </button>
           <button type="button" className="button" onClick={close} disabled={busy || locked}>
             {locked ? copy.laterIn(Math.ceil(waitLeft)) : copy.later}

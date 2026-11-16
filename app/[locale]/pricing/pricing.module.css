@@ -1,0 +1,30 @@
+.page{padding-top:34px;padding-bottom:80px}
+.hero{max-width:780px;margin:12px 0 48px}
+.hero h1{font-size:clamp(2.3rem,5.5vw,4.4rem);line-height:1.02;letter-spacing:-.055em;margin:13px 0 15px}
+.hero p{font-size:1.08rem;color:var(--muted);line-height:1.7;max-width:680px;margin:0}
+.section{margin:48px 0}
+.sectionHead{display:flex;align-items:end;justify-content:space-between;gap:22px;margin-bottom:19px}
+.sectionHead h2{font-size:clamp(1.75rem,3vw,2.45rem);letter-spacing:-.04em;margin:7px 0 0}
+.sectionHead>p{max-width:440px;margin:0;color:var(--muted);line-height:1.65}
+.studentGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:950px}
+.teacherGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:25px;border:1px solid var(--line);border-radius:20px;background:var(--surface)}
+.featured{border-color:color-mix(in srgb,var(--accent) 55%,var(--line));box-shadow:0 12px 35px color-mix(in srgb,var(--accent) 10%,transparent)}
+.planLabel{display:inline-flex;padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface-2);font-size:.77rem;font-weight:780}
+.card h3{display:flex;align-items:baseline;flex-wrap:wrap;gap:7px;margin:18px 0 5px;font-size:1rem}
+.card h3 strong{font-size:2.15rem;line-height:1;letter-spacing:-.045em}
+.card h3 span{font-size:.85rem;color:var(--muted);font-weight:600}
+.summary{min-height:2.9em;margin:8px 0 10px;color:var(--muted);font-size:.9rem;line-height:1.6}
+.seats{margin:12px 0 0;font-size:.88rem;font-weight:800;color:var(--accent)}
+.card ul{display:grid;gap:10px;align-content:start;flex:1;margin:11px 0 22px;padding-left:19px;color:var(--muted);font-size:.88rem;line-height:1.55}
+.card li::marker{color:var(--accent)}
+.card :global(.button),.card :global(button){margin-top:auto}
+.fine{display:block;margin-top:13px;color:var(--muted);font-size:.73rem;line-height:1.55}
+.fine a{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+.note{margin:17px 0 0;color:var(--muted);font-size:.82rem;line-height:1.6}
+.footerCta{display:flex;align-items:center;justify-content:space-between;gap:22px;margin-top:60px;padding:25px 28px;border:1px solid var(--line);border-radius:20px;background:var(--surface-2)}
+.footerCta h2{margin:0 0 6px;font-size:1.25rem}
+.footerCta p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.6}
+.actions{display:flex;flex-wrap:wrap;gap:9px;flex:none}
+@media(max-width:900px){.teacherGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.sectionHead{align-items:start;flex-direction:column;gap:7px}}
+@media(max-width:620px){.page{padding-top:22px}.hero{margin-bottom:34px}.studentGrid,.teacherGrid{grid-template-columns:1fr}.card{padding:21px}.summary{min-height:0}.footerCta{align-items:flex-start;flex-direction:column;padding:21px}}

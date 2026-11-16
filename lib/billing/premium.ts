@@ -6,6 +6,12 @@ import { isEntitled } from "./entitlement";
 /** Premium UI (30-second prompt, AI tutor, account-menu links) only appears once billing is configured. */
 export const premiumEnabled = authEnabled && process.env.NEXT_PUBLIC_PREMIUM_ENABLED === "true";
 
+/**
+ * Paddle has not enabled checkouts on the live account yet (transaction_checkout_not_enabled), so the
+ * Subscribe button shows "Coming soon" and is disabled. Set to false once Paddle approves the account.
+ */
+export const checkoutComingSoon = true;
+
 export type BillingConfig = { mode: "sandbox" | "live"; clientToken: string | null; ready: boolean };
 let billingConfig: Promise<BillingConfig | null> | undefined;
 
