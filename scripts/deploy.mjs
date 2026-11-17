@@ -51,7 +51,7 @@ const dir = mkdtempSync(join(tmpdir(), "learnerkits-deploy-"));
 const secretsFile = join(dir, "secrets.json");
 try {
   writeFileSync(secretsFile, JSON.stringify(secrets), { mode: 0o600 });
-  run("npx", ["wrangler", "deploy", "--secrets-file", secretsFile, "--var", `PADDLE_TEST_MODE:${flag}`]);
+  run("npx", ["wrangler", "deploy", "--secrets-file", secretsFile, "--var", `PADDLE_TEST_MODE:${flag}`, "--var", `PREMIUM_ENABLED:${premium}`]);
 } finally {
   rmSync(dir, { recursive: true, force: true });
 }

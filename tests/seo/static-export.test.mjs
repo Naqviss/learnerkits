@@ -3,7 +3,7 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
-import { verifyStaticSeo } from "../../scripts/verify-static-seo.mjs";
+import { verifyStaticSeo, verifyUnlistedLocales } from "../../scripts/verify-static-seo.mjs";
 
 const directories = [];
 const origin = "https://www.learnerkits.com";
@@ -35,6 +35,16 @@ describe("static export deployment checks", () => {
   });
   it("blocks a canonical pointing to a different page or deployment", () => {
     expect(() => verifyStaticSeo(fixture({ canonical: "https://preview.example/en/example" }), origin)).toThrow("mismatched canonical");
+  });
+  it("requires every page in a language not open to search to be noindex", () => {
+    const out = fixture();
+    mkdirSync(new URL("es/simulations/", out), { recursive: true });
+    const page = (robots) => `<html><head><meta name="robots" content="${robots}"></head><body>Ejemplo</body></html>`;
+    writeFileSync(new URL("es.html", out), page("noindex, follow"));
+    writeFileSync(new URL("es/simulations/example.html", out), page("noindex, follow"));
+    expect(verifyUnlistedLocales(out, ["es"])).toBe(2);
+    writeFileSync(new URL("es/simulations/example.html", out), page("index, follow"));
+    expect(() => verifyUnlistedLocales(out, ["es"])).toThrow("/es/simulations/example");
   });
   it("blocks a sitemap built for the wrong host", () => {
     expect(() => verifyStaticSeo(fixture({ sitemapOrigin: "http://localhost:3000" }), origin)).toThrow("Unexpected sitemap origin");

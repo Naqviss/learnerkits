@@ -10,6 +10,8 @@ import { SimulationAssistant } from "@/components/premium/SimulationAssistant";
 import { getSimulationGuide } from "@/lib/seo/simulation-guides";
 import { getMoleculeKitCopy, moleculeKitSimSlugs } from "@/lib/seo/molecule-kit-content";
 import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
+import { BalancingEquationsGuide } from "@/components/seo/BalancingEquationsGuide";
+import { balancingAnswer, balancingMethod, balancingSeo } from "@/lib/seo/balancing-equations";
 
 // Keep subject-specific client engines out of the shared route bundle. The server
 // still renders the accessible shell and SEO guide immediately; each lab engine is
@@ -41,6 +43,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const copy = getEducationCopy(locale);
   const keywords = [simulation.title, localizedSubject.eyebrow, ...(simulation.concepts ? simulation.concepts.split(" · ") : [])];
   if (locale === "en" && baseSimulation.seoTarget) keywords.unshift(baseSimulation.seoTarget);
+  if (locale === "en" && slug === "balance-equation") {
+    // Matches what people search ("how to balance chemical equations"), not just the game's name.
+    const metadata = localizedMetadata(locale, `/simulations/${slug}`, balancingSeo.title, balancingSeo.description, { keywords: ["balancing chemical equations", "how to balance chemical equations", "balancing equations practice", "balanced chemical equations examples", ...keywords] });
+    return { ...metadata, title: { absolute: balancingSeo.title } };
+  }
   return localizedMetadata(
     locale,
     `/simulations/${slug}`,
@@ -77,6 +84,17 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
   ]);
   const guide = getSimulationGuide(safeLocale, subject, simulation);
   const faq = faqJsonLd(safeLocale, guide.faq);
+  const balancing = safeLocale === "en" && slug === "balance-equation";
+  // The method shown on the page, as HowTo data for search engines and AI assistants.
+  const howTo = balancing ? {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to balance a chemical equation",
+    description: balancingAnswer,
+    inLanguage: "en",
+    dateModified: balancingSeo.updated,
+    step: balancingMethod.map((text, index) => ({ "@type": "HowToStep", position: index + 1, text })),
+  } : undefined;
   const activity = baseSubject.slug === "environmental-science"
     ? <EnvironmentalActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
     : baseSubject.slug === "mathematics"
@@ -96,8 +114,10 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faq)}/>
+    {howTo && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(howTo)}/>}
     {activity}
     <SimulationAssistant locale={safeLocale} simulation={{ title: simulation.title, subject: subject.eyebrow, concepts: simulation.concepts }}/>
+    {balancing && <BalancingEquationsGuide/>}
     <SimulationGuide locale={safeLocale} subject={subject} simulation={simulation}/>
   </>;
 }

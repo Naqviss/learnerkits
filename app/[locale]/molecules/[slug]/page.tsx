@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, siteName, siteUrl } from "@/lib/seo/metadata";
-import { classMistake, getMoleculeReference, getMoleculesWithShape, lewisSteps, moleculeCopy, moleculeFamily, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
+import { moleculeImage, moleculeImageAlt, moleculeImageSize } from "@/lib/seo/molecule-image";
+import { classMistake, getMoleculeReference, getMoleculesWithShape, isMoleculeIndexed, lewisSteps, moleculeCopy, moleculeFamily, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
 import { moleculeAbout } from "@/lib/seo/molecule-about";
 import { MoleculeViewer } from "@/components/seo/MoleculeViewer";
 import { bondLengthText, bondLengths } from "@/lib/simulations/chemistry/bondLengths";
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const molecule = getMoleculeReference(slug);
   if (!molecule || !isLocale(raw) || raw !== "en") return {};
   const { title, description } = moleculeSearchCopy(molecule);
-  return localizedMetadata(
+  const metadata = localizedMetadata(
     raw,
     `/molecules/${molecule.slug}`,
     title,
@@ -29,8 +30,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         `${molecule.asciiFormula} hybridization`, `${molecule.asciiFormula} 3D model`, "VSEPR",
       ],
       englishOnly: true,
+      unlisted: !isMoleculeIndexed(molecule),
     },
   );
+  // A picture of the molecule rather than the generic site logo, for result thumbnails and shares.
+  const image = { url: `${siteUrl}${moleculeImage(molecule.slug).jpg}`, ...moleculeImageSize.social, alt: moleculeImageAlt(molecule) };
+  return {
+    ...metadata,
+    title: { absolute: title },
+    openGraph: { ...metadata.openGraph, images: [{ ...image, type: "image/jpeg" }] },
+    twitter: { ...metadata.twitter, card: "summary_large_image", images: [{ url: image.url, alt: image.alt }] },
+  };
 }
 
 export default async function MoleculePage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
@@ -45,6 +55,8 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
   const lewis = lewisSteps(molecule);
   const family = moleculeFamily(molecule);
   const mistake = classMistake(molecule);
+  const lowerName = molecule.name[0].toLowerCase() + molecule.name.slice(1);
+  const diagram = { url: `${siteUrl}${moleculeImage(molecule.slug).svg}`, alt: moleculeImageAlt(molecule) };
   const stateSentence = about && (about.stateNote ? `${molecule.formula} is ${about.stateNote}.` : about.state === "unstable" ? `${molecule.formula} is not stable at room temperature.` : about.state === "ion" ? `${molecule.formula} is a polyatomic ion, found in salts and solutions.` : `${molecule.formula} is a ${about.state} at room temperature.`);
   const facts: [string, string][] = [
     ["Molecular geometry", molecule.shape],
@@ -76,6 +88,8 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
     audience: { "@type": "EducationalAudience", educationalRole: ["student", "teacher", "researcher"] },
     about: { "@type": "MolecularEntity", name: molecule.name, molecularFormula: molecule.asciiFormula },
     isPartOf: { "@type": "CollectionPage", name: "VSEPR shapes chart", url: `${siteUrl}/en/molecules` },
+    primaryImageOfPage: { "@type": "ImageObject", contentUrl: diagram.url, url: diagram.url, ...moleculeImageSize.page, caption: diagram.alt },
+    image: [diagram.url, `${siteUrl}${moleculeImage(molecule.slug).jpg}`],
     provider: { "@type": "Organization", name: siteName, url: siteUrl },
   };
   const breadcrumbs = breadcrumbJsonLd("en", [
@@ -92,7 +106,7 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
     <article>
       <header className="topicGuideHero">
         <div className="eyebrow"><Link href="/en/molecules">VSEPR shapes chart</Link> · {molecule.name} ({molecule.asciiFormula})</div>
-        <h1>{molecule.formula} molecular geometry and shape</h1>
+        <h1>{molecule.formula} ({lowerName}) molecular geometry and shape</h1>
         <p className="topicGuideLead">{copy.lead}</p>
         <div className="topicGuideHeroActions">
           <Link className="button primary" href={`/en/simulations/molecular-geometry-3d?molecule=${molecule.slug}`}>Test yourself in the 3D lab</Link>
@@ -117,6 +131,11 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
           <span className="eyebrow">Explain the shape</span>
           <h2>Why is {molecule.formula} {molecule.shape.toLowerCase()}?</h2>
           <p>{copy.why}</p>
+          {/* A crawlable picture of the model: the 3D canvas above is invisible to search engines. */}
+          <figure className="moleculeDiagram">
+            <img src={moleculeImage(molecule.slug).svg} alt={diagram.alt} {...moleculeImageSize.page} loading="lazy" decoding="async" />
+            <figcaption>{molecule.formula} ({lowerName}) is {molecule.shape.toLowerCase()}: the central {molecule.center} atom has {molecule.bondingPairs} bonding domain{molecule.bondingPairs === 1 ? "" : "s"} and {molecule.lonePairs} lone pair{molecule.lonePairs === 1 ? "" : "s"} ({molecule.axe}).</figcaption>
+          </figure>
         </section>
         {lewis && <section className="topicGuideSection">
           <span className="eyebrow">Lewis structure</span>

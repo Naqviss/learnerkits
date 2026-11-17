@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
-import { locales } from "@/lib/i18n/config";
+import { isIndexedLocale, locales } from "@/lib/i18n/config";
 import { subjectSlugs, hiddenSubjectSlugs, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { subjectImages } from "@/lib/subjects/images";
 import { localizedUrl, siteUrl } from "@/lib/seo/metadata";
@@ -31,7 +31,7 @@ describe("subject image discovery", () => {
         const ogUrl = `${siteUrl}${image.og.src}`;
         expect(metadata.openGraph).toMatchObject({ images: [{ url: ogUrl, width: 1200, height: 630, type: "image/jpeg", alt: image.alt[locale] }] });
         expect(metadata.twitter).toMatchObject({ images: [{ url: ogUrl, alt: image.alt[locale] }] });
-        expect(metadata.robots).toMatchObject({ index: true, googleBot: { "max-image-preview": "large" } });
+        expect(metadata.robots).toMatchObject(isIndexedLocale(locale) ? { index: true, googleBot: { "max-image-preview": "large" } } : { index: false, follow: true });
       }
     }
   });
@@ -41,11 +41,14 @@ describe("subject image discovery", () => {
     for (const locale of locales) {
       const html = renderToStaticMarkup(await SubjectIndex({ params: Promise.resolve({ locale }) }));
       const index = entries.find((entry) => entry.url === localizedUrl(locale, "/subjects"));
-      expect(index?.images).toHaveLength(subjectSlugs.length);
+      // Languages not open to search have no sitemap entries; their pages still show the images.
+      const listed = isIndexedLocale(locale);
+      if (listed) expect(index?.images).toHaveLength(subjectSlugs.length);
+      else expect(index).toBeUndefined();
       for (const subject of visibleSubjectSlugs) {
         const image = subjectImages[subject]!;
         expect(html).toContain(`src="${image.src}"`);
-        expect(entries.find((entry) => entry.url === localizedUrl(locale, `/subjects/${subject}`))?.images).toContain(`${siteUrl}${image.src}`);
+        if (listed) expect(entries.find((entry) => entry.url === localizedUrl(locale, `/subjects/${subject}`))?.images).toContain(`${siteUrl}${image.src}`);
       }
     }
     for (const subject of hiddenSubjectSlugs) {

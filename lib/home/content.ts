@@ -32,7 +32,7 @@ const en = {
   faqEyebrow: "Before you begin", faqHeading: "Questions about LearnerKits.", aboutCta: "Meet the team", policyCta: "How we create our content",
   faqs: [
     { q: "What is LearnerKits?", a: "LearnerKits is a browser-based science learning and teaching platform. It brings together free interactive simulations, subject guides, exam-board revision, timed mock exams, lesson planning and classroom tools." },
-    { q: "Are the science simulations free?", a: "The interactive science labs are free to explore without an account or download. Free mock-exam samples are also available. Some additional practice and premium tools require a subscription; those features are labelled on the website." },
+    { q: "Are the science simulations free?", a: "The interactive science labs are free to explore without an account or download. Free mock-exam samples are also available." },
     { q: "Which subjects and exam pathways can I explore?", a: "The lab library covers physics, chemistry, space, geography and environmental science. Exam Prep currently offers physics and chemistry pathways for selected boards. Topic pages identify the syllabus reference or explain when a mapping is an illustrative sample." },
     { q: "How can teachers use LearnerKits?", a: "Teachers can share a lab link, demonstrate a concept in class, or use Teacher Kit to create editable lesson plans, question papers and assignments. A signed-in teacher workspace is needed to save teaching resources and manage classes." },
   ],

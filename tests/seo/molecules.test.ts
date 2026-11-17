@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { molecules } from "@/lib/simulations/chemistry/model";
-import { classMistake, getMoleculeReference, getVseprClasses, lewisSteps, moleculeCopy, moleculeFamily, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
+import { classMistake, getMoleculeReference, getVseprClasses, indexedMoleculeReferences, isMoleculeIndexed, lewisSteps, moleculeCopy, moleculeFamily, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
+import sitemap from "@/app/sitemap";
+import MoleculePage, { generateMetadata } from "@/app/[locale]/molecules/[slug]/page";
+import { moleculeImageAlt, moleculeImageSvg } from "@/lib/seo/molecule-image";
+import { renderToStaticMarkup } from "react-dom/server";
 import { moleculeAbout } from "@/lib/seo/molecule-about";
 import { bondLengths } from "@/lib/simulations/chemistry/bondLengths";
 
@@ -12,6 +16,20 @@ describe("molecule reference pages", () => {
       expect(m.slug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
     }
     expect(new Set(moleculeReferences.map((m) => m.slug)).size).toBe(moleculeReferences.length);
+  });
+  it("opens a core set covering every VSEPR class to search and keeps the rest unlisted", async () => {
+    const indexed = indexedMoleculeReferences();
+    // Every slug in the core list must be a real page, so a typo cannot silently drop one.
+    expect(indexed).toHaveLength(40);
+    expect(new Set(indexed.map((m) => `${m.axe}|${m.shape}`)).size).toBe(getVseprClasses().length);
+    const listed = sitemap().map((entry) => new URL(entry.url).pathname).filter((path) => path.startsWith("/en/molecules/"));
+    expect(listed.sort()).toEqual(indexed.map((m) => `/en/molecules/${m.slug}`).sort());
+    for (const m of moleculeReferences) {
+      const metadata = await generateMetadata({ params: Promise.resolve({ locale: "en", slug: m.slug }) });
+      expect(metadata.alternates?.canonical, m.slug).toBe(`https://www.learnerkits.com/en/molecules/${m.slug}`);
+      if (isMoleculeIndexed(m)) expect(metadata.robots, m.slug).toMatchObject({ index: true, follow: true });
+      else expect(metadata.robots, m.slug).toEqual({ index: false, follow: true });
+    }
   });
   it("derives textbook VSEPR facts", () => {
     const water = getMoleculeReference("water-h2o")!;
@@ -33,11 +51,14 @@ describe("molecule reference pages", () => {
     expect(faq.every((f) => f.a.includes("H₂O") || f.a.includes("Water"))).toBe(true);
   });
   it("writes search titles and descriptions with the plain formula people type", () => {
-    expect(moleculeSearchCopy(getMoleculeReference("phosphorus-pentafluoride-pf5")!).title).toBe("PF5 Molecular Geometry, Lewis Structure & Bond Angles (3D)");
-    expect(moleculeSearchCopy(getMoleculeReference("hydrogen-sulfide-h2s")!).description).toMatch(/^Why is H2S bent\? .*Lewis structure step by step/);
-    expect(moleculeSearchCopy(getMoleculeReference("carbon-dioxide-co2")!).description).toContain("Why is CO2 linear?");
-    expect(moleculeSearchCopy(getMoleculeReference("sulfate-ion-so4")!).title).toMatch(/^SO4 2- /);
-    expect(moleculeSearchCopy(getMoleculeReference("nitrate-ion-no3")!).title).toMatch(/^NO3- /);
+    expect(moleculeSearchCopy(getMoleculeReference("phosphorus-pentafluoride-pf5")!).title).toBe("PF5 (Phosphorus Pentafluoride) Molecular Geometry & Shape");
+    expect(moleculeSearchCopy(getMoleculeReference("ammonia-nh3")!).title).toBe("NH3 (Ammonia) Molecular Geometry, Shape & Bond Angle (3D)");
+    expect(moleculeSearchCopy(getMoleculeReference("hydrogen-sulfide-h2s")!).description).toMatch(/^Why is H2S \(hydrogen sulfide\) bent\? .*Lewis structure/);
+    expect(moleculeSearchCopy(getMoleculeReference("carbon-dioxide-co2")!).description).toContain("Why is CO2 (carbon dioxide) linear?");
+    expect(moleculeSearchCopy(getMoleculeReference("sulfate-ion-so4")!).title).toBe("SO4 2- (Sulfate Ion) Molecular Geometry, Shape & Bond Angle");
+    expect(moleculeSearchCopy(getMoleculeReference("nitrate-ion-no3")!).title).toMatch(/^NO3- \(Nitrate Ion\) /);
+    // Every page that is open to search carries both the formula and the chemical name in its title.
+    for (const m of indexedMoleculeReferences()) expect(moleculeSearchCopy(m).title, m.slug).toContain(`(${m.name.replace(/(^|[\s-])([a-z])/g, (_, gap: string, letter: string) => gap + letter.toUpperCase())})`);
     for (const m of moleculeReferences) {
       const { title, description } = moleculeSearchCopy(m);
       expect(title, m.slug).not.toMatch(/[₀-₉⁰¹²³⁴-⁹]/);
@@ -63,5 +84,32 @@ describe("molecule reference pages", () => {
     expect(lewisSteps(getMoleculeReference("permanganate-ion-mno4")!)).toBeUndefined();
     expect(moleculeFamily(getMoleculeReference("water-h2o")!).map((m) => m.formula)).toEqual(["H₂O", "H₂S", "H₂Se", "H₂Te"]);
     expect(moleculeReferences.every((m) => classMistake(m))).toBe(true);
+  });
+});
+
+describe("molecule search images", () => {
+  it("draws every molecule with one atom per position, its lone pairs, and escaped text", () => {
+    for (const m of moleculeReferences) {
+      const svg = moleculeImageSvg(m);
+      expect(svg, m.slug).toMatch(/^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" width="1200" height="800"/);
+      expect(svg.match(/fill="url\(#atom-/g), m.slug).toHaveLength(m.bondingPairs + 1);
+      expect(svg.match(/<ellipse /g) ?? [], m.slug).toHaveLength(m.lonePairs);
+      expect(svg, m.slug).not.toMatch(/NaN|undefined|Infinity/);
+      expect(svg.replace(/<[^>]+>/g, ""), m.slug).not.toMatch(/[<>]/);
+    }
+    expect(moleculeImageSvg(getMoleculeReference("sulfur-tetrafluoride-sf4")!)).toContain("&lt;90°");
+    expect(moleculeImageAlt(getMoleculeReference("mercury-ii-chloride-hgcl2")!)).toContain("(mercury(II) chloride)");
+    expect(moleculeImageAlt(getMoleculeReference("sulfate-ion-so4")!)).toMatch(/^Ball-and-stick model of SO4 2- \(sulfate ion\)/);
+  });
+
+  it("gives each molecule page its own image instead of the site logo", async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: "en", slug: "ammonia-nh3" }) });
+    expect(metadata.title).toEqual({ absolute: "NH3 (Ammonia) Molecular Geometry, Shape & Bond Angle (3D)" });
+    expect(metadata.openGraph?.images).toEqual([expect.objectContaining({ url: "https://www.learnerkits.com/images/molecules/ammonia-nh3.jpg", width: 1200, height: 630 })]);
+    const html = renderToStaticMarkup(await MoleculePage({ params: Promise.resolve({ locale: "en", slug: "ammonia-nh3" }) }));
+    expect(html).toContain('src="/images/molecules/ammonia-nh3.svg"');
+    expect(html).toContain("NH₃ (ammonia) molecular geometry and shape");
+    const resource = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/g)].map((match) => JSON.parse(match[1])).find((item) => item["@type"]?.includes?.("LearningResource"));
+    expect(resource.primaryImageOfPage).toMatchObject({ "@type": "ImageObject", contentUrl: "https://www.learnerkits.com/images/molecules/ammonia-nh3.svg" });
   });
 });

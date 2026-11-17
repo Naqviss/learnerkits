@@ -559,6 +559,8 @@ html[data-theme="dark"] .learningNote{background:#3b3215}
 @media(min-width:801px) and (max-width:900px){.mobileNav{display:block}.navInner>.navSearch{display:none}.navActions{margin-left:auto}}
 
 /* Molecule reference pages and VSEPR shapes chart. */
+.balancingGuide{margin-top:32px}.balancingEquation{font-weight:760;white-space:nowrap}.balancingTableWrap{overflow-x:auto;margin:18px 0}.balancingTable{width:100%;border-collapse:collapse;font-size:.92rem}.balancingTable caption{text-align:left;font-weight:760;padding:6px 0 10px}.balancingTable th,.balancingTable td{text-align:left;padding:9px 12px;border-top:1px solid var(--line,rgba(127,127,127,.25));vertical-align:top}.balancingTable thead th{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.balancingTable tbody th{font-weight:600}.balancingTable td b{white-space:nowrap}
+.moleculeDiagram{margin:18px 0 6px;max-width:720px}.moleculeDiagram img{display:block;width:100%;height:auto;border-radius:14px;background:#0e1730}.moleculeDiagram figcaption{margin-top:8px;font-size:.88rem;color:var(--muted);line-height:1.6}
 .moleculeFacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 24px;margin:6px 0 0}
 .moleculeFacts>div{min-width:0}.moleculeFacts dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}.moleculeFacts dd{margin:4px 0 0;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
 .moleculeLinkList{list-style:none;padding:0 !important;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}.moleculeLinkList a{color:inherit}.moleculeLinkList b{color:var(--subject,var(--accent));margin-inline-end:6px}

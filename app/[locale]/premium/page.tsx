@@ -10,6 +10,9 @@ import { localizedMetadata } from "@/lib/seo/metadata";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale: raw } = await params;
   const locale = isLocale(raw) ? raw : "en";
+  if (process.env.NEXT_PUBLIC_PREMIUM_ENABLED !== "true") {
+    return localizedMetadata(locale, "/premium", "LearnerKits Premium temporarily unavailable", "LearnerKits Premium is temporarily unavailable.", { noIndex: true, englishOnly: true });
+  }
   const copy = getPremiumCopy(locale).page;
   return localizedMetadata(locale, "/premium", copy.seoTitle, copy.seoDescription);
 }
@@ -17,6 +20,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function PremiumPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
+  if (process.env.NEXT_PUBLIC_PREMIUM_ENABLED !== "true") {
+    return <main className="container premiumPage"><section className="premiumPageHero"><div><p className="eyebrow">LearnerKits</p><h1>Premium is temporarily unavailable.</h1><p className="premiumPageLead">All interactive science activities remain free. Existing subscribers can manage their subscription from the account menu.</p><p><Link href={`/${locale}/contact`}>Contact us</Link></p></div></section></main>;
+  }
   const all = getPremiumCopy(locale);
   const copy = all.page;
   return <main className="container premiumPage">

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { defaultLocale, locales, type Locale } from "@/lib/i18n/config";
+import { defaultLocale, indexedLocales, isIndexedLocale, locales, type Locale } from "@/lib/i18n/config";
 
 // Keep production URLs canonical even when the deployment has not supplied the env var yet.
 // Local development can still override this with NEXT_PUBLIC_SITE_URL=http://localhost:3000.
@@ -28,6 +28,8 @@ export type SeoOptions = {
   keywords?: string[];
   type?: "website" | "article";
   noIndex?: boolean;
+  /** Published for visitors and linked internally, but kept out of search results (noindex, follow) and the sitemap. */
+  unlisted?: boolean;
   englishOnly?: boolean;
 };
 
@@ -47,12 +49,17 @@ export function localizedMetadata(
 ): Metadata {
   const safeLocale = (locales as readonly string[]).includes(locale) ? (locale as Locale) : defaultLocale;
   const canonical = localizedUrl(safeLocale, path);
-  const languages = options.englishOnly
-    ? { en: localizedUrl(defaultLocale, path), "x-default": localizedUrl(defaultLocale, path) }
-    : Object.fromEntries([
-        ...locales.map((code) => [hreflangCodes[code], localizedUrl(code, path)] as const),
-        ["x-default", localizedUrl(defaultLocale, path)] as const,
-      ]);
+  // A page in a language that is not open to search engines is unlisted, and hreflang only ever
+  // points at indexable language versions.
+  const unlisted = options.unlisted || !isIndexedLocale(safeLocale);
+  const languages = unlisted
+    ? undefined
+    : options.englishOnly
+      ? { en: localizedUrl(defaultLocale, path), "x-default": localizedUrl(defaultLocale, path) }
+      : Object.fromEntries([
+          ...indexedLocales.map((code) => [hreflangCodes[code], localizedUrl(code, path)] as const),
+          ["x-default", localizedUrl(defaultLocale, path)] as const,
+        ]);
   const alternateLocale = options.englishOnly ? [] : locales.filter((code) => code !== safeLocale).map((code) => ogLocales[code]);
 
   return {
@@ -61,20 +68,22 @@ export function localizedMetadata(
     applicationName: siteName,
     category: "education",
     keywords: options.keywords,
-    alternates: { canonical, languages },
+    alternates: { canonical, ...(languages ? { languages } : {}) },
     robots: options.noIndex
       ? { index: false, follow: false }
-      : {
-          index: true,
-          follow: true,
-          googleBot: {
+      : unlisted
+        ? { index: false, follow: true }
+        : {
             index: true,
             follow: true,
-            "max-image-preview": "large",
-            "max-snippet": -1,
-            "max-video-preview": -1,
+            googleBot: {
+              index: true,
+              follow: true,
+              "max-image-preview": "large",
+              "max-snippet": -1,
+              "max-video-preview": -1,
+            },
           },
-        },
     openGraph: {
       title,
       description,

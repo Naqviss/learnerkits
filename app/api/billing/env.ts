@@ -7,5 +7,6 @@ export const billingEnv = (): BillingEnv => ({
   SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY,
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   PADDLE_TEST_MODE: process.env.PADDLE_TEST_MODE,
+  PREMIUM_ENABLED: process.env.NEXT_PUBLIC_PREMIUM_ENABLED,
   ...Object.fromEntries(paddleSecretNames.map((name) => [name, process.env[name]])),
 });

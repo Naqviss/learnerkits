@@ -3,7 +3,7 @@ import { resolvePaddle, type PaddleEnv, type PaddleSettings } from "./paddle-con
 import { isSameOrigin, json, readJsonBody, readSubscriptions, rpc, supabaseAdmin, userFromRequest, type Admin, type SupabaseEnv } from "../server/supabase";
 
 /** Paddle settings come in sandbox and live sets; PADDLE_TEST_MODE picks one (lib/billing/paddle-config.ts). */
-export type BillingEnv = SupabaseEnv & PaddleEnv;
+export type BillingEnv = SupabaseEnv & PaddleEnv & { PREMIUM_ENABLED?: string };
 
 type PaddleSubscription = {
   id?: unknown; status?: unknown; customer_id?: unknown; custom_data?: { user_id?: unknown } | null;
@@ -36,8 +36,8 @@ export function billingConfig(request: Request, env: BillingEnv): Response {
   const settings = settingsFor(env);
   return json(200, {
     mode: settings.mode,
-    clientToken: settings.clientToken ?? null,
-    ready: Boolean(settings.apiKey && settings.priceId && settings.clientToken),
+    clientToken: env.PREMIUM_ENABLED === "true" ? settings.clientToken ?? null : null,
+    ready: env.PREMIUM_ENABLED === "true" && Boolean(settings.apiKey && settings.priceId && settings.clientToken),
   });
 }
 const unavailable = () => json(503, { error: "Subscriptions are not available yet. Please try again later." });
@@ -50,6 +50,7 @@ const checkoutFailed = () => json(502, { error: "Checkout could not be started. 
  */
 export async function createCheckout(request: Request, env: BillingEnv): Promise<Response> {
   if (request.method !== "POST") return new Response(null, { status: 405, headers: { Allow: "POST" } });
+  if (env.PREMIUM_ENABLED !== "true") return unavailable();
   if (!isSameOrigin(request)) return json(403, { error: "Please subscribe from the LearnerKits website." });
   const admin = supabaseAdmin(env);
   const settings = settingsFor(env);

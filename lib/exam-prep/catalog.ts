@@ -277,5 +277,14 @@ export function canonicalTopicCourse(course: Course, topic: Topic): Course | nul
   return null;
 }
 
+/**
+ * Topic lessons are published for learners and linked from every course page, but are unlisted
+ * (noindex, out of the sitemap) for now. About 80 lessons built from one template went live while
+ * Google had the site demoted by its September 2026 spam update, and that update acted on exactly
+ * this pattern. Board, level, course, papers and practical pages stay indexable. Set this to true
+ * to open the lessons to search once rankings have recovered.
+ */
+export const topicLessonsIndexed: boolean = false;
+
 export const isLevelIndexable = (board: string, level: string) => liveSubjects.some((subject) => isVerified({ board, level, subject: subject.id }));
 export const isBoardIndexable = (board: string) => Boolean(getBoard(board)?.levels.some((level) => isLevelIndexable(board, level.id)));

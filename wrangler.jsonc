@@ -5,6 +5,7 @@
   "main": "worker/index.ts",
   "compatibility_date": "2026-09-27",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "vars": { "PREMIUM_ENABLED": "false" },
   // The static export. Requests served from here are free and do not count toward Worker limits.
   "assets": {
     "directory": "out",

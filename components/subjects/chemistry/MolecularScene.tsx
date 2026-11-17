@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { moleculeName, molecules, phase } from "@/lib/simulations/chemistry/model";
+import type { SolidStructure } from "@/lib/simulations/chemistry/solidStructures";
 import { bondLengths } from "@/lib/simulations/chemistry/bondLengths";
 import { loadSettings, prefersReducedMotion, renderProfile } from "@/lib/settings/storage";
 
@@ -14,7 +15,103 @@ const colors: Record<string, number> = {
   As: 0xc9a0e0, Se: 0xffb870, Br: 0xb5544f, Sn: 0x8fa3a3, Sb: 0xb98fd1, Te: 0xd9b25e, I: 0xa15fc2, Xe: 0x6bc4d1,
   Be: 0x9fd67f, Mg: 0x7fbf7f, Ti: 0xc7ccd6, Zn: 0x9a9fd6, Cd: 0xf0d9a1, Hg: 0xc7c7dc, Pb: 0x7a7d87,
   Mo: 0x7fc2c2, W: 0x5fa3c9, U: 0x6f9fd1, Nb: 0x8fd1c9, Mn: 0xb583a8, Cr: 0x6f93d1,
+  Na: 0xffbd69, Cu: 0xc9805d, Cs: 0xa678c5,
 };
+
+type CrystalPoint = { element: string; position: THREE.Vector3 };
+type StructureGeometry = { atoms: CrystalPoint[]; bonds: [number, number, number][] };
+
+function structureGeometry(structure: SolidStructure): StructureGeometry {
+  const atoms: CrystalPoint[] = [], bonds: [number, number, number][] = [];
+  const add = (element: string, x: number, y: number, z: number) => atoms.push({ element, position: new THREE.Vector3(x, y, z) });
+  const edge = (a: number, b: number, order = 1) => { if (a !== b && !bonds.some(([x, y]) => x === a && y === b || x === b && y === a)) bonds.push([a, b, order]); };
+  if (structure.layout === "rocksalt") {
+    for (let x = -1; x <= 1; x++) for (let y = -1; y <= 1; y++) for (let z = -1; z <= 1; z++) {
+      add((x + y + z) % 2 === 0 ? structure.elements[0] : structure.elements[1], x * .85, y * .85, z * .85);
+    }
+  } else if (structure.layout === "cesium-chloride") {
+    for (const x of [-1.15, 1.15]) for (const y of [-1.15, 1.15]) for (const z of [-1.15, 1.15]) add(structure.elements[0], x, y, z);
+    add(structure.elements[1], 0, 0, 0);
+  } else if (["fcc", "bcc"].includes(structure.layout)) {
+    for (const x of [-1.35, 1.35]) for (const y of [-1.35, 1.35]) for (const z of [-1.35, 1.35]) add(structure.elements[0], x, y, z);
+    if (structure.layout === "bcc") add(structure.elements[0], 0, 0, 0);
+    else {
+      for (const [axis, a, b] of [[0, 1, 2], [1, 0, 2], [2, 0, 1]]) {
+        for (const signA of [-1, 1]) for (const signB of [-1, 1]) {
+          const p = [0, 0, 0]; p[axis] = 0; p[a] = signA * 1.35; p[b] = signB * 1.35; add(structure.elements[0], p[0], p[1], p[2]);
+        }
+      }
+    }
+  } else if (structure.layout === "hcp") {
+    for (let layer = 0; layer < 3; layer++) for (let q = -2; q <= 2; q++) for (let r = -2; r <= 2; r++) {
+      if (Math.abs(q + r) > 2) continue;
+      const offset = layer % 2 ? .5 : 0;
+      add(structure.elements[0], (q + r / 2 + offset) * .84, layer * .72, r * .73);
+    }
+  } else if (structure.layout === "diamond" || structure.layout === "silica") {
+    const sites = [[0,0,0],[0,.5,.5],[.5,0,.5],[.5,.5,0]];
+    for (let x = -1; x <= 0; x++) for (let y = -1; y <= 0; y++) for (let z = -1; z <= 0; z++) for (const [sx, sy, sz] of sites) {
+      const base = [x + sx, y + sy, z + sz];
+      for (const [bx, by, bz] of [[0,0,0],[.25,.25,.25]]) {
+        add(structure.elements[0], (base[0]+bx)*2.6, (base[1]+by)*2.6, (base[2]+bz)*2.6);
+      }
+    }
+    const networkAtoms = atoms.slice();
+    const maxDistance = .44 * 2.6;
+    for (let a = 0; a < networkAtoms.length; a++) for (let b = a + 1; b < networkAtoms.length; b++) {
+      if (networkAtoms[a].position.distanceTo(networkAtoms[b].position) > maxDistance) continue;
+      if (structure.layout === "diamond") edge(a, b);
+      else {
+        const midpoint = networkAtoms[a].position.clone().add(networkAtoms[b].position).multiplyScalar(.5);
+        const oxygen = atoms.length; atoms.push({ element: structure.elements[1], position: midpoint });
+        edge(a, oxygen); edge(b, oxygen);
+      }
+    }
+    const center = new THREE.Vector3(); atoms.forEach(({ position }) => center.add(position)); center.multiplyScalar(1 / atoms.length); atoms.forEach(({ position }) => position.sub(center));
+  } else if (structure.layout === "graphite" || structure.layout === "graphene") {
+    const layers = structure.layout === "graphite" ? 3 : 1;
+    const nodeMap = new Map<string, number>();
+    const radius = .55;
+    for (let layer = 0; layer < layers; layer++) for (let col = -2; col <= 2; col++) for (let row = -2; row <= 2; row++) {
+      const cx = 1.5 * radius * col, cz = Math.sqrt(3) * radius * (row + (col & 1) * .5);
+      const ring: number[] = [];
+      for (let side = 0; side < 6; side++) {
+        const angle = (side * 60) * Math.PI / 180;
+        const px = cx + radius * Math.cos(angle), pz = cz + radius * Math.sin(angle);
+        const key = `${Math.round(px*100)}:${Math.round(pz*100)}`;
+        let index = nodeMap.get(key);
+        if (index === undefined) { index = atoms.length; nodeMap.set(key, index); add(structure.elements[0], px, layer * .62, pz); }
+        ring.push(index);
+      }
+      for (let side = 0; side < 6; side++) edge(ring[side], ring[(side+1)%6]);
+    }
+  } else if (structure.layout === "fullerene") {
+    const indices: number[] = [];
+    const count = 60, golden = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < count; i++) {
+      const y = 1 - (i / (count - 1)) * 2, radius = Math.sqrt(1 - y*y), theta = golden * i;
+      indices.push(atoms.length); add("C", Math.cos(theta)*radius*1.8, y*1.8, Math.sin(theta)*radius*1.8);
+    }
+    const pairs = new Set<string>();
+    for (const i of indices) {
+      const nearest = indices.filter(j => j !== i).map(j => ({ j, d: atoms[i].position.distanceToSquared(atoms[j].position) })).sort((a,b)=>a.d-b.d).slice(0,3);
+      for (const { j } of nearest) { const key = [i,j].sort((a,b)=>a-b).join(":"); if (!pairs.has(key)) { pairs.add(key); edge(i,j); } }
+    }
+  } else if (structure.layout === "diatomic" || structure.layout === "ice" || structure.layout === "dry-ice") {
+    const centers = [-1.8, 0, 1.8];
+    for (const x of centers) for (const z of centers) {
+      const y = (x === 0 ? -.8 : .8);
+      if (structure.layout === "diatomic") {
+        const a = atoms.length; add("I", x, y, z-.4); add("I", x, y, z+.4); edge(a,a+1);
+      } else if (structure.layout === "ice") {
+        const a = atoms.length; add("O", x, y, z); add("H", x-.28, y, z-.34); add("H", x+.28, y, z-.34); edge(a,a+1); edge(a,a+2);
+      } else {
+        const a = atoms.length; add("C", x, y, z); add("O", x, y, z-.48); add("O", x, y, z+.48); edge(a,a+1,2); edge(a,a+2,2);
+      }
+    }
+  }
+  return { atoms, bonds };
+}
 
 // Generic VSEPR direction table: given bonding domains (`count`) and lone pairs (`lone`),
 // returns unit vectors for the bonding directions. Lone pairs are removed from the front of
@@ -95,7 +192,7 @@ function anglePairs(directions: THREE.Vector3[], m: typeof molecules[number]) {
     .map(({ target, found }) => ({ pair: found, text: target === 180 ? "180°" : label(target) }));
 }
 
-export function MolecularScene({ molecule = 0, attachments, matter, temperature = 25, paused, resetKey }: { molecule?: number; attachments?: Attachment[]; matter?: boolean; temperature?: number; paused: boolean; resetKey: number }) {
+export function MolecularScene({ molecule = 0, attachments, matter, structure, temperature = 25, paused, resetKey }: { molecule?: number; attachments?: Attachment[]; matter?: boolean; structure?: SolidStructure; temperature?: number; paused: boolean; resetKey: number }) {
   const host = useRef<HTMLDivElement>(null);
   const [autoRotate, setAutoRotate] = useState(false);
   const [showLonePairs, setShowLonePairs] = useState(true);
@@ -107,7 +204,7 @@ export function MolecularScene({ molecule = 0, attachments, matter, temperature 
   const cameraControls = useRef<OrbitControls | null>(null);
   const [failed, setFailed] = useState(false);
   const attached = attachments?.map(a => `${a.atom}:${a.order}`).join(",");
-  const canShowLonePairs = !matter && attachments === undefined;
+  const canShowLonePairs = !matter && !structure && attachments === undefined;
 
   // Buttons drive zoom instead of scroll/pinch (enableZoom stays off) so the page
   // keeps scrolling normally when the pointer is over the 3D stage.
@@ -154,9 +251,9 @@ export function MolecularScene({ molecule = 0, attachments, matter, temperature 
     const particles: THREE.Mesh[] = [];
     // Element symbols sit on the camera-facing side of each atom, so hidden atoms keep hidden labels.
     const labels: { sprite: THREE.Sprite; center: THREE.Vector3; radius: number }[] = [];
-    const atom = (element: string, pos: THREE.Vector3, radius: number) => {
+    const atom = (element: string, pos: THREE.Vector3, radius: number, labelAtom = true) => {
       const mesh = new THREE.Mesh(sphere, materials[element] ?? materials.H); mesh.position.copy(pos); mesh.scale.setScalar(radius); model.add(mesh);
-      if (!matter && showLabels) { const sprite = textSprite(element, { height: radius * (element.length > 1 ? .72 : .85) }); if (sprite) { model.add(sprite); labels.push({ sprite, center: pos.clone(), radius }); } }
+      if (!matter && showLabels && labelAtom) { const sprite = textSprite(element, { height: radius * (element.length > 1 ? .72 : .85) }); if (sprite) { model.add(sprite); labels.push({ sprite, center: pos.clone(), radius }); } }
       return mesh;
     };
     const bond = (end: THREE.Vector3, order: number) => {
@@ -166,10 +263,22 @@ export function MolecularScene({ molecule = 0, attachments, matter, temperature 
         mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), end.clone().normalize()); model.add(mesh);
       }
     };
+    const connect = (start: THREE.Vector3, end: THREE.Vector3, order = 1) => {
+      const delta = end.clone().sub(start), distance = delta.length();
+      const perpendicular = delta.clone().cross(Math.abs(delta.y) < distance * .9 ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(1, 0, 0)).normalize();
+      for (let j = 0; j < order; j++) {
+        const mesh = new THREE.Mesh(new THREE.CylinderGeometry(.045, .045, distance, 10), bondMaterial);
+        mesh.position.copy(start).add(end).multiplyScalar(.5).addScaledVector(perpendicular, (j - (order - 1) / 2) * .14); mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), delta.clone().normalize()); model.add(mesh);
+      }
+    };
     if (matter) {
       const edges = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(6, 4, 3)), new THREE.LineBasicMaterial({ color: 0x89a5cf, transparent: true, opacity: .5 }));
       model.add(edges);
       for (let i = 0; i < 64; i++) particles.push(atom("O", new THREE.Vector3(), .14));
+    } else if (structure) {
+      const geometry = structureGeometry(structure);
+      geometry.bonds.forEach(([a, b, order]) => connect(geometry.atoms[a].position, geometry.atoms[b].position, order));
+      geometry.atoms.forEach(({ element, position }, i) => atom(element, position, structure.elements.length > 1 && structure.family.includes("ionic") ? .31 : .22, i < 22));
     } else {
       const m = molecules[molecule];
       atom(m.center, new THREE.Vector3(), .56);
@@ -243,7 +352,7 @@ export function MolecularScene({ molecule = 0, attachments, matter, temperature 
     return () => { cancelAnimationFrame(raf); observer.disconnect(); controls.dispose(); cameraControls.current=null; const geometries = new Set<THREE.BufferGeometry>(); const mats = new Set<THREE.Material>([...Object.values(materials),bondMaterial]); scene.traverse(o=>{ if (o instanceof THREE.Mesh || o instanceof THREE.LineSegments) { geometries.add(o.geometry); (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>mats.add(m)); } if (o instanceof THREE.Sprite) { o.material.map?.dispose(); mats.add(o.material); } }); geometries.add(sphere); geometries.forEach(g=>g.dispose()); mats.forEach(m=>m.dispose()); renderer.dispose(); renderer.domElement.remove(); };
   // Rebuild geometry only for a changed molecule/build, not for temperature, playback, or the auto-rotate toggle.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [molecule, attached, matter, resetKey, showLonePairs, showLabels, showAngles, showLengths]);
+  }, [molecule, attached, matter, structure, resetKey, showLonePairs, showLabels, showAngles, showLengths]);
   const current = molecules[molecule];
-  return <div className="chemMolecular"><div className="chemWebgl" ref={host} role="img" aria-label={matter ? `Water particles: ${phase(temperature)}` : `${current.formula} (${moleculeName(current.formula)}) molecular model`} />{!matter && <div className="chemMoleculeCard" aria-hidden="true"><strong>{current.formula}</strong><span>{moleculeName(current.formula)}</span></div>}{failed && <p className="chemRenderFallback">3D rendering is unavailable on this device. The controls, molecular data, and mission still work.</p>}<div className="chemOrbitBar"><span>Drag to rotate · touch to explore</span><div className="chemZoomGroup"><button aria-pressed={autoRotate} onClick={() => setAutoRotate(v => !v)}>{autoRotate ? "⏸ Auto-rotate" : "↻ Auto-rotate"}</button>{canShowLonePairs && <button aria-pressed={showLonePairs} onClick={() => setShowLonePairs(v => !v)}>{showLonePairs ? "Hide lone pairs" : "Show lone pairs"}</button>}{!matter && <button aria-pressed={showLabels} onClick={() => setShowLabels(v => !v)}>Atom labels</button>}{canShowLonePairs && <button aria-pressed={showAngles} onClick={() => setShowAngles(v => !v)}>Bond angles</button>}{canShowLonePairs && bondLengths[current.formula] && <button aria-pressed={showLengths} onClick={() => setShowLengths(v => !v)}>Bond lengths</button>}<button onClick={() => zoomBy(1 / 1.2)} aria-label="Zoom in">+</button><button onClick={() => zoomBy(1.2)} aria-label="Zoom out">−</button><button onClick={() => cameraControls.current?.reset()}>Reset view</button></div></div></div>;
+  return <div className="chemMolecular"><div className="chemWebgl" ref={host} role="img" aria-label={matter ? `Water particles: ${phase(temperature)}` : structure ? `${structure.name}, ${structure.family}: ${structure.note}` : `${current.formula} (${moleculeName(current.formula)}) molecular model`} />{!matter && <div className="chemMoleculeCard" aria-hidden="true"><strong>{structure?.formula ?? current.formula}</strong><span>{structure ? `${structure.name} · ${structure.family}` : moleculeName(current.formula)}</span>{structure && <><small>{structure.note}</small><small>Reference distances: {structure.distances.join(" · ")}</small><small>Reference values; model not to scale.</small></>}</div>}{failed && <p className="chemRenderFallback">3D rendering is unavailable on this device. The controls, molecular data, and mission still work.</p>}<div className="chemOrbitBar"><span>Drag to rotate · touch to explore</span><div className="chemZoomGroup"><button aria-pressed={autoRotate} onClick={() => setAutoRotate(v => !v)}>{autoRotate ? "⏸ Auto-rotate" : "↻ Auto-rotate"}</button>{canShowLonePairs && <button aria-pressed={showLonePairs} onClick={() => setShowLonePairs(v => !v)}>{showLonePairs ? "Hide lone pairs" : "Show lone pairs"}</button>}{!matter && <button aria-pressed={showLabels} onClick={() => setShowLabels(v => !v)}>Atom labels</button>}{canShowLonePairs && <button aria-pressed={showAngles} onClick={() => setShowAngles(v => !v)}>Bond angles</button>}{canShowLonePairs && bondLengths[current.formula] && <button aria-pressed={showLengths} onClick={() => setShowLengths(v => !v)}>Bond lengths</button>}<button onClick={() => zoomBy(1 / 1.2)} aria-label="Zoom in">+</button><button onClick={() => zoomBy(1.2)} aria-label="Zoom out">−</button><button onClick={() => cameraControls.current?.reset()}>Reset view</button></div></div></div>;
 }

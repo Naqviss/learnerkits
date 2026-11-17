@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, ...course } = await params;
   if (locale !== "en" || !isCourse(course) || !getPapers(course)) return {};
   const title = courseTitle(course);
-  return localizedMetadata("en", `${coursePath(course)}/papers`, `${title} Papers Explained: Format, Time & Marks | Exam Prep`, `See every ${title} exam paper: what it assesses, its duration and marks, and where to practise for it, including practical-skills papers.`, { englishOnly: true });
+  return localizedMetadata("en", `${coursePath(course)}/papers`, `${title} Papers: Format, Timing & Marks`, `See every ${title} exam paper: what it assesses, its duration and marks, and where to practise for it, including practical-skills papers.`, { englishOnly: true });
 }
 
 function action(paper: Paper, base: string, cambridge: boolean): { href: string; label: string } {

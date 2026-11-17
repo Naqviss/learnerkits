@@ -89,7 +89,7 @@ export function AuthButton({ labels, locale = "en", settingsLabel }: { labels: L
       </summary>
       <div className="authMenuPanel">
         <p><strong>{name}{premiumEnabled && premium === "premium" && <span className="premiumBadge">{premiumCopy.badge}</span>}</strong>{user.email && user.email !== name && <span>{user.email}</span>}</p>
-        {premiumEnabled && premium === "premium" && <button type="button" className="authMenuAction" onClick={manageSubscription} disabled={busy}>{premiumCopy.manage}</button>}
+        {premium === "premium" && <button type="button" className="authMenuAction" onClick={manageSubscription} disabled={busy}>{premiumCopy.manage}</button>}
         {premiumEnabled && premium === "free" && <button type="button" className="authMenuAction isUpgrade" onClick={() => { if (menu.current) menu.current.open = false; openPremium("menu"); }}>{premiumCopy.goPremium}</button>}
         {settingsLabel && <Link className="authMenuAction authMenuLink" href={`/${locale}/settings`} onClick={() => { if (menu.current) menu.current.open = false; }}>{settingsLabel}</Link>}
         {menuError && <p role="alert" className="authMenuError">{menuError}</p>}

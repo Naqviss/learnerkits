@@ -12,11 +12,12 @@ const teacherPlans = [
   { name: "Teacher Kit Classroom", seats: "Up to 30 students", price: "$19", note: "For teachers managing several classes" },
   { name: "Teacher Kit School", seats: "Up to 500 students", price: "$49", note: "For a department or school" },
 ];
+const studentPlanEnabled = process.env.NEXT_PUBLIC_PREMIUM_ENABLED === "true";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale: raw } = await params;
   if (raw !== "en") return {};
-  return localizedMetadata("en", "/pricing", "LearnerKits Plans and Pricing", "Compare Free Explorer, Student Plus and Teacher Kit plans for science learning and teaching.", { englishOnly: true });
+  return localizedMetadata("en", "/pricing", "LearnerKits Plans and Pricing", studentPlanEnabled ? "Compare Free Explorer, Student Plus and Teacher Kit plans for science learning and teaching." : "Explore free science learning and Teacher Kit plans for classrooms.", { englishOnly: true });
 }
 
 export function generateStaticParams() { return [{ locale: "en" }]; }
@@ -29,15 +30,15 @@ export default async function PricingPage({ params }: { params: Promise<{ locale
     <header className={styles.hero}>
       <span className="eyebrow">LearnerKits plans</span>
       <h1>Choose how you learn or teach.</h1>
-      <p>Explore science for free, add more study support with Student Plus, or bring your classes together with Teacher Kit.</p>
+      <p>{studentPlanEnabled ? "Explore science for free, add more study support with Student Plus, or bring your classes together with Teacher Kit." : "Explore science for free or bring your classes together with Teacher Kit."}</p>
     </header>
 
     <section className={styles.section} aria-labelledby="student-plans">
       <div className={styles.sectionHead}>
         <div><span className="eyebrow">For students</span><h2 id="student-plans">Learn at your pace</h2></div>
-        <p>Start exploring for free. Upgrade when you want a tutor and more exam practice.</p>
+        <p>{studentPlanEnabled ? "Start exploring for free. Upgrade when you want a tutor and more exam practice." : "Interactive simulations and starter mock exams are free to explore."}</p>
       </div>
-      <div className={styles.studentGrid}>
+      <div className={`${styles.studentGrid} ${!studentPlanEnabled ? styles.singleStudentPlan : ""}`}>
         <article className={styles.card}>
           <span className={styles.planLabel}>Free Explorer</span>
           <h3>Free</h3>
@@ -49,7 +50,7 @@ export default async function PricingPage({ params }: { params: Promise<{ locale
           </ul>
           <Link className="button" href="/en/simulations">Explore for free</Link>
         </article>
-        <article className={`${styles.card} ${styles.featured}`}>
+        {studentPlanEnabled && <article className={`${styles.card} ${styles.featured}`}>
           <span className={styles.planLabel}>Student Plus</span>
           <h3><strong>{premiumPrice.current}</strong><span>/month for 6 months</span></h3>
           <p className={styles.summary}>Then {premiumPrice.regular}/month. Cancel anytime.</p>
@@ -62,7 +63,7 @@ export default async function PricingPage({ params }: { params: Promise<{ locale
           </ul>
           <PremiumCta locale="en" />
           <small className={styles.fine}>Billed monthly in USD through Paddle. Taxes may apply. <Link href="/en/premium">Full plan details</Link>.</small>
-        </article>
+        </article>}
       </div>
     </section>
 

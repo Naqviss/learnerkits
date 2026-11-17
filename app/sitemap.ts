@@ -6,10 +6,10 @@ import { getArticle } from "@/lib/articles";
 import { examPrepIndexablePaths } from "@/lib/exam-prep/paths";
 import { mockExamIndexablePaths } from "@/lib/mock-exams/catalog";
 import { getHomeCopy } from "@/lib/home/content";
-import { defaultLocale, locales } from "@/lib/i18n/config";
+import { defaultLocale, indexedLocales } from "@/lib/i18n/config";
 import { hreflangCodes, localizedUrl, siteUrl } from "@/lib/seo/metadata";
 import { getTopicGuides } from "@/lib/seo/topic-guides";
-import { moleculeReferences } from "@/lib/seo/molecules";
+import { indexedMoleculeReferences } from "@/lib/seo/molecules";
 import { subjectImages, subjectImagesUpdatedAt } from "@/lib/subjects/images";
 import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 
@@ -17,7 +17,7 @@ export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // User-specific tools and previews are noindex and should not consume crawl budget.
-  const core = ["/", "/simulations", "/subjects", "/molecule-kit", "/donate", "/premium", "/about", "/contact", "/privacy", "/cookies", "/terms", "/refunds", "/disclaimer", "/editorial-policy", "/faq", "/accessibility"];
+  const core = ["/", "/simulations", "/subjects", "/molecule-kit", "/donate", "/about", "/contact", "/privacy", "/cookies", "/terms", "/refunds", "/disclaimer", "/editorial-policy", "/faq", "/accessibility"];
   const subjectPaths = visibleSubjectSlugs.map((slug) => `/subjects/${slug}`);
   const subjectImageEntries = Object.fromEntries(visibleSubjectSlugs.flatMap((slug) => {
     const image = subjectImages[slug];
@@ -26,11 +26,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const simulationPaths = visibleSubjectSlugs.flatMap((slug) => subjectsCatalog[slug].simulations.map((sim) => `/simulations/${sim.slug}`));
   const topicGuidePaths = ["/guides", "/guides/environmental-city-builder", ...getTopicGuides().map((guide) => `/guides/${guide.slug}`)];
   const articlePaths = ["/articles", ...articleSummaries.map((article) => `/articles/${article.slug}`)];
-  const moleculePaths = ["/molecules", ...moleculeReferences.map((molecule) => `/molecules/${molecule.slug}`)];
+  // Only the molecule pages open to search; the rest are unlisted (see indexedMoleculeSlugs).
+  const moleculePaths = ["/molecules", ...indexedMoleculeReferences().map((molecule) => `/molecules/${molecule.slug}`)];
   const learningToolPaths = [...examPrepIndexablePaths, ...mockExamIndexablePaths, "/teacher-kit", "/pricing"];
   const isEnglishOnly = (path: string) => ["/guides", "/articles", "/molecules", "/exam-prep", "/mock-exams", "/teacher-kit", "/pricing"].some((prefix) => path.startsWith(prefix));
   const lastModified = process.env.NEXT_PUBLIC_CONTENT_UPDATED_AT ?? "2026-09-19";
-  return locales.flatMap((locale) => {
+  // Languages that are published but not yet open to search engines are left out entirely.
+  return indexedLocales.flatMap((locale) => {
     // The focused guides are intentionally English-only until translated; do not publish
     // duplicate localized URLs that point to the same English editorial content.
     const paths = locale === defaultLocale ? [...core, ...subjectPaths, ...simulationPaths, ...topicGuidePaths, ...articlePaths, ...moleculePaths, ...learningToolPaths] : [...core, ...subjectPaths, ...simulationPaths];
@@ -49,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ? { languages: { en: localizedUrl(defaultLocale, path), "x-default": localizedUrl(defaultLocale, path) } }
       : {
           languages: {
-            ...Object.fromEntries(locales.map((alt) => [hreflangCodes[alt], localizedUrl(alt, path)])),
+            ...Object.fromEntries(indexedLocales.map((alt) => [hreflangCodes[alt], localizedUrl(alt, path)])),
             "x-default": localizedUrl(defaultLocale, path),
           },
         },

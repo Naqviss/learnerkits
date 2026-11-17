@@ -41,7 +41,7 @@ function ActiveSimulationAssistant({ locale, simulation }: { locale: string; sim
 
   useEffect(() => { log.current?.scrollTo({ top: log.current.scrollHeight }); }, [messages, busy, error]);
 
-  if (!premiumEnabled) return null;
+  if (!premiumEnabled && premium !== "premium") return null;
 
   const toggle = () => {
     if (premium === "premium") setOpen((value) => !value);

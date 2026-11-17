@@ -11,7 +11,7 @@ A browser-based educational simulation platform built around **learn by experime
 - **71 simulations total**
 - **16 SEO-priority simulations** surfaced as the first build/promote collection
 - Light theme by default, plus Dark and System appearance modes
-- Published in English and Spanish (`en`, `es`); other translations remain in the source for later re-enablement
+- Published in English and Spanish (`en`, `es`); only English is open to search engines (`indexedLocales`). Other translations remain in the source for later re-enablement
 
 The original labs are retained. The published catalog currently contains 71 indexable simulations; verify the catalog count when adding or removing a lab.
 
@@ -222,6 +222,18 @@ The English homepage stays at `/` for every browser language. Cloudflare's `publ
 
 Language publication is controlled by `locales` in `lib/i18n/config.ts`, currently `["en", "es"]`. The selector lists only published languages. Unpublished translations are not exported or listed in the sitemap/hreflang, and the Worker temporarily redirects their old URLs to the equivalent English URL (307, preserving query strings). Restore selected languages in `locales`, or set it to `supportedLocales`, then rebuild and deploy to enable them again. Keep the translation dictionaries intact. Existing language cookies cannot select an unpublished language.
 
+Publishing a language and opening it to search engines are separate switches. `indexedLocales` in the same file, currently `["en"]`, lists the languages search engines may index. A published language that is not in it (Spanish today) stays available through the language selector, but every page is `noindex, follow` and it is left out of the sitemap and hreflang; the build fails if any such page is indexable. Add a language to `indexedLocales` only when every page is fully translated, including simulation controls and the information pages, and a fluent speaker has reviewed it. Release one language at a time.
+
+**Why (Google September 2026 spam update).** Search Console shows the site lost almost all Google impressions between 30 September and 7 October 2026, in step with that update's rollout (24 September to 8 October). There is no manual action. The update acted on templated pages published at scale and on unreviewed translations, so three groups of pages are now published but unlisted (`noindex, follow`, not in the sitemap):
+
+- languages outside `indexedLocales`;
+- molecule reference pages outside the 40-page core set in `indexedMoleculeSlugs` (`lib/seo/molecules.ts`), which covers every VSEPR class;
+- exam-prep topic lessons, while `topicLessonsIndexed` in `lib/exam-prep/catalog.ts` is `false`.
+
+Reopen these gradually once Google impressions recover, not all at once.
+
+**Click-through (molecule pages).** Before the drop, molecule pages earned 0.1% CTR where their positions normally earn about 4%. Titles now lead with the formula and chemical name and use "shape" (`moleculeSearchCopy` in `lib/seo/molecules.ts`). Each molecule also gets a generated ball-and-stick picture, because the 3D canvas is invisible to search engines: `app/images/molecules/[file]/route.ts` exports `/images/molecules/{slug}.svg` (shown on the page, `primaryImageOfPage`) and `{slug}.jpg` (1200×630 `og:image`, rasterized at build time with `sharp`). The drawing code in `lib/seo/molecule-image.ts` mirrors the geometry, colors and camera of `components/subjects/chemistry/MolecularScene.tsx`; keep them in sync.
+
 The apex domain (`learnerkits.com`) must redirect to `https://www.learnerkits.com` using a Cloudflare domain redirect rule that preserves the path and query string. Workers static-asset `_redirects` does not support domain-level redirects. Configure this at the edge rather than running every static request through the Worker.
 
 ## Science learning articles
@@ -304,7 +316,7 @@ Publisher readiness also requires account-side work: verify the public contact m
 
 English-only sections, prerendered like the rest of the site:
 
-- `/en/exam-prep` — board → level → subject → topic lessons, paper navigator and two practical stations. Data lives in `lib/exam-prep/`. Only verified syllabi are indexable; illustrative mappings are `noindex` and stay out of the sitemap.
+- `/en/exam-prep` — board → level → subject → topic lessons, paper navigator and two practical stations. Data lives in `lib/exam-prep/`. Only verified syllabi are indexable; illustrative mappings are `noindex` and stay out of the sitemap. Topic lessons are unlisted for now (`topicLessonsIndexed`); board, level, course, papers and practical pages are indexable.
 - `/en/mock-exams` — timed mock exams with original questions (`lib/mock-exams/`).
 - `/en/teacher-kit` (public page) and `/en/teacher-kit/dashboard` — classes, lesson planner, subject kits, question bank, papers, assignments, marking and class insights.
 - `/en/classroom` — students join a class with a code and submit assignments.

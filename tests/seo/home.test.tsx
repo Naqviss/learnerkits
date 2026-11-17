@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import Home, { generateMetadata } from "@/app/[locale]/page";
-import { locales } from "@/lib/i18n/config";
+import { isIndexedLocale, locales } from "@/lib/i18n/config";
 import { getHomeCopy } from "@/lib/home/content";
 import { localizedUrl } from "@/lib/seo/metadata";
 import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
@@ -38,8 +38,10 @@ describe("homepage discovery and localized metadata", () => {
       const meta = await generateMetadata({ params: Promise.resolve({ locale }) });
       expect(meta.title).toEqual({ absolute: copy.title });
       expect(copy.title.match(/LearnerKits/g)).toHaveLength(1);
-      expect(meta).toMatchObject({ description: copy.description, alternates: { canonical: localizedUrl(locale, "/") }, robots: { index: true, follow: true }, openGraph: { title: copy.title, description: copy.description }, twitter: { title: copy.title } });
-      expect(sitemap().find((entry) => entry.url === localizedUrl(locale, "/"))?.lastModified).toBe(copy.updatedAt);
+      // Only languages open to search are indexable and listed in the sitemap.
+      const indexed = isIndexedLocale(locale);
+      expect(meta).toMatchObject({ description: copy.description, alternates: { canonical: localizedUrl(locale, "/") }, robots: { index: indexed, follow: true }, openGraph: { title: copy.title, description: copy.description }, twitter: { title: copy.title } });
+      expect(sitemap().find((entry) => entry.url === localizedUrl(locale, "/"))?.lastModified).toBe(indexed ? copy.updatedAt : undefined);
     });
   }
 });

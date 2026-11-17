@@ -1,4 +1,4 @@
-import { boards, canonicalTopicCourse, coursePath, courses, getSyllabus, isBoardIndexable, isLevelIndexable, isVerified, topicPath } from "./catalog";
+import { boards, canonicalTopicCourse, coursePath, courses, getSyllabus, isBoardIndexable, isLevelIndexable, isVerified, topicLessonsIndexed, topicPath } from "./catalog";
 import { getPapers } from "./papers";
 import { practicalKinds } from "./practical";
 
@@ -10,7 +10,7 @@ export const examPrepIndexablePaths: string[] = [
   ...boards.flatMap((board) => board.levels.filter((level) => isLevelIndexable(board.id, level.id)).map((level) => `/exam-prep/${board.id}/${level.id}`)),
   ...courses.filter(isVerified).flatMap((course) => [
     coursePath(course),
-    ...getSyllabus(course).filter((topic) => !canonicalTopicCourse(course, topic)).map((topic) => topicPath(course, topic)),
+    ...(topicLessonsIndexed ? getSyllabus(course).filter((topic) => !canonicalTopicCourse(course, topic)).map((topic) => topicPath(course, topic)) : []),
     ...(getPapers(course) ? [`${coursePath(course)}/papers`] : []),
   ]),
   ...practicalKinds.map((kind) => `/exam-prep/practicals/${kind}`),

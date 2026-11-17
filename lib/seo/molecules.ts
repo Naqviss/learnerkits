@@ -82,6 +82,33 @@ export const moleculeReferences: MoleculeReference[] = molecules.map((m, index) 
   };
 });
 
+// Reference pages open to search engines: the standard examples general-chemistry courses teach
+// for each of the 13 VSEPR classes. Every other molecule page stays published and linked from
+// the shapes chart, but is unlisted (noindex, out of the sitemap). Google's September 2026 spam
+// update demoted the site when all ~120 pages built from this one template were indexable at
+// once. To open another page to search, add its slug here.
+const indexedMoleculeSlugs = new Set([
+  // AX₂, AX₂E, AX₂E₂, AX₂E₃
+  "carbon-dioxide-co2", "beryllium-chloride-becl2",
+  "sulfur-dioxide-so2", "ozone-o3", "nitrite-ion-no2",
+  "water-h2o", "hydrogen-sulfide-h2s", "oxygen-difluoride-of2", "sulfur-dichloride-scl2",
+  "xenon-difluoride-xef2", "triiodide-ion-i3",
+  // AX₃, AX₃E, AX₃E₂
+  "boron-trifluoride-bf3", "boron-trichloride-bcl3", "aluminum-chloride-alcl3", "sulfur-trioxide-so3", "nitrate-ion-no3", "carbonate-ion-co3",
+  "ammonia-nh3", "phosphorus-trichloride-pcl3", "phosphine-ph3", "nitrogen-trifluoride-nf3", "hydronium-ion-h3o", "chlorate-ion-clo3",
+  "chlorine-trifluoride-clf3", "bromine-trifluoride-brf3",
+  // AX₄, AX₄E, AX₄E₂
+  "methane-ch4", "carbon-tetrachloride-ccl4", "carbon-tetrafluoride-cf4", "silicon-tetrachloride-sicl4", "ammonium-ion-nh4", "sulfate-ion-so4", "phosphate-ion-po4", "perchlorate-ion-clo4",
+  "sulfur-tetrafluoride-sf4",
+  "xenon-tetrafluoride-xef4",
+  // AX₅, AX₅E, AX₆
+  "phosphorus-pentachloride-pcl5", "phosphorus-pentafluoride-pf5",
+  "bromine-pentafluoride-brf5", "iodine-pentafluoride-if5",
+  "sulfur-hexafluoride-sf6",
+]);
+export const isMoleculeIndexed = (m: MoleculeReference) => indexedMoleculeSlugs.has(m.slug);
+export const indexedMoleculeReferences = () => moleculeReferences.filter(isMoleculeIndexed);
+
 export function getMoleculeReference(slug: string) {
   return moleculeReferences.find((m) => m.slug === slug);
 }
@@ -105,8 +132,8 @@ export function getVseprClasses() {
 const numberWords = ["zero", "one", "two", "three", "four", "five", "six"];
 const pairs = (n: number, noun: string) => `${numberWords[n]} ${noun}${n === 1 ? "" : "s"}`;
 
-// Short bond-angle label for search titles and descriptions.
-function angleShort(m: MoleculeReference) {
+// Short bond-angle label for search titles, descriptions and the molecule images.
+export function angleShort(m: MoleculeReference) {
   switch (m.shape) {
     case "Trigonal bipyramidal": return "90° & 120°";
     case "Seesaw": return "<90° & <120°";
@@ -122,28 +149,43 @@ const sentenceShape = (shape: string) => (/^[A-Z]-/.test(shape) ? shape : shape.
 
 // Search results show the plain formula people type ("PF5", "SO4 2-", not "PF₅") so the query
 // terms match, and a description short enough (≤ 160 characters) that the reason to click is not truncated.
-export function moleculeSearchCopy(m: MoleculeReference) {
+// The plain formula people type: "NO3-" for single charges, "SO4 2-" for larger ones (a space so the
+// charge digit is not read as a subscript).
+export function plainFormula(m: MoleculeReference) {
   const [, magnitude = "", sign = ""] = m.formula.match(/([⁰¹²³⁴⁵⁶⁷⁸⁹]*)([⁺⁻])$/) ?? [];
   const ascii = m.asciiFormula.replace(/[+-]$/, "");
   const charge = `${magnitude.replace(/./g, (d) => superscriptDigits[d])}${sign === "⁻" ? "-" : sign === "⁺" ? "+" : ""}`;
-  // Single charges read like "NO3-"; larger ones get a space so the digit is not read as a subscript ("SO4 2-").
-  const formula = magnitude ? `${ascii} ${charge}` : `${ascii}${charge}`;
+  return magnitude ? `${ascii} ${charge}` : `${ascii}${charge}`;
+}
+
+export function moleculeSearchCopy(m: MoleculeReference) {
+  const formula = plainFormula(m);
   const angle = angleShort(m);
   const plural = angle.includes("&") ? "s" : "";
-  // Titles promise what the page adds (Lewis steps, 3D model) instead of stating the shape: the SERP
-  // answer alone was satisfying "x molecular geometry" searches without a click.
-  const extra = lewisSteps(m) ? "Lewis Structure" : "Shape";
+  // Search Console (Sep–Oct 2026) showed these pages earning 0.1% CTR where their positions normally earn
+  // about 4%. Titles therefore use the words searchers type: the formula first, then the chemical name
+  // (a large share of queries use the name, e.g. "ammonia molecular geometry", "triiodide shape"), and
+  // "Shape" (in about a fifth of queries) rather than "Lewis Structure" (2%). Titles have no site-name
+  // suffix so the words fit before Google truncates; Google shows the site name separately.
+  const name = titleCase(m.name);
   const title = [
-    `${formula} Molecular Geometry, ${extra} & Bond Angle${plural} (3D)`,
-    `${formula} Molecular Geometry, ${extra} & Bond Angle${plural}`,
-    `${formula} Molecular Geometry & ${extra} (3D Model)`,
-  ].find((text) => text.length <= 60) ?? `${formula} Molecular Geometry & ${extra}`;
+    `${formula} (${name}) Molecular Geometry, Shape & Bond Angle${plural} (3D)`,
+    `${formula} (${name}) Molecular Geometry, Shape & Bond Angle${plural}`,
+    `${formula} (${name}) Molecular Geometry & Shape (3D)`,
+    `${formula} (${name}) Molecular Geometry & Shape`,
+    `${formula} Molecular Geometry, Shape & Bond Angle${plural} (3D)`,
+    `${formula} Molecular Geometry & Shape (3D Model)`,
+  ].find((text) => text.length <= 60) ?? `${formula} Molecular Geometry & Shape`;
+  // Descriptions lead with the question the page answers and the name, then what only the page has.
+  const lowerName = m.name[0].toLowerCase() + m.name.slice(1);
   const checks = m.polarity === "Ion" ? "electron geometry, bond angles and hybridization" : "electron geometry, bond angles, hybridization and polarity";
-  const lewis = lewisSteps(m) ? ", draw its Lewis structure step by step," : "";
+  const shape = m.shape.toLowerCase();
+  const lewis = lewisSteps(m) ? ", draw the Lewis structure," : "";
   const description = [
-    `Why is ${formula} ${m.shape.toLowerCase()}? Rotate a free 3D model of ${m.name.toLowerCase()}${lewis} and check its ${checks}.`,
-    `Why is ${formula} ${m.shape.toLowerCase()}? Rotate a free 3D model${lewis} and check its ${checks}.`,
-    `Why is ${formula} ${m.shape.toLowerCase()}? Rotate a free 3D model and check its ${checks}.`,
+    `Why is ${formula} (${lowerName}) ${shape}? Rotate a free 3D model${lewis} and check ${checks}.`,
+    `Why is ${formula} (${lowerName}) ${shape}? Rotate a free 3D model and check ${checks}.`,
+    `Why is ${formula} ${shape}? Rotate a free 3D model${lewis} and check ${checks}.`,
+    `Why is ${formula} ${shape}? Rotate a free 3D model and check ${checks}.`,
   ].find((text) => text.length <= 160)!;
   return { title, description };
 }

@@ -18,7 +18,7 @@ export function generateStaticParams() { return practicalKinds.map((kind) => ({ 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, kind } = await params;
   if (locale !== "en" || !isPracticalKind(kind)) return {};
-  return localizedMetadata("en", `/exam-prep/practicals/${kind}`, `${copy[kind].seoTitle} | Exam Prep`, copy[kind].seoDescription, { englishOnly: true });
+  return localizedMetadata("en", `/exam-prep/practicals/${kind}`, copy[kind].seoTitle, copy[kind].seoDescription, { englishOnly: true });
 }
 
 export default async function PracticalPage({ params }: Props) {

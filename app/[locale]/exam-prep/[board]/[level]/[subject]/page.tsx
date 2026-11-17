@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, ...course } = await params;
   if (locale !== "en" || !isCourse(course)) return {};
   const title = courseTitle(course);
-  return localizedMetadata("en", coursePath(course), `${title} Topics, Labs & Practice | Exam Prep`, `Browse ${title} topics. Each one has a short concept lesson, a worked example, a practice question and a linked interactive LearnerKits lab.`, { englishOnly: true, noIndex: !isVerified(course) });
+  return localizedMetadata("en", coursePath(course), `${title} Topics, Labs & Practice`, `Browse ${title} topics. Each one has a short concept lesson, a worked example, a practice question and a linked interactive LearnerKits lab.`, { englishOnly: true, noIndex: !isVerified(course) });
 }
 
 export default async function CoursePage({ params }: Props) {

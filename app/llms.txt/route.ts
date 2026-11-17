@@ -5,6 +5,7 @@ import { locales, localeNames } from "@/lib/i18n/config";
 import { siteSlogan, siteUrl } from "@/lib/seo/metadata";
 import { getTopicGuides } from "@/lib/seo/topic-guides";
 import { moleculeReferences } from "@/lib/seo/molecules";
+import { balancedEquations, balancingAnswer } from "@/lib/seo/balancing-equations";
 import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 
 export const dynamic = "force-static";
@@ -73,6 +74,12 @@ ${articleLinks}
 ${guideLinks}
 
 ${subjectSections.join("\n\n")}
+
+## Balancing chemical equations (English)
+
+${balancingAnswer}
+
+- [How to balance chemical equations: steps, examples & practice](${siteUrl}/en/simulations/balance-equation): step-by-step method, worked examples (combustion and a redox half-equation), common mistakes, and ${balancedEquations().length} balanced equations with answers, plus a free practice game.
 
 ## Molecule reference (VSEPR, English)
 

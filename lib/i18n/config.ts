@@ -6,6 +6,17 @@ export const defaultLocale: Locale = "en";
 // supportedLocales so more translations can be restored by adding them here.
 export const locales: readonly Locale[] = ["en", "es"];
 
+// Languages search engines may index. A published language that is not listed here stays
+// available to visitors but is `noindex` and left out of the sitemap and hreflang. Add a
+// language only when every page in it is fully translated (including simulation controls and
+// the information pages) and a fluent speaker has reviewed it: partly translated copies of the
+// English pages are what Google's September 2026 spam update demoted this site for.
+export const indexedLocales: readonly Locale[] = ["en"];
+
+export function isIndexedLocale(value: string): boolean {
+  return (indexedLocales as readonly string[]).includes(value);
+}
+
 export const localeNames: Record<Locale, string> = {
   en: "English",
   es: "Español",

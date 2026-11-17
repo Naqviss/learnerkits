@@ -2,7 +2,7 @@ import "../globals.css";
 import { ScrollToTop } from "@/components/navigation/ScrollToTop";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { locales, isLocale, localeDirection } from "@/lib/i18n/config";
+import { locales, isIndexedLocale, isLocale, localeDirection } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/getMessages";
 import { Nav } from "@/components/navigation/Nav";
 import { Footer } from "@/components/navigation/Footer";
@@ -13,7 +13,9 @@ import { adsenseClientId } from "@/lib/adsense/config";
 import { siteUrl } from "@/lib/seo/metadata";
 
 export function generateStaticParams() { return locales.map((locale) => ({ locale })); }
-export async function generateMetadata({ params }: { params: Promise<{locale:string}> }): Promise<Metadata> { const { locale: raw } = await params; const locale = isLocale(raw) ? raw : "en"; const m = getMessages(locale),adsense=adsenseClientId(); return { metadataBase: new URL(siteUrl), title: { default: m.meta.title, template: `%s · ${m.meta.title}` }, description: m.meta.description, applicationName: "LearnerKits", creator: "LearnerKits", publisher: "LearnerKits", formatDetection: { telephone: false }, icons: { icon: "/favicon.svg", shortcut: "/favicon.svg", apple: "/learnerkits-mark.svg" }, verification: { google: "9SDKLsHd0vlmWO8Hl0c71834IrwGrBKIz_wTrxpm1Xk" },other:{"msvalidate.01":"055069CDF0FF795D8165DD9C833DC616",...(adsense?{"google-adsense-account":adsense}:{})} }; }
+// Pages set their own robots through localizedMetadata; the robots default here covers any page
+// in a language not yet open to search engines that does not.
+export async function generateMetadata({ params }: { params: Promise<{locale:string}> }): Promise<Metadata> { const { locale: raw } = await params; const locale = isLocale(raw) ? raw : "en"; const m = getMessages(locale),adsense=adsenseClientId(); return { metadataBase: new URL(siteUrl), title: { default: m.meta.title, template: `%s · ${m.meta.title}` }, description: m.meta.description, applicationName: "LearnerKits", creator: "LearnerKits", publisher: "LearnerKits", formatDetection: { telephone: false }, icons: { icon: "/favicon.svg", shortcut: "/favicon.svg", apple: "/learnerkits-mark.svg" }, verification: { google: "9SDKLsHd0vlmWO8Hl0c71834IrwGrBKIz_wTrxpm1Xk" }, ...(isIndexedLocale(locale) ? {} : { robots: { index: false, follow: true } }),other:{"msvalidate.01":"055069CDF0FF795D8165DD9C833DC616",...(adsense?{"google-adsense-account":adsense}:{})} }; }
 const themeBoot = `(function(){try{var raw=localStorage.getItem('science-sim-settings-v1');var s=raw?JSON.parse(raw):{};var t=s.theme||'light';if(t==='system')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;document.documentElement.dataset.motion=s.motion||'system'}catch(e){document.documentElement.dataset.theme='light'}})();`;
 const googleAnalyticsId = "G-VZ63RT6XYN";
 // Ad delivery is enabled only after the publisher configures advertising consent in AdSense.

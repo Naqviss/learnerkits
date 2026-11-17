@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { locales, supportedLocales } from "@/lib/i18n/config";
+import { indexedLocales, locales, supportedLocales } from "@/lib/i18n/config";
 import { localizedMetadata } from "@/lib/seo/metadata";
 import sitemap from "@/app/sitemap";
 import { LanguageSelector } from "@/components/navigation/LanguageSelector";
@@ -19,15 +19,33 @@ describe("published locales", () => {
     expect(locales).toEqual(["en", "es"]);
   });
 
-  it("lists only published locales in the sitemap and alternates", () => {
+  it("opens only English to search engines", () => {
+    expect(indexedLocales).toEqual(["en"]);
+    expect(indexedLocales.every((locale) => locales.includes(locale))).toBe(true);
+  });
+
+  it("lists only search-indexed languages in the sitemap and hreflang", () => {
     for (const entry of sitemap()) {
-      expect(new URL(entry.url).pathname).toMatch(/^(\/|\/(en|es)(\/.*)?)$/);
-      expect(Object.keys(entry.alternates?.languages ?? {}).every((code) => ["en", "es", "x-default"].includes(code))).toBe(true);
+      expect(new URL(entry.url).pathname).toMatch(/^(\/|\/en(\/.*)?)$/);
+      expect(Object.keys(entry.alternates?.languages ?? {}).sort()).toEqual(["en", "x-default"]);
     }
-    expect(sitemap().some((entry) => new URL(entry.url).pathname.startsWith("/es/simulations/"))).toBe(true);
     const metadata = localizedMetadata("en", "/simulations", "Simulations", "Science labs");
-    expect(Object.keys(metadata.alternates?.languages ?? {}).sort()).toEqual(["en", "es", "x-default"]);
+    expect(Object.keys(metadata.alternates?.languages ?? {}).sort()).toEqual(["en", "x-default"]);
+    expect(metadata.robots).toMatchObject({ index: true, follow: true });
     expect(metadata.openGraph).toMatchObject({ alternateLocale: ["es_ES"] });
+  });
+
+  it("keeps Spanish pages for visitors but out of search results", () => {
+    const metadata = localizedMetadata("es", "/simulations", "Simulaciones", "Laboratorios de ciencias");
+    expect(metadata.robots).toEqual({ index: false, follow: true });
+    expect(metadata.alternates).toEqual({ canonical: "https://www.learnerkits.com/es/simulations" });
+  });
+
+  it("lets a page stay published but unlisted, and keeps private pages fully blocked", () => {
+    const unlisted = localizedMetadata("en", "/molecules/example", "Example", "Example", { englishOnly: true, unlisted: true });
+    expect(unlisted.robots).toEqual({ index: false, follow: true });
+    expect(unlisted.alternates).toEqual({ canonical: "https://www.learnerkits.com/en/molecules/example" });
+    expect(localizedMetadata("en", "/settings", "Settings", "Settings", { noIndex: true, unlisted: true }).robots).toEqual({ index: false, follow: false });
   });
 
   it("shows the language selector with published languages only", () => {

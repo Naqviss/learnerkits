@@ -1,4 +1,5 @@
 // Educational models: ideal gases, dilute solutions at 25 °C, and ideal VSEPR.
+import { solidStructures } from "./solidStructures";
 export type Values = Record<string, number>;
 export type Control = { key: string; label: string; min: number; max: number; step: number; value: number; unit?: string; options?: string[] };
 export type Activity = { slug: string; instrument: string; mission: string; hint: string; science: string; controls: Control[] };
@@ -179,19 +180,19 @@ export const moleculeNames: Record<string, string> = {
   "IF₂⁻": "Difluoroiodate ion",
 };
 export const moleculeName = (formula: string) => moleculeNames[formula] ?? formula;
-const moleculeFormulas = molecules.map(m => m.formula);
+const moleculeFormulas = [...molecules.map(m => m.formula), ...solidStructures.map(m => `${m.name} (${m.formula})`)];
 // Word-only color descriptions for the legend (matches MolecularScene's hex swatches).
 export const elementColorNames: Record<string, string> = {
   H: "white", O: "red", C: "slate", N: "blue", F: "green", B: "tan",
   Al: "lavender", Si: "sand", P: "orange", S: "yellow", Cl: "jade", Ga: "rose", Ge: "teal-gray",
   As: "purple", Se: "amber", Br: "brick", Sn: "pewter", Sb: "mauve", Te: "gold", I: "violet", Xe: "cyan",
   Be: "sage", Mg: "moss", Ti: "steel", Zn: "periwinkle", Cd: "cream", Hg: "silver", Pb: "gray",
-  Mo: "teal", W: "azure", U: "sky", Nb: "aqua", Mn: "plum", Cr: "cobalt",
+  Mo: "teal", W: "azure", U: "sky", Nb: "aqua", Mn: "plum", Cr: "cobalt", Na: "amber", Cu: "copper", Cs: "violet",
 };
 export const activities: Activity[] = [
   { slug: "gas-law-lab", instrument: "Pressure chamber", mission: "Tune the chamber to 150 ± 3 kPa.", hint: "Compress the gas or warm it to increase pressure. Try 1 mol at 300 K in about 16.6 L.", science: "PV = nRT. Ideal gas; R = 8.314 kPa·L·mol⁻¹·K⁻¹. Particle count is illustrative.", controls: [slider("volume", "Chamber volume", 5, 40, .1, 25, "L"), slider("temperature", "Temperature", 200, 600, 1, 300, "K"), slider("moles", "Gas amount", .2, 2, .1, 1, "mol")] },
   { slug: "reaction-rate-lab", instrument: "Kinetics reactor", mission: "Reach at least 80% conversion within 20 simulated seconds.", hint: "Increase temperature or use a catalyst, then restart the reaction. Conditions are locked during a run.", science: "A → B, first-order model: [A] = [A]₀e⁻ᵏᵗ. Arrhenius kinetics with a fixed prefactor calibrated to k = 0.035 s⁻¹ at 298 K and Eₐ = 40 kJ/mol. A catalyst lowers the barrier by 2.72 kJ/mol. The optional surface-controlled model scales the observed rate by exposed area; it is illustrative.", controls: [slider("temperature", "Reactor temperature", 280, 340, 1, 298, "K"), slider("concentration", "Initial A concentration", .1, 2, .1, 1, "mol/L"), choice("catalyst", "Catalyst", ["Absent", "Present"]), slider("activation", "Activation energy", 20, 60, 1, 40, "kJ/mol"), choice("rateMode", "Reaction model", ["Homogeneous", "Surface-controlled"]), slider("area", "Relative exposed area", .5, 4, .1, 1, "×")] },
-  { slug: "molecular-geometry-3d", instrument: "Molecular observatory", mission: "Find the bent molecule with two lone pairs and identify its shape.", hint: "Choose water, inspect the lone pairs, and select Bent. Drag the model to inspect it from another angle.", science: "VSEPR models electron-domain repulsion. Displayed bond angles are approximate molecular values. Ball sizes and bond lengths are illustrative.", controls: [choice("molecule", "Inspect molecule", moleculeFormulas), choice("answer", "Identify its shape", ["Choose a shape", "Linear", "Trigonal planar", "Tetrahedral", "Trigonal pyramidal", "Bent", "Trigonal bipyramidal", "Seesaw", "T-shaped", "Octahedral", "Square pyramidal", "Square planar"])] },
+  { slug: "molecular-geometry-3d", instrument: "Molecular observatory", mission: "Find the bent molecule with two lone pairs and identify its shape.", hint: "Choose water, inspect the lone pairs, and select Bent. Drag the model to inspect it from another angle. The structure presets show repeating solids rather than one molecule.", science: "VSEPR models electron-domain repulsion in discrete molecules and ions. Crystal presets are simplified structure models: extended solids do not have one molecular shape. Displayed bond angles are approximate, and atom sizes and distances are illustrative.", controls: [choice("molecule", "Inspect molecule or solid", moleculeFormulas), choice("answer", "Identify its shape", ["Choose a shape", "Linear", "Trigonal planar", "Tetrahedral", "Trigonal pyramidal", "Bent", "Trigonal bipyramidal", "Seesaw", "T-shaped", "Octahedral", "Square pyramidal", "Square planar"])] },
   { slug: "molecule-builder-3d", instrument: "Molecule workshop", mission: "Build the displayed target by attaching the correct atoms and bond orders.", hint: "Water needs two single O–H bonds; methane four single C–H bonds; carbon dioxide two double C=O bonds. Select a socket to remove a bond.", science: "This guided builder uses common neutral valences: H = 1, O = 2, C = 4. It builds three specific target molecules, not arbitrary chemical structures.", controls: [choice("target", "Target molecule", ["H₂O (Water)", "CH₄ (Methane)", "CO₂ (Carbon dioxide)"])] },
   { slug: "chemical-bonding", instrument: "Electron exchange", mission: "Classify the bond in each of three pairs: NaCl, H₂, and HCl.", hint: "NaCl forms ions; H₂ shares equally; HCl shares unequally. Move through all three pairs and check each answer.", science: "Bond character is a continuum. These examples illustrate ionic, nonpolar covalent, and polar covalent bonding; NaCl represents a formula unit of an extended lattice.", controls: [choice("pair", "Atom pair", ["Na + Cl", "H + H", "H + Cl"]), choice("answer", "Bond type", ["Choose a bond", "Ionic", "Nonpolar covalent", "Polar covalent"])] },
   { slug: "acid-base-ph", instrument: "pH analysis bench", mission: "Prepare a strong-acid solution at pH 3.00 ± 0.10.", hint: "Select HCl and set log₁₀ concentration to −3. Compare with acetic acid at the same concentration.", science: "At 25 °C, K𝑤 = 10⁻¹⁴. HCl/NaOH fully dissociate. Acetic acid uses Kₐ = 1.8 × 10⁻⁵; ammonia uses Kᵦ = 1.8 × 10⁻⁵, both with charge balance including water. Indicator colors are illustrative.", controls: [choice("solution", "Solution", ["HCl · strong acid", "CH₃COOH · weak acid", "NaOH · strong base", "NH₃ · weak base"]), slider("logC", "log₁₀ concentration", -7, -1, .1, -2, "mol/L exponent")] },
@@ -200,7 +201,11 @@ export const activities: Activity[] = [
   { slug: "states-of-matter-3d", instrument: "Thermal chamber", mission: "Observe solid, liquid, and gas water by changing temperature. Check each phase.", hint: "At 1 atm: try −20 °C, 25 °C, and 120 °C. Particle motion and spacing change with the phase.", science: "Water at 1 atm: freezing at 0 °C and boiling at 100 °C. This equilibrium illustration omits latent-heat plateaus and represents particles as spheres.", controls: [slider("temperature", "Temperature", -40, 140, 1, 25, "°C")] },
   { slug: "solubility-curve", instrument: "Crystallization bench", mission: "Leave 15–25 g of crystals from 80 g of solute in 100 g of water.", hint: "Fix the added solute at 80 g, then cool until capacity is about 60 g. Excess solute becomes crystals.", science: "Illustrative salt: solubility S = 20 + 0.8T grams per 100 g water. This teaching curve is not experimental data for a named substance. Equilibrium is immediate.", controls: [slider("temperature", "Water temperature", 0, 100, 1, 80, "°C"), slider("solute", "Added solute", 0, 120, 1, 40, "g"), slider("water", "Water mass", 50, 250, 10, 100, "g")] },
   { slug: "limiting-reagent", instrument: "Stoichiometry reactor", mission: "Make 6 mol of water with no leftover hydrogen or oxygen.", hint: "The recipe is 2 H₂ + O₂ → 2 H₂O. You need twice as many moles of H₂ as O₂.", science: "Extent ξ = min(nH₂/2, nO₂). Theoretical water = 2ξ. The reaction goes to completion. Collection yield represents product lost during isolation, without changing how much reactant was consumed.", controls: [slider("hydrogen", "Hydrogen H₂", 1, 12, 1, 4, "mol"), slider("oxygen", "Oxygen O₂", 1, 8, 1, 4, "mol"), slider("recovery", "Collection yield", 0, 100, 1, 100, "%")] },
-  { slug: "balance-equation", instrument: "Atom conservation", mission: "Balance all three equations using the smallest whole-number coefficients.", hint: "Count each element on both sides. Change coefficients, never chemical subscripts.", science: "Atoms are conserved in chemical reactions. Coefficients multiply every atom in a formula. The challenge requires the lowest whole-number ratio.", controls: [choice("reaction", "Reaction", ["Water formation", "Ammonia synthesis", "Methane combustion"])] },
+  { slug: "balance-equation", instrument: "Atom and charge conservation", mission: "Work through the O Level and A Level equation bank using the smallest whole-number coefficients.", hint: "Count each atom on both sides. For ionic equations, balance the total charge too. Change coefficients, never subscripts.", science: "Chemical equations conserve both atoms and, for ionic equations, total electric charge. Coefficients multiply every atom and charge in a formula. The challenge requires the lowest whole-number ratio.", controls: [choice("reaction", "Equation", [
+    "Water formation", "Ammonia synthesis", "Methane combustion", "Ammonia oxidation", "Potassium nitrate decomposition", "Calcium and water", "Sodium bicarbonate decomposition", "Carbon monoxide combustion",
+    "Magnesium oxidation", "Zinc and hydrochloric acid", "Sodium and water", "Calcium carbonate decomposition", "Propane combustion", "Ethanol combustion", "Iron and sulfur", "Ethene bromination", "Ethene hydrogenation", "Calcium carbonate and acid", "Sodium carbonate and acid", "Sodium hydroxide and sulfuric acid", "Zinc and copper sulfate", "Copper oxide reduction", "Silver nitrate precipitation", "Chlorine displacement",
+    "Sulfur dioxide oxidation", "Phosphorus oxidation", "Calcium nitrate decomposition", "Ethanol oxidation", "Ethene hydration", "Esterification", "Acid-base ionic equation", "Silver chloride precipitation", "Permanganate half-equation", "Dichromate half-equation", "Permanganate and iron(II)", "Dichromate and iodide", "Chlorine disproportionation", "Aluminum and hydrochloric acid", "Phosphorus chloride hydrolysis", "Phosphorus oxide and water", "Sulfur trioxide and water", "Copper nitrate decomposition", "Potassium chlorate decomposition"
+  ])] },
   { slug: "periodic-table-hunt", instrument: "Element detective", mission: "Solve three clues by selecting elements in the first 36 elements of the periodic table.", hint: "Find the group (column) and period (row) in each clue. The number in a tile is its atomic number.", science: "The first 36 elements retain their actual group and period positions. Atomic number equals proton count; shells shown for the selected examples are simplified.", controls: [] },
 ];
 export const initialValues = (activity: Activity): Values => Object.fromEntries(activity.controls.map(c => [c.key, c.value]));
@@ -208,6 +213,46 @@ export const reactions = [
   { formula: ["H₂", "O₂", "H₂O"], atoms: [{ H: 2, O: 0 }, { H: 0, O: 2 }, { H: 2, O: 1 }], split: 2, solution: [2, 1, 2] },
   { formula: ["N₂", "H₂", "NH₃"], atoms: [{ N: 2, H: 0 }, { N: 0, H: 2 }, { N: 1, H: 3 }], split: 2, solution: [1, 3, 2] },
   { formula: ["CH₄", "O₂", "CO₂", "H₂O"], atoms: [{ C: 1, H: 4, O: 0 }, { C: 0, H: 0, O: 2 }, { C: 1, H: 0, O: 2 }, { C: 0, H: 2, O: 1 }], split: 2, solution: [1, 2, 1, 2] },
+  { formula: ["NH₃", "O₂", "NO", "H₂O"], atoms: [{ N: 1, H: 3, O: 0 }, { N: 0, H: 0, O: 2 }, { N: 1, H: 0, O: 1 }, { N: 0, H: 2, O: 1 }], split: 2, solution: [4, 5, 4, 6] },
+  { formula: ["KNO₃", "KNO₂", "O₂"], atoms: [{ K: 1, N: 1, O: 3 }, { K: 1, N: 1, O: 2 }, { O: 2 }], split: 1, solution: [2, 2, 1] },
+  { formula: ["Ca", "H₂O", "Ca(OH)₂", "H₂"], atoms: [{ Ca: 1 }, { H: 2, O: 1 }, { Ca: 1, O: 2, H: 2 }, { H: 2 }], split: 2, solution: [1, 2, 1, 1] },
+  { formula: ["NaHCO₃", "Na₂CO₃", "H₂O", "CO₂"], atoms: [{ Na: 1, H: 1, C: 1, O: 3 }, { Na: 2, C: 1, O: 3 }, { H: 2, O: 1 }, { C: 1, O: 2 }], split: 1, solution: [2, 1, 1, 1] },
+  { formula: ["CO", "O₂", "CO₂"], atoms: [{ C: 1, O: 1 }, { O: 2 }, { C: 1, O: 2 }], split: 2, solution: [2, 1, 2] },
+  { formula: ["Mg", "O₂", "MgO"], atoms: [{ Mg: 1 }, { O: 2 }, { Mg: 1, O: 1 }], split: 2, solution: [2, 1, 2] },
+  { formula: ["Zn", "HCl", "ZnCl₂", "H₂"], atoms: [{ Zn: 1 }, { H: 1, Cl: 1 }, { Zn: 1, Cl: 2 }, { H: 2 }], split: 2, solution: [1, 2, 1, 1] },
+  { formula: ["Na", "H₂O", "NaOH", "H₂"], atoms: [{ Na: 1 }, { H: 2, O: 1 }, { Na: 1, O: 1, H: 1 }, { H: 2 }], split: 2, solution: [2, 2, 2, 1] },
+  { formula: ["CaCO₃", "CaO", "CO₂"], atoms: [{ Ca: 1, C: 1, O: 3 }, { Ca: 1, O: 1 }, { C: 1, O: 2 }], split: 1, solution: [1, 1, 1] },
+  { formula: ["C₃H₈", "O₂", "CO₂", "H₂O"], atoms: [{ C: 3, H: 8 }, { O: 2 }, { C: 1, O: 2 }, { H: 2, O: 1 }], split: 2, solution: [1, 5, 3, 4] },
+  { formula: ["C₂H₅OH", "O₂", "CO₂", "H₂O"], atoms: [{ C: 2, H: 6, O: 1 }, { O: 2 }, { C: 1, O: 2 }, { H: 2, O: 1 }], split: 2, solution: [1, 3, 2, 3] },
+  { formula: ["Fe", "S", "FeS"], atoms: [{ Fe: 1 }, { S: 1 }, { Fe: 1, S: 1 }], split: 2, solution: [1, 1, 1] },
+  { formula: ["C₂H₄", "Br₂", "C₂H₄Br₂"], atoms: [{ C: 2, H: 4 }, { Br: 2 }, { C: 2, H: 4, Br: 2 }], split: 2, solution: [1, 1, 1] },
+  { formula: ["C₂H₄", "H₂", "C₂H₆"], atoms: [{ C: 2, H: 4 }, { H: 2 }, { C: 2, H: 6 }], split: 2, solution: [1, 1, 1] },
+  { formula: ["CaCO₃", "HCl", "CaCl₂", "H₂O", "CO₂"], atoms: [{ Ca: 1, C: 1, O: 3 }, { H: 1, Cl: 1 }, { Ca: 1, Cl: 2 }, { H: 2, O: 1 }, { C: 1, O: 2 }], split: 2, solution: [1, 2, 1, 1, 1] },
+  { formula: ["Na₂CO₃", "HCl", "NaCl", "H₂O", "CO₂"], atoms: [{ Na: 2, C: 1, O: 3 }, { H: 1, Cl: 1 }, { Na: 1, Cl: 1 }, { H: 2, O: 1 }, { C: 1, O: 2 }], split: 2, solution: [1, 2, 2, 1, 1] },
+  { formula: ["NaOH", "H₂SO₄", "Na₂SO₄", "H₂O"], atoms: [{ Na: 1, O: 1, H: 1 }, { H: 2, S: 1, O: 4 }, { Na: 2, S: 1, O: 4 }, { H: 2, O: 1 }], split: 2, solution: [2, 1, 1, 2] },
+  { formula: ["Zn", "CuSO₄", "ZnSO₄", "Cu"], atoms: [{ Zn: 1 }, { Cu: 1, S: 1, O: 4 }, { Zn: 1, S: 1, O: 4 }, { Cu: 1 }], split: 2, solution: [1, 1, 1, 1] },
+  { formula: ["CuO", "H₂", "Cu", "H₂O"], atoms: [{ Cu: 1, O: 1 }, { H: 2 }, { Cu: 1 }, { H: 2, O: 1 }], split: 2, solution: [1, 1, 1, 1] },
+  { formula: ["AgNO₃", "NaCl", "AgCl", "NaNO₃"], atoms: [{ Ag: 1, N: 1, O: 3 }, { Na: 1, Cl: 1 }, { Ag: 1, Cl: 1 }, { Na: 1, N: 1, O: 3 }], split: 2, solution: [1, 1, 1, 1] },
+  { formula: ["Cl₂", "KI", "KCl", "I₂"], atoms: [{ Cl: 2 }, { K: 1, I: 1 }, { K: 1, Cl: 1 }, { I: 2 }], split: 2, solution: [1, 2, 2, 1] },
+  { formula: ["SO₂", "O₂", "SO₃"], atoms: [{ S: 1, O: 2 }, { O: 2 }, { S: 1, O: 3 }], split: 2, solution: [2, 1, 2] },
+  { formula: ["P₄", "O₂", "P₄O₁₀"], atoms: [{ P: 4 }, { O: 2 }, { P: 4, O: 10 }], split: 2, solution: [1, 5, 1] },
+  { formula: ["Ca(NO₃)₂", "CaO", "NO₂", "O₂"], atoms: [{ Ca: 1, N: 2, O: 6 }, { Ca: 1, O: 1 }, { N: 1, O: 2 }, { O: 2 }], split: 1, solution: [2, 2, 4, 1] },
+  { formula: ["C₂H₅OH", "[O]", "CH₃COOH", "H₂O"], atoms: [{ C: 2, H: 6, O: 1 }, { O: 1 }, { C: 2, H: 4, O: 2 }, { H: 2, O: 1 }], split: 2, solution: [1, 2, 1, 1] },
+  { formula: ["C₂H₄", "H₂O", "C₂H₅OH"], atoms: [{ C: 2, H: 4 }, { H: 2, O: 1 }, { C: 2, H: 6, O: 1 }], split: 2, solution: [1, 1, 1] },
+  { formula: ["CH₃COOH", "C₂H₅OH", "CH₃COOC₂H₅", "H₂O"], atoms: [{ C: 2, H: 4, O: 2 }, { C: 2, H: 6, O: 1 }, { C: 4, H: 8, O: 2 }, { H: 2, O: 1 }], split: 2, solution: [1, 1, 1, 1] },
+  { formula: ["H⁺", "OH⁻", "H₂O"], atoms: [{ H: 1 }, { O: 1, H: 1 }, { H: 2, O: 1 }], charges: [1, -1, 0], split: 2, solution: [1, 1, 1] },
+  { formula: ["Ag⁺", "Cl⁻", "AgCl"], atoms: [{ Ag: 1 }, { Cl: 1 }, { Ag: 1, Cl: 1 }], charges: [1, -1, 0], split: 2, solution: [1, 1, 1] },
+  { formula: ["MnO₄⁻", "H⁺", "e⁻", "Mn²⁺", "H₂O"], atoms: [{ Mn: 1, O: 4 }, { H: 1 }, {}, { Mn: 1 }, { H: 2, O: 1 }], charges: [-1, 1, -1, 2, 0], split: 3, solution: [1, 8, 5, 1, 4] },
+  { formula: ["Cr₂O₇²⁻", "H⁺", "e⁻", "Cr³⁺", "H₂O"], atoms: [{ Cr: 2, O: 7 }, { H: 1 }, {}, { Cr: 1 }, { H: 2, O: 1 }], charges: [-2, 1, -1, 3, 0], split: 3, solution: [1, 14, 6, 2, 7] },
+  { formula: ["MnO₄⁻", "Fe²⁺", "H⁺", "Mn²⁺", "Fe³⁺", "H₂O"], atoms: [{ Mn: 1, O: 4 }, { Fe: 1 }, { H: 1 }, { Mn: 1 }, { Fe: 1 }, { H: 2, O: 1 }], charges: [-1, 2, 1, 2, 3, 0], split: 3, solution: [1, 5, 8, 1, 5, 4] },
+  { formula: ["Cr₂O₇²⁻", "I⁻", "H⁺", "Cr³⁺", "I₂", "H₂O"], atoms: [{ Cr: 2, O: 7 }, { I: 1 }, { H: 1 }, { Cr: 1 }, { I: 2 }, { H: 2, O: 1 }], charges: [-2, -1, 1, 3, 0, 0], split: 3, solution: [1, 6, 14, 2, 3, 7] },
+  { formula: ["Cl₂", "OH⁻", "Cl⁻", "ClO⁻", "H₂O"], atoms: [{ Cl: 2 }, { O: 1, H: 1 }, { Cl: 1 }, { Cl: 1, O: 1 }, { H: 2, O: 1 }], charges: [0, -1, -1, -1, 0], split: 2, solution: [1, 2, 1, 1, 1] },
+  { formula: ["Al", "HCl", "AlCl₃", "H₂"], atoms: [{ Al: 1 }, { H: 1, Cl: 1 }, { Al: 1, Cl: 3 }, { H: 2 }], split: 2, solution: [2, 6, 2, 3] },
+  { formula: ["PCl₅", "H₂O", "H₃PO₄", "HCl"], atoms: [{ P: 1, Cl: 5 }, { H: 2, O: 1 }, { H: 3, P: 1, O: 4 }, { H: 1, Cl: 1 }], split: 2, solution: [1, 4, 1, 5] },
+  { formula: ["P₄O₁₀", "H₂O", "H₃PO₄"], atoms: [{ P: 4, O: 10 }, { H: 2, O: 1 }, { H: 3, P: 1, O: 4 }], split: 2, solution: [1, 6, 4] },
+  { formula: ["SO₃", "H₂O", "H₂SO₄"], atoms: [{ S: 1, O: 3 }, { H: 2, O: 1 }, { H: 2, S: 1, O: 4 }], split: 2, solution: [1, 1, 1] },
+  { formula: ["Cu(NO₃)₂", "CuO", "NO₂", "O₂"], atoms: [{ Cu: 1, N: 2, O: 6 }, { Cu: 1, O: 1 }, { N: 1, O: 2 }, { O: 2 }], split: 1, solution: [2, 2, 4, 1] },
+  { formula: ["KClO₃", "KCl", "O₂"], atoms: [{ K: 1, Cl: 1, O: 3 }, { K: 1, Cl: 1 }, { O: 2 }], split: 1, solution: [2, 2, 3] },
 ];
 export const elementSymbols = "H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr".split(" ");
 export const elementGroups = [1,18,1,2,13,14,15,16,17,18,1,2,13,14,15,16,17,18,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
@@ -254,5 +299,7 @@ export function yieldResult(h: number, o: number) { const extent = Math.min(h / 
 export function atomBalance(reaction: number, coefficients: number[]) {
   const r = reactions[reaction];
   const keys = [...new Set(r.atoms.flatMap(a => Object.keys(a)))];
-  return keys.map(element => ({ element, left: r.atoms.slice(0, r.split).reduce((s, a, i) => s + ((a as Record<string, number>)[element] ?? 0) * coefficients[i], 0), right: r.atoms.slice(r.split).reduce((s, a, i) => s + ((a as Record<string, number>)[element] ?? 0) * coefficients[i + r.split], 0) }));
+  const balances = keys.map(element => ({ element, left: r.atoms.slice(0, r.split).reduce((s, a, i) => s + ((a as Record<string, number>)[element] ?? 0) * coefficients[i], 0), right: r.atoms.slice(r.split).reduce((s, a, i) => s + ((a as Record<string, number>)[element] ?? 0) * coefficients[i + r.split], 0) }));
+  if ("charges" in r) balances.push({ element: "Charge", left: r.charges.slice(0, r.split).reduce((s, charge, i) => s + charge * coefficients[i], 0), right: r.charges.slice(r.split).reduce((s, charge, i) => s + charge * coefficients[i + r.split], 0) });
+  return balances;
 }

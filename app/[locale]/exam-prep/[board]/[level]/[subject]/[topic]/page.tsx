@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { canonicalTopicCourse, coursePath, courseTitle, courses, getBoard, getLevel, getSubject, getSyllabus, isCourse, isFreeTopic, isVerified, labs, lessonContent, topicPath, type Course } from "@/lib/exam-prep/catalog";
+import { canonicalTopicCourse, coursePath, courseTitle, courses, getBoard, getLevel, getSubject, getSyllabus, isCourse, isFreeTopic, isVerified, labs, lessonContent, topicLessonsIndexed, topicPath, type Course } from "@/lib/exam-prep/catalog";
 import { Breadcrumbs, IllustrativeNotice, IndependenceNotice } from "@/components/exam-prep/Shell";
 import { MiniSim } from "@/components/exam-prep/MiniSim";
 import { PremiumGate } from "@/components/exam-prep/PremiumGate";
@@ -24,8 +24,8 @@ function find(course: Course, slug: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, topic: slug, ...course } = await params, found = find(course, slug);
   if (locale !== "en" || !found) return {};
-  const content = lessonContent[found.topic.content], title = `${found.topic.name} – ${courseTitle(course)} | Exam Prep`;
-  const metadata = localizedMetadata("en", topicPath(course, found.topic), title, `${found.topic.name} for ${courseTitle(course)}: ${content.brief}`.slice(0, 300), { englishOnly: true, noIndex: !isVerified(course) });
+  const content = lessonContent[found.topic.content], title = `${found.topic.name} – ${courseTitle(course)}`;
+  const metadata = localizedMetadata("en", topicPath(course, found.topic), title, `${found.topic.name} for ${courseTitle(course)}: ${content.brief}`.slice(0, 300), { englishOnly: true, noIndex: !isVerified(course), unlisted: !topicLessonsIndexed });
   // A level that repeats an earlier level's topic points search engines at that single page.
   const owner = canonicalTopicCourse(course, found.topic);
   return { ...metadata, title: { absolute: `${title} | ${siteName}` }, ...(owner ? { alternates: { ...metadata.alternates, canonical: localizedUrl("en", topicPath(owner, found.topic)) } } : {}) };

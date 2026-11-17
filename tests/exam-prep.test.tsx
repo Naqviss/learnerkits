@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { boards, courses, coursePath, courseTitle, getSyllabus, isBoardIndexable, isFreeTopic, isVerified, labs, lessonContent, subjectCode, syllabi, syllabusKey, topicPath } from "@/lib/exam-prep/catalog";
+import { boards, courses, coursePath, courseTitle, getSyllabus, isBoardIndexable, isFreeTopic, isVerified, labs, lessonContent, subjectCode, syllabi, syllabusKey, topicLessonsIndexed, topicPath } from "@/lib/exam-prep/catalog";
 import { getPapers, paperCatalog } from "@/lib/exam-prep/papers";
 import { buildExam, examLength, generators } from "@/lib/exam-prep/generators";
 import { lessonDetail } from "@/lib/exam-prep/lessons";
@@ -64,8 +64,12 @@ describe("exam prep catalog", () => {
     expect(new Set(examPrepIndexablePaths).size).toBe(examPrepIndexablePaths.length);
     expect(examPrepIndexablePaths).toContain("/exam-prep");
     expect(examPrepIndexablePaths).toContain("/exam-prep/any-board");
-    expect(examPrepIndexablePaths).toContain("/exam-prep/cambridge/as/physics/kinematics");
+    expect(examPrepIndexablePaths).toContain("/exam-prep/cambridge/as/physics");
     expect(examPrepIndexablePaths).toContain("/exam-prep/cambridge/as/physics/papers");
+    // Topic lessons are published but held out of search until topicLessonsIndexed is switched on.
+    expect(topicLessonsIndexed).toBe(false);
+    expect(examPrepIndexablePaths).not.toContain("/exam-prep/cambridge/as/physics/kinematics");
+    expect(examPrepIndexablePaths.length).toBeLessThan(40);
     expect(examPrepIndexablePaths).toContain("/exam-prep/practicals/circuit");
     expect(examPrepIndexablePaths.some((path) => path.includes("/biology") || path.includes("/maths") || path.includes("/olevel/") || path.startsWith("/exam-prep/aqa/as"))).toBe(false);
     for (const course of courses.filter((item) => !isVerified(item))) expect(examPrepIndexablePaths).not.toContain(coursePath(course));
@@ -175,8 +179,8 @@ describe("exam prep pages", () => {
     expect(html).toContain("LearningResource");
     expect(html).toContain("not affiliated with or endorsed by any exam board");
     const metadata = await generateMetadata({ params: params(asPhysics, "kinematics") });
-    expect(metadata.title).toEqual({ absolute: "Kinematics – Cambridge AS Level Physics 9702 | Exam Prep | LearnerKits" });
-    expect(metadata.robots).toMatchObject({ index: true });
+    expect(metadata.title).toEqual({ absolute: "Kinematics – Cambridge AS Level Physics 9702 | LearnerKits" });
+    expect(metadata.robots).toEqual({ index: false, follow: true });
   });
 
   it("soft-locks a Premium lesson but keeps the concept and lab link in the HTML", async () => {
