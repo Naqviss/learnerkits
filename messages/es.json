@@ -18,7 +18,11 @@
     "signInWithGoogle": "Iniciar sesión con Google",
     "signOut": "Cerrar sesión",
     "account": "Tu cuenta",
-    "failed": "No se completó el inicio de sesión. Inténtalo de nuevo."
+    "failed": "No se completó el inicio de sesión. Inténtalo de nuevo.",
+    "checking": "Comprobando la sesión…",
+    "openingGoogle": "Abriendo Google…",
+    "signedIn": "Sesión iniciada",
+    "launchNotice": "Tus datos en vivo estarán disponibles el 30 de noviembre."
   },
   "search": {
     "placeholder": "Buscar simulaciones y materias…",

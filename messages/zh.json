@@ -18,7 +18,11 @@
     "signInWithGoogle": "使用 Google 登录",
     "signOut": "退出登录",
     "account": "你的账户",
-    "failed": "登录未完成，请重试。"
+    "failed": "登录未完成，请重试。",
+    "checking": "正在检查登录状态…",
+    "openingGoogle": "正在打开 Google…",
+    "signedIn": "已登录",
+    "launchNotice": "你的实时数据将于11月30日开放。"
   },
   "search": {
     "placeholder": "搜索模拟和学科…",

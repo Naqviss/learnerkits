@@ -78,21 +78,26 @@ function Classroom() {
   if (error) return <p className={`${styles.notice} ${styles.error}`} role="alert">{error} <button type="button" className={`${styles.btn} ${styles.small}`} onClick={() => void reload()}>Try again</button></p>;
   if (!state) return <p role="status" className={styles.empty}>Loading your classroom…</p>;
   const open = state.assignments.find((assignment) => assignment.id === openId);
-  const graded = state.assignments.filter((assignment) => assignment.submission?.status === "graded");
+  const graded = state.assignments.filter((assignment) => assignment.submission?.status === "graded" && assignment.submission.total > 0);
+  const submitted = state.assignments.filter((assignment) => assignment.submission).length;
   const average = graded.length ? Math.round(graded.reduce((sum, assignment) => sum + assignment.submission!.score! / assignment.submission!.total, 0) / graded.length * 100) : null;
 
   return <>
-    <header className={styles.head}><div><span className="eyebrow">My classroom</span><h1>Your classes and assignments</h1><p>Open work from your teacher, submit your answers and see your results and feedback.</p></div></header>
+    <header className={styles.head}><div><span className="eyebrow">My classroom</span><h1>Your classes and assignments</h1><p>Open work from your teacher, submit your answers and see your results and feedback.</p></div><Link className={styles.btn} href="/en/progress">My progress →</Link></header>
     {open ? <AssignmentView assignment={open} close={() => setOpenId(null)} submit={(payload) => act("submitAssignment", payload, "Submitted.")} /> : <>
       <div className={styles.grid4} style={{ marginBottom: 16 }}>
         <div className={styles.stat}><span>Classes</span><strong>{state.classes.length}</strong></div>
-        <div className={styles.stat}><span>To do</span><strong>{state.assignments.filter((assignment) => !assignment.submission).length}</strong></div>
-        <div className={styles.stat}><span>Submitted</span><strong>{state.assignments.filter((assignment) => assignment.submission).length}</strong></div>
+        <div className={styles.stat}><span>To do</span><strong>{state.assignments.length - submitted}</strong></div>
+        <div className={styles.stat}><span>Submitted</span><strong>{submitted}</strong></div>
         <div className={styles.stat}><span>Average mark</span><strong>{average === null ? "—" : `${average}%`}</strong></div>
       </div>
-      <div className={styles.grid2} style={{ gridTemplateColumns: "minmax(0,1.25fr) minmax(0,.75fr)" }}>
+      <div className={`${styles.grid2} ${styles.studentColumns}`}>
         <section className={styles.panel}>
           <h2>Assignments</h2>
+          {state.assignments.length > 0 && <div className={styles.completion}>
+            <label htmlFor="assignment-progress">{submitted} of {state.assignments.length} assignments submitted</label>
+            <progress id="assignment-progress" value={submitted} max={state.assignments.length} />
+          </div>}
           {state.assignments.length ? <div className={styles.rows}>{state.assignments.map((assignment) => <div key={assignment.id} className={styles.item}>
             <div><h3>{assignment.title}</h3><p>{assignment.className} · {assignment.kind === "paper" ? "Question paper" : "Lesson"}{assignment.due_date ? ` · Due ${assignment.due_date}` : ""}</p></div>
             <div className={styles.row}>
@@ -126,5 +131,5 @@ function Classroom() {
 }
 
 export function StudentClassroom() {
-  return <SignInGate title="Sign in to your classroom" lead="Use your Google account, then enter the class code from your teacher."><Classroom /></SignInGate>;
+  return <SignInGate role="student"><Classroom /></SignInGate>;
 }

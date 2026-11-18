@@ -11,7 +11,7 @@ export function AssignmentsTab({ state, act, preset, clearPreset }: TeacherConte
     const sent = await act("createAssignment", { classId: formValue(form, "classId"), itemId: formValue(form, "itemId"), due: formValue(form, "due"), instructions: formValue(form, "instructions") }, "Assignment sent to the class.");
     if (sent) { form.reset(); clearPreset(); }
   };
-  return <div className={styles.grid2} style={{ gridTemplateColumns: "minmax(0,.8fr) minmax(0,1.2fr)" }}>
+  return <div className={`${styles.grid2} ${styles.editorColumns}`}>
     <section className={styles.panel}>
       <h2>Send an assignment</h2>
       {state.classes.length && assignable.length ? <form className={styles.form} onSubmit={(event) => { event.preventDefault(); void create(event.currentTarget); }}>

@@ -27,7 +27,7 @@ export function Nav({ locale, m }: { locale: string; m: Messages }) {
         { href: "/en/mock-exams", label: "Mock Exams", detail: "Try a timed paper and review your results." },
       ]}/><Link href="/en/teacher-kit">Teacher Kit</Link><Link href="/en/pricing">Pricing</Link><Link href="/en/articles">News &amp; Articles</Link></>}</div>
     <SearchBar locale={locale} search={m.search} id="nav-search-desktop"/>
-    <div className="navActions"><ThemeToggle labels={{toLight:`${m.settings.theme}: ${m.settings.light}`,toDark:`${m.settings.theme}: ${m.settings.dark}`}}/><LanguageSelector locale={locale} label={m.common.languageLabel}/><AuthButton labels={m.auth} locale={locale} settingsLabel={m.navigation.settings}/></div>
+    <div className="navActions"><ThemeToggle labels={{toLight:`${m.settings.theme}: ${m.settings.light}`,toDark:`${m.settings.theme}: ${m.settings.dark}`}}/><LanguageSelector locale={locale} label={m.common.languageLabel}/><AuthButton labels={m.auth}/></div>
     <details className="mobileNav"><summary aria-label="Open navigation"><span/><span/><span/></summary><div><SearchBar locale={locale} search={m.search} id="nav-search-mobile"/><Link href={`/${locale}/simulations`}>◉ {m.navigation.simulations}</Link>{locale === "en" && <Link className="mobileNavSub" href="/en/guides">↳ Simulation guides</Link>}{locale === "en" && <><Link href="/en/exam-prep">▣ Exam Preparation</Link><Link href="/en/mock-exams">◷ Mock Exams</Link><Link href="/en/teacher-kit">✎ Teacher Kit</Link><Link href="/en/pricing">$ Pricing</Link><Link href="/en/classroom">♙ My classroom</Link><Link href="/en/articles">▤ News &amp; Articles</Link></>}</div></details>
   </div></nav>;
 }

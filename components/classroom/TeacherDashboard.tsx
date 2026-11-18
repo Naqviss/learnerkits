@@ -16,6 +16,7 @@ type Tab = typeof tabs[number][0];
 function Overview({ state, go }: TeacherContext & { go: (tab: Tab) => void }) {
   const plan = plans[state.profile.plan];
   const review = state.submissions.filter((submission) => submission.status === "awaiting_review").length;
+  const graded = state.submissions.filter((submission) => submission.status === "graded").length;
   return <>
     <div className={styles.grid4}>
       <div className={styles.stat}><span>Students</span><strong>{seatsUsed(state.members)} <small>/ {plan.display.replace(" students", "")}</small></strong><small>Across {state.classes.length} classes</small></div>
@@ -23,6 +24,17 @@ function Overview({ state, go }: TeacherContext & { go: (tab: Tab) => void }) {
       <div className={styles.stat}><span>Assignments</span><strong>{state.assignments.length}</strong><small>{state.submissions.length} submissions</small></div>
       <div className={styles.stat}><span>Needs review</span><strong>{review}</strong><small>Written responses</small></div>
     </div>
+    <section className={`${styles.panel} ${styles.overviewProgress}`}>
+      <div className={styles.between}>
+        <h2>Class progress</h2>
+        <button type="button" className={styles.btn} onClick={() => go("insights")}>View topic results →</button>
+      </div>
+      {state.submissions.length ? <div className={styles.completion}>
+        <label htmlFor="grading-progress">{graded} of {state.submissions.length} submissions graded</label>
+        <progress id="grading-progress" value={graded} max={state.submissions.length} />
+      </div> : <p>Results appear here when students submit their work.</p>}
+      {review > 0 && <button type="button" className={styles.btn} onClick={() => go("submissions")}>Review pending work ({review})</button>}
+    </section>
     <div className={styles.grid2} style={{ marginTop: 16 }}>
       <section className={styles.panel}>
         <div className={styles.between}><h2>Your classes</h2><button type="button" className={`${styles.btn} ${styles.small}`} onClick={() => go("classes")}>Manage</button></div>
@@ -42,7 +54,7 @@ function Overview({ state, go }: TeacherContext & { go: (tab: Tab) => void }) {
 function Classes({ state, act, notify }: TeacherContext) {
   const copy = async (text: string) => { try { await navigator.clipboard.writeText(text); notify("Copied to clipboard."); } catch { notify(text); } };
   const invite = (name: string, code: string) => `Join "${name}" on LearnerKits:\n1. Open ${window.location.origin}/en/classroom\n2. Sign in with Google\n3. Enter class code ${code}`;
-  return <div className={styles.grid2} style={{ gridTemplateColumns: "minmax(0,.75fr) minmax(0,1.25fr)" }}>
+  return <div className={`${styles.grid2} ${styles.teacherColumns}`}>
     <section className={styles.panel}>
       <h2>Create a class</h2>
       <p>Each class gets a join code. Students sign in with their own Google account and enter it.</p>
@@ -96,13 +108,35 @@ function Plan({ state }: TeacherContext) {
 export function TeacherWorkspace({ state, act, notify, readOnly }: TeacherContext) {
   const [tab, setTab] = useState<Tab>("overview");
   const [preset, setPreset] = useState<string | null>(null);
+  useEffect(() => {
+    if (readOnly) return;
+    const syncTab = () => {
+      const hash = window.location.hash.slice(1);
+      const match = tabs.find(([id]) => id === hash);
+      setTab(match?.[0] ?? "overview");
+    };
+    syncTab();
+    window.addEventListener("hashchange", syncTab);
+    return () => window.removeEventListener("hashchange", syncTab);
+  }, [readOnly]);
+
   const context = { state, act, notify, readOnly };
-  const assign = (itemId: string) => { setPreset(itemId); setTab("assignments"); };
+  const go = (next: Tab) => {
+    setTab(next);
+    if (readOnly) return;
+    const url = new URL(window.location.href);
+    const previousHash = url.hash;
+    url.hash = next === "overview" ? "" : next;
+    if (url.hash === previousHash) return;
+    window.history.replaceState(window.history.state, "", url);
+    window.dispatchEvent(new Event("hashchange"));
+  };
+  const assign = (itemId: string) => { setPreset(itemId); go("assignments"); };
   return <>
     {state.profile.suspended && <p className={`${styles.notice} ${styles.error}`} role="alert">This teacher account is paused, so nothing can be changed. Contact LearnerKits support.</p>}
-    <div className={styles.tabs} role="tablist" aria-label="Teacher Kit sections">{tabs.map(([id, label]) => <button key={id} type="button" role="tab" aria-selected={tab === id} onClick={() => setTab(id)}>{label}</button>)}</div>
+    <div className={styles.tabs} role="tablist" aria-label="Teacher Kit sections">{tabs.map(([id, label]) => <button key={id} type="button" role="tab" aria-selected={tab === id} onClick={() => go(id)}>{label}</button>)}</div>
     <div role="tabpanel">
-      {tab === "overview" && <Overview {...context} go={setTab} />}
+      {tab === "overview" && <Overview {...context} go={go} />}
       {tab === "classes" && <Classes {...context} />}
       {tab === "lessons" && <LessonsTab {...context} onAssign={assign} />}
       {tab === "kits" && <KitsTab {...context} onAssign={assign} />}
@@ -158,5 +192,5 @@ function Workspace() {
 }
 
 export function TeacherDashboard() {
-  return <SignInGate title="Sign in to Teacher Kit" lead="Use your Google account to create classes, plan lessons and review student work."><Workspace /></SignInGate>;
+  return <SignInGate role="teacher"><Workspace /></SignInGate>;
 }

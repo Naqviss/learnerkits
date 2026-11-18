@@ -18,11 +18,12 @@ describe("Google sign-in button", () => {
     expect(await render()).toBe("");
   });
 
-  it("renders a signed-out Google button when configured", async () => {
+  it("renders a stable loading state until the browser session is checked", async () => {
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "sb_publishable_test");
     const html = await render();
-    expect(html).toContain('aria-label="Sign in with Google"');
-    expect(html).toContain(">Sign in</span>");
+    expect(html).toContain('aria-label="Checking sign-in…"');
+    expect(html).toContain("authSpinner");
+    expect(html).not.toContain(">Sign in</span>");
   });
 });

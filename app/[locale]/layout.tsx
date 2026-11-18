@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { locales, isIndexedLocale, isLocale, localeDirection } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/getMessages";
 import { Nav } from "@/components/navigation/Nav";
+import { WorkspaceShell } from "@/components/navigation/WorkspaceShell";
 import { Footer } from "@/components/navigation/Footer";
 import { ConsentManager } from "@/components/privacy/ConsentManager";
 import { PremiumHost } from "@/components/premium/PremiumHost";
@@ -22,5 +23,21 @@ const googleAnalyticsId = "G-VZ63RT6XYN";
 // AdsLoader skips the AdSense script for Premium subscribers ("No ads").
 export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{locale:string}> }) {
   const { locale: raw } = await params; if (!isLocale(raw)) notFound(); const m = getMessages(raw); const adsenseClient = adsenseClientId(); const dir = localeDirection(raw); const htmlLang = raw === "zh" ? "zh-Hans" : raw;
-  return <html lang={htmlLang} dir={dir} data-theme="light" data-scroll-behavior="smooth" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:themeBoot}}/></head><body className={dir === "rtl" ? "rtl" : undefined}><ScrollToTop/><Nav locale={raw} m={m}/>{children}<Footer locale={raw} m={m}/><ConsentManager locale={raw} googleAnalyticsId={googleAnalyticsId} clarityId="ygwnomr7fd"/><PremiumHost locale={raw}/>{adsenseClient && process.env.NEXT_PUBLIC_ADSENSE_ADS_ENABLED === "true" && <AdsLoader client={adsenseClient}/>}</body></html>;
+  return <html lang={htmlLang} dir={dir} data-theme="light" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <head><script dangerouslySetInnerHTML={{__html:themeBoot}}/></head>
+    <body className={dir === "rtl" ? "rtl" : undefined}>
+      <ScrollToTop/>
+      <WorkspaceShell
+        locale={raw}
+        m={{ auth: m.auth, common: m.common, navigation: m.navigation, search: m.search, settings: m.settings }}
+        guestNav={<Nav locale={raw} m={m}/>}
+        guestFooter={<Footer locale={raw} m={m}/>}
+      >
+        {children}
+      </WorkspaceShell>
+      <ConsentManager locale={raw} googleAnalyticsId={googleAnalyticsId} clarityId="ygwnomr7fd"/>
+      <PremiumHost locale={raw}/>
+      {adsenseClient && process.env.NEXT_PUBLIC_ADSENSE_ADS_ENABLED === "true" && <AdsLoader client={adsenseClient}/>}
+    </body>
+  </html>;
 }

@@ -18,7 +18,11 @@
     "signInWithGoogle": "Sign in with Google",
     "signOut": "Sign out",
     "account": "Your account",
-    "failed": "Sign-in didn't finish. Please try again."
+    "failed": "Sign-in didn't finish. Please try again.",
+    "checking": "Checking sign-in…",
+    "openingGoogle": "Opening Google…",
+    "signedIn": "Signed in",
+    "launchNotice": "Your live data will be available on 30 November."
   },
   "search": {
     "placeholder": "What are you looking for?",
@@ -283,7 +287,7 @@
     "subtitle": "Progress rewards completed challenges, improved performance, and discovered concepts.",
     "rank": "Rank",
     "completed": "Completed missions",
-    "local": "Stored locally on this device for the MVP.",
+    "local": "Mission progress is saved in this browser.",
     "explorer": "Explorer",
     "cadet": "Cadet",
     "pilot": "Pilot",

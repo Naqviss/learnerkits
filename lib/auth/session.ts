@@ -84,11 +84,17 @@ export async function signInWithGoogle() {
 }
 
 export async function signOut() {
-  const client = await getAuthClient();
-  const { error } = await client.auth.signOut();
-  // Offline or the server rejected the request: still forget the session on this device.
-  if (error) await client.auth.signOut({ scope: "local" });
-  update({ status: "signedOut", session: null });
+  try {
+    const client = await getAuthClient();
+    const { error } = await client.auth.signOut();
+    // Offline or the server rejected the request: still forget the session on this device.
+    if (error) await client.auth.signOut({ scope: "local" });
+  } catch {
+    // The local UI is cleared below even if Supabase cannot be reached.
+  } finally {
+    // The UI must always leave the authenticated state, including when the network is offline.
+    update({ status: "signedOut", session: null, failed: false });
+  }
 }
 
 /** A current access token for calling our own /api routes, refreshed by supabase-js if needed. */

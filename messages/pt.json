@@ -18,7 +18,11 @@
     "signInWithGoogle": "Entrar com o Google",
     "signOut": "Sair",
     "account": "Sua conta",
-    "failed": "O login não foi concluído. Tente novamente."
+    "failed": "O login não foi concluído. Tente novamente.",
+    "checking": "Verificando o login…",
+    "openingGoogle": "Abrindo o Google…",
+    "signedIn": "Sessão iniciada",
+    "launchNotice": "Seus dados ao vivo estarão disponíveis em 30 de novembro."
   },
   "search": {
     "placeholder": "Buscar simulações e disciplinas…",

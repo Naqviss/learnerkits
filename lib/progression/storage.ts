@@ -1,6 +1,3 @@
-// The /progress page is hidden until teacher/student sign-in ships. Flip back to true to re-enable.
-export const progressPageEnabled = false;
-
 export interface ProgressState { xp: number; completedMissionIds: string[]; bestScores: Record<string, number> }
 const KEY = "science-sim-progress-v1";
 const EMPTY: ProgressState = { xp: 0, completedMissionIds: [], bestScores: {} };
@@ -10,11 +7,12 @@ export function loadProgress(): ProgressState {
 }
 export function saveProgress(state: ProgressState) { if (typeof window !== "undefined") localStorage.setItem(KEY, JSON.stringify(state)); }
 export type RankKey = "explorer" | "cadet" | "pilot" | "missionSpecialist" | "spaceScientist";
+export const rankGoals = [300, 900, 1800, 3000] as const;
 export function rankForXp(xp: number): RankKey {
-  if (xp >= 3000) return "spaceScientist";
-  if (xp >= 1800) return "missionSpecialist";
-  if (xp >= 900) return "pilot";
-  if (xp >= 300) return "cadet";
+  if (xp >= rankGoals[3]) return "spaceScientist";
+  if (xp >= rankGoals[2]) return "missionSpecialist";
+  if (xp >= rankGoals[1]) return "pilot";
+  if (xp >= rankGoals[0]) return "cadet";
   return "explorer";
 }
 

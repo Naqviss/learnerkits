@@ -226,7 +226,7 @@ export function KitsTab({ state, act }: Props) {
     const item = saved?.item as TeachingItem | undefined;
     if (item) setOpenId(item.id);
   };
-  return <div className={styles.grid2} style={{ gridTemplateColumns: "minmax(0,.8fr) minmax(0,1.2fr)" }}>
+  return <div className={`${styles.grid2} ${styles.editorColumns}`}>
     <div className={styles.rows} style={{ marginTop: 0 }}>
       <section className={styles.panel}>
         <h2>Build a whole-subject kit</h2>

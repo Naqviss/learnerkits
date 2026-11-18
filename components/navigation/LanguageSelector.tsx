@@ -2,7 +2,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { localeNames, locales } from "@/lib/i18n/config";
 
-export function LanguageSelector({ locale, label }: { locale: string; label: string }) {
+export function LanguageSelector({ locale, label, inWorkspace = false }: { locale: string; label: string; inWorkspace?: boolean }) {
   const router = useRouter();
   const pathname = usePathname();
   if (locales.length < 2) return null;
@@ -12,8 +12,8 @@ export function LanguageSelector({ locale, label }: { locale: string; label: str
     segments[1] = next;
     localStorage.setItem("science-sim-locale", next);
     document.cookie = `science-sim-locale=${next}; path=/; max-age=31536000; samesite=lax`;
-    // Editorial pages are English-only until a translated edition exists.
-    const englishOnly = segments[2] === "articles" || segments[2] === "guides";
-    router.push(englishOnly && next !== "en" ? `/${next}` : segments.join("/") || `/${next}`);
+    const englishOnly = ["articles", "guides", "classroom", "teacher-kit", "exam-prep", "mock-exams"].includes(segments[2]);
+    const fallback = inWorkspace ? `/${next}/simulations` : `/${next}`;
+    router.push(englishOnly && next !== "en" ? fallback : segments.join("/") || `/${next}`);
   }}>{locales.map((code) => <option value={code} key={code}>{localeNames[code]}</option>)}</select></span>;
 }

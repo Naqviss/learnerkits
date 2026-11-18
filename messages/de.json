@@ -18,7 +18,11 @@
     "signInWithGoogle": "Mit Google anmelden",
     "signOut": "Abmelden",
     "account": "Dein Konto",
-    "failed": "Die Anmeldung wurde nicht abgeschlossen. Bitte versuche es erneut."
+    "failed": "Die Anmeldung wurde nicht abgeschlossen. Bitte versuche es erneut.",
+    "checking": "Anmeldung wird geprüft…",
+    "openingGoogle": "Google wird geöffnet…",
+    "signedIn": "Angemeldet",
+    "launchNotice": "Deine Live-Daten sind ab dem 30. November verfügbar."
   },
   "search": {
     "placeholder": "Simulationen und Fächer durchsuchen…",

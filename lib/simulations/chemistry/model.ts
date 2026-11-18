@@ -300,6 +300,7 @@ export function atomBalance(reaction: number, coefficients: number[]) {
   const r = reactions[reaction];
   const keys = [...new Set(r.atoms.flatMap(a => Object.keys(a)))];
   const balances = keys.map(element => ({ element, left: r.atoms.slice(0, r.split).reduce((s, a, i) => s + ((a as Record<string, number>)[element] ?? 0) * coefficients[i], 0), right: r.atoms.slice(r.split).reduce((s, a, i) => s + ((a as Record<string, number>)[element] ?? 0) * coefficients[i + r.split], 0) }));
-  if ("charges" in r) balances.push({ element: "Charge", left: r.charges.slice(0, r.split).reduce((s, charge, i) => s + charge * coefficients[i], 0), right: r.charges.slice(r.split).reduce((s, charge, i) => s + charge * coefficients[i + r.split], 0) });
+  const charges = "charges" in r ? r.charges : undefined;
+  if (charges) balances.push({ element: "Charge", left: charges.slice(0, r.split).reduce((s, charge, i) => s + charge * coefficients[i], 0), right: charges.slice(r.split).reduce((s, charge, i) => s + charge * coefficients[i + r.split], 0) });
   return balances;
 }

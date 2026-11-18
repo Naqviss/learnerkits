@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { authEnabled } from "@/lib/auth/client";
 import { signInWithGoogle, useAuth } from "@/lib/auth/session";
@@ -44,18 +45,33 @@ export function useClassroomData<T>(action: string, enabled: boolean) {
 }
 
 /** Shows `children` only to a signed-in user; otherwise explains and offers Google sign-in. */
-export function SignInGate({ title, lead, children }: { title: string; lead: string; children: ReactNode }) {
-  const { status, failed } = useAuth();
+export function SignInGate({ role, children }: { role: "student" | "teacher"; children: ReactNode }) {
+  const { status, session, failed } = useAuth();
   const [busy, setBusy] = useState(false);
-  if (status === "signedIn") return <>{children}</>;
-  return <section className={styles.gate}>
-    <span className="eyebrow">LearnerKits account</span>
-    <h1>{title}</h1>
-    <p>{lead}</p>
-    {status === "loading" ? <p role="status">Checking your sign-in…</p> : !authEnabled
-      ? <p className={`${styles.notice} ${styles.error}`}>Sign-in is not configured on this site yet.</p>
-      : <button type="button" className="button primary" disabled={busy} onClick={() => { setBusy(true); signInWithGoogle().catch(() => setBusy(false)); }}>{busy ? "Opening Google…" : "Sign in with Google"}</button>}
-    {failed && <p className={`${styles.notice} ${styles.error}`} role="alert">Sign-in did not complete. Please try again.</p>}
+  useEffect(() => {
+    const reset = (event: PageTransitionEvent) => { if (event.persisted) setBusy(false); };
+    window.addEventListener("pageshow", reset);
+    return () => window.removeEventListener("pageshow", reset);
+  }, []);
+  if (status === "signedIn" && session) return <div key={session.user.id}>{children}</div>;
+
+  const teacher = role === "teacher";
+  const features = teacher
+    ? [["Set up a class", "Share a join code with your students."], ["Assign work", "Build lessons and question papers."], ["Follow class progress", "Review submissions and see which topics need practice."]]
+    : [["Join your class", "Use the class code your teacher shares."], ["Complete assignments", "Open lessons and submit answers online."], ["Check your results", "See marks and feedback from your teacher."]];
+
+  return <section className={`${styles.hero} ${styles.signInHero}`} aria-labelledby="workspace-sign-in">
+    <div>
+      <span className="eyebrow">{teacher ? "Teacher Kit" : "Student classroom"}</span>
+      <h1 id="workspace-sign-in">{teacher ? "Sign in to Teacher Kit" : "Sign in to your classroom"}</h1>
+      <p>Continue with your Google account to open your {teacher ? "teacher workspace" : "classroom"}.</p>
+      {status === "loading" ? <p role="status">Checking your sign-in…</p> : !authEnabled
+        ? <p className={`${styles.notice} ${styles.error}`}>Sign-in is not configured on this site yet.</p>
+        : <button type="button" className="button primary" disabled={busy} aria-busy={busy} onClick={() => { setBusy(true); signInWithGoogle().catch(() => setBusy(false)); }}>{busy ? "Opening Google…" : "Sign in with Google"}</button>}
+      {failed && <p className={`${styles.notice} ${styles.error}`} role="alert">Sign-in did not complete. Please try again.</p>}
+      <Link className={styles.textLink} href={teacher ? "/en/classroom" : "/en/teacher-kit/dashboard"}>{teacher ? "Go to student classroom" : "Go to Teacher Kit"}</Link>
+    </div>
+    <ul className={styles.signInFeatures}>{features.map(([title, note]) => <li key={title}><strong>{title}</strong><span>{note}</span></li>)}</ul>
   </section>;
 }
 

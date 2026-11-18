@@ -18,7 +18,11 @@
     "signInWithGoogle": "Googleでログイン",
     "signOut": "ログアウト",
     "account": "アカウント",
-    "failed": "ログインが完了しませんでした。もう一度お試しください。"
+    "failed": "ログインが完了しませんでした。もう一度お試しください。",
+    "checking": "ログイン状態を確認中…",
+    "openingGoogle": "Googleを開いています…",
+    "signedIn": "ログイン済み",
+    "launchNotice": "ライブデータは11月30日からご利用いただけます。"
   },
   "search": {
     "placeholder": "シミュレーションと分野を検索…",
