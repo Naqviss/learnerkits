@@ -20,6 +20,7 @@ import { bondLengthShort } from "@/lib/simulations/chemistry/bondLengths";
 import { getMoleculeReference } from "@/lib/seo/molecules";
 import { LabNotebook } from "./LabNotebook";
 import { describeConditions } from "@/lib/simulations/chemistry/learning";
+import { PeriodicTableExplorer } from "./PeriodicTableExplorer";
 import styles from "./chemistry.module.css";
 
 const STORAGE = "learnerkits-chemistry-missions-v1";
@@ -30,6 +31,7 @@ const format = (v:number, digits=2) => v.toFixed(digits);
 type ChemistryProps = { locale:string; subject:SubjectDefinition; simulation:SimulationCard; kitLabel?:string };
 export function ChemistryActivitiesClient(props: ChemistryProps) {
   if (props.simulation.slug === "molecule-builder-3d") return <MoleculeBuilder locale={props.locale}/>;
+  if (props.simulation.slug === "periodic-table-hunt") return <PeriodicTableExplorer locale={props.locale} subject={props.subject} simulation={props.simulation}/>;
   return getCourseLab(props.simulation.slug) ? <ChemistryCourseClient key={props.simulation.slug} {...props}/> : <LegacyChemistryActivitiesClient key={props.simulation.slug} {...props}/>;
 }
 function LegacyChemistryActivitiesClient({ locale, subject, simulation, kitLabel }: ChemistryProps) {

@@ -6,6 +6,11 @@ const out = new URL("../out/", import.meta.url);
 const config = readFileSync(new URL("../lib/i18n/config.ts", import.meta.url), "utf8");
 const defaultLocale = config.match(/export const defaultLocale: Locale = "([^"]+)"/)[1];
 
+// Social campaign artwork is for local publishing workflows, not the website.
+// Next copies public/ into out/ during a static export, so remove it before Wrangler
+// uploads the out/ directory to Cloudflare.
+rmSync(new URL("images/social/", out), { recursive: true, force: true });
+
 // The bare domain is the canonical English homepage (see localizedUrl), so "/" serves the
 // same HTML as /en. Keep that URL stable for every browser and crawler. Visitors
 // can choose another language using the existing language selector.

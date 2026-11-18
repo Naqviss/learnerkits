@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
-import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, siteName, siteUrl } from "@/lib/seo/metadata";
+import { breadcrumbJsonLd, faqJsonLd, imageRights, jsonLd, localizedMetadata, siteName, siteUrl } from "@/lib/seo/metadata";
 import { moleculeImage, moleculeImageAlt, moleculeImageSize } from "@/lib/seo/molecule-image";
 import { classMistake, getMoleculeReference, getMoleculesWithShape, isMoleculeIndexed, lewisSteps, moleculeCopy, moleculeFamily, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
 import { moleculeAbout } from "@/lib/seo/molecule-about";
@@ -88,7 +88,7 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
     audience: { "@type": "EducationalAudience", educationalRole: ["student", "teacher", "researcher"] },
     about: { "@type": "MolecularEntity", name: molecule.name, molecularFormula: molecule.asciiFormula },
     isPartOf: { "@type": "CollectionPage", name: "VSEPR shapes chart", url: `${siteUrl}/en/molecules` },
-    primaryImageOfPage: { "@type": "ImageObject", contentUrl: diagram.url, url: diagram.url, ...moleculeImageSize.page, caption: diagram.alt },
+    primaryImageOfPage: { "@type": "ImageObject", contentUrl: diagram.url, url: diagram.url, ...moleculeImageSize.page, caption: diagram.alt, ...imageRights() },
     image: [diagram.url, `${siteUrl}${moleculeImage(molecule.slug).jpg}`],
     provider: { "@type": "Organization", name: siteName, url: siteUrl },
   };

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { Locale } from "@/lib/i18n/config";
 import type { SubjectSlug } from "@/lib/subjects/catalog";
 import { subjectImages, subjectImageCaptions } from "@/lib/subjects/images";
-import { localizedUrl, siteName, siteUrl } from "./metadata";
+import { imageRights, localizedUrl, siteUrl } from "./metadata";
 
 export function withSubjectImage(metadata: Metadata, locale: Locale, subject: SubjectSlug): Metadata {
   const image = subjectImages[subject];
@@ -28,6 +28,6 @@ export function subjectImageJsonLd(locale: Locale, subject: SubjectSlug) {
     encodingFormat: "image/webp",
     description: image.alt[locale],
     caption: subjectImageCaptions[locale],
-    creditText: siteName,
+    ...imageRights(),
   };
 }

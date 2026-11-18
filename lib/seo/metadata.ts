@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { defaultLocale, indexedLocales, isIndexedLocale, locales, type Locale } from "@/lib/i18n/config";
+import { brandShareCard, shareCardAlt, shareCardForPath, shareCardPath } from "@/lib/seo/share-card";
 
 // Keep production URLs canonical even when the deployment has not supplied the env var yet.
 // Local development can still override this with NEXT_PUBLIC_SITE_URL=http://localhost:3000.
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://www.learnerkits.com")).replace(/\/$/, "");
 export const siteName = "LearnerKits";
 export const siteSlogan = "Predict. Experiment. Explain.";
-export const defaultOgImage = `${siteUrl}/og-default.png`;
+// Branded 1200×630 JPEG link preview (see lib/seo/share-card.ts); pages with their own picture override it.
+export const defaultOgImage = `${siteUrl}${shareCardPath(brandShareCard.key)}`;
 
 const ogLocales: Record<Locale, string> = {
   en: "en_US",
@@ -60,6 +62,9 @@ export function localizedMetadata(
           ...indexedLocales.map((code) => [hreflangCodes[code], localizedUrl(code, path)] as const),
           ["x-default", localizedUrl(defaultLocale, path)] as const,
         ]);
+  // English pages get a preview card naming the page (simulation, section); everything else the brand card.
+  const card = (safeLocale === defaultLocale ? shareCardForPath(path) : undefined) ?? brandShareCard;
+  const shareImage = { url: `${siteUrl}${shareCardPath(card.key)}`, width: 1200, height: 630, type: "image/jpeg", alt: shareCardAlt(card) };
   const alternateLocale = options.englishOnly ? [] : locales.filter((code) => code !== safeLocale).map((code) => ogLocales[code]);
 
   return {
@@ -92,10 +97,23 @@ export function localizedMetadata(
       siteName,
       locale: ogLocales[safeLocale],
       alternateLocale,
-      images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
+      images: [shareImage],
     },
-    twitter: { card: "summary_large_image", title, description, images: [defaultOgImage] },
+    twitter: { card: "summary_large_image", title, description, images: [{ url: shareImage.url, alt: shareImage.alt }] },
     other: { "content-language": hreflangCodes[safeLocale] },
+  };
+}
+
+// Rights fields for ImageObject structured data on original LearnerKits images. Google's image
+// metadata report (Search Console) checks these; with them, Google Images can show a "Licensable"
+// badge that links to how the image may be used and how to ask for wider reuse.
+export function imageRights() {
+  return {
+    creditText: siteName,
+    creator: { "@type": "Organization", name: siteName, url: `${siteUrl}/en/about` },
+    copyrightNotice: `© ${new Date().getUTCFullYear()} ${siteName}`,
+    license: `${siteUrl}/en/terms#content-and-intellectual-property`,
+    acquireLicensePage: `${siteUrl}/en/contact`,
   };
 }
 

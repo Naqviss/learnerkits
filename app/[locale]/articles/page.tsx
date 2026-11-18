@@ -8,6 +8,7 @@ import { ArticleCard } from "@/components/articles/ArticleCard";
 import { ArticleFilter } from "@/components/articles/ArticleFilter";
 import { ManagedArticleList } from "@/components/articles/ManagedArticleContent";
 import { breadcrumbJsonLd, jsonLd, localizedMetadata, localizedUrl, siteUrl } from "@/lib/seo/metadata";
+import { articleShareImagePath } from "@/lib/seo/share-card";
 import styles from "@/components/articles/articles.module.css";
 
 export function generateStaticParams() { return [{ locale: "en" }]; }
@@ -16,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (locale !== "en") return {};
   const metadata = localizedMetadata("en", "/articles", "Science News & Articles: Concepts, Virtual Labs & AI", "Science concepts explained with experiments, plus guides to virtual labs, AI in education, self-study, and digital science notebooks for students and teachers.", { englishOnly: true });
   const image = articleImages[articles[0].slug];
-  return { ...metadata, openGraph: { ...metadata.openGraph, images: [{ url: `${siteUrl}${image.socialSrc}`, width: 1200, height: 630, type: "image/webp", alt: image.alt }] }, twitter: { ...metadata.twitter, card: "summary_large_image", images: [{ url: `${siteUrl}${image.socialSrc}`, alt: image.alt }] } };
+  return { ...metadata, openGraph: { ...metadata.openGraph, images: [{ url: `${siteUrl}${articleShareImagePath(image.socialSrc)}`, width: 1200, height: 630, type: "image/jpeg", alt: image.alt }] }, twitter: { ...metadata.twitter, card: "summary_large_image", images: [{ url: `${siteUrl}${image.socialSrc}`, alt: image.alt }] } };
 }
 
 export default async function ArticlesPage({ params }: { params: Promise<{ locale: string }> }) {

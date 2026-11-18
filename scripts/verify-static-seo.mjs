@@ -46,6 +46,12 @@ export function verifyStaticSeo(out, expectedOrigin) {
     }
     const tags = headTags(html, location);
     if (isNoindex(tags)) throw new Error(`Sitemap page is marked noindex: ${location}`);
+    // Link previews (WhatsApp, Facebook, LinkedIn, X): an exported JPEG or PNG on this site.
+    const ogImage = tags.find((tag) => tag.tag === "meta" && tag.property === "og:image")?.content;
+    if (!ogImage) throw new Error(`Sitemap page has no og:image: ${location}`);
+    const image = new URL(ogImage);
+    if (image.origin !== url.origin || !/\.(jpe?g|png)$/i.test(image.pathname)) throw new Error(`og:image must be a JPEG or PNG on this site: ${location} -> ${ogImage}`);
+    if (!existsSync(new URL(image.pathname.slice(1), out))) throw new Error(`og:image file was not exported: ${location} -> ${ogImage}`);
     const canonicals = tags.filter((tag) => tag.tag === "link" && tag.rel === "canonical");
     if (canonicals.length !== 1 || !canonicals[0].href || new URL(canonicals[0].href).href !== url.href) {
       throw new Error(`Sitemap page has a missing or mismatched canonical: ${location}`);

@@ -10,4 +10,7 @@ coverage/
 .wrangler/
 out/
 
+# Local social-media campaign artwork; never commit or deploy it.
+public/images/social/
+
 .dev.vars*

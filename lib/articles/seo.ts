@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import type { Article } from "./index";
 import { articleImages } from "./images";
 import { articleKind } from "./catalog";
-import { localizedMetadata, localizedUrl, siteName, siteUrl } from "@/lib/seo/metadata";
+import { imageRights, localizedMetadata, localizedUrl, siteName, siteUrl } from "@/lib/seo/metadata";
+import { articleShareImagePath } from "@/lib/seo/share-card";
 
 export function articleMetadata(article: Article): Metadata {
   const title = "seoTitle" in article ? article.seoTitle : article.title;
@@ -21,9 +22,9 @@ export function articleMetadata(article: Article): Metadata {
       modifiedTime: article.updatedAt,
       authors: [localizedUrl("en", "/about")],
       section: article.category,
-      images: [{ url: `${siteUrl}${image.socialSrc}`, type: "image/webp", width: 1200, height: 630, alt: image.alt }],
+      images: [{ url: `${siteUrl}${articleShareImagePath(image.socialSrc)}`, type: "image/jpeg", width: 1200, height: 630, alt: image.alt }],
     },
-    twitter: { card: "summary_large_image", title, description: article.description, images: [{ url: `${siteUrl}${image.socialSrc}`, alt: image.alt }] },
+    twitter: { card: "summary_large_image", title, description: article.description, images: [{ url: `${siteUrl}${articleShareImagePath(image.socialSrc)}`, alt: image.alt }] },
   };
 }
 
@@ -45,9 +46,8 @@ export function articleJsonLd(article: Article) {
       name: article.title, url: `${siteUrl}${image.src}`, contentUrl: `${siteUrl}${image.src}`,
       thumbnailUrl: `${siteUrl}${image.smallSrc}`, width: image.width, height: image.height,
       caption: image.caption, description: image.alt, encodingFormat: "image/webp",
-      representativeOfPage: true, creditText: siteName,
-      creator: { "@type": "Organization", name: siteName, url: localizedUrl("en", "/about") },
-    }, ...article.figures.map((figure) => ({ "@type": "ImageObject", "@id": `${url}#figure-${figure.id}`, url: `${siteUrl}${figure.src}`, contentUrl: `${siteUrl}${figure.src}`, width: figure.width, height: figure.height, caption: figure.caption, description: figure.alt, encodingFormat: "image/webp" }))],
+      representativeOfPage: true, ...imageRights(),
+    }, ...article.figures.map((figure) => ({ "@type": "ImageObject", "@id": `${url}#figure-${figure.id}`, url: `${siteUrl}${figure.src}`, contentUrl: `${siteUrl}${figure.src}`, width: figure.width, height: figure.height, caption: figure.caption, description: figure.alt, encodingFormat: "image/webp", ...imageRights() }))],
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
     inLanguage: "en",

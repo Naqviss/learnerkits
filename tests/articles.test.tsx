@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { articleShareImagePath } from "@/lib/seo/share-card";
 import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import sharp from "sharp";
@@ -75,8 +76,8 @@ describe("article publishing", () => {
       expect(structured.citation.length).toBeGreaterThan(0);
       expect(Object.keys(metadata.alternates!.languages!)).toEqual(["en", "x-default"]);
       const image = articleImages[article.slug];
-      expect(metadata.openGraph).toMatchObject({ type: "article", images: [{ url: `${siteUrl}${image.socialSrc}`, type: "image/webp", width: 1200, height: 630, alt: image.alt }] });
-      expect(metadata.twitter).toMatchObject({ card: "summary_large_image", images: [{ url: `${siteUrl}${image.socialSrc}`, alt: image.alt }] });
+      expect(metadata.openGraph).toMatchObject({ type: "article", images: [{ url: `${siteUrl}${articleShareImagePath(image.socialSrc)}`, type: "image/jpeg", width: 1200, height: 630, alt: image.alt }] });
+      expect(metadata.twitter).toMatchObject({ card: "summary_large_image", images: [{ url: `${siteUrl}${articleShareImagePath(image.socialSrc)}`, alt: image.alt }] });
       expect(structured.image[0]).toMatchObject({ contentUrl: `${siteUrl}${image.src}`, thumbnailUrl: `${siteUrl}${image.smallSrc}`, width: 1200, height: 800, encodingFormat: "image/webp", creditText: "LearnerKits", representativeOfPage: true });
       expect(metadata.robots).toMatchObject({ index: true, follow: true, googleBot: { "max-image-preview": "large" } });
     }

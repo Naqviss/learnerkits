@@ -40,11 +40,15 @@ describe("chemistry discovery and indexability",()=>{
    for(const lab of courseLabs)expect(html).not.toContain(`/simulations/${lab.slug}"`);
   }
  });
- it("excludes the hidden element hunt from listings, sitemap, route generation and direct access",async()=>{
-  expect(getSimulationCard("periodic-table-hunt")).toBeUndefined();
-  expect(sitemap().some(p=>p.url.includes("periodic-table-hunt"))).toBe(false);
-  expect(generateStaticParams().some(p=>p.slug==="periodic-table-hunt")).toBe(false);
-  await expect(SimulationPage({params:Promise.resolve({locale:"en",slug:"periodic-table-hunt"})})).rejects.toThrow("NEXT_HTTP_ERROR_FALLBACK;404");
+ it("publishes the complete periodic table in listings, sitemap, routes and metadata",async()=>{
+  const simulation=getSimulationCard("periodic-table-hunt");
+  expect(simulation?.title).toBe("Interactive Periodic Table");
+  expect(simulation?.concepts).toContain("118 elements");
+  expect(sitemap().some(p=>p.url.endsWith("/en/simulations/periodic-table-hunt"))).toBe(true);
+  expect(generateStaticParams().some(p=>p.slug==="periodic-table-hunt")).toBe(true);
+  const metadata=await generateMetadata({params:Promise.resolve({locale:"en",slug:"periodic-table-hunt"})});
+  expect(metadata.title).toContain("Interactive Periodic Table");
+  await expect(SimulationPage({params:Promise.resolve({locale:"en",slug:"periodic-table-hunt"})})).resolves.toBeTruthy();
  });
  it("keeps classroom role sections out of the public experiment guide",()=>{
   const html=renderToStaticMarkup(<SimulationGuide locale="en" subject={subjectsCatalog.chemistry} simulation={getSimulationCard("acid-base-ph")!}/>);

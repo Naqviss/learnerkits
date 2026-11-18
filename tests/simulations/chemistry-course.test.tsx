@@ -113,14 +113,16 @@ describe("chemistry course models",()=>{
   const s=solubilityResult({temperature:50,water:50,solute:80});
   expect(s).toEqual({capacity:30,dissolved:30,crystals:50});
  });
- it.runIf(chemistryCoursePublished)("provides valid public links for every topic and excludes the hidden hunt",()=>{
+ it.runIf(chemistryCoursePublished)("provides valid public links for every topic and the periodic table",()=>{
   const slugs=subjectsCatalog.chemistry.simulations.map(s=>s.slug);
-  expect(slugs).toHaveLength(26);
+  expect(slugs).toHaveLength(27);
+  expect(slugs).toContain("periodic-table-hunt");
   for(const topic of chemistryTopics)for(const slug of topic.slugs){expect(slugs).toContain(slug);expect(hiddenSimulationSlugs.has(slug)).toBe(false);}
  });
  it.skipIf(chemistryCoursePublished)("unpublishes every course lab while keeping the original chemistry labs",()=>{
   const slugs=subjectsCatalog.chemistry.simulations.map(s=>s.slug);
-  expect(slugs).toHaveLength(12);
+  expect(slugs).toHaveLength(13);
+  expect(slugs).toContain("periodic-table-hunt");
   for(const lab of courseLabs){expect(slugs).not.toContain(lab.slug);expect(hiddenSimulationSlugs.has(lab.slug)).toBe(true);}
  });
  it.each(courseLabs.map(l=>[l.slug,l] as const))("renders every %s control endpoint without invalid model output",(_slug,lab)=>{
