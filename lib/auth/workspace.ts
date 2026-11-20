@@ -4,6 +4,11 @@ export function workspaceHome(mode: WorkspaceMode) {
   return mode === "teacher" ? "/en/teacher-kit/dashboard" : "/en/classroom";
 }
 
+export function isWorkspaceLandingPath(pathname: string, locale: string) {
+  const normalized = pathname === "/" ? "" : pathname.replace(/\/$/, "");
+  return normalized === "" || normalized === `/${locale}`;
+}
+
 export function workspaceModeForPath(pathname: string): WorkspaceMode | null {
   const [, , section, page] = pathname.split("/");
   if (section === "teacher-kit" && page === "dashboard") return "teacher";

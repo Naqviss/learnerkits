@@ -102,17 +102,19 @@
 @media(max-width:560px){.grid3,.grid4,.form{grid-template-columns:1fr}.panel{padding:16px}.toast{left:12px;right:12px}}
 
 :global([data-workspace]) .page {
-  width: min(1180px, calc(100% - 2 * var(--workspace-gutter)));
-  padding-block: 22px clamp(30px, 5vw, 64px);
+  width: min(var(--workspace-page-width), calc(100% - 2 * var(--workspace-gutter)));
+  padding-block: 28px clamp(30px, 5vw, 64px);
 }
 :global([data-workspace]) .head,
 :global([data-workspace]) .progressHero {
   margin: 0 0 18px;
   padding: clamp(22px, 3.8vw, 42px);
-  border: 1px solid #375486;
-  border-radius: 20px;
-  background: radial-gradient(ellipse at 100% 0%, #284d87, transparent 65%), #172847;
+  min-height: 190px;
+  border: 0;
+  border-radius: 14px;
+  background: radial-gradient(circle at 88% 16%, #5c94e8 0 6px, transparent 7px), radial-gradient(circle at 93% 30%, #83adeb 0 4px, transparent 5px), linear-gradient(125deg, #174ea6, #1967d2 68%, #4285f4);
   color: #f4f8ff;
+  box-shadow: 0 2px 6px #174ea62b;
 }
 :global([data-workspace]) .head h1,
 :global([data-workspace]) .progressHero h1 { font-size: clamp(1.9rem, 3.1vw, 3.05rem); }
@@ -122,6 +124,12 @@
 :global([data-workspace]) .head :global(.eyebrow)::before { display: none; }
 :global([data-workspace]) .progressHero { margin-bottom: 0; }
 :global([data-workspace]) .rankCard { color: var(--text); }
-:global([data-workspace]) .stat { padding: 18px; box-shadow: 0 2px 6px #1222420a; }
+:global([data-workspace]) .stat { padding: 18px; border-radius: 12px; box-shadow: 0 1px 3px #12224212; }
 :global([data-workspace]) .stat strong { font-variant-numeric: tabular-nums; }
-:global([data-workspace]) .panel { box-shadow: 0 2px 8px #1222420a; }
+:global([data-workspace]) .panel { border-radius: 12px; box-shadow: 0 1px 3px #12224212; }
+:global([data-workspace]) .tabs { border-radius: 10px; padding: 4px; box-shadow: 0 1px 2px #1222420a; }
+:global([data-workspace="teacher"]) .tabs { display: none; }
+:global([data-workspace]) .tabs button { border-radius: 7px; }
+:global([data-workspace]) .tabs button[aria-selected="true"] { background: color-mix(in srgb, var(--accent) 11%, var(--surface)); color: var(--accent); }
+:global([data-workspace]) .item { transition: border-color .15s ease, background .15s ease; }
+:global([data-workspace]) button.item:hover { border-color: color-mix(in srgb, var(--accent) 42%, var(--line)); background: color-mix(in srgb, var(--accent) 3%, var(--surface)); }

@@ -6,6 +6,7 @@ import { displayDifficulty, getEducationCopy, getLocalizedSubject, getLocalizedS
 import { localizedMetadata } from "@/lib/seo/metadata";
 import { hiddenSubjectSlugs, subjectSlugs, subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { SimulationLibrary } from "@/components/simulation/SimulationLibrary";
+import { LearningHub } from "@/components/workspace/LearningHub";
 
 export async function generateMetadata({params}:{params:Promise<{locale:string}>}):Promise<Metadata>{
   const {locale:raw}=await params,locale=isLocale(raw)?raw:"en",copy=getEducationCopy(locale);
@@ -19,9 +20,7 @@ export default async function Simulations({params}:{params:Promise<{locale:strin
   const all=subjects.flatMap(({data})=>data.simulations);
   const labs=subjects.flatMap(({slug,name,data})=>data.simulations.map((sim,index)=>({slug,name,sim,base:subjectsCatalog[slug].simulations[index]})));
   const levels=(["Beginner","Intermediate","Advanced"] as const).map(value=>({value,label:displayDifficulty(raw,value)}));
-  return <main className="container educationLibrary simLibrary">
-    <header className="pageHeader generalPageHeader libHeader"><div className="eyebrow">{copy.library.eyebrow}</div><h1 className="pageTitle">{copy.library.title}</h1><p className="lede">{copy.library.body(all.length,visibleSubjectSlugs.length)}</p></header>
-    <SimulationLibrary
+  const library=<SimulationLibrary
       groups={subjects.map(({slug,name,data})=>({slug,name,meta:`${data.simulations.length} ${copy.generic.labs}`,href:`/${raw}/subjects/${slug}`,viewLabel:copy.library.viewSubject}))}
       upcoming={subjectSlugs.filter(slug=>hiddenSubjectSlugs.has(slug)).map(slug=>({slug,name:getLocalizedSubjectName(raw,slug)}))}
       items={labs.map(({slug,name,sim,base})=>({subject:slug,level:sim.difficulty,text:[sim.title,sim.kind,sim.concepts,sim.outcome,name,base.title,base.concepts,sim.slug.replace(/-/g," ")].filter(Boolean).join(" ")}))}
@@ -32,6 +31,10 @@ export default async function Simulations({params}:{params:Promise<{locale:strin
       <h3>{sim.title}</h3>
       <p>{sim.outcome}</p>
       <div className="libCardMeta"><span className="pill">{displayDifficulty(raw,sim.difficulty)}</span><span className="pill">{sim.duration}</span><b aria-hidden="true">→</b></div>
-    </Link>)}</SimulationLibrary>
+    </Link>)}</SimulationLibrary>;
+  const publicContent=<main className="container educationLibrary simLibrary">
+    <header className="pageHeader generalPageHeader libHeader"><div className="eyebrow">{copy.library.eyebrow}</div><h1 className="pageTitle">{copy.library.title}</h1><p className="lede">{copy.library.body(all.length,visibleSubjectSlugs.length)}</p></header>
+    {library}
   </main>;
+  return <LearningHub kind="simulations" title="Simulations" description="Explore interactive labs, continue missions and track the activities you complete." total={all.length} secondaryCount={visibleSubjectSlugs.length} secondaryLabel="Subjects" publicContent={publicContent}>{library}</LearningHub>;
 }

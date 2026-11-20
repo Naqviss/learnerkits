@@ -9,6 +9,7 @@ import { examPrepSeo } from "@/lib/exam-prep/seo";
 import { Breadcrumbs, IndependenceNotice } from "@/components/exam-prep/Shell";
 import { faqJsonLd, jsonLd, localizedMetadata, localizedUrl, siteName, siteUrl } from "@/lib/seo/metadata";
 import styles from "@/components/exam-prep/examPrep.module.css";
+import { LearningHub } from "@/components/workspace/LearningHub";
 
 export function generateStaticParams() { return [{ locale: "en" }]; }
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -65,8 +66,12 @@ export default async function ExamPrepPage({ params }: { params: Promise<{ local
       ],
     },
   };
+  const boardTiles=<div className={styles.tiles}>{boards.map((board) => <Link key={board.id} className={styles.tile} style={{ "--tint": board.color } as React.CSSProperties} href={`/en/exam-prep/${board.id}`}>
+    <div className={styles.tileTop}><span className={styles.glyph} aria-hidden="true">{board.icon}</span><span aria-hidden="true">↗</span></div>
+    <h3>{board.name} exam prep</h3><p>{board.sub}</p><span className={styles.subline}>Explore levels →</span>
+  </Link>)}<Link className={styles.tile} style={{ "--tint": "#5275e7" } as React.CSSProperties} href="/en/exam-prep/any-board"><div className={styles.tileTop}><span className={styles.glyph} aria-hidden="true">+</span><span className={styles.badge}>Universal route</span></div><h3>Another exam board</h3><p>Match any official syllabus topic to the subject resources currently published on LearnerKits.</p><span className={styles.subline}>Prepare with another board →</span></Link></div>;
 
-  return <main className={`container ${styles.page}`}>
+  const publicContent=<main className={`container ${styles.page}`}>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(collection)} />
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faqJsonLd("en", [...examPrepSeo.faqs]))} />
     <Breadcrumbs items={[{ name: "Exam Prep", path: "/exam-prep" }]} />
@@ -85,10 +90,7 @@ export default async function ExamPrepPage({ params }: { params: Promise<{ local
 
     <section id="exam-boards" aria-labelledby="boards-heading" className={styles.contentSection}>
       <div className={styles.sectionHead}><span className="eyebrow">Start here</span><h2 id="boards-heading">Choose your exam board</h2><p>Each route separates published syllabus coverage from illustrative previews, so you can see exactly what has been checked.</p></div>
-      <div className={styles.tiles}>{boards.map((board) => <Link key={board.id} className={styles.tile} style={{ "--tint": board.color } as React.CSSProperties} href={`/en/exam-prep/${board.id}`}>
-        <div className={styles.tileTop}><span className={styles.glyph} aria-hidden="true">{board.icon}</span><span aria-hidden="true">↗</span></div>
-        <h3>{board.name} exam prep</h3><p>{board.sub}</p><span className={styles.subline}>Explore levels →</span>
-      </Link>)}<Link className={styles.tile} style={{ "--tint": "#5275e7" } as React.CSSProperties} href="/en/exam-prep/any-board"><div className={styles.tileTop}><span className={styles.glyph} aria-hidden="true">+</span><span className={styles.badge}>Universal route</span></div><h3>Another exam board</h3><p>Match any official syllabus topic to the subject resources currently published on LearnerKits.</p><span className={styles.subline}>Prepare with another board →</span></Link></div>
+      {boardTiles}
     </section>
 
     <section aria-labelledby="method-heading" className={styles.contentSection}>
@@ -116,4 +118,5 @@ export default async function ExamPrepPage({ params }: { params: Promise<{ local
 
     <IndependenceNotice />
   </main>;
+  return <LearningHub kind="exam-prep" title="Exam preparation" description="Choose your board and qualification, revise by topic and keep an eye on your practice scores." total={boards.length + 1} secondaryCount={subjects.length} secondaryLabel="Subjects" publicContent={publicContent}>{boardTiles}</LearningHub>;
 }

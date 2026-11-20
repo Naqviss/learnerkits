@@ -1,7 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { workspaceModeForPath, workspaceRedirect } from "@/lib/auth/workspace";
+import { isWorkspaceLandingPath, workspaceModeForPath, workspaceRedirect } from "@/lib/auth/workspace";
 
 describe("workspace mode routing", () => {
+  it("recognizes both canonical and localized landing URLs", () => {
+    expect(isWorkspaceLandingPath("/", "en")).toBe(true);
+    expect(isWorkspaceLandingPath("", "en")).toBe(true);
+    expect(isWorkspaceLandingPath("/en", "en")).toBe(true);
+    expect(isWorkspaceLandingPath("/en/", "en")).toBe(true);
+    expect(isWorkspaceLandingPath("/en/simulations", "en")).toBe(false);
+  });
   it("chooses the role from a direct workspace link when no preference exists", () => {
     expect(workspaceModeForPath("/en/teacher-kit/dashboard")).toBe("teacher");
     expect(workspaceModeForPath("/en/classroom")).toBe("student");
