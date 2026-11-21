@@ -26,6 +26,9 @@ export function verifyUnlistedLocales(out, unlistedLocales) {
   return checked;
 }
 
+// A sentence that only appears in the generic simulation guide (lib/seo/simulation-guides.ts).
+const templatedGuide = /Change one variable so its effect is easier to identify\./;
+
 // Validate the generated files, after cleanup, rather than just the source metadata.
 export function verifyStaticSeo(out, expectedOrigin) {
   const sitemap = readFileSync(new URL("sitemap.xml", out), "utf8");
@@ -45,6 +48,10 @@ export function verifyStaticSeo(out, expectedOrigin) {
       throw new Error(`Sitemap page has no exported HTML: ${location}`, { cause: error });
     }
     const tags = headTags(html, location);
+    // Bing flags titles over 70 characters (lib/seo/metadata.ts maxTitleLength).
+    const title = (html.match(/<title>([\s\S]*?)<\/title>/i)?.[1] ?? "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'");
+    if (!title.trim()) throw new Error(`Sitemap page has no title: ${location}`);
+    if ([...title].length > 70) throw new Error(`Title over 70 characters (${[...title].length}): ${location} -> ${title}`);
     if (isNoindex(tags)) throw new Error(`Sitemap page is marked noindex: ${location}`);
     // Link previews (WhatsApp, Facebook, LinkedIn, X): an exported JPEG or PNG on this site.
     const ogImage = tags.find((tag) => tag.tag === "meta" && tag.property === "og:image")?.content;
@@ -55,6 +62,12 @@ export function verifyStaticSeo(out, expectedOrigin) {
     const canonicals = tags.filter((tag) => tag.tag === "link" && tag.rel === "canonical");
     if (canonicals.length !== 1 || !canonicals[0].href || new URL(canonicals[0].href).href !== url.href) {
       throw new Error(`Sitemap page has a missing or mismatched canonical: ${location}`);
+    }
+    // The September 2026 spam update demoted this site for templated pages. An indexed English
+    // simulation page must carry its own content (lib/seo/simulation-content), not the generic
+    // fallback guide shared by every lab.
+    if (/^\/en\/simulations\/[^/]+$/.test(url.pathname) && templatedGuide.test(html)) {
+      throw new Error(`Simulation page uses the generic template instead of its own content (add it to lib/seo/simulation-content): ${location}`);
     }
   }
   return urls.length;

@@ -55,16 +55,18 @@ describe("published locales", () => {
     for (const locale of disabledLocales) expect(html).not.toContain(`value="${locale}"`);
   });
 
-  it.each(disabledLocales)("temporarily redirects %s deep links and preserves the query", async (locale) => {
+  it.each(disabledLocales)("permanently redirects %s deep links for search engines and preserves the query", async (locale) => {
     const response = await worker.fetch(new Request(`https://www.learnerkits.com/${locale}/simulations/moon-phases-3d?source=bookmark`), env);
-    expect(response.status).toBe(307);
+    expect(response.status).toBe(301);
+    // Browsers re-check daily, so a paused language can be restored later.
+    expect(response.headers.get("cache-control")).toBe("public, max-age=86400");
     expect(response.headers.get("location")).toBe("https://www.learnerkits.com/en/simulations/moon-phases-3d?source=bookmark");
   });
 
   it.each(disabledLocales)("redirects the %s homepage directly to the canonical homepage", async (locale) => {
     for (const suffix of ["", "/"]) {
       const response = await worker.fetch(new Request(`https://www.learnerkits.com/${locale}${suffix}`), env);
-      expect(response.status).toBe(307);
+      expect(response.status).toBe(301);
       expect(response.headers.get("location")).toBe("https://www.learnerkits.com/");
     }
   });

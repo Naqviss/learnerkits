@@ -17,8 +17,8 @@ describe("signed-in launch notice", () => {
 
   it("appears at the top for signed-in users", () => {
     mockedUseAuth.mockReturnValue({ status: "signedIn", session: null, failed: false });
-    const html = renderToStaticMarkup(<SignedInNotice message="Your live data will be available on 30 November."/>);
+    const html = renderToStaticMarkup(<SignedInNotice message="LearnerKits goes fully live on 30 November. Some features are still in preview until then."/>);
     expect(html).toContain("signedInNotice");
-    expect(html).toContain("Your live data will be available on 30 November.");
+    expect(html).toContain("LearnerKits goes fully live on 30 November. Some features are still in preview until then.");
   });
 });

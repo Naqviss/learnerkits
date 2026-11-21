@@ -82,8 +82,8 @@ export function ChemistryCourseClient({locale,subject,simulation}:{locale:string
  useEffect(()=>{if(motion&&v[motion.key]>=motion.max)setPlaying(false);},[v,motion]);
  function update(key:string,value:number){setPlaying(false);setValues(old=>({...old,[key]:value,...(key==="family"?{step:0}:lab.slug==="chemical-equilibrium"&&key!=="elapsed"?{elapsed:0}:{})}));}
  const readings=courseReadings(lab.slug,v);
- return <main className={`${base.page} ${styles.page}`}>
-  <header className={base.header}><div><Link className={base.back} href={`/${locale}/subjects/chemistry`}>← {subject.eyebrow}</Link><div className={base.eyebrow}>{lab.topic.toUpperCase()} · INTERACTIVE LAB</div><h1>{simulation.title}</h1><p>{simulation.outcome}</p></div></header>
+ return <div className={`${base.page} ${styles.page}`}>
+  <header className={base.header}><div><Link className={base.back} href={`/${locale}/subjects/chemistry`}>← {subject.eyebrow}</Link><div className={base.eyebrow}>{lab.topic.toUpperCase()} · INTERACTIVE LAB</div><h2>{simulation.title}</h2><p>{simulation.outcome}</p></div></header>
   <div className={base.workspace}>
    <section className={base.scenePanel} aria-label={simulation.title}>
     <div className={base.sceneTop}><span><i/>{lab.topic}</span><span className={styles.modelBadge}>LIVE MODEL</span></div>
@@ -93,13 +93,12 @@ export function ChemistryCourseClient({locale,subject,simulation}:{locale:string
     <p className={styles.formula}>{lab.formula}</p>
    </section>
    <aside className={base.controlsPanel}>
-    <div className={base.controlTitle}><h2>Experiment controls</h2><button onClick={()=>{setValues(initial());setPlaying(false);}}>↺ Reset</button></div>
+    <div className={base.controlTitle}><h2>Tools &amp; controls</h2><button onClick={()=>{setValues(initial());setPlaying(false);}}>↺ Reset</button></div>
     <div className={styles.controls}>{lab.controls.filter(c=>visibleControl(lab.slug,c.key,v)).map(c=>c.options?<label key={c.key} className={base.control}><span><b>{c.label}</b></span><select value={v[c.key]} onChange={e=>update(c.key,Number(e.target.value))}>{c.options.map((name,i)=><option key={name} value={i}>{name}</option>)}</select></label>:<NumericControl key={c.key} c={c} value={v[c.key]} onChange={n=>update(c.key,n)}/>)}</div>
     {motion&&<button className={base.action} onClick={()=>{if(v[motion.key]>=motion.max)setValues(old=>({...old,[motion.key]:motion.min}));setPlaying(p=>!p);}} aria-pressed={playing}>{playing?"Ⅱ Pause":"▶ Play progression"}</button>}
     <div className={styles.exploreNote}><h3>Try changing one thing</h3><p>{lab.steps[0]}</p></div>
-    <details className={base.science}><summary>Model assumptions</summary><p>{lab.assumptions}</p><a href={lab.source} target="_blank" rel="noreferrer">{lab.sourceTitle} ↗</a>{lab.slug==="periodic-trends"&&<a href="https://pubchem.ncbi.nlm.nih.gov/periodic-table" target="_blank" rel="noreferrer">PubChem element reference ↗</a>}{lab.slug==="periodic-trends"&&<a href="https://doi.org/10.1039/B801115J" target="_blank" rel="noreferrer">Cordero et al. · Covalent radii ↗</a>}{lab.slug==="phase-changes-diffusion"&&<a href="https://webbook.nist.gov/cgi/cbook.cgi?ID=C7732185&amp;Mask=4&amp;Type=ANTOINE" target="_blank" rel="noreferrer">NIST · Water vapor pressure ↗</a>}</details>
    </aside>
   </div>
   <section className={styles.scienceSection}><div><span className={base.eyebrow}>THE CHEMISTRY BEHIND THE MODEL</span><h2>{lab.topic}</h2><p>{lab.explanation}</p><div className={styles.topicChips}>{lab.concepts.map(c=><span key={c}>{c}</span>)}</div></div><div><h3>Explore the relationships</h3><ol>{lab.steps.map(s=><li key={s}>{s}</li>)}</ol></div></section>
- </main>;
+ </div>;
 }

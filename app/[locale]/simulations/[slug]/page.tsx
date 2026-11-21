@@ -5,9 +5,10 @@ import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
 import { getSimulationCard, getSubjectForSimulation, isVisibleSubjectSlug } from "@/lib/subjects/catalog";
-import { SimulationGuide } from "@/components/seo/SimulationGuide";
+import { SimulationPageLayout } from "@/components/simulation/SimulationPageLayout";
 import { SimulationAssistant } from "@/components/premium/SimulationAssistant";
 import { getSimulationGuide } from "@/lib/seo/simulation-guides";
+import { getSimulationContent, simulationContentUpdated } from "@/lib/seo/simulation-content";
 import { getMoleculeKitCopy, moleculeKitSimSlugs } from "@/lib/seo/molecule-kit-content";
 import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { BalancingEquationsGuide } from "@/components/seo/BalancingEquationsGuide";
@@ -68,6 +69,7 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
   const simulation = subject.simulations.find((item) => item.slug === slug);
   if (!simulation) notFound();
   const copy = getEducationCopy(safeLocale);
+  const content = safeLocale === "en" ? getSimulationContent(slug) : undefined;
   const targetPhrase = safeLocale === "en" && baseSimulation.seoTarget ? ` ${baseSimulation.seoTarget}.` : "";
   const schema = simulationJsonLd({
     locale: safeLocale,
@@ -76,6 +78,8 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     description: `${simulation.outcome}${targetPhrase}`,
     subject: subject.eyebrow,
     concepts: simulation.concepts ? simulation.concepts.split(" · ") : [],
+    abstract: content?.answer,
+    dateModified: content ? simulationContentUpdated : undefined,
   });
   const crumbs = breadcrumbJsonLd(safeLocale, [
     { name: copy.home.exploreSubjects, path: "/subjects" },
@@ -115,9 +119,9 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)}/>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faq)}/>
     {howTo && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(howTo)}/>}
-    {activity}
+    <SimulationPageLayout locale={safeLocale} subject={subject} simulation={simulation} supplementaryGuide={balancing ? <BalancingEquationsGuide/> : undefined}>
+      {activity}
+    </SimulationPageLayout>
     <SimulationAssistant locale={safeLocale} simulation={{ title: simulation.title, subject: subject.eyebrow, concepts: simulation.concepts }}/>
-    {balancing && <BalancingEquationsGuide/>}
-    <SimulationGuide locale={safeLocale} subject={subject} simulation={simulation}/>
   </>;
 }

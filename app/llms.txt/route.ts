@@ -3,7 +3,7 @@ import { boards, isBoardIndexable } from "@/lib/exam-prep/catalog";
 import { getBoardSeo } from "@/lib/exam-prep/seo";
 import { locales, localeNames } from "@/lib/i18n/config";
 import { siteSlogan, siteUrl } from "@/lib/seo/metadata";
-import { getTopicGuides } from "@/lib/seo/topic-guides";
+import { getSimulationContent } from "@/lib/seo/simulation-content";
 import { moleculeReferences } from "@/lib/seo/molecules";
 import { balancedEquations, balancingAnswer } from "@/lib/seo/balancing-equations";
 import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
@@ -16,14 +16,14 @@ export async function GET() {
   const subjectSections = visibleSubjectSlugs.map((slug) => {
     const subject = subjectsCatalog[slug];
     const links = subject.simulations
-      .map((sim) => `- [${sim.title}](${siteUrl}/en/simulations/${sim.slug}): ${sim.outcome}`)
+      // Each simulation page answers one main question; give AI assistants that answer directly.
+      .map((sim) => {
+        const content = getSimulationContent(sim.slug);
+        return `- [${sim.title}](${siteUrl}/en/simulations/${sim.slug}): ${content ? `${content.question} ${content.answer}` : sim.outcome}`;
+      })
       .join("\n");
     return `## ${subject.headline}\n\n${subject.description}\n\n${links}`;
   });
-  const guideLinks = getTopicGuides()
-    .map((guide) => `- [${guide.title}](${siteUrl}/en/guides/${guide.slug}): ${guide.answer}`)
-    .join("\n");
-
   const articleLinks = articleSummaries.map((article) => `- [${article.title}](${siteUrl}/en/articles/${article.slug}): ${article.description}`).join("\n");
 
   const moleculeLinks = moleculeReferences
@@ -41,7 +41,7 @@ ${siteSlogan}
 
 > Free, interactive science simulations for grades 6-12. Students predict, experiment, observe, and explain across space, physics, geography, environmental science, and chemistry — no sign-up required.
 
-LearnerKits is an education platform with interactive labs, topic guides, and practical science-learning articles. Articles and focused topic guides are currently available in English only. Each simulation page is a self-contained interactive lab with a stated learning outcome, difficulty level, and the concepts it teaches. Currently published languages: ${locales.map((locale) => localeNames[locale]).join(", ")}. The English homepage is at / and English learning pages are at /en/... paths.
+LearnerKits is an education platform with interactive labs and practical science-learning articles. Each English simulation page is a self-contained interactive lab plus a guide: the main question the topic raises and a short answer, step-by-step instructions for the lab, the science behind it, a common misconception, what the model simplifies, and common questions. Articles and guides are currently available in English only. Currently published languages: ${locales.map((locale) => localeNames[locale]).join(", ")}. The English homepage is at / and English learning pages are at /en/... paths.
 
 ## Key pages
 
@@ -68,10 +68,6 @@ ${examBoardLinks}
 ## Science learning articles
 
 ${articleLinks}
-
-## Focused topic guides
-
-${guideLinks}
 
 ${subjectSections.join("\n\n")}
 

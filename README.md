@@ -56,11 +56,13 @@ The supplied roadmap is represented directly in `lib/subjects/catalog.ts` with `
 15. Solubility Curve Simulator
 16. Matrix Transformation Visualizer
 
-Subject pages and the global simulation library surface these first while still exposing the complete 71-lab curriculum. Each published priority lab also has an English topic guide at `/en/guides/{slug}` with unique explanation, investigation prompts, model scope, FAQs, and a direct link into the lab. The two molecular labs are additionally grouped at `/en/molecule-kit` as a focused chemistry hub. Generic simulation metadata uses the supplied SEO phrase as a keyword and creates localized canonical/hreflang metadata.
+Subject pages and the global simulation library surface these first while still exposing the complete 71-lab curriculum. The former topic guides at `/en/guides/{slug}` now 301 to their simulation pages (`public/_redirects`), so each topic has one URL; `/en/guides` is a hub linking every simulation guide by its main question. The two molecular labs are additionally grouped at `/en/molecule-kit` as a focused chemistry hub. Generic simulation metadata uses the supplied SEO phrase as a keyword and creates localized canonical/hreflang metadata.
 
 ## Search and AI discovery operations
 
-`/robots.txt` explicitly allows Googlebot, bingbot, and OpenAI's OAI-SearchBot while keeping `/api/` private. `/sitemap.xml` includes the localized curriculum plus the English topic-guide hubs, and `/llms.txt` exposes a concise machine-readable catalog for AI systems.
+`/robots.txt` explicitly allows Googlebot, bingbot, and OpenAI's OAI-SearchBot while keeping `/api/` private. `/sitemap.xml` includes the localized curriculum plus the English guide hubs, and `/llms.txt` exposes a concise machine-readable catalog for AI systems.
+
+**Simulation page content (English).** Every English simulation page has hand-written, page-specific content in `lib/seo/simulation-content/<subject>.ts`: the main question learners search and an answer-first paragraph (shown under the lab, and published as `abstract` in the page's structured data), steps naming that lab's real controls, the science, a common misconception, what the model simplifies, and topic FAQs (also FAQPage data and `/llms.txt`). Nothing may repeat between pages: `tests/seo/simulation-content.test.ts` checks lengths, banned template and filler phrases, and that no sentence or question is shared between two simulations, and the build fails if an indexed English simulation page falls back to the generic template in `lib/seo/simulation-guides.ts`. A new simulation needs its content entry before it can ship. When content is reviewed, update `simulationContentUpdated` in `lib/seo/simulation-content/types.ts`; it drives the visible "Updated" date, `dateModified` and the sitemap `lastmod`.
 
 After deployment, verify the production property in Google Search Console and Bing Webmaster Tools, submit `https://www.learnerkits.com/sitemap.xml`, and configure IndexNow. The helper submits the current sitemap after the key file is published:
 
@@ -68,7 +70,7 @@ After deployment, verify the production property in Google Search Console and Bi
 INDEXNOW_KEY=your-key NEXT_PUBLIC_SITE_URL=https://www.learnerkits.com npm run indexnow
 ```
 
-Use `INDEXNOW_URLS=https://www.learnerkits.com/en/guides/moon-phases-3d` when only a small set of changed URLs needs to be submitted.
+Use `INDEXNOW_URLS=https://www.learnerkits.com/en/simulations/moon-phases-3d` when only a small set of changed URLs needs to be submitted.
 
 Set `NEXT_PUBLIC_CONTENT_UPDATED_AT=YYYY-MM-DD` whenever indexed educational content changes so sitemap `lastmod` values remain accurate.
 

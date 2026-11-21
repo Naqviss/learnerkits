@@ -31,7 +31,7 @@ If you want a visual walkthrough of every control, the illustrated [environmenta
 
 ## Energy balance experiments with the greenhouse effect simulator
 
-The [Greenhouse Effect Simulator](/en/simulations/greenhouse-effect-simulator) asks: "Why does warming continue after greenhouse gas concentrations stop rising?" Its controls are atmospheric CO₂ from 280 to 800 ppm (default 560), atmospheric methane from 700 to 2600 ppb (default 1900), and planetary reflectivity from 0.26 to 0.34 (default 0.30). The presets are Pre-industrial reference (280 ppm, 700 ppb, 0.30), Double CO₂ only (560 ppm, 700 ppb, 0.30), and Higher reflectivity (0.31). The [greenhouse effect simulator guide](/en/guides/greenhouse-effect-simulator) explains each setting.
+The [Greenhouse Effect Simulator](/en/simulations/greenhouse-effect-simulator) asks: "Why does warming continue after greenhouse gas concentrations stop rising?" Its controls are atmospheric CO₂ from 280 to 800 ppm (default 560), atmospheric methane from 700 to 2600 ppb (default 1900), and planetary reflectivity from 0.26 to 0.34 (default 0.30). The presets are Pre-industrial reference (280 ppm, 700 ppb, 0.30), Double CO₂ only (560 ppm, 700 ppb, 0.30), and Higher reflectivity (0.31). The [greenhouse effect simulator guide](/en/simulations/greenhouse-effect-simulator#guide) explains each setting.
 
 The simulator uses a two-layer global energy-balance model: the surface and the deep ocean store heat separately. It is not a dated projection of future temperatures, and it leaves out aerosols, clouds, and ice feedbacks.
 
@@ -51,7 +51,7 @@ A rough calculation shows why a small change matters. Averaged over the whole pl
 
 ### Experiment 3: Stocks, flows, and the carbon bathtub
 
-The [Carbon Cycle Simulator](/en/simulations/carbon-cycle-simulator) asks: "Is cutting emissions in half enough to stop atmospheric CO₂ rising?" Its controls are human emissions from 0 to 50 GtCO₂/yr (default 38), the land sink at 420 ppm from 0 to 18 (default 9), the ocean sink at 420 ppm from 0 to 14 (default 10), and engineered removal from 0 to 25 (default 0). The presets are Emissions halved (19), No human emissions (0), and Balance at start (emissions 19, land 9, ocean 10). The [carbon cycle simulator guide](/en/guides/carbon-cycle-simulator) describes the full setup.
+The [Carbon Cycle Simulator](/en/simulations/carbon-cycle-simulator) asks: "Is cutting emissions in half enough to stop atmospheric CO₂ rising?" Its controls are human emissions from 0 to 50 GtCO₂/yr (default 38), the land sink at 420 ppm from 0 to 18 (default 9), the ocean sink at 420 ppm from 0 to 14 (default 10), and engineered removal from 0 to 25 (default 0). The presets are Emissions halved (19), No human emissions (0), and Balance at start (emissions 19, land 9, ocean 10). The [carbon cycle simulator guide](/en/simulations/carbon-cycle-simulator#guide) describes the full setup.
 
 :::figure carbon-stock-flow
 
@@ -63,7 +63,7 @@ Next, try No human emissions and predict the direction of change at the start. T
 
 ### Experiment 4: Ocean acidification
 
-The [Ocean Acidification Simulator](/en/simulations/ocean-acidification-simulator) asks: "How can seawater become more acidic while its pH remains above 7?" Its controls are atmospheric CO₂ from 280 to 900 ppm (default 620), warming above 25°C from 0 to 4°C, and a local respiration pressure index from 0 to 100. The presets are 280 ppm atmosphere, Double CO₂ (560), and Local nutrient pressure (80). The [ocean acidification simulator guide](/en/guides/ocean-acidification-simulator) explains the chemistry.
+The [Ocean Acidification Simulator](/en/simulations/ocean-acidification-simulator) asks: "How can seawater become more acidic while its pH remains above 7?" Its controls are atmospheric CO₂ from 280 to 900 ppm (default 620), warming above 25°C from 0 to 4°C, and a local respiration pressure index from 0 to 100. The presets are 280 ppm atmosphere, Double CO₂ (560), and Local nutrient pressure (80). The [ocean acidification simulator guide](/en/simulations/ocean-acidification-simulator#guide) explains the chemistry.
 
 Acidification describes a direction of change, not a final state. Seawater remains basic, above pH 7, but its pH is falling. Because pH is logarithmic, a drop of 0.1 means hydrogen ion concentration is multiplied by 10^0.1 ≈ 1.26, about 26 percent more. [NOAA reports](https://oceanservice.noaa.gov/facts/acidification.html) that surface ocean pH has fallen by about 0.1 since the industrial revolution, roughly a 30 percent increase in acidity. The two figures differ because of rounding: a drop of 0.11 would give 10^0.11 ≈ 1.29, about 29 percent. The simulator uses simplified carbonate equilibrium and does not predict which species survive.
 
@@ -93,7 +93,7 @@ Responses to climate change fall into two groups. Mitigation reduces the cause, 
 
 ### Experiment 8: A renewable energy grid
 
-The [Renewable Energy Grid Simulator](/en/simulations/renewable-energy-grid-simulator) asks: "Can a grid meet the evening peak after solar generation stops?" Its controls are demand (40–140 MW), solar (0–300 MW), wind (0–250 MW), hydro (0–100 MW), battery storage (0–500 MWh), and gas backup (0–150 MW). The presets are Solar-heavy no battery, Add a 400 MWh battery, and Diverse supply. The [renewable energy grid simulator guide](/en/guides/renewable-energy-grid-simulator) walks through each source.
+The [Renewable Energy Grid Simulator](/en/simulations/renewable-energy-grid-simulator) asks: "Can a grid meet the evening peak after solar generation stops?" Its controls are demand (40–140 MW), solar (0–300 MW), wind (0–250 MW), hydro (0–100 MW), battery storage (0–500 MWh), and gas backup (0–150 MW). The presets are Solar-heavy no battery, Add a 400 MWh battery, and Diverse supply. The [renewable energy grid simulator guide](/en/simulations/renewable-energy-grid-simulator#guide) walks through each source.
 
 Scrub to midday and then to 20:00. Judge each preset by its unmet-energy total, not by the midday picture alone. Note the units: MW is a rate of power, while MWh is stored energy. Imagine an evening shortfall of 50 MW lasting 4 hours; covering it would need 50 × 4 = 200 MWh. The model runs a single deterministic day and ignores costs, so it shows timing and balance rather than economics.
 
@@ -107,7 +107,7 @@ This is an adaptation lab. Try Warning alone and notice that early warning reduc
 
 ### Experiment 10: Ocean currents in 3D
 
-The [Ocean Currents 3D Simulator](/en/simulations/ocean-currents-3d) relates differences in temperature and salinity, which set seawater density, to global ocean circulation. Cold, salty water is denser and tends to sink, while warmer, fresher water stays nearer the surface. The resulting circulation moves heat around the planet. Connect it to Experiment 1: the ocean stores heat and also redistributes it. The [ocean currents 3D guide](/en/guides/ocean-currents-3d) gives more background.
+The [Ocean Currents 3D Simulator](/en/simulations/ocean-currents-3d) relates differences in temperature and salinity, which set seawater density, to global ocean circulation. Cold, salty water is denser and tends to sink, while warmer, fresher water stays nearer the surface. The resulting circulation moves heat around the planet. Connect it to Experiment 1: the ocean stores heat and also redistributes it. The [ocean currents 3D guide](/en/simulations/ocean-currents-3d#guide) gives more background.
 
 ## How to read climate model results honestly
 

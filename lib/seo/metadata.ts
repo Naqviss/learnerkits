@@ -35,6 +35,19 @@ export type SeoOptions = {
   englishOnly?: boolean;
 };
 
+// Bing reports titles over 70 characters, and Google truncates long ones. The " · LearnerKits" suffix
+// (added by the layout's title template) is kept only when the whole title still fits; otherwise the
+// page title stands alone, since Google and Bing show the site name separately anyway.
+export const maxTitleLength = 70;
+const brandSuffix = ` · ${siteName}`;
+export function pageTitle(title: string): string | { absolute: string } {
+  return title.length + brandSuffix.length <= maxTitleLength ? title : { absolute: title };
+}
+// For pages that set an absolute title themselves (articles, lessons): the same rule with an explicit suffix.
+export function brandedTitle(title: string) {
+  return title.length + brandSuffix.length <= maxTitleLength ? `${title}${brandSuffix}` : title;
+}
+
 export function localizedUrl(locale: Locale | string, path: string) {
   const cleanPath = path === "/" ? "" : path.startsWith("/") ? path : `/${path}`;
   // The bare domain is the canonical English homepage; /en serves the same page and defers to it.
@@ -68,7 +81,7 @@ export function localizedMetadata(
   const alternateLocale = options.englishOnly ? [] : locales.filter((code) => code !== safeLocale).map((code) => ogLocales[code]);
 
   return {
-    title,
+    title: pageTitle(title),
     description,
     applicationName: siteName,
     category: "education",
@@ -167,12 +180,17 @@ export function simulationJsonLd(args: {
   description: string;
   subject: string;
   concepts: string[];
+  /** The page's answer-first paragraph and its review date, when the page has written content. */
+  abstract?: string;
+  dateModified?: string;
 }) {
   return {
     "@context": "https://schema.org",
     "@type": ["LearningResource", "SoftwareApplication"],
     name: args.title,
     description: args.description,
+    ...(args.abstract ? { abstract: args.abstract } : {}),
+    ...(args.dateModified ? { dateModified: args.dateModified } : {}),
     url: localizedUrl(args.locale, args.path),
     inLanguage: hreflangCodes[args.locale],
     isAccessibleForFree: true,

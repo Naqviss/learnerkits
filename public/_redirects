@@ -1,3 +1,20 @@
 # Match the canonical English homepage without changing other language URLs.
 /en / 301
 /en/ / 301
+
+# Topic guides moved onto their simulation pages (one URL per topic). Keep these permanent.
+/en/guides/moon-phases-3d /en/simulations/moon-phases-3d 301
+/en/guides/escape-velocity /en/simulations/escape-velocity 301
+/en/guides/earth-seasons-tilt /en/simulations/earth-seasons-tilt 301
+/en/guides/inclined-plane-friction /en/simulations/inclined-plane-friction 301
+/en/guides/momentum-collision /en/simulations/momentum-collision 301
+/en/guides/earthquake-epicenter-finder /en/simulations/earthquake-epicenter-finder 301
+/en/guides/ocean-currents-3d /en/simulations/ocean-currents-3d 301
+/en/guides/greenhouse-effect-simulator /en/simulations/greenhouse-effect-simulator 301
+/en/guides/carbon-cycle-simulator /en/simulations/carbon-cycle-simulator 301
+/en/guides/ocean-acidification-simulator /en/simulations/ocean-acidification-simulator 301
+/en/guides/renewable-energy-grid-simulator /en/simulations/renewable-energy-grid-simulator 301
+/en/guides/molecular-geometry-3d /en/simulations/molecular-geometry-3d 301
+/en/guides/molecule-builder-3d /en/simulations/molecule-builder-3d 301
+/en/guides/neutralization-station /en/simulations/neutralization-station 301
+/en/guides/solubility-curve /en/simulations/solubility-curve 301

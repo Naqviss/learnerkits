@@ -3,7 +3,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
 import { localizedMetadata } from "@/lib/seo/metadata";
-import { getTopicGuides } from "@/lib/seo/topic-guides";
+import { getSimulationContent } from "@/lib/seo/simulation-content";
+import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
+
+const firstSentence = (text: string) => text.match(/^.+?[.!?](?=\s|$)/)?.[0] ?? text;
 
 export function generateStaticParams() {
   return [{ locale: "en" }];
@@ -16,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     raw,
     "/guides",
     "Science Simulation Guides",
-    "Clear, interactive explanations for high-interest science topics, paired with free simulations for students and teachers.",
+    "Short answers to the key question behind every LearnerKits simulation, from Moon phases to titration, each linked to the interactive lab that tests it.",
     { keywords: ["science simulation guides", "interactive science explanations", "free science simulations"], englishOnly: true },
   );
 }
@@ -24,7 +27,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function TopicGuidesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale) || locale !== "en") notFound();
-  const guides = getTopicGuides();
+  // Every simulation page carries its own guide (question, answer, steps, science, FAQ); this hub
+  // links to each one by its main question, grouped by subject.
+  const groups = visibleSubjectSlugs.map((slug) => ({
+    subject: subjectsCatalog[slug],
+    guides: subjectsCatalog[slug].simulations.flatMap((simulation) => {
+      const content = getSimulationContent(simulation.slug);
+      return content ? [{ simulation, content }] : [];
+    }),
+  })).filter((group) => group.guides.length);
 
   return <main className="container topicGuidesIndex">
     <header className="pageHeader generalPageHeader">
@@ -40,14 +51,15 @@ export default async function TopicGuidesPage({ params }: { params: Promise<{ lo
         <p>Learn the illustrated controls, drag projects onto valid plots, and compare scientific results. Includes a first-build walkthrough and starter investigations for all ten environmental worlds.</p>
         <div className="topicGuideCardActions"><Link className="textLink" href="/en/guides/environmental-city-builder">Read the game guide →</Link><Link className="textLink" href="/en/simulations/urban-heat-island-simulator">Open simulation</Link></div>
       </article>
-      {guides.map((guide) => <article className="topicGuideCard" key={guide.slug}>
-        <span className="eyebrow">{guide.subject.eyebrow}</span>
-        <h2><Link href={`/en/simulations/${guide.slug}#topic-guide`}>{guide.title}</Link></h2>
-        <p>{guide.answer}</p>
-        <div className="topicGuideCardActions">
-          <Link className="textLink" href={`/en/simulations/${guide.slug}#topic-guide`}>Read the guide in the simulation →</Link>
-        </div>
-      </article>)}
     </section>
+    {groups.map(({ subject, guides }) => <section className="topicGuideGrid" key={subject.slug} aria-labelledby={`guides-${subject.slug}`}>
+      <h2 className="topicGuideGroupTitle" id={`guides-${subject.slug}`}>{subject.eyebrow}</h2>
+      {guides.map(({ simulation, content }) => <article className="topicGuideCard" key={simulation.slug}>
+        <span className="eyebrow">{simulation.title}</span>
+        <h3><Link href={`/en/simulations/${simulation.slug}`}>{content.question}</Link></h3>
+        <p>{firstSentence(content.answer)}</p>
+        <div className="topicGuideCardActions"><Link className="textLink" href={`/en/simulations/${simulation.slug}`}>Read the guide and open the lab →</Link></div>
+      </article>)}
+    </section>)}
   </main>;
 }

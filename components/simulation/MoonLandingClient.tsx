@@ -3,6 +3,7 @@
 import { SIMULATION_LEARNING_TOOLS_ENABLED } from "@/lib/settings/simulationFeatures";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { createPortal } from "react-dom";
 import * as THREE from "three";
 import { MoonLandingEngine, type MoonLandingState } from "@/lib/simulations/moonLanding/engine";
 import { FixedStepRunner } from "@/lib/simulations/fixedStep";
@@ -62,6 +63,11 @@ export function MoonLandingClient({ m }: { m: Messages }) {
   const [timeScale, setTimeScale] = useState(1);
   const [cameraMode, setCameraMode] = useState<"close" | "third" | "overview">("third");
   const [experiment, setExperiment] = useState({ altitude: 1200, verticalVelocity: -34, fuelMass: 2700, maxThrust: 45000 });
+  const [portalTargets, setPortalTargets] = useState<{ guide: HTMLElement | null; measurements: HTMLElement | null }>({ guide: null, measurements: null });
+
+  useEffect(() => {
+    setPortalTargets({ guide: document.getElementById("simulation-guide-extension"), measurements: document.getElementById("simulation-measurements-extension") });
+  }, []);
 
   useEffect(() => {
     cameraModeRef.current = cameraMode;
@@ -373,12 +379,12 @@ export function MoonLandingClient({ m }: { m: Messages }) {
   }, [selectedMission, missionComplete, score]);
 
   return (
-    <main className="simLayout moonMissionShell">
+    <div className="simLayout moonMissionShell">
       <section className="simViewport moonViewport" aria-label={m.moonLanding.title}>
         <div ref={host} className="threeHost" />
         <div className="overlayTop missionOverlay">
           <div className="missionOverlayTop"><span className="missionBadge"><i /> FLIGHT DECK</span><span className="missionClock">LUNAR APPROACH / 01</span></div>
-          <h1>{m.moonLanding.title}</h1>
+          <strong className="simulationSceneTitle">{m.moonLanding.title}</strong>
           <p>{m.moonLanding.instructions}</p>
         </div>
         <div className="sceneReadout"><span>TARGET ZONE</span><strong>PAD 01</strong><small>Keep lateral drift low</small></div>
@@ -409,6 +415,8 @@ export function MoonLandingClient({ m }: { m: Messages }) {
         <div className="controlGroup cameraControl"><div className="controlHeading"><label>{m.common.camera}</label><span className="keyHint">VIEW</span></div><div className="segmented threeWay"><button className={cameraMode === "close" ? "active" : ""} onClick={() => setCameraMode("close")}>{m.common.closeCamera}</button><button className={cameraMode === "third" ? "active" : ""} onClick={() => setCameraMode("third")}>{m.common.thirdPerson}</button><button className={cameraMode === "overview" ? "active" : ""} onClick={() => setCameraMode("overview")}>{m.common.overview}</button></div></div>
         <div className="bottomControls"><select className="langSelect" aria-label={m.common.timeScale} value={timeScale} onChange={(event) => setTimeScaleValue(Number(event.target.value))}><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1">1×</option><option value="2">2×</option></select><button className="button" onClick={() => { pausedRef.current = !paused; setPaused(!paused); }}>{paused ? m.common.resume : m.common.pause}</button><button className="button primary" onClick={reset}>{m.common.restart}</button></div>
       </aside>
-    </main>
+      {portalTargets.guide && createPortal(<section className="spaceMissionExtension" aria-labelledby="moon-landing-guide-title"><header><span>SPACE MISSION GUIDE</span><h3 id="moon-landing-guide-title">Plan a controlled lunar landing</h3></header><p>{m.moonLanding.instructions}</p><h3>How to explore</h3><ol><li>Predict how thrust and vehicle mass will affect the descent.</li><li>Use throttle to reduce vertical speed while keeping the lander upright.</li><li>Compare a safe landing with a hard landing, then change one experiment condition.</li><li>Open Measurements to record the touchdown evidence.</li></ol><h3>Physics represented by this model</h3><p>{m.moonLanding.learnBody}</p><div className="simulationConceptFormula">a<sub>net</sub> = F/m − 1.62 m/s²</div></section>, portalTargets.guide)}
+      {portalTargets.measurements && createPortal(<section className="spaceMissionExtension" aria-labelledby="moon-landing-measurements-title"><header><span>LIVE MISSION TELEMETRY</span><h3 id="moon-landing-measurements-title">Measurements & landing conditions</h3></header><dl><div><dt>{m.common.status}</dt><dd>{displayStatus}</dd></div><div><dt>{m.common.altitude}</dt><dd>{fmt(state.position.y, 1)} m</dd></div><div><dt>{m.common.verticalVelocity}</dt><dd>{fmt(state.velocity.y, 1)} m/s</dd></div><div><dt>{m.common.horizontalVelocity}</dt><dd>{fmt(state.velocity.x, 1)} m/s</dd></div><div><dt>{m.common.acceleration}</dt><dd>{fmt(Math.hypot(state.acceleration.x, state.acceleration.y), 2)} m/s²</dd></div><div><dt>{m.common.fuel}</dt><dd>{fmt(fuelPct, 0)}%</dd></div><div><dt>{m.common.mass}</dt><dd>{fmt(state.dryMass + state.fuelMass, 0)} kg</dd></div><div><dt>{m.common.gravity}</dt><dd>{MOON_GRAVITY.toFixed(2)} m/s²</dd></div></dl><a href="#simulation">Return to simulation</a></section>, portalTargets.measurements)}
+    </div>
   );
 }

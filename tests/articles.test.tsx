@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { brandedTitle } from "@/lib/seo/metadata";
 import { articleShareImagePath } from "@/lib/seo/share-card";
 import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -58,7 +59,8 @@ describe("article publishing", () => {
         expect(isVisibleSubjectSlug(getSubjectForSimulation(slug)!.slug)).toBe(true);
         expect(getArticlesForSimulation(slug).map((related) => related.slug)).toContain(article.slug);
       }
-      for (const [, type, slug] of article.body.matchAll(/\]\(\/en\/(articles|simulations)\/([^)]+)\)/g)) {
+      // A link may target a section of the page (for example #guide); the slug is the path before it.
+      for (const [, type, slug] of article.body.matchAll(/\]\(\/en\/(articles|simulations)\/([^)#]+)(?:#[^)]*)?\)/g)) {
         expect(type === "articles" ? getArticle(slug) : getSimulationCard(slug), slug).toBeDefined();
       }
     }
@@ -69,7 +71,8 @@ describe("article publishing", () => {
       const metadata = await generateMetadata({ params: Promise.resolve({ locale: "en", slug: article.slug }) });
       const structured = articleJsonLd(article);
       expect(metadata.alternates?.canonical).toBe(structured.url);
-      expect(metadata.title).toEqual({ absolute: `${"seoTitle" in article ? article.seoTitle : article.title} | LearnerKits` });
+      expect(metadata.title).toEqual({ absolute: brandedTitle("seoTitle" in article ? article.seoTitle : article.title) });
+      expect((metadata.title as { absolute: string }).absolute.length).toBeLessThanOrEqual(70);
       expect(structured.headline).toBe(article.title);
       expect(structured.datePublished).toBe(article.publishedAt);
       expect(structured.dateModified).toBe(article.updatedAt);

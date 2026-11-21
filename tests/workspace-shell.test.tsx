@@ -28,6 +28,13 @@ describe("workspace layout", () => {
     expect(html).toContain("<main>Classroom content</main>");
   });
 
+  it("renders the public footer while the session is loading, so the static HTML crawlers read includes it", () => {
+    vi.mocked(useAuth).mockReturnValue({ status: "loading", session: null, failed: false });
+    const html = render();
+    expect(html).toContain("<nav>Public navigation</nav>");
+    expect(html).toContain("<footer>Public footer</footer>");
+  });
+
   it("uses the workspace sidebar and omits public chrome for signed-in users", () => {
     const session = { user: { id: "student-1" } } as Session;
     vi.mocked(useAuth).mockReturnValue({ status: "signedIn", session, failed: false });

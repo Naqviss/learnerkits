@@ -18,3 +18,9 @@
 @media(prefers-reduced-motion:reduce){.page button{transition:none!important}}
 .page :global(.geoNode text){font-size:17px;font-weight:600}
 @media(max-width:700px){.page :global(.geoDiagram text){font-size:16px}.page :global(.geoNode text){font-size:17px}}
+
+/* The universal page tabs own the Earth field guide and live measurements.
+   These panels are portaled into those sections instead of opening dialogs. */
+.inlinePanel{margin-top:20px;padding:22px;border:1px solid #dce5f1;border-radius:14px;background:#f6f9fe;color:#17263f;box-shadow:0 14px 35px #1730570d}
+.inlinePanelHeading{margin-bottom:16px}.inlinePanelHeading span{display:block;margin-bottom:5px;color:#4669e8;font-size:.61rem;font-weight:850;letter-spacing:.12em}.inlinePanelHeading h3{margin:0;font-size:1.1rem}.inlinePanel :is(p,li){color:#5c6f89;font-size:.8rem;line-height:1.7}.inlinePanel>h3{margin:22px 0 8px;font-size:.96rem}.inlinePanel>a{display:block;margin:10px 0;color:#4669e8;font-size:.8rem;text-decoration:underline;text-underline-offset:3px}.inlinePanel button{min-height:38px;padding:8px 12px;border:1px solid #d5dfec;border-radius:8px;background:#fff;color:#31558f;font:inherit;font-size:.74rem;font-weight:700}.inlinePanel .readingList>div{border-color:#dce5f1}.inlinePanel .tableWrap{margin-top:10px;border:1px solid #dce5f1;border-radius:10px;background:#fff}.inlinePanel .tableWrap th,.inlinePanel .tableWrap td{border-color:#dce5f1}.inlinePanel .panelActions{margin-top:18px}
+@media(max-width:700px){.inlinePanel{margin-top:12px;padding:16px}.inlinePanel .readingList>div{align-items:start}.inlinePanel .tableWrap{overflow-x:auto}}

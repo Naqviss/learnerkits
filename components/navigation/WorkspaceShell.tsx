@@ -200,7 +200,9 @@ export function WorkspaceShell({ locale, m, guestNav, guestFooter, children }: {
         </div>
       </header>}
       {!checkingLandingSession && (user && (!mode || redirectingWorkspaceLanding) ? <p className={styles.loading} role="status">Opening your dashboard…</p> : children)}
-      {status === "signedOut" && guestFooter}
+      {/* Like guestNav, render the footer until a session is known, so it is in the static HTML that
+          crawlers read (its policy and editorial links are part of the site's trust signals). */}
+      {!user && !checkingLandingSession && guestFooter}
     </div>
   </div>;
 }

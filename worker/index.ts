@@ -18,13 +18,15 @@ export default {
     const url = new URL(request.url);
     const { pathname } = url;
 
-    // Disabled translations have no exported assets. Keep their old URLs usable
-    // while publication is paused, without permanently retiring the language.
+    // Disabled translations have no exported assets. A 301 tells Google and Bing to drop the old
+    // URLs (they were being reported as duplicate titles of the English pages) and pass their
+    // signals to the English page. The one-day Cache-Control keeps browsers from caching the
+    // redirect for good, so a language can still be restored later.
     const requestedLocale = supportedLocales.find((locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
     if (requestedLocale && !locales.includes(requestedLocale)) {
       const suffix = pathname.slice(requestedLocale.length + 1);
       url.pathname = !suffix || suffix === "/" ? "/" : `/${defaultLocale}${suffix}`;
-      return Response.redirect(url.toString(), 307);
+      return new Response(null, { status: 301, headers: { location: url.toString(), "cache-control": "public, max-age=86400" } });
     }
 
     if (pathname === "/api/contact") return submitContact(request, env);

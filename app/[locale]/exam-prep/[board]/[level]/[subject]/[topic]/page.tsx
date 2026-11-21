@@ -10,6 +10,7 @@ import { TopicTutor } from "@/components/exam-prep/TopicTutor";
 import { lessonDetail } from "@/lib/exam-prep/lessons";
 import { questionBank } from "@/lib/exam-prep/question-bank";
 import { jsonLd, localizedMetadata, localizedUrl, siteName, siteUrl } from "@/lib/seo/metadata";
+import { brandedTitle } from "@/lib/seo/metadata";
 import styles from "@/components/exam-prep/examPrep.module.css";
 
 type Props = { params: Promise<{ locale: string; board: string; level: string; subject: string; topic: string }> };
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const metadata = localizedMetadata("en", topicPath(course, found.topic), title, `${found.topic.name} for ${courseTitle(course)}: ${content.brief}`.slice(0, 300), { englishOnly: true, noIndex: !isVerified(course), unlisted: !topicLessonsIndexed });
   // A level that repeats an earlier level's topic points search engines at that single page.
   const owner = canonicalTopicCourse(course, found.topic);
-  return { ...metadata, title: { absolute: `${title} | ${siteName}` }, ...(owner ? { alternates: { ...metadata.alternates, canonical: localizedUrl("en", topicPath(owner, found.topic)) } } : {}) };
+  return { ...metadata, title: { absolute: brandedTitle(title) }, ...(owner ? { alternates: { ...metadata.alternates, canonical: localizedUrl("en", topicPath(owner, found.topic)) } } : {}) };
 }
 
 export default async function TopicPage({ params }: Props) {

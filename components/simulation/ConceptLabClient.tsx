@@ -117,8 +117,8 @@ const labs: Record<string, React.ComponentType<{ locale: string }>> = {
 export function ConceptLabClient({ locale, subject, simulation, copy }: Props) {
   const Lab = labs[simulation.slug];
   const badge = simulation.visualMode === "3d" ? copy.lab.interactive3d : simulation.visualMode === "game" ? copy.lab.challenge : copy.lab.interactiveModel;
-  return <main className={`conceptLab subject-${subject.slug}`}>
-    <section className="container labHeader"><div><Link className="backLink" href={`/${locale}/subjects/${subject.slug}`}>← {subject.eyebrow}</Link><div className="eyebrow">{simulation.kind || badge}</div><h1>{simulation.title}</h1>{simulation.concepts && <p>{simulation.concepts}</p>}<div className="labHeaderOutcome"><span>{copy.lab.learningOutcome}</span><strong>{simulation.outcome}</strong></div></div><div className="labBadge">{badge}</div></section>
+  return <div className={`conceptLab subject-${subject.slug}`}>
+    <section className="container labHeader"><div><Link className="backLink" href={`/${locale}/subjects/${subject.slug}`}>← {subject.eyebrow}</Link><div className="eyebrow">{simulation.kind || badge}</div><h2>{simulation.title}</h2>{simulation.concepts && <p>{simulation.concepts}</p>}<div className="labHeaderOutcome"><span>{copy.lab.learningOutcome}</span><strong>{simulation.outcome}</strong></div></div><div className="labBadge">{badge}</div></section>
     <section className="container labWorkspace"><div className="labCanvas">{Lab ? <Lab locale={locale}/> : <ExpandedLabClient locale={locale} copy={copy} subject={subject.slug} simulation={simulation}/>}</div><aside className="labExplain"><span className="eyebrow">{copy.lab.scientificMethod}</span><h2>{copy.lab.methodTitle}</h2><p>{copy.lab.methodBody}</p><div className="labRule"><b>{copy.lab.predict}</b><span>{copy.lab.predictBody}</span></div><div className="labRule"><b>{copy.lab.observe}</b><span>{copy.lab.observeBody}</span></div><div className="labRule"><b>{copy.lab.explain}</b><span>{copy.lab.explainBody}</span></div>{locale === "en" && simulation.seoTarget && <div className="labSeoNote"><span>{copy.lab.topic}</span><strong>{simulation.seoTarget}</strong></div>}</aside></section>
-  </main>;
+  </div>;
 }

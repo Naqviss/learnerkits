@@ -92,10 +92,10 @@ export default async function MoleculeKitPage({ params }: { params: Promise<{ lo
           <div className="priorityLabGrid">
             {kitSimulations.map((sim) => (
               <article className="priorityLabCard" key={sim.slug}>
-                <div className="priorityTop"><span>{sim.kind}</span><b>{sim.difficulty}</b></div>
+                <div className="priorityTop"><span>{sim.kind}</span></div>
                 <h3>{sim.title}</h3>
                 <p>{sim.outcome}</p>
-                <div className="simMeta"><span className="pill">{sim.duration}</span>{sim.concepts && <span className="pill">{sim.concepts}</span>}</div>
+                {sim.concepts && <div className="simMeta"><span className="pill">{sim.concepts}</span></div>}
                 <Link className="button subjectButton" href={`/${locale}/simulations/${sim.slug}?from=molecule-kit`}>{copy.openLab} →</Link>
               </article>
             ))}

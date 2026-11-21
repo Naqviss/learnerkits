@@ -154,11 +154,11 @@ Over one synodic month, the Moon goes once around the sky relative to the Sun, s
 
 ## A related sunlight effect: seasons
 
-Seasons depend on a different sunlight angle. Earth's axial tilt of about 23.4° changes how directly sunlight strikes each hemisphere, and seasons are caused by that tilt, not by Earth's distance from the Sun. The [Earth Seasons & Tilt Simulator](/en/simulations/earth-seasons-tilt) lets you change orbital longitude, axial tilt (0° to 35°), and observer latitude (−70° to 70°), and the [seasons guide](/en/guides/earth-seasons-tilt) walks through the comparisons.
+Seasons depend on a different sunlight angle. Earth's axial tilt of about 23.4° changes how directly sunlight strikes each hemisphere, and seasons are caused by that tilt, not by Earth's distance from the Sun. The [Earth Seasons & Tilt Simulator](/en/simulations/earth-seasons-tilt) lets you change orbital longitude, axial tilt (0° to 35°), and observer latitude (−70° to 70°), and the [seasons guide](/en/simulations/earth-seasons-tilt#guide) walks through the comparisons.
 
 ## Tips for teachers
 
-Start with the lamp model before the simulator, so students do not read the 3D view as a scale picture. The [Moon phases simulator guide](/en/guides/moon-phases-3d) offers a structured route through the same ideas. Ask students to explain each phase using "lit half" and "viewing angle"; those words reveal quickly whether the shadow idea persists. For background, see [why visual learning helps science](/en/articles/why-visual-learning-helps-science) and [learning physics without memorizing formulas](/en/articles/learn-physics-without-memorizing-formulas), which fits treating (1 − cos θ) ÷ 2 as geometry. If students use AI tools, [checking AI-generated science answers](/en/articles/check-ai-generated-science-answers) includes separating lunar phases from eclipses.
+Start with the lamp model before the simulator, so students do not read the 3D view as a scale picture. The [Moon phases simulator guide](/en/simulations/moon-phases-3d#guide) offers a structured route through the same ideas. Ask students to explain each phase using "lit half" and "viewing angle"; those words reveal quickly whether the shadow idea persists. For background, see [why visual learning helps science](/en/articles/why-visual-learning-helps-science) and [learning physics without memorizing formulas](/en/articles/learn-physics-without-memorizing-formulas), which fits treating (1 − cos θ) ÷ 2 as geometry. If students use AI tools, [checking AI-generated science answers](/en/articles/check-ai-generated-science-answers) includes separating lunar phases from eclipses.
 
 ## Frequently asked questions
 

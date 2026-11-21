@@ -179,7 +179,7 @@ describe("exam prep pages", () => {
     expect(html).toContain("LearningResource");
     expect(html).toContain("not affiliated with or endorsed by any exam board");
     const metadata = await generateMetadata({ params: params(asPhysics, "kinematics") });
-    expect(metadata.title).toEqual({ absolute: "Kinematics – Cambridge AS Level Physics 9702 | LearnerKits" });
+    expect(metadata.title).toEqual({ absolute: "Kinematics – Cambridge AS Level Physics 9702 · LearnerKits" });
     expect(metadata.robots).toEqual({ index: false, follow: true });
   });
 

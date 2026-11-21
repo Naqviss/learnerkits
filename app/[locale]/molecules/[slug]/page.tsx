@@ -109,7 +109,7 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
         <h1>{molecule.formula} ({lowerName}) molecular geometry and shape</h1>
         <p className="topicGuideLead">{copy.lead}</p>
         <div className="topicGuideHeroActions">
-          <Link className="button primary" href={`/en/simulations/molecular-geometry-3d?molecule=${molecule.slug}`}>Test yourself in the 3D lab</Link>
+          <Link className="button primary" href={`/en/simulations/molecular-geometry-3d#molecule=${molecule.slug}`}>Test yourself in the 3D lab</Link>
           <Link className="textLink" href="/en/molecule-kit">Explore the Molecule Kit →</Link>
         </div>
       </header>

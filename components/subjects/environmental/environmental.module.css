@@ -23,3 +23,12 @@
 
 /* Keep the complete camera dock inside short landscape viewports. */
 @media(max-height:740px) and (min-width:701px){.camera{top:76px;grid-template-columns:repeat(3,36px);gap:5px;padding:5px}.camera button{width:36px;height:36px;min-height:36px!important}}
+
+/* The shared page tabs now own Guide and Measurements. Conditions remain part
+   of the Simulation section, while guide/graph content is portaled into the
+   shared page sections instead of opening duplicate modal panels. */
+.page{height:auto}.game{flex:none;height:min(720px,calc(100svh - 150px));min-height:570px}
+.inlineConditions,.inlinePanel{margin-top:16px;padding:22px;border:1px solid #dce5f1;border-radius:14px;background:#fff;color:#17263f;box-shadow:0 14px 35px #1730570d}
+.inlineConditions{background:#f6f9fe}.inlinePanelHeading{margin-bottom:16px}.inlinePanelHeading span{display:block;margin-bottom:5px;color:#4669e8;font-size:.61rem;font-weight:850;letter-spacing:.12em}.inlinePanelHeading h3{margin:0;font-size:1.1rem}.inlinePanel :is(p,li),.inlineConditions :is(p,li){color:#5c6f89;font-size:.78rem;line-height:1.65}.inlinePanel>h3,.inlineConditions>h3{margin:22px 0 8px;font-size:.95rem}.inlinePanel>a{display:block;margin:8px 0;color:#4669e8;font-size:.78rem;text-decoration:underline;text-underline-offset:3px}
+.inlinePanel button,.inlineConditions button{min-height:38px;padding:8px 12px;border:1px solid #d5dfec;border-radius:8px;background:#fff;color:#31558f;font:inherit;font-size:.72rem;font-weight:700}.inlinePanel details,.inlineConditions details{margin-top:14px;padding:14px 0;border-top:1px solid #dce5f1}.inlinePanel summary,.inlineConditions summary{cursor:pointer;font-size:.78rem;font-weight:750}.inlineConditions .accessibleBuild{margin-top:18px;padding:18px;border:1px solid #dce5f1;border-radius:11px;background:#fff}
+@media(max-width:700px){.page{height:auto}.game{height:auto;min-height:650px}.inlineConditions,.inlinePanel{margin-top:12px;padding:16px}.inlineConditions .conditions{grid-template-columns:1fr}.inlinePanel .modalActions{align-items:stretch}.inlinePanel .modalActions>*{width:100%}.inlinePanel .modalActions select{width:100%}}

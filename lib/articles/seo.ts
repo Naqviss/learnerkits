@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { Article } from "./index";
 import { articleImages } from "./images";
 import { articleKind } from "./catalog";
-import { imageRights, localizedMetadata, localizedUrl, siteName, siteUrl } from "@/lib/seo/metadata";
+import { brandedTitle, imageRights, localizedMetadata, localizedUrl, siteName, siteUrl } from "@/lib/seo/metadata";
 import { articleShareImagePath } from "@/lib/seo/share-card";
 
 export function articleMetadata(article: Article): Metadata {
@@ -11,7 +11,7 @@ export function articleMetadata(article: Article): Metadata {
   const image = articleImages[article.slug];
   return {
     ...metadata,
-    title: { absolute: `${title} | ${siteName}` },
+    title: { absolute: brandedTitle(title) },
     authors: [{ name: siteName, url: localizedUrl("en", "/about") }],
     creator: siteName,
     publisher: siteName,

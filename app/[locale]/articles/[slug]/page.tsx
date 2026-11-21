@@ -52,7 +52,7 @@ export default async function ArticlePage({ params }: Props) {
     </article>
     <section id="try-a-simulation" className={styles.related} aria-labelledby="try-title"><span className="eyebrow">Put the idea to work</span><h2 id="try-title">Try a linked simulation</h2><div className={styles.labGrid}>{article.simulationSlugs.map((simSlug) => {
       const simulation = getSimulationCard(simSlug);
-      return simulation && <Link className={styles.labCard} href={`/en/simulations/${simSlug}`} key={simSlug}><span className="eyebrow">{simulation.kind} · {simulation.duration}</span><h3>{simulation.title}</h3><p>{simulation.outcome}</p><span className="textLink">Open simulation →</span></Link>;
+      return simulation && <Link className={styles.labCard} href={`/en/simulations/${simSlug}`} key={simSlug}><span className="eyebrow">{simulation.kind}</span><h3>{simulation.title}</h3><p>{simulation.outcome}</p><span className="textLink">Open simulation →</span></Link>;
     })}</div></section>
     <section className={styles.related} aria-labelledby="related-title"><h2 id="related-title">Continue reading</h2><div className={styles.grid}>{article.relatedSlugs.map((relatedSlug) => {
       const related = getArticleSummary(relatedSlug);

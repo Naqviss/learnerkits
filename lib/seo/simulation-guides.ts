@@ -1,5 +1,5 @@
 import { getCourseLab } from "@/lib/simulations/chemistry/course/catalog";
-import { balancingFaq } from "@/lib/seo/balancing-equations";
+import { getSimulationContent } from "@/lib/seo/simulation-content";
 import type { Locale } from "@/lib/i18n/config";
 import type { SimulationCard, SubjectDefinition } from "@/lib/subjects/catalog";
 
@@ -95,23 +95,21 @@ export function getSimulationGuide(locale: Locale, subject: SubjectDefinition, s
   const copy = copies[locale];
   const concepts = simulation.concepts.replaceAll(" · ", ", ");
   const chemistry = locale === "en" ? getCourseLab(simulation.slug) : undefined;
-  const balancing = locale === "en" && simulation.slug === "balance-equation";
+  // English pages use hand-written, page-specific content; other languages (not indexed) keep the
+  // translated generic copy until their own content is written.
+  const content = locale === "en" ? getSimulationContent(simulation.slug) : undefined;
   return {
     freeLabel: locale === "en" && simulation.seoTarget ? `Free online ${simulation.seoTarget}` : copy.freeLabel,
     title: copy.title(simulation.title),
     intro: copy.intro(simulation.kind, simulation.outcome, subject.gradeBand),
-    investigate: copy.investigate,
-    investigateBody: balancing
-      ? "The game has 43 equations, from water formation and combustion to precipitation, ionic equations and redox half-equations. The atom ledger counts every element on both sides, and charge as well for ionic equations, so you can see exactly what is still unbalanced."
-      : chemistry?.explanation ?? copy.investigateBody(concepts),
-    howTo: balancing ? "How to play" : copy.howTo,
-    steps: balancing
-      ? ["Choose a reaction from the list.", "Raise or lower the coefficient in front of each formula.", "Watch the atom ledger until every element, and the charge, matches on both sides.", "Use the smallest whole numbers, then move on to the next equation."]
-      : chemistry?.steps ?? copy.steps,
+    investigate: content ? "The science" : copy.investigate,
+    investigateBody: content?.science[0] ?? chemistry?.explanation ?? copy.investigateBody(concepts),
+    howTo: copy.howTo,
+    steps: content?.steps ?? chemistry?.steps ?? copy.steps,
     classroom: copy.classroom,
     classroomBody: copy.classroomBody(simulation.duration),
     questions: copy.questions,
-    faq: balancing ? balancingFaq : [
+    faq: content?.faq ?? [
       { q: copy.teachesQuestion(simulation.title), a: copy.teachesAnswer(simulation.outcome, concepts) },
       { q: copy.freeQuestion(simulation.title), a: copy.freeAnswer },
       { q: copy.timeQuestion, a: copy.timeAnswer(simulation.duration) },

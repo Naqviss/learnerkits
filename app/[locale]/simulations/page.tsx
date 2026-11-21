@@ -30,7 +30,7 @@ export default async function Simulations({params}:{params:Promise<{locale:strin
       <div className="libCardTop"><span className="libKind">{sim.kind}</span>{sim.featured&&<span className="priorityBadge">{copy.library.priorityBadge}</span>}</div>
       <h3>{sim.title}</h3>
       <p>{sim.outcome}</p>
-      <div className="libCardMeta"><span className="pill">{displayDifficulty(raw,sim.difficulty)}</span><span className="pill">{sim.duration}</span><b aria-hidden="true">→</b></div>
+      <div className="libCardMeta"><b aria-hidden="true">→</b></div>
     </Link>)}</SimulationLibrary>;
   const publicContent=<main className="container educationLibrary simLibrary">
     <header className="pageHeader generalPageHeader libHeader"><div className="eyebrow">{copy.library.eyebrow}</div><h1 className="pageTitle">{copy.library.title}</h1><p className="lede">{copy.library.body(all.length,visibleSubjectSlugs.length)}</p></header>
