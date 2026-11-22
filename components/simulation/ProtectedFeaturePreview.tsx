@@ -18,7 +18,7 @@ import {
 type Feature = "Measurements" | "Missions";
 type LoadState = "loading" | "ready" | "error";
 
-export function ProtectedFeaturePreview({ feature, simulation, available = true }: { feature: Feature; simulation: SimulationCard; available?: boolean }) {
+export function ProtectedFeaturePreview({ feature, simulation, available = true, children, prompts }: { children?: React.ReactNode; prompts?: string[]; feature: Feature; simulation: SimulationCard; available?: boolean }) {
   const auth = useAuth();
   const measurements = feature === "Measurements";
   const title = measurements ? "Measurements & observations" : "Missions";
@@ -27,10 +27,11 @@ export function ProtectedFeaturePreview({ feature, simulation, available = true 
     <header>
       <div><h2 id={`${feature.toLowerCase()}-title`}>{title}</h2></div>
     </header>
+    {children}
     {measurements && <div id="simulation-measurements-extension" className="simulationFeatureExtension"/>}
     {auth.status !== "signedIn" || !auth.session ? <SignedOutFeature feature={feature} measurements={measurements} failed={auth.failed}/> : !available ? <UnavailableFeature feature={feature}/> : measurements
       ? <MeasurementsNotebook simulation={simulation} userId={auth.session.user.id}/>
-      : <MissionNotebook simulation={simulation} userId={auth.session.user.id}/>
+      : <MissionNotebook prompts={prompts} simulation={simulation} userId={auth.session.user.id}/>
     }
   </section>;
 }
@@ -130,7 +131,7 @@ function MeasurementsNotebook({ simulation, userId }: { simulation: SimulationCa
   </div>;
 }
 
-function MissionNotebook({ simulation, userId }: { simulation: SimulationCard; userId: string }) {
+function MissionNotebook({ simulation, userId, prompts }: { prompts?: string[]; simulation: SimulationCard; userId: string }) {
   const definitions = useMemo(() => missionDefinitions(simulation.title, simulation.outcome, simulation.concepts), [simulation]);
   const [progress, setProgress] = useState<Record<MissionId, Pick<SimulationMissionProgress, "completed" | "evidence">>>({ predict: { completed: false, evidence: "" }, compare: { completed: false, evidence: "" }, explain: { completed: false, evidence: "" } });
   const [state, setState] = useState<LoadState>("loading");
@@ -159,8 +160,8 @@ function MissionNotebook({ simulation, userId }: { simulation: SimulationCard; u
 
   return <div className="missionWorkspace">
     <div className="missionProgressSummary"><div><small>MISSION PROGRESS</small><strong>{completed} of {definitions.length} complete</strong></div><progress max={definitions.length} value={completed} aria-label={`${completed} of ${definitions.length} missions complete`}/></div>
-    <div className="missionCards">{definitions.map((mission) => <article key={mission.id} data-complete={progress[mission.id].completed}>
-      <header><span>{mission.number}</span><div><small>{progress[mission.id].completed ? "COMPLETE" : "IN PROGRESS"}</small><h3>{mission.title}</h3></div></header><p>{mission.prompt}</p>
+    <div className="missionCards">{definitions.map((mission, i) => <article key={mission.id} data-complete={progress[mission.id].completed}>
+      <header><span>{mission.number}</span><div><small>{progress[mission.id].completed ? "COMPLETE" : "IN PROGRESS"}</small><h3>{mission.title}</h3></div></header><p>{prompts?.[i] ?? mission.prompt}</p>
       <label>{mission.evidenceLabel}<textarea maxLength={2000} rows={4} value={progress[mission.id].evidence} onChange={(event) => setProgress((current) => ({ ...current, [mission.id]: { ...current[mission.id], evidence: event.target.value } }))}/></label>
       <div><label className="missionCompleteCheck"><input type="checkbox" checked={progress[mission.id].completed} onChange={(event) => setProgress((current) => ({ ...current, [mission.id]: { ...current[mission.id], completed: event.target.checked } }))}/> Mark complete</label><button className="button" type="button" disabled={saving !== null} onClick={() => void save(mission.id)}>{saving === mission.id ? "Saving…" : "Save progress"}</button></div>
     </article>)}</div>

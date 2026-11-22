@@ -18,12 +18,12 @@ const mappedCountries = countries.filter(country => country.name !== "Antarctica
 const outline = (name: string) => countries.find(country => country.name === name)!;
 
 // Natural Earth 1:10m Admin 0 disputed areas: claim, disputed, indeterminate and breakaway polygons.
-function DisputedAreas() {
+export function DisputedAreas() {
   return <g fill="#43515d" stroke="white" strokeWidth="1.1" strokeLinejoin="round" pointerEvents="none">
     {disputedAreas.map((d,i) => <path key={i} d={d} vectorEffect="non-scaling-stroke"/>)}
   </g>;
 }
-function MapLegend() {
+export function MapLegend() {
   return <small className="mapLegend">White outlines mark disputed areas mapped by Natural Earth.</small>;
 }
 

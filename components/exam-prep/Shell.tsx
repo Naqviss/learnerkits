@@ -13,7 +13,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
     <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
       {all.map((item, index) => index === all.length - 1
         ? <span key={item.path} aria-current="page">{item.name}</span>
-        : <span key={item.path} style={{ display: "contents" }}><Link href={`/en${item.path === "/" ? "" : item.path}`}>{item.name}</Link><span aria-hidden="true">/</span></span>)}
+        : <span key={item.path} style={{ display: "contents" }}><Link href={item.path === "/" ? "/" : `/en${item.path}`}>{item.name}</Link><span aria-hidden="true">/</span></span>)}
     </nav>
   </>;
 }

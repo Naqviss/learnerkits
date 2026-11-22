@@ -9,7 +9,7 @@ import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonL
 import { SimulationPageLayout } from "@/components/simulation/SimulationPageLayout";
 import { SimulationAssistant } from "@/components/premium/SimulationAssistant";
 import { getSimulationGuide } from "@/lib/seo/simulation-guides";
-import { getSimulationContent, simulationContentUpdated } from "@/lib/seo/simulation-content";
+import { getSimulationContent, getSimulationDescription, simulationContentUpdated } from "@/lib/seo/simulation-content";
 
 const OrbitalRescueClient = dynamic(() => import("@/components/simulation/OrbitalRescueClient").then((module) => module.OrbitalRescueClient));
 
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const simulation = subject.simulations.find((item) => item.slug === "orbital-rescue");
   const m = getMessages(locale);
   const c = getEducationCopy(locale);
-  return localizedMetadata(locale, "/simulations/orbital-rescue", c.seo.simulationTitle(simulation?.title ?? m.orbitalRescue.title), c.seo.simulationDescription(simulation?.title ?? m.orbitalRescue.title, simulation?.outcome ?? m.orbitalRescue.subtitle));
+  return localizedMetadata(locale, "/simulations/orbital-rescue", c.seo.simulationTitle(simulation?.title ?? m.orbitalRescue.title), getSimulationDescription("orbital-rescue", locale) ?? c.seo.simulationDescription(simulation?.title ?? m.orbitalRescue.title, simulation?.outcome ?? m.orbitalRescue.subtitle));
 }
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {

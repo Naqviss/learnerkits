@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content";
 import { isLocale } from "@/lib/i18n/config";
 import { localizedMetadata, localizedUrl, jsonLd, siteUrl, websiteJsonLd } from "@/lib/seo/metadata";
-import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
+import { simulationCountLabel, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { boards, liveSubjects } from "@/lib/exam-prep/catalog";
 import { mockExams } from "@/lib/mock-exams/catalog";
 import { getHomeCopy } from "@/lib/home/content";
@@ -29,7 +29,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   if (!isLocale(locale)) notFound();
   const c = getHomeCopy(locale);
   const homeUrl = localizedUrl(locale, "/");
-  const labCount = visibleSubjectSlugs.reduce((count, slug) => count + subjectsCatalog[slug].simulations.length, 0);
+  const labCount = simulationCountLabel();
   const base = websiteJsonLd(locale, c.description);
   const structured = {
     ...base,

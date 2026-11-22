@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { subjectsCatalog } from "@/lib/subjects/catalog";
+import { interactiveMathSlugs } from "@/lib/simulations/mathematicsLabs/interactive";
 import { activities, derivative, initialValues, integrals, matrix, mission, probability, quadratic, riemann, sliceShape, transformShape, vector, type Values } from "@/lib/simulations/mathematicsLabs/model";
 
 const values=(slug:string,changes:Values={})=>({...initialValues(activities.find(a=>a.slug===slug)!),...changes});
 describe("mathematics missions",()=>{
  it("replaces every mathematics placeholder and makes every badge achievable",()=>{
-  expect(activities.map(a=>a.slug).sort()).toEqual(subjectsCatalog.mathematics.simulations.map(s=>s.slug).sort());
+  expect([...activities.map(a=>a.slug),...interactiveMathSlugs].sort()).toEqual(subjectsCatalog.mathematics.simulations.map(s=>s.slug).sort());
   const solutions:Record<string,Values>={"vector-lab":{bx:4,by:5},"function-explorer":{a:1,b:1,c:-6},"geometry-slice-3d":{solid:0,plane:0,offset:0},"pythagorean-puzzle":{puzzle:0,answer:5},"unit-circle-challenge":{angle:0,answer:1},"quadratic-transformation":{target:0,a:1,h:2,k:-3},"slope-intercept-challenge":{target:0,m:2,b:-3},"geometry-transformation":{challenge:0,tx:4,ty:-2},"probability-experiment":{experiment:0,trials:1000},"derivative-tangent":{function:0,x:1,guess:2},"area-under-curve":{problem:0,rectangles:40,method:1},"matrix-transformation":{target:0,a:0,b:-1,c:1,d:0}};
   for(const a of activities)expect(mission(a.slug,values(a.slug,solutions[a.slug]),true).ok,a.slug).toBe(true);
  });

@@ -3,7 +3,7 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
-import { verifyStaticSeo, verifyUnlistedLocales } from "../../scripts/verify-static-seo.mjs";
+import { verifyBingSitemap, verifyInternalLinks, verifyStaticSeo, verifyUnlistedLocales } from "../../scripts/verify-static-seo.mjs";
 
 const directories = [];
 const origin = "https://www.learnerkits.com";
@@ -38,6 +38,24 @@ describe("static export deployment checks", () => {
   it("blocks a canonical pointing to a different page or deployment", () => {
     expect(() => verifyStaticSeo(fixture({ canonical: "https://preview.example/en/example" }), origin)).toThrow("mismatched canonical");
   });
+  it("keeps sitemap-bing.xml pages open to Bing, noindex for Google, and out of sitemap.xml", () => {
+    const out = fixture();
+    const page = (head) => `<html><head>${head}<link rel="canonical" href="${origin}/en/bing-only"></head></html>`;
+    writeFileSync(new URL("sitemap-bing.xml", out), `<urlset><url><loc>${origin}/en/bing-only</loc></url></urlset>`);
+    writeFileSync(new URL("en/bing-only.html", out), page(`<meta name="robots" content="index, follow"><meta name="googlebot" content="noindex, follow">`));
+    expect(verifyBingSitemap(out)).toBe(1);
+    writeFileSync(new URL("en/bing-only.html", out), page(`<meta name="robots" content="index, follow">`));
+    expect(() => verifyBingSitemap(out)).toThrow("open to Google");
+    writeFileSync(new URL("en/bing-only.html", out), page(`<meta name="robots" content="noindex, follow">`));
+    expect(() => verifyBingSitemap(out)).toThrow("noindex for every engine");
+    writeFileSync(new URL("sitemap-bing.xml", out), `<urlset><url><loc>${origin}/en/example</loc></url></urlset>`);
+    expect(() => verifyBingSitemap(out)).toThrow("both sitemap.xml and sitemap-bing.xml");
+  });
+  it("blocks a Google-only noindex page in sitemap.xml", () => {
+    const out = fixture();
+    writeFileSync(new URL("en/example.html", out), `<html><head><title>Example</title><meta name="robots" content="index, follow"><meta name="googlebot" content="noindex, follow"><link rel="canonical" href="${origin}/en/example"><meta property="og:image" content="${origin}/images/share/example.jpg"></head></html>`);
+    expect(() => verifyStaticSeo(out, origin)).toThrow("marked noindex");
+  });
   it("requires every page in a language not open to search to be noindex", () => {
     const out = fixture();
     mkdirSync(new URL("es/simulations/", out), { recursive: true });
@@ -62,6 +80,28 @@ describe("static export deployment checks", () => {
     expect(() => verifyStaticSeo(out, origin)).toThrow("generic template");
     writeFileSync(new URL("en/simulations/tsunami-3d.html", out), page("<p>Set Offshore water depth to 2,000 m and compare Deep-water speed.</p>"));
     expect(verifyStaticSeo(out, origin)).toBe(1);
+  });
+  it("blocks two sitemap pages with the same meta description", () => {
+    const out = fixture();
+    writeFileSync(new URL("sitemap.xml", out), `<urlset><url><loc>${origin}/en/a</loc></url><url><loc>${origin}/en/b</loc></url></urlset>`);
+    const page = (slug, description) => `<html><head><title>${slug}</title><meta name="description" content="${description}"><link rel="canonical" href="${origin}/en/${slug}"><meta property="og:image" content="${origin}/images/share/example.jpg"></head></html>`;
+    writeFileSync(new URL("en/a.html", out), page("a", "Test Ohm’s law with a lamp."));
+    writeFileSync(new URL("en/b.html", out), page("b", "Test Ohm’s law with a lamp."));
+    expect(() => verifyStaticSeo(out, origin)).toThrow("share a meta description");
+    writeFileSync(new URL("en/b.html", out), page("b", "Find the period of a pendulum."));
+    expect(verifyStaticSeo(out, origin)).toBe(2);
+  });
+  it("blocks internal links to missing pages and to redirected URLs", () => {
+    const out = fixture();
+    const page = (links) => `<html><head><title>x</title></head><body>${links.map((href) => `<a href="${href}">x</a>`).join("")}<img src="/images/share/example.jpg"></body></html>`;
+    writeFileSync(new URL("en/b.html", out), page(["/en/example", "/en/example#guide", `${origin}/en/example?x=1`, "https://elsewhere.example/", "mailto:a@b.c", "/"]));
+    writeFileSync(new URL("index.html", out), page([]));
+    expect(verifyInternalLinks(out, origin)).toBe(6);
+    writeFileSync(new URL("en/b.html", out), page(["/es/pricing"]));
+    expect(() => verifyInternalLinks(out, origin)).toThrow("/es/pricing (not exported)");
+    writeFileSync(new URL("_redirects", out), "/en / 301\n");
+    writeFileSync(new URL("en/b.html", out), page(["/en"]));
+    expect(() => verifyInternalLinks(out, origin)).toThrow("/en (redirects to /)");
   });
   it("blocks missing titles and titles over 70 characters", () => {
     expect(() => verifyStaticSeo(fixture({ title: "" }), origin)).toThrow("no title");

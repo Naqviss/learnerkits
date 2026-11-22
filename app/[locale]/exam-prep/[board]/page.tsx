@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { boards, coursePath, getBoard, isBoardIndexable, isLevelIndexable } from "@/lib/exam-prep/catalog";
+import { boards, coursePath, examPrepHubsIndexed, getBoard, isBoardIndexable, isLevelIndexable } from "@/lib/exam-prep/catalog";
 import { boardFaqs, getBoardSeo, readableCourseName, verifiedBoardCourses } from "@/lib/exam-prep/seo";
 import { Breadcrumbs, IndependenceNotice } from "@/components/exam-prep/Shell";
 import { faqJsonLd, jsonLd, localizedMetadata, localizedUrl, siteName, siteUrl } from "@/lib/seo/metadata";
@@ -16,6 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return localizedMetadata("en", `/exam-prep/${id}`, seo.title, seo.description, {
     englishOnly: true,
     noIndex: !isBoardIndexable(id),
+    googleUnlisted: !examPrepHubsIndexed,
     keywords: [`${board.short} exam prep`, `${board.short} science revision`, `${board.short} physics`, `${board.short} chemistry`],
   });
 }

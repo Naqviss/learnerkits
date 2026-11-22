@@ -1,0 +1,557 @@
+{
+  "fluid-dynamics-simulator": {
+    "question": "Why does liquid in the middle of a pipe move faster?",
+    "answer": "A stationary pipe wall holds the adjacent liquid nearly still. Viscosity transmits that braking effect inward while a pressure difference drives liquid along the pipe. In steady laminar flow, the resulting speed profile is parabolic. At half the pipe radius the fluid travels at three quarters of the center speed, even when the viscosity changes.",
+    "science": [
+      "Imagine marking several parcels across the same cross section at the same instant. The row bows downstream as the central parcels overtake their neighbors. Watch markers on one horizontal row to judge downstream motion. Rows are offset initially to make individual parcels easier to follow, and a marker leaving the picture wraps around to the entrance.",
+      "The pressure gradient, pipe radius and fluid properties play different roles. A larger viscosity increases resistance to shearing and lowers the entire profile at a fixed pressure gradient. Compare the readings at two and four millipascal seconds. The center speed falls from two centimetres per second to one while the center-to-wall geometry stays the same."
+    ],
+    "formula": {
+      "expression": "u(r) = u₀[1 − (r/R)²]",
+      "meaning": "The distance r is measured outward from the center. Substituting half the radius gives a squared fraction of one quarter, leaving three quarters of the maximum speed at that location."
+    },
+    "steps": [
+      "Set viscosity to two and record the three speed readings.",
+      "Predict how far a center parcel travels in six seconds, then follow one during playback.",
+      "Double viscosity to four and repeat the center-distance calculation for the same interval.",
+      "Divide the half-radius reading by the center reading in each trial. Explain why the ratios agree."
+    ],
+    "misconception": {
+      "myth": "The fastest liquid is next to the wall.",
+      "fact": "A stationary solid surface enforces a no-slip boundary condition for the ordinary liquids represented here."
+    },
+    "modelNote": "The markers sample a fully developed laminar profile in a straight circular pipe. Turbulence, entrance effects and transient pressure changes lie outside its assumptions.",
+    "faq": [
+      {
+        "q": "What does an immobile marker at the edge represent?",
+        "a": "The limiting fluid velocity at the solid boundary equals the velocity of the wall. Fluid a small distance inward can still move. The stationary row illustrates that boundary value without implying that the whole outer layer has a uniform zero speed."
+      },
+      {
+        "q": "How does viscosity differ from density?",
+        "a": "Density measures mass per volume. Dynamic viscosity describes the stress required to sustain a velocity gradient. Two liquids can have similar densities yet respond very differently to the same pressure difference because their internal resistance to shearing differs."
+      },
+      {
+        "q": "Can one read the mean speed directly from the center marker?",
+        "a": "The center marker gives the maximum speed. Computing the mean requires weighting each ring of the cross section by its area. For the parabolic profile in a circular pipe this average equals half the center speed, which affects estimates of volume delivered."
+      }
+    ]
+  },
+  "water-impact-simulator": {
+    "question": "How does object shape change the force from a water current?",
+    "answer": "Shape changes how water separates around an obstacle and how pressure differs between its upstream and downstream faces. For objects with the same frontal area in the same current, the drag force scales with the drag coefficient. Comparing ten prescribed coefficients isolates that effect without introducing changes in size or water speed.",
+    "science": [
+      "A force comparison needs a consistent reference area. Imagine looking straight upstream at an object and measuring the area of its silhouette. Here every object receives the same assigned frontal area of one hundredth of a square metre. The drawn outlines identify orientations, while the calculation holds that reference area and water density fixed.",
+      "A force acts during a time interval and supplies impulse. Select the flat disk, run five seconds, and inspect the two measurements. Its coefficient of 1.17 gives a force of 23.4 newtons and an impulse of 117 newton seconds. Advance another five seconds and identify which measurement doubles while the other holds steady."
+    ],
+    "formula": {
+      "expression": "F = ½ρv²ACᴅ",
+      "meaning": "The calculation uses fresh water at a density of 1,000 kilograms per cubic metre, a two metre per second current and a fixed frontal area. These values make the force in newtons twenty times the chosen coefficient."
+    },
+    "steps": [
+      "Compare the sphere and flat disk at equal exposure times.",
+      "Choose the streamlined pod and estimate its drag relative to the disk before reading the force.",
+      "Inspect the hollow-upstream hemisphere and explain which surface meets the current first.",
+      "Rank three objects by accumulated impulse after ten seconds and justify your order from their coefficients."
+    ],
+    "misconception": {
+      "myth": "All equally wide objects experience equal drag.",
+      "fact": "A shared frontal area permits different forces because surface pressure and flow separation depend on shape and orientation."
+    },
+    "modelNote": "Coefficients are illustrative constants. The moving water marks indicate flow direction and do not resolve turbulence, splashes or detailed velocity fields around each surface.",
+    "faq": [
+      {
+        "q": "Why does orientation matter for the hollow hemisphere?",
+        "a": "A hollow opening facing upstream presents a different pressure distribution from the rounded outer face. The listed coefficient represents the orientation named in the selector. Flipping the object would require a different coefficient for a defensible comparison."
+      },
+      {
+        "q": "What does impulse tell us about a fixed obstacle?",
+        "a": "Impulse records the momentum transferred over a chosen interval. An anchored obstacle can remain stationary while its support carries the opposing load. Consequently an increasing impulse reading is consistent with a constant drag force and an object that stays in place."
+      },
+      {
+        "q": "Would doubling current speed double the water force?",
+        "a": "With coefficient, area and density held fixed, drag scales with the square of speed. Doubling current speed would give four times the force. In an actual experiment a different flow regime could also change the coefficient, complicating that prediction."
+      }
+    ]
+  },
+  "planet-collision-simulator": {
+    "question": "How does release distance affect a head-on planetary collision?",
+    "answer": "Two planets released from rest attract each other and accelerate as their centres approach. A larger initial separation gives them more gravitational potential energy to convert before their surfaces touch. Both encounter time and closing speed increase with release distance, even though the acceleration is weaker at the beginning of the longer fall.",
+    "science": [
+      "The planets have equal drawn radii but different masses. The heavier planet travels one third of the shrinking separation and the lighter planet travels two thirds. Follow the center marker during playback. The individual centers move toward that reference while the center of mass remains fixed because only internal forces act on the pair.",
+      "First contact occurs at a separation of two model radii. Closing speed is the rate at which the distance between centers decreases. It combines the speeds of both planets measured in the center-of-mass frame. Once contact occurs, the view holds the last pre-impact measurement so that trials of different lengths can be compared at the same physical event."
+    ],
+    "formula": {
+      "expression": "v² = 2G(M₁ + M₂)(1/r − 1/r₀)",
+      "meaning": "Starting at rest fixes the total energy. The reciprocal separation at contact and the reciprocal starting separation determine the relative kinetic energy gained during the fall."
+    },
+    "steps": [
+      "Start three radii apart and record the predicted contact time.",
+      "Pause just before contact and compare the two distances traveled.",
+      "Repeat from ten radii and record closing speed at the instant the display says first contact.",
+      "Explain why a larger initial distance can produce both a longer wait and a faster encounter."
+    ],
+    "misconception": {
+      "myth": "The lighter planet alone falls toward the heavier one.",
+      "fact": "Both planets accelerate under equal and opposite attractions, while their unequal masses produce different individual accelerations."
+    },
+    "modelNote": "A radial two-body solution uses normalized gravity, equal radii and a two-to-one mass ratio. The calculation ends at touching surfaces, before fragmentation, heating or deformation.",
+    "faq": [
+      {
+        "q": "Does increasing release distance give unlimited impact speed?",
+        "a": "At a fixed contact radius the reciprocal starting-distance term approaches zero as the release distance grows. The closing speed therefore approaches a finite limit. Starting farther away continues to increase travel time even when the additional speed gain becomes small."
+      },
+      {
+        "q": "Why do these planets collide instead of orbiting?",
+        "a": "They begin with zero sideways velocity. Their initial angular momentum about the common center of mass is zero, so gravity keeps their relative motion on the line joining them. Introducing transverse speed would create a different encounter geometry."
+      },
+      {
+        "q": "Could the displayed speed be used for two real planets?",
+        "a": "The speed is given in radii per model time unit. Converting it to a physical speed requires assigning masses, a radius scale and consistent gravitational units. Similar-looking planets on a screen alone cannot determine kilometres per second."
+      }
+    ]
+  },
+  "projectile-target-simulator": {
+    "question": "Which launch angles can hit a target thirty metres away?",
+    "answer": "A ball launched at eighteen metres per second can reach a level target thirty metres away on either a low or a high arc. Neglecting air resistance, complementary launch angles give equal range. Around thirty-three and fifty-seven degrees both come close with the available whole-degree control, although their heights and flight times differ.",
+    "science": [
+      "Horizontal motion proceeds at constant speed while gravity reduces the upward component and then accelerates the ball downward. Steeper launches trade horizontal speed for longer time aloft. At the landing point those changes can cancel exactly in the horizontal distance, so an observer watching only the finish may miss a very different trajectory.",
+      "Read the sign of the landing error before judging a shot. Positive error means the ball lands beyond the flag. Negative error places it short. A predicted error is available at launch because the equations specify the entire flight from the starting speed and angle. The moving range and height measurements show the trajectory as it unfolds."
+    ],
+    "formula": {
+      "expression": "R = v² sin(2θ)/g",
+      "meaning": "Equal launch and landing heights give this range expression. Reflecting the launch angle about forty-five degrees leaves the sine term unchanged and explains the paired trajectories."
+    },
+    "steps": [
+      "Launch at thirty degrees and decide whether the predicted miss is short or long.",
+      "Increase the angle one degree at a time until the landing error changes sign.",
+      "Reflect your closest angle about forty-five degrees and run its partner shot.",
+      "Compare the height and downrange distance of both balls after half a second."
+    ],
+    "misconception": {
+      "myth": "Only one angle can reach a fixed target.",
+      "fact": "A target inside the maximum range can usually be reached along two ideal trajectories when launch speed is fixed."
+    },
+    "modelNote": "The ball leaves ground level and returns to the same elevation under constant downward acceleration. Drag, spin, target width and launch-speed uncertainty are omitted.",
+    "faq": [
+      {
+        "q": "Why can a whole-degree slider miss the exact solution?",
+        "a": "The exact inverse-sine solution typically lies between integer angles. A small nonzero error at the best slider setting is evidence of finite control resolution. Bracketing the sign change tells you where finer angular adjustment would put the target center."
+      },
+      {
+        "q": "When is forty-five degrees the best angle?",
+        "a": "Forty-five degrees maximizes range for a fixed initial speed on level ground under uniform gravity and negligible drag. A particular target nearer than that maximum can require a different angle. The optimal angle can also shift if launch and landing heights differ."
+      },
+      {
+        "q": "Why does the ball stay at its landing point?",
+        "a": "Once the calculated flight time has elapsed, the displayed trajectory stops at ground contact. Bouncing would require additional assumptions about restitution and surface friction. Holding the landing position lets a learner compare the flag and the predicted signed miss directly."
+      }
+    ]
+  },
+  "pendulum-wave-designer": {
+    "question": "How can string lengths be chosen for a pendulum wave to reunite on cue?",
+    "answer": "Choose a reunion time and assign each pendulum a whole number of swings within that interval. Here eight bobs complete five through twelve cycles respectively. Each returns to its original phase at the chosen instant. Designing a shorter reunion requires higher frequencies throughout the row and therefore shorter strings under the same gravity.",
+    "science": [
+      "The period of an ideal small-angle pendulum scales with the square root of its length. To double a period you must multiply the string length by four. That squared relationship matters when designing a physical display because equally spaced cycle counts generally yield unequal differences between adjacent string lengths.",
+      "Take a twelve-second design as a worked example. The slowest bob takes twelve divided by five seconds per cycle while the fastest takes one second. Calculate their lengths separately using standard gravitational acceleration. Check both values against the two length readings, then advance to twelve seconds and inspect the phase of every bob."
+    ],
+    "formula": {
+      "expression": "L = g[T/(2πn)]²",
+      "meaning": "Here T is the intended reunion interval and n is the number of complete swings assigned to one bob. Each additional cycle increases frequency while reducing the required length."
+    },
+    "steps": [
+      "Choose twelve seconds and record the longest and shortest strings.",
+      "Pause at six seconds and identify bobs pointing to opposite sides.",
+      "Advance to twelve seconds and check the completed-reunions counter.",
+      "Double the reunion time and predict the length multiplier before comparing the readings."
+    ],
+    "misconception": {
+      "myth": "The pendulums must exchange energy to line up.",
+      "fact": "Independent oscillators with carefully related frequencies can return to a shared phase without any mechanical coupling between supports."
+    },
+    "modelNote": "The design uses small-angle periods, simultaneous release, uniform gravitational acceleration and ideal strings. The rig represents length changes and omits air resistance and pivot friction.",
+    "faq": [
+      {
+        "q": "Why do odd and even cycle counts separate halfway?",
+        "a": "At half the design interval, an even cycle count has reached a whole number of periods. An odd count has reached a whole number plus half a period. Starting from the same release side therefore places neighboring bobs on opposite sides at that instant."
+      },
+      {
+        "q": "Which string length limits a real display?",
+        "a": "The longest string determines the minimum clearance needed beneath the support for a chosen set of cycle counts, including room for the radius of the suspended bob. Check it before building a rig. A slower reunion schedule can demand considerably more height even when every bob uses the same release angle."
+      },
+      {
+        "q": "Can the row form patterns before the full reunion?",
+        "a": "Fractional parts of the reunion interval can organize bobs into alternating groups or repeating phase patterns. These arrangements are different observations from every bob returning to its starting pose. Scrubbing around a fraction of the design time helps distinguish the two effects."
+      }
+    ]
+  },
+  "food-chain-simulator": {
+    "question": "Why can removing foxes change the amount of grass in a meadow?",
+    "answer": "Removing foxes releases rabbits from predation. More rabbits can then consume grass faster than it regrows, producing an indirect effect on a producer that foxes never eat. The timing matters because the three populations respond at different rates. Compare the intact meadow and the fox-removal treatment at the same week to see that cascade.",
+    "science": [
+      "Grass approaches a resource-limited maximum when grazing is weak. Rabbits gain from encounters with grass and lose individuals through predation and other losses. Foxes depend on encounters with rabbits. Each transfer links a gain at one level to a loss at another, so changing the top level can alter the trajectory of the bottom level.",
+      "Compare a meadow without rabbits to one without foxes. Removing the middle link simultaneously removes grazing pressure and the foxes' modeled food supply. The grass may recover while predators gradually decline. Removing foxes leaves grazing active. These two treatments separate a direct feeding effect from the longer sequence of responses following predator release."
+    ],
+    "formula": {
+      "expression": "Grazing rate = 0.003 × grass index × rabbit index",
+      "meaning": "Either scarce grass or scarce rabbits limits consumption. Multiplying their indices captures that dependence in a simplified encounter model, while separate terms represent births, growth and background losses."
+    },
+    "steps": [
+      "Play the intact meadow and record all three indices at week twenty.",
+      "Remove foxes at the start and compare the grass and rabbit readings at the same week.",
+      "Remove rabbits instead and inspect the direction of the fox curve.",
+      "Use the sixty-week curves to explain which treatment lets grass approach its resource limit."
+    ],
+    "misconception": {
+      "myth": "Every food-chain response begins at the same time and size.",
+      "fact": "A disturbance changes some feeding rates immediately while differences in abundance accumulate over subsequent weeks."
+    },
+    "modelNote": "The meadow contains one producer, one herbivore and one predator with constant coefficients. Abundance indices describe model populations and carry no units of biomass or field density.",
+    "faq": [
+      {
+        "q": "Why are the three lines measured in indices?",
+        "a": "An abundance index gives a consistent measure of change within one modeled group. A rabbit index of twenty does not mean that twenty rabbits weigh the same as twenty units of grass. Compare each group's response across treatments before comparing numerical levels between groups."
+      },
+      {
+        "q": "Would fox removal always reduce grass in a real meadow?",
+        "a": "The direction depends on how much rabbits depend on fox predation and how strongly their grazing limits plants. Other herbivores, alternative prey, migration and weather can alter that chain. The controlled comparison establishes a mechanism whose importance would need field measurements."
+      },
+      {
+        "q": "Why do foxes survive briefly after rabbit removal?",
+        "a": "The predator index declines through its background loss rate after feeding gains stop. Losses accrue over time. An immediate drop of the prey index to zero therefore produces a gradual predator decline, which the time series makes easier to distinguish."
+      }
+    ]
+  },
+  "population-ecosystem-simulator": {
+    "question": "How much grazing habitat can support one thousand animals?",
+    "answer": "Under the reserve's assumed density of twenty animals per square kilometre, fifty square kilometres supplies a carrying capacity of one thousand animals. A herd introduced at that size starts in balance at fifty square kilometres. A smaller reserve produces a decline and a larger one permits growth toward a higher equilibrium.",
+    "science": [
+      "Carrying capacity represents the abundance compatible with a specified environment over time. It depends on food, water, space and other limiting resources. Here changing area changes the available resources in direct proportion because productivity per unit area is held constant. This deliberately isolates the geometric effect of supplying more usable land.",
+      "Herd size starts at one thousand in every trial. If the carrying capacity lies below the release population, competition makes the net growth rate negative. The herd can temporarily exceed capacity because capacity is an equilibrium value rather than an instant cap on population. Inspect the first year to see this adjustment underway."
+    ],
+    "formula": {
+      "expression": "K = 20A; N(t) = K/[1 + (K/1000 − 1)e^(−0.28t)]",
+      "meaning": "The area A fixes the equilibrium K. The time-dependent expression preserves the initial release size and gradually brings the abundance toward the capacity for the selected reserve."
+    },
+    "steps": [
+      "Set the grazing area to fifty square kilometres and inspect the two readings.",
+      "Reduce the area to forty and predict the direction of the first year's change.",
+      "Increase the area to one hundred and compare the herd with capacity after ten years.",
+      "Find two settings that put the starting herd equally far above and below capacity, then compare their adjustment curves."
+    ],
+    "misconception": {
+      "myth": "An ecosystem immediately ejects animals above carrying capacity.",
+      "fact": "Crowding changes growth and survival over time, allowing temporary population overshoot even in a closed reserve."
+    },
+    "modelNote": "Reserve quality is uniform and the herd follows continuous logistic growth with constant intrinsic growth rate. Predators, drought, age structure and seasonal movement are excluded.",
+    "faq": [
+      {
+        "q": "Why does the population curve flatten?",
+        "a": "As the herd approaches capacity, the remaining opportunity for net growth shrinks. When gains balance losses the population can remain steady. A flatter curve therefore describes a smaller net rate of change even while individual births and deaths may continue."
+      },
+      {
+        "q": "How could a real reserve increase capacity without gaining land?",
+        "a": "Improved water access or vegetation recovery might increase food available per square kilometre. That would alter the assumed density supported by the habitat. The area control represents one way to change capacity under a fixed productivity assumption."
+      },
+      {
+        "q": "Should a fractional herd reading be interpreted literally?",
+        "a": "A continuous population equation represents expected abundance and permits fractional intermediate values. For a management decision an ecologist would combine a rounded estimate with uncertainty and field counts. Rounding every intermediate calculation would introduce another assumption into the modeled trajectory."
+      }
+    ]
+  },
+  "deforestation-simulator": {
+    "question": "How much forest survives one hundred years of annual clearing?",
+    "answer": "Clearing a fixed percentage of the forest that remains produces a declining exponential curve. Starting from one thousand hectares, two percent annual clearing leaves about 133 hectares after one hundred years. Each year's absolute loss becomes smaller as the remaining area shrinks, even though the clearing percentage stays exactly the same.",
+    "science": [
+      "The first year at two percent removes twenty hectares. During the next year the same percentage applies to the 980 hectares still standing, removing 19.6 hectares. Repeating this reasoning explains why multiplying the first year's loss by one hundred gives an impossible estimate that exceeds the original size of the stand.",
+      "Standing area and cleared area add to the original thousand hectares throughout the experiment. Aboveground carbon is estimated by multiplying the remaining area by eighty tonnes of carbon per hectare. That converts a land-cover change into a stock estimate. It does not specify when removed carbon reaches the atmosphere or what happens to harvested wood."
+    ],
+    "formula": {
+      "expression": "A(t) = 1,000(1 − p/100)ᵗ",
+      "meaning": "The annual retained fraction compounds over t years. A separate stock calculation multiplies hectares remaining by a uniform carbon density, keeping the area accounting and carbon accounting distinct."
+    },
+    "steps": [
+      "Set clearing to zero and inspect the forest and carbon readings at year one hundred.",
+      "Choose two percent and calculate the areas lost in the first and second years.",
+      "Pause at year fifty and compare standing area with the cleared-area curve.",
+      "Run the century twice using two and four percent. Test whether doubling the percentage doubles the final cleared area."
+    ],
+    "misconception": {
+      "myth": "Two percent per year means twenty hectares every year.",
+      "fact": "A constant percentage is applied to a changing base, so successive annual cuts remove progressively smaller areas."
+    },
+    "modelNote": "The stand has uniform aboveground carbon density and no regrowth. Clearing proceeds at a constant proportional rate and excludes soil carbon, timber storage and fire emissions.",
+    "faq": [
+      {
+        "q": "Is a small annual percentage important over a century?",
+        "a": "Repeated losses accumulate even when the first cut looks modest. At one percent clearing, slightly more than a third of the original stand remains after a century. That long horizon makes cumulative loss much larger than a single year's percentage suggests."
+      },
+      {
+        "q": "Does carbon lost from standing trees equal immediate emissions?",
+        "a": "Standing stock measures carbon currently stored in the modeled forest. Some harvested carbon may remain in products or decay over years. Translating a stock decline into atmospheric emissions would require assumptions about burning, decomposition, products and uptake elsewhere."
+      },
+      {
+        "q": "Can the same surviving area support the same wildlife?",
+        "a": "Total surviving area gives limited information about habitat layout. A single intact block and many isolated fragments can have equal area yet offer different movement routes and edge conditions. Fragmentation would require a spatial model beyond the two area curves."
+      }
+    ]
+  },
+  "ocean-pollution-simulator": {
+    "question": "How fast can clean water flush pollution from a coastal bay?",
+    "answer": "A well-mixed bay exchanging ten percent of its water daily retains ninety percent of its dissolved tracer after each exchange. Starting at ten milligrams per litre, the concentration first falls to one milligram per litre or less on day twenty-two. Faster exchange reduces that waiting time, provided no new pollution enters.",
+    "science": [
+      "Imagine drawing a sample immediately before an exchange. Because the bay is uniformly mixed, the departing water has the same concentration as that sample. Clean replacement water restores the volume without restoring the removed tracer. After mixing, the next outflow carries less pollutant than the previous one, even if the volume exchanged stays constant.",
+      "The concentration curve drops quickly at first and slowly later. The time to a particular fractional reduction depends on the exchange fraction. Look at days twenty-one and twenty-two at the default rate. A rounded display near the threshold may hide a small difference, so the threshold reading uses the unrounded calculation."
+    ],
+    "formula": {
+      "expression": "Cₙ = C₀(1 − f)ⁿ",
+      "meaning": "The exchange fraction f is expressed as a decimal. Solving the retained-fraction equation for a tenth of the original concentration and rounding up gives the first qualifying whole day."
+    },
+    "steps": [
+      "Start with ten percent exchange and predict the concentration after one day.",
+      "Find the last whole day above one milligram per litre and the next day below it.",
+      "Double daily exchange and compare the new threshold day with your original result.",
+      "Try one percent exchange and check whether the threshold falls beyond the hundred-day viewing window."
+    ],
+    "misconception": {
+      "myth": "Flushing a tenth of the bay removes all tracer in ten days.",
+      "fact": "Each exchange removes a fraction of the tracer still present, leaving progressively smaller residual amounts."
+    },
+    "modelNote": "The bay maintains a fixed volume and mixes uniformly with clean replacement water. The threshold is an experimental reference concentration and carries no pollutant-specific safety interpretation.",
+    "faq": [
+      {
+        "q": "What happens to pollution that leaves the bay?",
+        "a": "The model tracks concentration inside a defined water body. Tracer carried away by its outflow leaves that accounting boundary. Assessing impacts on another stretch of coast would require information about transport, dilution and degradation after discharge."
+      },
+      {
+        "q": "Would oil on a beach follow this curve?",
+        "a": "A dissolved tracer is carried with the exchanged water. Oil stranded on sediment or a shoreline may persist and later release material back into the water. That additional reservoir changes the recovery process and cannot be inferred from daily water exchange alone."
+      },
+      {
+        "q": "Why can the threshold day exceed the viewing period?",
+        "a": "The threshold calculation solves the decay relationship for as many exchanges as necessary. The graph displays a selected hundred-day interval. With weak exchange, the bay can still be above the threshold at the end of that interval while the predicted crossing lies later."
+      }
+    ]
+  },
+  "carbon-footprint-simulator": {
+    "question": "What happens if everyone in a town halves their carbon footprint?",
+    "answer": "If a thousand residents each reduce an annual footprint of six tonnes of carbon dioxide equivalent by half, the town emits three thousand tonnes per year instead of six thousand. Over thirty years the difference reaches ninety thousand tonnes. The reduced total still grows because a positive amount enters the cumulative account each year.",
+    "science": [
+      "An annual footprint is a rate, while a cumulative footprint sums those rates over time. On the graph the slope corresponds to annual emissions and the height corresponds to emissions since the start. A less steep line therefore shows a lower annual rate while its upward direction shows that additional emissions continue to accumulate.",
+      "Avoided emissions measure the gap between two scenarios that use the same population and baseline consumption. They depend on the comparison being chosen. At fifty percent reduction the avoided and reduced totals have equal values, so their lines coincide. Try a different reduction to separate those curves and identify which quantity changes direction as the control increases."
+    ],
+    "formula": {
+      "expression": "E = population × annual footprint × years × (1 − reduction)",
+      "meaning": "The reduction enters as a fraction of the baseline annual footprint. Subtracting the reduced cumulative total from the baseline total gives avoided emissions over the same interval."
+    },
+    "steps": [
+      "Run the baseline with zero reduction and identify the line with a zero reading.",
+      "Set reduction to fifty percent and compare all three quantities after ten years.",
+      "Move to thirty years and determine whether the annual saving or the accumulated saving has grown.",
+      "Choose one hundred percent reduction and explain why the baseline line continues rising."
+    ],
+    "misconception": {
+      "myth": "Halving annual emissions removes half of past emissions.",
+      "fact": "A reduction changes future additions to the cumulative total and leaves previously emitted greenhouse gases outside this accounting calculation."
+    },
+    "modelNote": "All residents adopt the same permanent reduction at the start. Population, baseline footprint and accounting boundaries stay fixed, and atmospheric removal and temperature responses are excluded.",
+    "faq": [
+      {
+        "q": "What does carbon dioxide equivalent measure?",
+        "a": "Carbon dioxide equivalent aggregates different greenhouse gases using an agreed comparison of warming effects over a specified time horizon. A footprint expressed this way is an accounting quantity. It should not be read as a direct measurement of carbon dioxide concentration in the air."
+      },
+      {
+        "q": "Why compare against a baseline for the same town?",
+        "a": "Holding population and the reference footprint steady isolates the chosen per-person reduction. Comparing two towns with different populations or accounting methods could mix several effects. A matched baseline makes the meaning of the difference in cumulative emissions explicit."
+      },
+      {
+        "q": "Can a flat emissions curve mean two different things?",
+        "a": "On a plot of annual rates, a flat positive curve represents steady continuing emissions. On this cumulative plot, a flat curve represents no additional emissions over that interval. Reading the quantity and units on the chart avoids confusing those interpretations."
+      }
+    ]
+  },
+  "animated-world-map": {
+    "question": "How does daylight move across an equinox world map?",
+    "answer": "As Earth rotates eastward, the longitude experiencing solar noon shifts westward by about fifteen degrees per hour. On an ideal equinox map, each longitude spends approximately half a day in sunlight. A reference meridian lets you compare the moving daylight boundary with local mean solar time at a fixed place.",
+    "science": [
+      "At twelve hours UTC the modeled noon meridian coincides with Greenwich. Six hours later it lies ninety degrees west. A learner can trace that motion by following the middle of the sunlit half rather than its leading edge. The transition from light to shade marks evening at a fixed longitude, while the reverse transition marks morning.",
+      "A flat world map has a seam at the international date-line region. The night half may appear as two separate dark pieces near the left and right edges of the rectangle. On a globe those pieces connect. The apparent break comes from the projection and does not divide Earth's night into two physically separate regions."
+    ],
+    "formula": {
+      "expression": "Local solar hour = (UTC + longitude/15) modulo 24",
+      "meaning": "Longitude uses positive values east of Greenwich. Wrapping the result into a twenty-four-hour interval gives the clock reading for the reference meridian on the ideal rotating Earth."
+    },
+    "steps": [
+      "Set the reference to Greenwich and pause at twelve UTC.",
+      "Move the reference ninety degrees east and read its solar hour at the same instant.",
+      "Follow the reference line through a complete cycle and identify approximate sunrise and sunset.",
+      "Repeat the comparison ninety degrees west and explain the sign of the time difference."
+    ],
+    "misconception": {
+      "myth": "Everyone at the same longitude reads the same civil clock.",
+      "fact": "Solar time follows longitude continuously whereas civil time also depends on time zones, laws and seasonal clock changes."
+    },
+    "modelNote": "The animation assumes an equinox, parallel sunlight and uniform rotation. It omits twilight, atmospheric refraction, polar edge effects and the seasonal equation of time.",
+    "faq": [
+      {
+        "q": "Why is the daylight boundary vertical on this map?",
+        "a": "At an ideal equinox the Sun lies over the equator and the day–night boundary runs through the poles. In this rectangular latitude–longitude projection, the corresponding meridians are vertical lines. At other seasons the boundary generally curves across the same projection."
+      },
+      {
+        "q": "Which direction should I move for a later solar hour?",
+        "a": "At one instant, an eastward location has rotated farther through its daily cycle. Adding fifteen degrees east adds about one hour of local mean solar time. Crossing midnight wraps the reading back toward zero while the eastward relationship remains continuous."
+      },
+      {
+        "q": "Does local solar noon always occur at twelve on my watch?",
+        "a": "A civil clock follows an assigned time zone and may include a seasonal offset. A location can sit east or west of that zone's reference meridian. The difference explains why an observed noon shadow can reach its minimum before or after twelve on a watch."
+      }
+    ]
+  },
+  "country-border-simulator": {
+    "question": "Where does a border fall if each settlement joins its nearest capital?",
+    "answer": "For two capitals at the same latitude on a simplified flat map, the equal-distance boundary lies halfway between their longitudes. Moving the eastern capital shifts that boundary by half the capital's displacement. A settlement can change territory even though the settlement itself stays still, because the nearest-capital comparison has changed.",
+    "science": [
+      "The two capital markers sit along one horizontal line. A perpendicular line through their midpoint divides the plane into a western half nearer the western capital and an eastern half nearer the eastern capital. This is the two-site case of a Voronoi partition, a construction also used to model service catchments.",
+      "Watch the five settlement markers as the eastern capital moves from thirty-five degrees east toward the selected final longitude. The counter records settlements strictly west of the calculated boundary. A settlement exactly on the boundary ties in distance and is excluded from that strict count. Pause around a crossing to see why the counter changes in steps."
+    ],
+    "formula": {
+      "expression": "Boundary longitude = (western longitude + eastern longitude)/2",
+      "meaning": "The western capital remains at ten degrees west. Averaging signed coordinates places the boundary at the midpoint and lets you predict its movement before the relocation animation runs."
+    },
+    "steps": [
+      "Choose fifty degrees east as the destination and locate both square capital markers.",
+      "Predict the final boundary from their two longitudes before advancing relocation.",
+      "Move the time slider until the line reaches a settlement. Record the boundary reading.",
+      "Move the destination westward and compare how many of the five settlements end up on each side."
+    ],
+    "misconception": {
+      "myth": "A nearest-capital boundary follows existing national borders.",
+      "fact": "A distance rule can cut across existing countries, landscapes and communities because it uses only the locations of the two sites."
+    },
+    "modelNote": "Territories are fictional classroom overlays. Equal travel cost in a plane, a common capital latitude and five stationary settlement markers make the midpoint construction possible.",
+    "faq": [
+      {
+        "q": "Why are the capitals represented separately from the settlements?",
+        "a": "Capitals define the two competing service centers and therefore determine the partition. The five smaller markers are test locations whose assignments can change. Moving a test location would alter its assignment without moving the mathematical boundary between the two centers."
+      },
+      {
+        "q": "What changes if travel follows roads?",
+        "a": "Road length, travel time, border crossings and terrain can make the fastest route lead to a geographically farther capital. A realistic accessibility boundary would compare network travel costs. The straight midpoint construction applies only under the symmetric distance assumptions of the exercise."
+      },
+      {
+        "q": "What happens exactly halfway between the capitals?",
+        "a": "Both capital distances are equal on the dividing line. An assignment rule would need an additional tie-breaking convention to put such a settlement on one side. The numerical readout instead counts only settlements strictly west, making the tie convention explicit."
+      }
+    ]
+  },
+  "population-growth-map": {
+    "question": "How did world population change between 2000 and 2020?",
+    "answer": "World Bank estimates put world population at about 6.16 billion in 2000 and 7.85 billion in 2020, an increase of roughly 27.5 percent. National changes varied widely. Nigeria grew by about 69 percent over the same interval, while Japan ended slightly below its starting population. The map compares each place with its own baseline.",
+    "science": [
+      "A percentage map answers a different question from a map of total inhabitants. To calculate the color of a country, subtract its population in 2000 from the estimate for the selected year, then divide by its starting population. A small country can consequently enter the highest growth band even if its absolute gain is much smaller than the gain in a larger country.",
+      "Follow Japan one year at a time. Its 2010 population stood above the 2000 estimate yet its 2020 population stood below that baseline. A single comparison between the endpoints conceals this intermediate rise. Use the annual observations to distinguish a net change across twenty years from a continuous increase or decrease throughout the interval."
+    ],
+    "formula": {
+      "expression": "Change (%) = 100 × (Pyear − P2000)/P2000",
+      "meaning": "Both population estimates must refer to the same geographic series. The denominator is the starting population. Using the later population instead would answer a different percentage question and produce a different map value."
+    },
+    "steps": [
+      "Select World and advance to the last year. Compare the displayed percentage with a calculation from the two population totals.",
+      "Select Nigeria and compare its change since 2000 with the separate world-change reading for 2020.",
+      "Scrub through the Japan series and identify a year when its population exceeded the starting value.",
+      "Find a mapped country close to a color threshold. Compare its numerical reading with a neighbor that falls into the adjacent color band."
+    ],
+    "misconception": {
+      "myth": "The largest colored country contributed the largest number of people.",
+      "fact": "Geographic area determines the footprint of a polygon while its color measures proportional population change, so neither directly measures the number of people added."
+    },
+    "modelNote": "The map uses annual World Bank total-population estimates from 2000 through 2020. Gray indicates unavailable matched data. The world total comes directly from the published aggregate, including places beyond the mapped polygons.",
+    "faq": [
+      {
+        "q": "What does a negative population change mean?",
+        "a": "A negative value means the population estimate for the displayed year is lower than the estimate for the same place in 2000. It cannot by itself explain whether migration, birth rates, mortality or a revision to the underlying estimates accounts for that difference."
+      },
+      {
+        "q": "Why does the map sometimes keep the same color for several years?",
+        "a": "Color represents a range of percentage values. A population can increase every year while its change relative to 2000 stays inside one color band. Inspect the numerical readings for the selected country to see movement within that interval."
+      },
+      {
+        "q": "Is the global percentage the average of country percentages?",
+        "a": "The global percentage is calculated from the World Bank world-population series. A simple average of country percentages would give each country equal weight regardless of its starting size, potentially producing a different answer from the change in the global total."
+      }
+    ]
+  },
+  "climate-zones-map": {
+    "question": "How can warming move temperature belts toward the poles?",
+    "answer": "If mean temperature decreases toward the poles, warming moves a fixed temperature threshold to a higher absolute latitude. In this idealized map the gradient is half a degree Celsius per degree of latitude. Three degrees of uniform warming therefore shifts each threshold six degrees of latitude poleward in both hemispheres.",
+    "science": [
+      "At baseline the equator is assigned thirty degrees Celsius. The twenty-degree boundary lies twenty degrees of latitude from it and the five-degree boundary lies fifty degrees away. The colored bands indicate where the latitude-only temperature estimate falls relative to those thresholds. They extend across oceans and continents because the equation uses no land-surface inputs.",
+      "Use the scenario-progress control to distinguish two ideas. The warming slider sets the final increment to test, while progress applies a fraction of it. Halfway through a six-degree scenario the applied warming equals three degrees. Compare that state with the endpoint of a three-degree scenario and explain why both pairs of latitude readings match."
+    ],
+    "formula": {
+      "expression": "Temperature = 30 + warming − 0.5 × absolute latitude",
+      "meaning": "A threshold is reached where the latitude-dependent decrease offsets the equatorial temperature excess. The absolute latitude makes the ideal belts symmetric north and south, an assumption that can be checked directly on the map."
+    },
+    "steps": [
+      "Record both boundary latitudes before warming starts.",
+      "Select three degrees and predict the final latitude of the twenty-degree line.",
+      "Test six degrees at half progress and compare it with the previous endpoint.",
+      "Identify two places at similar latitude where altitude or rainfall could produce different real climates."
+    ],
+    "misconception": {
+      "myth": "Temperature bands alone determine a complete climate classification.",
+      "fact": "Climate classifications can also depend on precipitation amounts, seasonal patterns and other conditions omitted from a latitude-only temperature profile."
+    },
+    "modelNote": "This map illustrates thermal thresholds under uniform warming. It is separate from observed Köppen climate classifications and carries no regional prediction of rainfall or vegetation.",
+    "faq": [
+      {
+        "q": "Why do the two boundaries move equally far?",
+        "a": "Both thresholds use the same constant temperature gradient and receive the same uniform warming. Dividing the warming by that gradient therefore yields the same latitude displacement. Variable gradients or spatially uneven warming would give different displacements to the two thresholds."
+      },
+      {
+        "q": "Why are high mountains missing from the cold band?",
+        "a": "Elevation strongly influences temperature but has no term in this particular profile. A high tropical summit can be much cooler than a nearby lowland at almost the same latitude. A terrain-aware zone map would need elevation data and a local temperature model."
+      },
+      {
+        "q": "Does the progress slider represent a specific year?",
+        "a": "Progress describes how much of the selected warming increment has been applied. It can be used to compare intermediate temperature patterns but carries no dates. Assigning years would require a separate emissions pathway and a climate response through time."
+      }
+    ]
+  },
+  "natural-disaster-map": {
+    "question": "How does steering wind change a hurricane's path across an ocean map?",
+    "answer": "In a simple steering model a hurricane center is carried by a prescribed background wind. Increasing the westward component moves the modeled storm farther west during the same interval, while a fixed northward component carries it toward higher latitude. The plotted line joins successive positions of a hypothetical Atlantic storm over five days.",
+    "science": [
+      "The track begins near fifteen degrees north and thirty-five degrees west. At twenty kilometres per hour westward, a full day produces 480 kilometres of westward displacement. During the same day the fixed northward component adds 144 kilometres northward. Those two displacements describe different components of one motion and should be compared at a common elapsed time.",
+      "Map coordinates use degrees but the steering control uses kilometres per hour. Northward travel is converted using about 111 kilometres per degree of latitude. Westward travel uses the shorter length of a longitude degree at a representative latitude of eighteen degrees north. This approximation makes the plotted longitude track easy to calculate and inspect."
+    ],
+    "formula": {
+      "expression": "Westward displacement = steering speed × elapsed hours",
+      "meaning": "With constant speed the westward distance grows linearly. Converting that distance to longitude requires a latitude factor because neighboring meridians converge toward the poles."
+    },
+    "steps": [
+      "Start at twenty kilometres per hour and estimate westward displacement after twenty-four hours.",
+      "Advance one day and compare the readout with your estimate.",
+      "Double-check the northward latitude change in two trials with different westward speeds.",
+      "Follow both trials to five days and explain why their final longitudes differ while their latitudes match."
+    ],
+    "misconception": {
+      "myth": "A hurricane track directly shows wind strength around its eye.",
+      "fact": "The path describes motion of the storm center, while circulation intensity is a different property requiring separate observations or a dynamical model."
+    },
+    "modelNote": "A constant steering vector moves a point across a simplified Atlantic map. The track omits land interaction, storm development, curved steering and forecast uncertainty.",
+    "faq": [
+      {
+        "q": "Why can a storm travel slowly while winds around it are strong?",
+        "a": "Translation refers to the movement of the entire circulation center over the surface. Wind speed near the eye measures air motion around that center. The two quantities represent different motions, so a slow-moving storm may still contain strong local winds."
+      },
+      {
+        "q": "Can a real hurricane cross the same line on this map?",
+        "a": "Many real steering patterns vary with height, time and location. A real track might overlap a portion of the illustrated line by coincidence. Reproducing a particular event would require observed initial conditions and the relevant atmospheric circulation over the forecast interval."
+      },
+      {
+        "q": "How can I check the sign of a longitude change?",
+        "a": "The numeric longitude uses positive values to the east and negative values to the west. Moving farther west from an already negative starting longitude makes that reading more negative, even though the separately displayed westward distance grows as a positive number."
+      }
+    ]
+  }
+}

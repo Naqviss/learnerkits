@@ -20,6 +20,21 @@ export const infoMeta: Record<InfoPageKey, { title: string; seoTitle?: string; d
   faq: { title: "Frequently Asked Questions", description: "Help with free access, classroom use, saved progress, browser requirements, and reporting problems." },
   accessibility: { title: "Accessibility", description: "Accessibility features, known limitations of interactive simulations, and how to request help." },
 };
+// Meta descriptions for the Spanish copies of these pages, so they do not repeat the English ones
+// (Bing's site scan flags identical descriptions even on noindex pages).
+const infoDescriptionsEs: Record<InfoPageKey, string> = {
+  about: "Quiénes están detrás de LearnerKits y cómo creamos educación científica interactiva y gratuita, basada en predecir, experimentar y explicar.",
+  contact: "Escribe a LearnerKits para hacer una pregunta, señalar un error científico o pedir ayuda con la accesibilidad, la privacidad o el uso en clase.",
+  privacy: "Cómo trata LearnerKits los mensajes de contacto, el almacenamiento del navegador, la analítica, la publicidad y tus opciones de privacidad.",
+  cookies: "El almacenamiento esencial del navegador, las cookies opcionales de analítica y publicidad, y cómo cambiar tus preferencias en LearnerKits.",
+  terms: "Condiciones de uso de las simulaciones, los artículos, los recursos para el aula y los servicios de contacto de LearnerKits.",
+  refunds: "Reembolso completo de cualquier pago de LearnerKits Premium solicitado en un plazo de 14 días, cómo pedirlo y cómo funciona la cancelación.",
+  disclaimer: "El alcance y los límites de los modelos científicos, los materiales de aprendizaje y las referencias externas de LearnerKits.",
+  "editorial-policy": "Cómo elabora LearnerKits su contenido educativo: fuentes científicas, correcciones, uso de la IA e independencia frente a la publicidad.",
+  faq: "Respuestas sobre el acceso gratuito, el uso en clase, el progreso guardado, los navegadores compatibles y cómo informar de un problema.",
+  accessibility: "Funciones de accesibilidad de LearnerKits, límites conocidos de las simulaciones interactivas y cómo pedir ayuda.",
+};
+export const infoDescription = (page: InfoPageKey, locale: string) => (locale === "es" ? infoDescriptionsEs[page] : infoMeta[page].description);
 const Updated = () => <p className="legalUpdated">Last updated: <time dateTime={informationUpdatedAt}>November 9, 2026</time></p>;
 const ContactLink = () => <a href={`mailto:${contactEmail}`}>{contactEmail}</a>;
 

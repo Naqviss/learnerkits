@@ -1,4 +1,5 @@
 import { practicalLabs } from "@/lib/simulations/practical/catalog";
+import { mathLabCards } from "@/lib/seo/simulation-content/math-labs";
 import { chemistryCoursePublished, courseLabs, courseSimulationCards } from "@/lib/simulations/chemistry/course/catalog";
 
 export const subjectSlugs = ["space", "physics", "geography", "environmental-science", "biology", "chemistry", "mathematics"] as const;
@@ -6,8 +7,25 @@ export type SubjectSlug = (typeof subjectSlugs)[number];
 
 // Keep hidden subjects in the catalog so their work can resume without data loss.
 // Remove a slug from this set when it is ready to be published again.
-export const hiddenSubjectSlugs: ReadonlySet<SubjectSlug> = new Set(["biology", "mathematics"]);
+export const hiddenSubjectSlugs: ReadonlySet<SubjectSlug> = new Set(["biology"]);
 export const visibleSubjectSlugs = subjectSlugs.filter((slug) => !hiddenSubjectSlugs.has(slug));
+// Published for visitors and linked internally, but kept out of Google: the subject page and its
+// simulation pages carry a googlebot noindex and stay out of the sitemap and llms.txt (Bing may list
+// them; they are in /sitemap-bing.xml). Mathematics went live in
+// November 2026 during the recovery from the September 2026 spam-update demotion, so it is kept out
+// of search until the existing pages recover. Remove a slug to open its pages to search.
+export const unlistedSubjectSlugs: ReadonlySet<SubjectSlug> = new Set(["mathematics"]);
+export const indexedSubjectSlugs = visibleSubjectSlugs.filter((slug) => !unlistedSubjectSlugs.has(slug));
+export const isSubjectIndexed = (slug: SubjectSlug) => !unlistedSubjectSlugs.has(slug);
+// Single simulation pages kept out of Google only (googlebot noindex, out of the sitemap and llms.txt;
+// Bing may still list them, from /sitemap-bing.xml). These investigation labs went live in one batch on 2026-11-22, during the
+// recovery, and their text has not been reviewed by a person; several also overlap older labs. Remove a
+// slug once a person has reviewed and rewritten that page.
+export const unlistedSimulationSlugs: ReadonlySet<string> = new Set([
+  "fluid-dynamics-simulator", "water-impact-simulator", "planet-collision-simulator", "projectile-target-simulator", "pendulum-wave-designer",
+  "food-chain-simulator", "population-ecosystem-simulator", "deforestation-simulator", "ocean-pollution-simulator", "carbon-footprint-simulator",
+  "animated-world-map", "country-border-simulator", "population-growth-map", "climate-zones-map", "natural-disaster-map",
+]);
 // Temporarily unpublished simulations remain implemented and can be restored here.
 export const hiddenSimulationSlugs: ReadonlySet<string> = new Set([...(chemistryCoursePublished ? [] : courseLabs.map((lab) => lab.slug))]);
 
@@ -199,8 +217,8 @@ const fullSubjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
     headline: "See abstract relationships move, rotate, and reshape.",
     description: "Manipulate geometry, probability, functions, calculus, and transformations so mathematical relationships become observable objects.",
     prompt: "What stays invariant when a mathematical representation changes?",
-    concepts: ["Geometry", "Functions", "Probability", "Calculus"],
-    gradeBand: "Grades 7–12",
+    concepts: ["Fractions", "Algebra", "Geometry", "Statistics", "Functions", "Calculus"],
+    gradeBand: "Grades 5–12",
     learningObjectives: ["Connect symbolic, graphical, and geometric representations", "Interpret how parameters transform mathematical objects", "Use visual evidence to explain rates, area, and probability"],
     simulations: [
       { slug: "vector-lab", title: "Vector Playground", concepts: "Magnitude · direction · components · addition", difficulty: "Beginner", duration: "5–10 min", kind: "Vector lab", outcome: "Build and add vectors by reasoning from components and direction.", visualMode: "graph" },
@@ -215,6 +233,8 @@ const fullSubjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
       { slug: "derivative-tangent", title: "Derivative & Tangent Simulator", concepts: "Derivative · slope · tangent line · rate of change", difficulty: "Advanced", duration: "8–15 min", kind: "Simulation", outcome: "Connect the derivative at a point with the slope of the tangent line.", seoTarget: "derivative tangent line simulator", opportunity: "Very High", visualMode: "graph" },
       { slug: "area-under-curve", title: "Area Under Curve Explorer", concepts: "Riemann sums · definite integral · rectangles · area", difficulty: "Advanced", duration: "8–15 min", kind: "Simulation", outcome: "Approximate area with Riemann sums and observe convergence toward a definite integral.", seoTarget: "Riemann sum simulator", opportunity: "Very High", visualMode: "graph" },
       { slug: "matrix-transformation", title: "Matrix Transformation Visualizer", concepts: "Matrices · linear transformations · basis vectors · determinant", difficulty: "Advanced", duration: "8–15 min", kind: "2D/3D simulation", outcome: "Visualize how a 2×2 matrix rotates, scales, shears, and reflects the plane.", seoTarget: "matrix transformation visualizer", opportunity: "Very High", featured: true, visualMode: "3d" },
+      // Interactive labs (components/subjects/mathematics/labs); cards live in lib/seo/simulation-content/math-labs.
+      ...mathLabCards,
     ],
   },
 };
@@ -243,4 +263,14 @@ export function getSimulationCard(slug: string): SimulationCard | undefined {
 }
 
 export const allSimulations = subjectSlugs.flatMap((slug) => subjectsCatalog[slug].simulations);
+/** Live simulations across every published subject (hidden subjects excluded). */
+export const liveSimulationCount = () => visibleSubjectSlugs.reduce((count, slug) => count + subjectsCatalog[slug].simulations.length, 0);
+/**
+ * The site-wide total as shown in copy: rounded down to the hundred with a plus ("100+") so the
+ * wording does not change every time a lab is added. Per-subject counts and structured-data
+ * numbers stay exact.
+ */
+export function simulationCountLabel(count = liveSimulationCount()) {
+  return count >= 100 ? `${Math.floor(count / 100) * 100}+` : String(count);
+}
 export const featuredSimulations = allSimulations.filter((simulation) => simulation.featured);

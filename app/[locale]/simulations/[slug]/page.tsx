@@ -1,15 +1,20 @@
+import { investigationShareTitles } from "@/lib/seo/simulation-content/investigation-share-titles";
+import type { InvestigationSlug } from "@/lib/simulations/practical/investigations";
 import { practicalSlugs } from "@/lib/simulations/practical/catalog";
+import { interactiveMathSlugs } from "@/lib/simulations/mathematicsLabs/interactive";
+
+const interactiveMathSlugSet = new Set<string>(interactiveMathSlugs);
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getEducationCopy, getLocalizedSubject } from "@/lib/i18n/content";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonLd } from "@/lib/seo/metadata";
-import { getSimulationCard, getSubjectForSimulation, isVisibleSubjectSlug } from "@/lib/subjects/catalog";
+import { getSimulationCard, getSubjectForSimulation, isSubjectIndexed, isVisibleSubjectSlug, unlistedSimulationSlugs } from "@/lib/subjects/catalog";
 import { SimulationPageLayout } from "@/components/simulation/SimulationPageLayout";
 import { SimulationAssistant } from "@/components/premium/SimulationAssistant";
 import { getSimulationGuide } from "@/lib/seo/simulation-guides";
-import { getSimulationContent, simulationContentUpdated } from "@/lib/seo/simulation-content";
+import { getSimulationContent, getSimulationDescription, simulationReviewDate } from "@/lib/seo/simulation-content";
 import { getMoleculeKitCopy, moleculeKitSimSlugs } from "@/lib/seo/molecule-kit-content";
 import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { BalancingEquationsGuide } from "@/components/seo/BalancingEquationsGuide";
@@ -26,6 +31,7 @@ const SpaceActivitiesClient = dynamic(() => import("@/components/subjects/space/
 const GeographyActivitiesClient = dynamic(() => import("@/components/subjects/geography/GeographyActivitiesClient").then((module) => module.GeographyActivitiesClient));
 const BiologyActivitiesClient = dynamic(() => import("@/components/subjects/biology/BiologyActivitiesClient").then((module) => module.BiologyActivitiesClient));
 const MathematicsActivitiesClient = dynamic(() => import("@/components/subjects/mathematics/MathematicsActivitiesClient").then((module) => module.MathematicsActivitiesClient));
+const InteractiveMathLab = dynamic(() => import("@/components/subjects/mathematics/labs/InteractiveMathLab").then((module) => module.InteractiveMathLab));
 const EnvironmentalActivitiesClient = dynamic(() => import("@/components/subjects/environmental/EnvironmentalActivitiesClient").then((module) => module.EnvironmentalActivitiesClient));
 
 export function generateStaticParams() {
@@ -51,13 +57,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const metadata = localizedMetadata(locale, `/simulations/${slug}`, balancingSeo.title, balancingSeo.description, { keywords: ["balancing chemical equations", "how to balance chemical equations", "balancing equations practice", "balanced chemical equations examples", ...keywords] });
     return { ...metadata, title: { absolute: balancingSeo.title } };
   }
-  return localizedMetadata(
+  const metadata = localizedMetadata(
     locale,
     `/simulations/${slug}`,
     copy.seo.simulationTitle(simulation.title),
-    copy.seo.simulationDescription(simulation.title, simulation.outcome),
-    { keywords }
+    getSimulationDescription(slug, locale) ?? copy.seo.simulationDescription(simulation.title, simulation.outcome),
+    { keywords, googleUnlisted: !isSubjectIndexed(baseSubject.slug) || unlistedSimulationSlugs.has(slug) }
   );
+  const shareTitle = locale === "en" ? investigationShareTitles[slug as InvestigationSlug] : undefined;
+  if (!shareTitle) return metadata;
+  return { ...metadata, openGraph: { ...metadata.openGraph, title: shareTitle }, twitter: { ...metadata.twitter, title: shareTitle } };
 }
 
 export default async function ConceptSimulationPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
@@ -81,7 +90,7 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
     subject: subject.eyebrow,
     concepts: simulation.concepts ? simulation.concepts.split(" · ") : [],
     abstract: content?.answer,
-    dateModified: content ? simulationContentUpdated : undefined,
+    dateModified: content ? simulationReviewDate(slug) : undefined,
   });
   const crumbs = breadcrumbJsonLd(safeLocale, [
     { name: copy.home.exploreSubjects, path: "/subjects" },
@@ -104,7 +113,7 @@ export default async function ConceptSimulationPage({ params }: { params: Promis
   const activity = practicalSlugs.has(slug) ? <PracticalLab key={slug} slug={slug}/> : baseSubject.slug === "environmental-science"
     ? <EnvironmentalActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
     : baseSubject.slug === "mathematics"
-      ? <MathematicsActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
+      ? interactiveMathSlugSet.has(slug) ? <InteractiveMathLab key={slug} locale={safeLocale} simulation={simulation}/> : <MathematicsActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
       : baseSubject.slug === "biology"
         ? <BiologyActivitiesClient key={slug} locale={safeLocale} subject={subject} simulation={simulation}/>
         : baseSubject.slug === "geography"

@@ -7,13 +7,13 @@ A browser-based educational simulation platform built around **learn by experime
 ## Current catalog
 
 - **6 published subject areas**
-- **71 simulations currently indexable**
-- **71 simulations total**
+- **103 simulations live** (Biology stays hidden)
+- **68 simulations indexable in Google**; the 20 Mathematics labs (`unlistedSubjectSlugs`) and the 15 investigation labs (`unlistedSimulationSlugs`), both in `lib/subjects/catalog.ts`, are kept out of Google only (`googlebot` noindex, out of `sitemap.xml`) and listed for Bing in `sitemap-bing.xml`
 - **16 SEO-priority simulations** surfaced as the first build/promote collection
 - Light theme by default, plus Dark and System appearance modes
 - Published in English and Spanish (`en`, `es`); only English is open to search engines (`indexedLocales`). Other translations remain in the source for later re-enablement
 
-The original labs are retained. The published catalog currently contains 71 indexable simulations; verify the catalog count when adding or removing a lab.
+The original labs are retained. The published catalog currently contains 103 live and 83 indexable simulations; verify the catalog count when adding or removing a lab.
 
 ## Subjects
 
@@ -32,8 +32,10 @@ Greenhouse Effect, Carbon Cycle, Sea Level Rise, Ocean Acidification, Renewable 
 ### Chemistry — 13 labs
 Existing Gas Law and Reaction Rate labs plus Molecular Geometry 3D, Molecule Builder 3D, Chemical Bonding, Acid–Base & pH, Neutralization Station, Titration, States of Matter 3D, Solubility Curve, Limiting Reagent, Balance the Equation and Periodic Table Element Hunt.
 
-### Mathematics — 12 labs
-Existing Vector Playground and Function Explorer plus 3D Geometry Slice, Pythagorean Puzzle, Unit Circle, Quadratic Transformations, Slope Intercept, Geometry Transformations, Probability Experiment, Derivative & Tangent, Area Under Curve and Matrix Transformation.
+### Mathematics — 20 labs
+Twelve slider labs (`lib/simulations/mathematicsLabs/model.ts`): Vector Playground, Function Explorer, 3D Geometry Slice, Pythagorean Puzzle, Unit Circle, Quadratic Transformations, Slope Intercept, Geometry Transformations, Probability Experiment, Derivative & Tangent, Area Under Curve and Matrix Transformation.
+
+Eight interactive labs built on `components/subjects/mathematics/labs/MathLabShell.tsx`, with drag handles, a live "Try this" checklist (worked out from the lab state, nothing saved) and a key idea that opens when the checks are done: Equivalent Fractions, Circle Area & Pi, Triangle Angle Sum, Equation Balance Scale, Systems of Equations, SOH CAH TOA Trigonometry, Mean/Median/Mode and Exponential vs Linear Growth. To add one, create the component, its model and test, add a content module in `lib/seo/simulation-content/math-labs/` (catalog card, page content, meta description, Spanish title) and register the slug in `lib/simulations/mathematicsLabs/interactive.ts` and `components/subjects/mathematics/labs/index.ts`.
 
 ## SEO-priority collection
 
@@ -62,7 +64,7 @@ Subject pages and the global simulation library surface these first while still 
 
 `/robots.txt` explicitly allows Googlebot, bingbot, and OpenAI's OAI-SearchBot while keeping `/api/` private. `/sitemap.xml` includes the localized curriculum plus the English guide hubs, and `/llms.txt` exposes a concise machine-readable catalog for AI systems.
 
-**Simulation page content (English).** Every English simulation page has hand-written, page-specific content in `lib/seo/simulation-content/<subject>.ts`: the main question learners search and an answer-first paragraph (shown under the lab, and published as `abstract` in the page's structured data), steps naming that lab's real controls, the science, a common misconception, what the model simplifies, and topic FAQs (also FAQPage data and `/llms.txt`). Nothing may repeat between pages: `tests/seo/simulation-content.test.ts` checks lengths, banned template and filler phrases, and that no sentence or question is shared between two simulations, and the build fails if an indexed English simulation page falls back to the generic template in `lib/seo/simulation-guides.ts`. A new simulation needs its content entry before it can ship. When content is reviewed, update `simulationContentUpdated` in `lib/seo/simulation-content/types.ts`; it drives the visible "Updated" date, `dateModified` and the sitemap `lastmod`.
+**Simulation page content (English).** Every English simulation page has hand-written, page-specific content in `lib/seo/simulation-content/<subject>.ts`: the main question learners search and an answer-first paragraph (shown under the lab, and published as `abstract` in the page's structured data), steps naming that lab's real controls, the science, a common misconception, what the model simplifies, and topic FAQs (also FAQPage data and `/llms.txt`). Nothing may repeat between pages: `tests/seo/simulation-content.test.ts` checks lengths, banned template and filler phrases, and that no sentence or question is shared between two simulations, and the build fails if an indexed English simulation page falls back to the generic template in `lib/seo/simulation-guides.ts`. A new simulation needs its content entry before it can ship, plus a meta description in `lib/seo/simulation-content/descriptions.ts` (120–158 characters, written for that lab, with no shared tagline such as "free online, no sign-up"). The build fails if two sitemap pages have the same meta description. When content is reviewed, update `simulationContentUpdated` in `lib/seo/simulation-content/types.ts`; it drives the visible "Updated" date, `dateModified` and the sitemap `lastmod`.
 
 After deployment, verify the production property in Google Search Console and Bing Webmaster Tools, submit `https://www.learnerkits.com/sitemap.xml`, and configure IndexNow. The helper submits the current sitemap after the key file is published:
 
@@ -226,11 +228,16 @@ Language publication is controlled by `locales` in `lib/i18n/config.ts`, current
 
 Publishing a language and opening it to search engines are separate switches. `indexedLocales` in the same file, currently `["en"]`, lists the languages search engines may index. A published language that is not in it (Spanish today) stays available through the language selector, but every page is `noindex, follow` and it is left out of the sitemap and hreflang; the build fails if any such page is indexable. Add a language to `indexedLocales` only when every page is fully translated, including simulation controls and the information pages, and a fluent speaker has reviewed it. Release one language at a time.
 
-**Why (Google September 2026 spam update).** Search Console shows the site lost almost all Google impressions between 30 September and 7 October 2026, in step with that update's rollout (24 September to 8 October). There is no manual action. The update acted on templated pages published at scale and on unreviewed translations, so three groups of pages are now published but unlisted (`noindex, follow`, not in the sitemap):
+**Why (Google September 2026 spam update).** Search Console shows the site lost almost all Google impressions between 30 September and 7 October 2026, in step with that update's rollout (24 September to 8 October). There is no manual action. The update acted on templated pages published at scale and on unreviewed translations, so languages outside `indexedLocales` are published but `noindex, follow` for every search engine.
 
-- languages outside `indexedLocales`;
+The English page groups below are kept out of Google only (`googleUnlisted` in `lib/seo/metadata.ts`: `robots` index plus `googlebot` noindex, and out of `sitemap.xml`), so Bing and the engines using its index (Yahoo, DuckDuckGo, Ecosia) can still list them. `lib/seo/google-unlisted.ts` collects them into `/sitemap-bing.xml`, which is deliberately not named in `robots.txt` (Google reads that file): submit it once in Bing Webmaster Tools. `npm run indexnow`, which `npm run deploy` runs, submits both sitemaps; IndexNow never reaches Google. The build fails if a `sitemap-bing.xml` page is open to Google, noindex for Bing, not self-canonical, or also in `sitemap.xml`.
+
+- Mathematics, while it is in `unlistedSubjectSlugs` (`lib/subjects/catalog.ts`);
 - molecule reference pages outside the 40-page core set in `indexedMoleculeSlugs` (`lib/seo/molecules.ts`), which covers every VSEPR class;
-- exam-prep topic lessons, while `topicLessonsIndexed` in `lib/exam-prep/catalog.ts` is `false`.
+- exam-prep topic lessons, while `topicLessonsIndexed` in `lib/exam-prep/catalog.ts` is `false`;
+- exam-prep board, level, course and papers pages, while `examPrepHubsIndexed` in `lib/exam-prep/catalog.ts` is `false` (they repeat each other almost word for word; only `/exam-prep`, `/exam-prep/any-board` and the practical pages are open to Google);
+- the 15 investigation labs in `unlistedSimulationSlugs` (`lib/subjects/catalog.ts`), published together on 2026-11-22 without a human review: remove a slug once its page has been reviewed and rewritten;
+- the `/guides/<lab>/mission` and `/how-to-measure` worksheets, which repeat their lab page's Missions section.
 
 Reopen these gradually once Google impressions recover, not all at once.
 

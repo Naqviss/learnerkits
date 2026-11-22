@@ -1,10 +1,12 @@
 import type { Locale } from "./config";
+import { mathLabSpanish } from "@/lib/seo/simulation-content/math-labs";
 
 type T = { title:string; outcome:string; concepts?:string; kind?:string };
 const s=(title:string,outcome:string,concepts?:string,kind?:string):T=>({title,outcome,concepts,kind});
 export const simulationTranslations: Record<Locale,Record<string,T>> = {
   en:{},
   es:{
+    ...Object.fromEntries(Object.entries(mathLabSpanish).map(([slug,t])=>[slug,s(t.title,t.outcome,t.concepts,t.kind)])),
     "moon-landing":s("Alunizaje","Equilibra el empuje y la gravedad para realizar un alunizaje controlado.","Gravedad · empuje · masa · velocidad","Laboratorio de vuelo"),
     "orbital-rescue":s("Rescate orbital","Planifica encendidos e interpreta la telemetría orbital para realizar un encuentro seguro.","Órbitas · delta-v · energía · encuentro","Simulador de misión"),
     "moon-phases-3d":s("Simulador 3D de fases de la Luna","Explica por qué la Luna parece cambiar de fase al variar su posición orbital.","Fases lunares · luz solar · posición orbital · ángulo de visión","Simulación 3D"),

@@ -3,7 +3,7 @@ import type { Frame } from "@/lib/simulations/practical/models";
 
 export type PhysicsKind = "gravity-planet-orbit" | "n-body-space" | "pendulum-wave";
 
-const Sky = memo(function Sky() {
+export const Sky = memo(function Sky() {
   let seed = 317;
   function random() {
     seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
@@ -21,7 +21,7 @@ const Sky = memo(function Sky() {
   </>;
 });
 
-const LabBench = memo(function LabBench() {
+export const LabBench = memo(function LabBench() {
   return <>
     <defs>
       <linearGradient id="rail" x2="0" y2="1" gradientUnits="objectBoundingBox"><stop stopColor="#d8e5ef"/><stop offset=".3" stopColor="#889dab"/><stop offset=".52" stopColor="#253746"/><stop offset="1" stopColor="#101821"/></linearGradient>
@@ -39,7 +39,7 @@ const LabBench = memo(function LabBench() {
   </>;
 });
 
-function Globe({x,y,r,angle,earth=false}: {x:number;y:number;r:number;angle:number;earth?:boolean}) {
+export function Globe({x,y,r,angle,earth=false}: {x:number;y:number;r:number;angle:number;earth?:boolean}) {
   return <g transform={`translate(${x} ${y})`}>
     <image href={earth ? "/images/practical/earth.webp" : "/images/practical/moon.webp"} x={-r} y={-r} width={2*r} height={2*r}/>
     <circle r={r} fill="url(#shadow)" transform={`rotate(${angle})`}/>

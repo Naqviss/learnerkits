@@ -19,6 +19,11 @@ export const environmentalSubjectTranslations: Record<L, Prose> = {
 
 export const environmentalSimulationTranslations: Record<L, Record<string, Sim>> = {
   es:{
+    "food-chain-simulator":s("Cadena alimentaria de la pradera","Retira zorros o conejos y compara los efectos sobre la hierba.","",""),
+    "population-ecosystem-simulator":s("Capacidad del hábitat de una población","Ajusta la superficie de pastoreo para sostener mil animales.","",""),
+    "deforestation-simulator":s("Cien años de deforestación","Calcula la superficie forestal y el carbono que quedan tras un siglo.","",""),
+    "ocean-pollution-simulator":s("Recuperación de una bahía contaminada","Cambia el intercambio diario de agua y sigue un contaminante disuelto.","",""),
+    "carbon-footprint-simulator":s("Huella de carbono de una comunidad","Compara las emisiones acumuladas de mil habitantes durante treinta años.","",""),
     "ecosystem-survival":s("Simulación de ecosistemas","Compara las poblaciones a lo largo de mil años.","",""),
     "climate-change-scenarios":s("Simulador de cambio climático","Observa cómo cambia el hábitat de montaña con el calentamiento.","",""),
     "aquarium-food-web":s("Simulador del ecosistema de un acuario","Retira una especie y observa las otras dos.","",""),
@@ -34,6 +39,11 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("Constructor de ciudades resilientes al clima","Asigna un presupuesto limitado de adaptación para reducir los riesgos de inundación, calor y tormentas en una ciudad.","Adaptación · inundaciones · calor · tormentas · presupuesto","Juego de estrategia de resiliencia")
   },
   fr:{
+    "food-chain-simulator":s("Chaîne alimentaire de la prairie","Retirez les renards ou les lapins et observez les herbes.","",""),
+    "population-ecosystem-simulator":s("Capacité de la réserve","Ajustez la surface disponible pour mille animaux.","",""),
+    "deforestation-simulator":s("Un siècle de déforestation","Mesurez la forêt et le carbone restants.","",""),
+    "ocean-pollution-simulator":s("Dépollution d’une baie","Suivez la dilution quotidienne d’un traceur.","",""),
+    "carbon-footprint-simulator":s("Empreinte carbone collective","Comparez les émissions cumulées de mille habitants.","",""),
     "ecosystem-survival":s("Simulation d’écosystème","Suivez les populations pendant mille ans.","",""),
     "climate-change-scenarios":s("Simulateur de changement climatique","Étudiez le déplacement d’un habitat en altitude.","",""),
     "aquarium-food-web":s("Écosystème d’aquarium","Retirez une espèce et observez les deux autres.","",""),
@@ -49,6 +59,11 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("Bâtisseur de ville résiliente au climat","Répartissez un budget d’adaptation limité pour réduire les risques d’inondation, de chaleur et de tempêtes dans une ville.","Adaptation · inondations · chaleur · tempêtes · budget","Jeu de stratégie de résilience")
   },
   de:{
+    "food-chain-simulator":s("Nahrungskette auf der Wiese","Entferne Füchse oder Kaninchen und beobachte das Gras.","",""),
+    "population-ecosystem-simulator":s("Tragfähigkeit eines Reservats","Verändere die Weidefläche für tausend Tiere.","",""),
+    "deforestation-simulator":s("Ein Jahrhundert Entwaldung","Ermittle die verbleibende Waldfläche und Kohlenstoffmenge.","",""),
+    "ocean-pollution-simulator":s("Erholung einer belasteten Bucht","Untersuche den täglichen Wasseraustausch.","",""),
+    "carbon-footprint-simulator":s("CO₂-Fußabdruck einer Gemeinde","Vergleiche die Gesamtemissionen von tausend Menschen.","",""),
     "ecosystem-survival":s("Ökosystemsimulation","Verfolge Populationen über tausend Jahre.","",""),
     "climate-change-scenarios":s("Klimawandel-Simulator","Untersuche die Höhenverschiebung eines Lebensraums.","",""),
     "aquarium-food-web":s("Aquarium-Ökosystem","Entferne eine Art und beobachte die anderen.","",""),
@@ -64,6 +79,11 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("Klimaresiliente Stadt bauen","Verteile ein begrenztes Anpassungsbudget, um Überschwemmungs-, Hitze- und Sturmrisiken in einer Stadt zu senken.","Anpassung · Überschwemmung · Hitze · Stürme · Budget","Resilienz-Strategiespiel")
   },
   pt:{
+    "food-chain-simulator":s("Cadeia alimentar do prado","Retire raposas ou coelhos e observe a vegetação.","",""),
+    "population-ecosystem-simulator":s("Capacidade de uma reserva","Ajuste a área de pastagem para mil animais.","",""),
+    "deforestation-simulator":s("Um século de desmatamento","Meça a floresta e o carbono restantes.","",""),
+    "ocean-pollution-simulator":s("Recuperação de uma baía poluída","Acompanhe a diluição de um poluente dissolvido.","",""),
+    "carbon-footprint-simulator":s("Pegada de carbono comunitária","Compare as emissões acumuladas de mil habitantes.","",""),
     "ecosystem-survival":s("Simulação de ecossistema","Acompanhe as populações por mil anos.","",""),
     "climate-change-scenarios":s("Simulador de mudanças climáticas","Investigue o deslocamento de um habitat em altitude.","",""),
     "aquarium-food-web":s("Ecossistema de aquário","Remova uma espécie e observe as outras duas.","",""),
@@ -79,6 +99,11 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("Construtor de cidades resilientes ao clima","Distribua um orçamento limitado de adaptação para reduzir os riscos de enchentes, calor e tempestades em uma cidade.","Adaptação · enchentes · calor · tempestades · orçamento","Jogo de estratégia de resiliência")
   },
   ru:{
+    "food-chain-simulator":s("Пищевая цепь луга","Уберите лис или кроликов и проследите за травой.","",""),
+    "population-ecosystem-simulator":s("Ёмкость пастбища","Подберите площадь для тысячи животных.","",""),
+    "deforestation-simulator":s("Сто лет вырубки леса","Измерьте оставшуюся площадь леса и запас углерода.","",""),
+    "ocean-pollution-simulator":s("Очищение загрязнённого залива","Изменяйте ежедневный водообмен в заливе.","",""),
+    "carbon-footprint-simulator":s("Углеродный след города","Сравните накопленные выбросы тысячи жителей.","",""),
     "ecosystem-survival":s("Модель экосистемы","Проследите за популяциями на протяжении тысячи лет.","",""),
     "climate-change-scenarios":s("Симулятор изменения климата","Изучите смещение горной среды обитания при потеплении.","",""),
     "aquarium-food-web":s("Экосистема аквариума","Уберите один вид и проследите за остальными.","",""),
@@ -94,6 +119,11 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("Строитель климатически устойчивого города","Распределите ограниченный бюджет на адаптацию, чтобы снизить риски наводнений, жары и штормов в городе.","Адаптация · наводнения · жара · штормы · бюджет","Стратегическая игра об устойчивости")
   },
   ja:{
+    "food-chain-simulator":s("草地の食物連鎖","キツネやウサギを取り除いて草の変化を調べます。","",""),
+    "population-ecosystem-simulator":s("保護区の環境収容力","千頭を支える草地の面積を調整します。","",""),
+    "deforestation-simulator":s("百年間の森林伐採","残る森林面積と炭素量を求めます。","",""),
+    "ocean-pollution-simulator":s("汚染された湾の回復","毎日の海水交換と汚染物質の濃度を調べます。","",""),
+    "carbon-footprint-simulator":s("地域のカーボンフットプリント","千人の住民の累積排出量を比較します。","",""),
     "ecosystem-survival":s("生態系シミュレーション","千年間の個体数の変化を調べます。","",""),
     "climate-change-scenarios":s("気候変動シミュレーター","温暖化に伴う山の生息域の移動を調べます。","",""),
     "aquarium-food-web":s("水槽の生態系","一種を取り除き、残りの変化を観察します。","",""),
@@ -109,6 +139,11 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("気候レジリエンス都市ビルダー","限られた適応予算を配分し、都市全体の洪水・猛暑・暴風のリスクを減らします。","適応 · 洪水 · 猛暑 · 暴風 · 予算","レジリエンス戦略ゲーム")
   },
   zh:{
+    "food-chain-simulator":s("草地食物链","移除狐狸或兔子，观察草的变化。","",""),
+    "population-ecosystem-simulator":s("保护区的环境承载力","调整草场面积以供养一千只动物。","",""),
+    "deforestation-simulator":s("百年森林砍伐","计算剩余森林面积与碳储量。","",""),
+    "ocean-pollution-simulator":s("受污染海湾的恢复","观察换水速度如何影响污染物浓度。","",""),
+    "carbon-footprint-simulator":s("社区碳足迹","比较一千名居民三十年内的累计排放量。","",""),
     "ecosystem-survival":s("生态系统模拟","观察一千年内种群的变化。","",""),
     "climate-change-scenarios":s("气候变化模拟器","研究升温如何改变山地栖息地的海拔。","",""),
     "aquarium-food-web":s("水族箱生态系统","移除一个物种并观察其他物种。","",""),
@@ -124,6 +159,11 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("气候韧性城市建造","分配有限的适应预算，降低城市面临的洪水、高温和风暴风险。","适应 · 洪水 · 高温 · 风暴 · 预算","韧性策略游戏")
   },
   ar:{
+    "food-chain-simulator":s("السلسلة الغذائية في المرج","أزل الثعالب أو الأرانب وراقب نمو العشب.","",""),
+    "population-ecosystem-simulator":s("القدرة الاستيعابية للمحمية","عدّل مساحة المراعي لإعالة ألف حيوان.","",""),
+    "deforestation-simulator":s("قرن من إزالة الغابات","احسب مساحة الغابة المتبقية ومخزون الكربون.","",""),
+    "ocean-pollution-simulator":s("تعافي خليج ملوث","تتبّع أثر التبادل اليومي للمياه في تركيز الملوث.","",""),
+    "carbon-footprint-simulator":s("البصمة الكربونية للمجتمع","قارن الانبعاثات التراكمية لألف شخص.","",""),
     "ecosystem-survival":s("محاكاة النظام البيئي","تتبّع أعداد الفرائس والمفترسات على مدى ألف عام.","",""),
     "climate-change-scenarios":s("محاكي تغير المناخ","ادرس تغير ارتفاع الموطن الجبلي مع الاحترار.","",""),
     "aquarium-food-web":s("النظام البيئي لحوض السمك","أزل نوعًا وراقب النوعين الآخرين.","",""),

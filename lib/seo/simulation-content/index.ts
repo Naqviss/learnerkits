@@ -1,11 +1,15 @@
+import investigationContent from "./investigations.json";
 import practicalContent from "./practical.json";
 import { balancingFaq } from "@/lib/seo/balancing-equations";
 import { chemistryContent } from "./chemistry";
+import { simulationDescriptions } from "./descriptions";
 import { environmentalContent } from "./environmental";
 import { geographyContent } from "./geography";
+import { mathematicsContent } from "./mathematics";
+import { mathLabContent } from "./math-labs";
 import { physicsContent } from "./physics";
 import { spaceContent } from "./space";
-import type { SimulationContent } from "./types";
+import { simulationContentUpdated, type SimulationContent } from "./types";
 
 export { simulationContentUpdated, type SimulationContent } from "./types";
 
@@ -31,11 +35,14 @@ const balancing: SimulationContent = {
 
 const content: Record<string, SimulationContent> = {
   ...practicalContent,
+  ...investigationContent,
   ...spaceContent,
   ...physicsContent,
   ...geographyContent,
   ...environmentalContent,
   ...chemistryContent,
+  ...mathematicsContent,
+  ...mathLabContent,
   "balance-equation": balancing,
 };
 
@@ -45,3 +52,12 @@ export function getSimulationContent(slug: string): SimulationContent | undefine
 }
 
 export const simulationContentSlugs = () => Object.keys(content);
+
+/** The hand-written meta description for a simulation page. English only; other languages use their own copy. */
+export function getSimulationDescription(slug: string, locale: string): string | undefined {
+  return locale === "en" ? simulationDescriptions[slug] : undefined;
+}
+
+export function simulationReviewDate(slug: string) {
+  return Object.hasOwn(investigationContent, slug) ? "2026-11-22" : simulationContentUpdated;
+}

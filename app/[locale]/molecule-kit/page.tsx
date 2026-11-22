@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale, locales, type Locale } from "@/lib/i18n/config";
 import { getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content";
-import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonLd, subjectCollectionJsonLd } from "@/lib/seo/metadata";
+import { breadcrumbJsonLd, jsonLd, localizedMetadata, simulationJsonLd, subjectCollectionJsonLd } from "@/lib/seo/metadata";
 import { getMoleculeKitCopy, moleculeKitSimSlugs } from "@/lib/seo/molecule-kit-content";
 import { getMoleculeReference, getVseprClasses, moleculeReferences } from "@/lib/seo/molecules";
 
@@ -54,7 +54,6 @@ export default async function MoleculeKitPage({ params }: { params: Promise<{ lo
     description: copy.metaDescription,
     simulations: kitSimulations.map((sim) => ({ name: sim.title, path: `/simulations/${sim.slug}`, description: sim.outcome })),
   });
-  const faq = faqJsonLd(locale, copy.faq);
   const kitApp = simulationJsonLd({
     locale,
     path: "/molecule-kit",
@@ -69,7 +68,6 @@ export default async function MoleculeKitPage({ params }: { params: Promise<{ lo
     <main className="container topicGuidePage subject-chemistry">
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumb)} />
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(collection)} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faq)} />
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(kitApp)} />
       <header className="topicGuideHero">
         <div className="eyebrow">{chemistryName} · {copy.heroEyebrowSuffix}</div>
@@ -124,11 +122,6 @@ export default async function MoleculeKitPage({ params }: { params: Promise<{ lo
             <h3>{group.shape} <span>{group.axe} · {group.electronGeometry.toLowerCase()} electron geometry · {group.examples.length}</span></h3>
             <div className="moleculeKitChart">{group.examples.map((m) => <Link key={m.slug} href={`/en/molecules/${m.slug}`}>{m.formula} · {m.name}</Link>)}</div>
           </div>)}
-        </section>
-        <section className="topicGuideSection topicGuideFaq">
-          <span className="eyebrow">{copy.faqEyebrow}</span>
-          <h2>{copy.faqTitle}</h2>
-          {copy.faq.map((item) => <details key={item.q}><summary>{item.q}</summary><p>{item.a}</p></details>)}
         </section>
       </div>
     </main>

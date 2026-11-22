@@ -9,7 +9,7 @@ import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, simulationJsonL
 import { SimulationPageLayout } from "@/components/simulation/SimulationPageLayout";
 import { SimulationAssistant } from "@/components/premium/SimulationAssistant";
 import { getSimulationGuide } from "@/lib/seo/simulation-guides";
-import { getSimulationContent, simulationContentUpdated } from "@/lib/seo/simulation-content";
+import { getSimulationContent, getSimulationDescription, simulationContentUpdated } from "@/lib/seo/simulation-content";
 
 const MoonLandingClient = dynamic(() => import("@/components/simulation/MoonLandingClient").then((module) => module.MoonLandingClient));
 
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const simulation = subject.simulations.find((item) => item.slug === "moon-landing");
   const m = getMessages(locale);
   const c = getEducationCopy(locale);
-  return localizedMetadata(locale, "/simulations/moon-landing", c.seo.simulationTitle(simulation?.title ?? m.moonLanding.title), c.seo.simulationDescription(simulation?.title ?? m.moonLanding.title, simulation?.outcome ?? m.moonLanding.subtitle));
+  return localizedMetadata(locale, "/simulations/moon-landing", c.seo.simulationTitle(simulation?.title ?? m.moonLanding.title), getSimulationDescription("moon-landing", locale) ?? c.seo.simulationDescription(simulation?.title ?? m.moonLanding.title, simulation?.outcome ?? m.moonLanding.subtitle));
 }
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {

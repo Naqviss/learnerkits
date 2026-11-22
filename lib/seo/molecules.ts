@@ -84,7 +84,8 @@ export const moleculeReferences: MoleculeReference[] = molecules.map((m, index) 
 
 // Reference pages open to search engines: the standard examples general-chemistry courses teach
 // for each of the 13 VSEPR classes. Every other molecule page stays published and linked from
-// the shapes chart, but is unlisted (noindex, out of the sitemap). Google's September 2026 spam
+// the shapes chart, but is kept out of Google (googlebot noindex, out of the sitemap; Bing may list
+// it from /sitemap-bing.xml). Google's September 2026 spam
 // update demoted the site when all ~120 pages built from this one template were indexable at
 // once. To open another page to search, add its slug here.
 const indexedMoleculeSlugs = new Set([

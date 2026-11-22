@@ -28,7 +28,7 @@ describe("molecule reference pages", () => {
       const metadata = await generateMetadata({ params: Promise.resolve({ locale: "en", slug: m.slug }) });
       expect(metadata.alternates?.canonical, m.slug).toBe(`https://www.learnerkits.com/en/molecules/${m.slug}`);
       if (isMoleculeIndexed(m)) expect(metadata.robots, m.slug).toMatchObject({ index: true, follow: true });
-      else expect(metadata.robots, m.slug).toEqual({ index: false, follow: true });
+      else expect(metadata.robots, m.slug).toEqual({ index: true, follow: true, googleBot: { index: false, follow: true } });
     }
   });
   it("derives textbook VSEPR facts", () => {

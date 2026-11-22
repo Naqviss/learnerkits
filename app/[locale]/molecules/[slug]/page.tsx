@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
-import { breadcrumbJsonLd, faqJsonLd, imageRights, jsonLd, localizedMetadata, siteName, siteUrl } from "@/lib/seo/metadata";
+import { breadcrumbJsonLd, imageRights, jsonLd, localizedMetadata, siteName, siteUrl } from "@/lib/seo/metadata";
 import { moleculeImage, moleculeImageAlt, moleculeImageSize } from "@/lib/seo/molecule-image";
 import { classMistake, getMoleculeReference, getMoleculesWithShape, isMoleculeIndexed, lewisSteps, moleculeCopy, moleculeFamily, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
 import { moleculeAbout } from "@/lib/seo/molecule-about";
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         `${molecule.asciiFormula} hybridization`, `${molecule.asciiFormula} 3D model`, "VSEPR",
       ],
       englishOnly: true,
-      unlisted: !isMoleculeIndexed(molecule),
+      googleUnlisted: !isMoleculeIndexed(molecule),
     },
   );
   // A picture of the molecule rather than the generic site logo, for result thumbnails and shares.
@@ -97,12 +97,10 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
     { name: "VSEPR shapes chart", path: "/molecules" },
     { name: `${molecule.formula} molecular geometry`, path },
   ]);
-  const faq = faqJsonLd("en", copy.faq);
 
   return <main className="container topicGuidePage subject-chemistry">
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(resource)} />
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbs)} />
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faq)} />
     <article>
       <header className="topicGuideHero">
         <div className="eyebrow"><Link href="/en/molecules">VSEPR shapes chart</Link> · {molecule.name} ({molecule.asciiFormula})</div>
@@ -180,11 +178,6 @@ export default async function MoleculePage({ params }: { params: Promise<{ local
           <p>VSEPR predicts idealized shapes from electron-domain repulsion. Bond angles are approximate experimental or textbook values; ball sizes and bond lengths in the 3D model are illustrative, not to scale.</p>
           <Link href="/en/editorial-policy">Read our model and editorial policy →</Link>
         </aside>
-        <section className="topicGuideSection topicGuideFaq">
-          <span className="eyebrow">Quick answers</span>
-          <h2>Common questions about {molecule.formula}</h2>
-          {copy.faq.map((item) => <details key={item.q}><summary>{item.q}</summary><p>{item.a}</p></details>)}
-        </section>
       </div>
     </article>
   </main>;

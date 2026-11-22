@@ -5,7 +5,7 @@ So are virtual labs as good as real labs? It depends on the outcome. This guide 
 
 ## What do students learn in science labs?
 
-A lab is not one skill. The National Research Council's report [America's Lab Report: Investigations in High School Science](https://nap.nationalacademies.org/catalog/11311/americas-lab-report-investigations-in-high-school-science) describes several goals for lab experiences. These include mastering subject matter, developing scientific reasoning, understanding the complexity and ambiguity of empirical work, building practical skills, understanding the nature of science, cultivating interest in science, and learning teamwork.
+A lab is not one skill. The National Research Council's report [America's Lab Report: Investigations in High School Science](https://www.nationalacademies.org/publications/11311) describes several goals for lab experiences. These include mastering subject matter, developing scientific reasoning, understanding the complexity and ambiguity of empirical work, building practical skills, understanding the nature of science, cultivating interest in science, and learning teamwork.
 
 That list explains why "virtual labs vs. real labs" has no single winner: a format that works well for one goal can do little for another. Below, each outcome gets three parts: what a virtual lab develops well, what a real lab develops well, and a self-check.
 

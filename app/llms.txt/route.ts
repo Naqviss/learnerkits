@@ -1,21 +1,22 @@
 import { articleSummaries } from "@/lib/articles/catalog";
-import { boards, isBoardIndexable } from "@/lib/exam-prep/catalog";
+import { boards, examPrepHubsIndexed, isBoardIndexable } from "@/lib/exam-prep/catalog";
 import { getBoardSeo } from "@/lib/exam-prep/seo";
 import { locales, localeNames } from "@/lib/i18n/config";
 import { siteSlogan, siteUrl } from "@/lib/seo/metadata";
 import { getSimulationContent } from "@/lib/seo/simulation-content";
 import { moleculeReferences } from "@/lib/seo/molecules";
 import { balancedEquations, balancingAnswer } from "@/lib/seo/balancing-equations";
-import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
+import { indexedSubjectSlugs, subjectsCatalog, unlistedSimulationSlugs } from "@/lib/subjects/catalog";
 
 export const dynamic = "force-static";
 
 // Machine-readable site guide for LLMs and AI agents (see https://llmstxt.org).
 // Regenerated from the same catalog that drives the sitemap, so it can't drift out of sync.
 export async function GET() {
-  const subjectSections = visibleSubjectSlugs.map((slug) => {
+  const subjectSections = indexedSubjectSlugs.map((slug) => {
     const subject = subjectsCatalog[slug];
     const links = subject.simulations
+      .filter((sim) => !unlistedSimulationSlugs.has(sim.slug))
       // Each simulation page answers one main question; give AI assistants that answer directly.
       .map((sim) => {
         const content = getSimulationContent(sim.slug);
@@ -31,7 +32,7 @@ export async function GET() {
     .join("\n");
 
   const examBoardLinks = boards
-    .filter((board) => isBoardIndexable(board.id))
+    .filter((board) => examPrepHubsIndexed && isBoardIndexable(board.id))
     .map((board) => `- [${getBoardSeo(board.id)!.title}](${siteUrl}/en/exam-prep/${board.id}): ${getBoardSeo(board.id)!.description}`)
     .join("\n");
 
@@ -58,13 +59,13 @@ LearnerKits is an education platform with interactive labs and practical science
 - [Molecule Kit](${siteUrl}/en/molecule-kit): Free 3D molecule builder and molecular geometry (VSEPR) lab for students, tutors, and teachers.
 - [VSEPR shapes chart](${siteUrl}/en/molecules): Molecular geometry, electron geometry, bond angles, and hybridization for every common VSEPR class, with ${moleculeReferences.length} molecules and ions as rotatable 3D models.
 - [Sitemap](${siteUrl}/sitemap.xml)
-
+${examBoardLinks ? `
 ## Exam preparation by board
 
 LearnerKits exam preparation is organised by board, qualification, subject and syllabus topic. Students can learn in a supported language, use interactive models, complete available checks, ask the optional topic-aware AI tutor for help and keep supported activity progress in their browser. Published syllabus mappings are separated from labelled illustrative previews. LearnerKits is independent of every exam board and all practice material is original.
 
 ${examBoardLinks}
-
+` : ""}
 ## Science learning articles
 
 ${articleLinks}

@@ -14,7 +14,7 @@ import { siteName } from "@/lib/seo/metadata";
 export function Nav({ locale, m }: { locale: string; m: Messages }) {
   const allSubjects = getEducationCopy(locale as Locale).library.allSubjects;
   return <nav className="nav"><div className="container navInner">
-    <Link className="brand" href={`/${locale}`} aria-label={siteName}><img className="brandLogo" src="/learnerkits-logo.svg" width="300" height="64" alt={siteName}/></Link>
+    <Link className="brand" href={locale === "en" ? "/" : `/${locale}`} aria-label={siteName}><img className="brandLogo" src="/learnerkits-logo.svg" width="300" height="64" alt={siteName}/></Link>
     <div className="navLinks"><NavDropdown label={m.navigation.simulations} items={[
         { href: `/${locale}/simulations`, label: allSubjects, subject: "" },
         ...visibleSubjectSlugs.map((slug) => ({ href: `/${locale}/simulations#${slug}`, label: getLocalizedSubjectName(locale as Locale, slug), subject: slug })),

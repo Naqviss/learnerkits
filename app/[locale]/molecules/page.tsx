@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
-import { breadcrumbJsonLd, faqJsonLd, jsonLd, localizedMetadata, siteName, siteUrl } from "@/lib/seo/metadata";
+import { breadcrumbJsonLd, jsonLd, localizedMetadata, siteName, siteUrl } from "@/lib/seo/metadata";
 import { getVseprClasses, moleculeReferences } from "@/lib/seo/molecules";
 
 export function generateStaticParams() {
@@ -11,13 +11,6 @@ export function generateStaticParams() {
 
 const title = "VSEPR Shapes Chart: Molecular Geometry & Bond Angles (3D)";
 const description = `Interactive VSEPR chart with ${moleculeReferences.length} molecules and ions: molecular geometry, electron geometry, bond angles, hybridization, and polarity, each with a free 3D model.`;
-const faqItems = [
-  { q: "What is VSEPR theory?", a: "VSEPR (valence shell electron pair repulsion) theory predicts molecular shape by assuming that electron domains around a central atom — bonds and lone pairs — arrange themselves as far apart as possible to minimize repulsion." },
-  { q: "What is the difference between electron geometry and molecular geometry?", a: "Electron geometry describes the arrangement of all electron domains, including lone pairs. Molecular geometry describes only the positions of the atoms. They are the same when the central atom has no lone pairs." },
-  { q: "How do lone pairs change bond angles?", a: "Lone pairs repel more strongly than bonding pairs, so they push bonded atoms closer together. That is why NH₃ (about 107°) and H₂O (about 104.5°) have smaller angles than the ideal tetrahedral 109.5°." },
-  { q: "What does AXE notation mean?", a: "In AXₙEₘ notation, A is the central atom, X is each bonded atom (bonding domain), and E is each lone pair on the central atom. For example, water is AX₂E₂ and ammonia is AX₃E." },
-  { q: "Does a double bond count as one electron domain?", a: "Yes. In VSEPR, a single, double, or triple bond to one atom counts as one electron domain, so CO₂ has two domains and is linear." },
-];
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale: raw } = await params;
@@ -61,12 +54,10 @@ export default async function MoleculesIndexPage({ params }: { params: Promise<{
     { name: "Molecule Kit", path: "/molecule-kit" },
     { name: "VSEPR shapes chart", path: "/molecules" },
   ]);
-  const faq = faqJsonLd("en", faqItems);
 
   return <main className="container topicGuidePage subject-chemistry">
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(collection)} />
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbs)} />
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faq)} />
     <header className="topicGuideHero">
       <div className="eyebrow"><Link href="/en/molecule-kit">Molecule Kit</Link> · Chemistry reference</div>
       <h1>VSEPR shapes chart</h1>
@@ -100,11 +91,6 @@ export default async function MoleculesIndexPage({ params }: { params: Promise<{
         <h2>{row.shape} molecules ({row.axe})</h2>
         <ul className="moleculeLinkList">{row.examples.map((m) => <li key={m.slug}><Link href={`/en/molecules/${m.slug}`}><b>{m.formula}</b> {m.name}</Link></li>)}</ul>
       </section>)}
-      <section className="topicGuideSection topicGuideFaq">
-        <span className="eyebrow">Quick answers</span>
-        <h2>VSEPR questions</h2>
-        {faqItems.map((item) => <details key={item.q}><summary>{item.q}</summary><p>{item.a}</p></details>)}
-      </section>
     </div>
   </main>;
 }

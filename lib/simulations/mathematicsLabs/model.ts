@@ -21,7 +21,7 @@ export const initialValues=(activity:Activity):Values=>Object.fromEntries(activi
 export const clamp=(n:number,a=0,b=1)=>Math.max(a,Math.min(b,n));
 export function vector(v:Values){const x=v.ax+v.bx,y=v.ay+v.by;return{x,y,magnitude:Math.hypot(x,y),angle:Math.atan2(y,x)*180/Math.PI};}
 export function quadratic(v:Values){const disc=v.b*v.b-4*v.a*v.c,roots=v.a!==0&&disc>=0?[(-v.b-Math.sqrt(disc))/(2*v.a),(-v.b+Math.sqrt(disc))/(2*v.a)].sort((a,b)=>a-b):[];return{disc,roots,vertexX:v.a?-v.b/(2*v.a):Infinity,vertexY:v.a?v.c-v.b*v.b/(4*v.a):Infinity};}
-export function sliceShape(v:Values){if(v.solid===3)return"Circle";if(v.solid===0)return v.plane===0?"Circle":"Rectangle";if(v.solid===1)return v.plane===0?"Square":"Rectangle";return v.plane===0?"Circle":"Triangle";}
+export function sliceShape(v:Values){if(v.solid===3)return"Circle";if(v.solid===0)return v.plane===0?"Circle":"Rectangle";if(v.solid===1)return"Square";return v.plane===0?"Circle":"Triangle";}
 export const triangles=[[3,4,5],[5,12,13],[8,15,17]] as const;
 export const quadraticTargets=[{a:1,h:2,k:-3},{a:-.5,h:-2,k:2},{a:2,h:1,k:1}];
 export const lineTargets=[{m:2,b:-3},{m:-1.5,b:4},{m:.5,b:-2}];

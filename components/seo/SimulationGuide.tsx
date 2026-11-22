@@ -67,6 +67,6 @@ export function SimulationGuide({ locale, subject, simulation, protectedSections
       <Link className="button relatedSeeAll" href={`/${locale}/subjects/${subject.slug}`}>See all {subject.eyebrow} simulations →</Link>
     </nav>
 
-    <aside className="simulationBottomCta"><div><h2>Curious about the science behind the experiment?</h2><p>Read simple learning guides and keep building your understanding.</p></div><Link href={`/${locale}/guides`}>Explore science guides ↗</Link></aside>
+    <aside className="simulationBottomCta"><div><h2>Curious about the science behind the experiment?</h2><p>Read simple learning guides and keep building your understanding.</p></div><Link href="/en/guides">Explore science guides ↗</Link></aside>
   </section>;
 }

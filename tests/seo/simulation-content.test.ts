@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
-import { getSimulationContent, type SimulationContent } from "@/lib/seo/simulation-content";
+import { getSimulationContent, getSimulationDescription, type SimulationContent } from "@/lib/seo/simulation-content";
 
 // Quality rules for the per-simulation reference content. Run one subject with
 // `npx vitest run tests/seo/simulation-content.test.ts -t space`.
@@ -53,6 +53,13 @@ for (const { subject, slugs } of bySubject) {
             expect(words(f.a)).toBeLessThanOrEqual(95);
           }
         });
+        if (slug !== "balance-equation") it("has its own meta description that Google shows in full", () => {
+          const description = getSimulationDescription(slug, "en");
+          expect(description, `${slug} has no entry in lib/seo/simulation-content/descriptions.ts`).toBeDefined();
+          expect([...description!].length).toBeGreaterThanOrEqual(120);
+          expect([...description!].length).toBeLessThanOrEqual(158);
+          expect(description).not.toMatch(/no sign-up|no download|try the free|free online/i);
+        });
         it("is substantial and avoids template or filler phrases", () => {
           expect(words(allText(c).join(" "))).toBeGreaterThanOrEqual(450);
           for (const pattern of banned) expect(allText(c).join(" "), `${slug} matches ${pattern}`).not.toMatch(pattern);
@@ -74,6 +81,18 @@ describe("simulation content: uniqueness across pages", () => {
         if (other && other !== slug) clashes.push(`${other} & ${slug}: ${s}`);
         else seen.set(s, slug);
       }
+    }
+    expect(clashes).toEqual([]);
+  });
+});
+
+describe("simulation meta descriptions", () => {
+  it("are all different and share no sentence", () => {
+    const seen = new Map<string, string>();
+    const clashes: string[] = [];
+    for (const slug of everySlug) for (const sentence of getSimulationDescription(slug, "en")?.toLowerCase().split(/(?<=[.!?])\s+/) ?? []) {
+      if (seen.has(sentence)) clashes.push(`${seen.get(sentence)} & ${slug}: ${sentence}`);
+      else seen.set(sentence, slug);
     }
     expect(clashes).toEqual([]);
   });

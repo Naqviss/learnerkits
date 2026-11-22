@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { boards, getBoard, getLevel, getSyllabus, isLevelIndexable, isVerified, subjectCode, subjects } from "@/lib/exam-prep/catalog";
+import { boards, examPrepHubsIndexed, getBoard, getLevel, getSyllabus, isLevelIndexable, isVerified, subjectCode, subjects } from "@/lib/exam-prep/catalog";
 import { Breadcrumbs, IndependenceNotice } from "@/components/exam-prep/Shell";
 import { localizedMetadata } from "@/lib/seo/metadata";
 import styles from "@/components/exam-prep/examPrep.module.css";
@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, board: boardId, level: levelId } = await params, board = getBoard(boardId), level = getLevel(boardId, levelId);
   if (locale !== "en" || !board || !level) return {};
   const name = `${board.short} ${level.name.replace(" · ", " ")}`;
-  return localizedMetadata("en", `/exam-prep/${boardId}/${levelId}`, `${name} Exam Prep: Science and Maths Topics`, `${name} exam preparation: choose Physics, Chemistry, Biology or Mathematics to browse syllabus topics with short lessons, interactive labs and practice questions.`, { englishOnly: true, noIndex: !isLevelIndexable(boardId, levelId) });
+  return localizedMetadata("en", `/exam-prep/${boardId}/${levelId}`, `${name} Exam Prep: Science and Maths Topics`, `${name} exam preparation: choose Physics, Chemistry, Biology or Mathematics to browse syllabus topics with short lessons, interactive labs and practice questions.`, { englishOnly: true, noIndex: !isLevelIndexable(boardId, levelId), googleUnlisted: !examPrepHubsIndexed });
 }
 
 export default async function LevelPage({ params }: Props) {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { boards, courses, coursePath, courseTitle, getSyllabus, isBoardIndexable, isFreeTopic, isVerified, labs, lessonContent, subjectCode, syllabi, syllabusKey, topicLessonsIndexed, topicPath } from "@/lib/exam-prep/catalog";
+import { boards, courses, coursePath, courseTitle, examPrepHubsIndexed, getSyllabus, isBoardIndexable, isFreeTopic, isVerified, labs, lessonContent, subjectCode, syllabi, syllabusKey, topicLessonsIndexed, topicPath } from "@/lib/exam-prep/catalog";
 import { getPapers, paperCatalog } from "@/lib/exam-prep/papers";
 import { buildExam, examLength, generators } from "@/lib/exam-prep/generators";
 import { lessonDetail } from "@/lib/exam-prep/lessons";
@@ -64,8 +64,11 @@ describe("exam prep catalog", () => {
     expect(new Set(examPrepIndexablePaths).size).toBe(examPrepIndexablePaths.length);
     expect(examPrepIndexablePaths).toContain("/exam-prep");
     expect(examPrepIndexablePaths).toContain("/exam-prep/any-board");
-    expect(examPrepIndexablePaths).toContain("/exam-prep/cambridge/as/physics");
-    expect(examPrepIndexablePaths).toContain("/exam-prep/cambridge/as/physics/papers");
+    // Board, level, course and papers pages are published but held out of search (examPrepHubsIndexed).
+    expect(examPrepHubsIndexed).toBe(false);
+    expect(examPrepIndexablePaths).not.toContain("/exam-prep/cambridge");
+    expect(examPrepIndexablePaths).not.toContain("/exam-prep/cambridge/as/physics");
+    expect(examPrepIndexablePaths).not.toContain("/exam-prep/cambridge/as/physics/papers");
     // Topic lessons are published but held out of search until topicLessonsIndexed is switched on.
     expect(topicLessonsIndexed).toBe(false);
     expect(examPrepIndexablePaths).not.toContain("/exam-prep/cambridge/as/physics/kinematics");
@@ -180,7 +183,8 @@ describe("exam prep pages", () => {
     expect(html).toContain("not affiliated with or endorsed by any exam board");
     const metadata = await generateMetadata({ params: params(asPhysics, "kinematics") });
     expect(metadata.title).toEqual({ absolute: "Kinematics – Cambridge AS Level Physics 9702 · LearnerKits" });
-    expect(metadata.robots).toEqual({ index: false, follow: true });
+    // Held out of Google while topicLessonsIndexed is false; Bing may index it.
+    expect(metadata.robots).toEqual({ index: true, follow: true, googleBot: { index: false, follow: true } });
   });
 
   it("soft-locks a Premium lesson but keeps the concept and lab link in the HTML", async () => {
@@ -225,7 +229,7 @@ describe("exam prep pages", () => {
     expect(String(metadata.description).length).toBeLessThanOrEqual(160);
   });
 
-  it("uses unique board search snippets and indexes only verified board hubs", async () => {
+  it("uses unique board search snippets and indexes only verified board hubs (Google skips them while hubs are held out)", async () => {
     const titles = new Set<string>();
     for (const board of boards) {
       const metadata = await generateBoardMetadata({ params: Promise.resolve({ locale: "en", board: board.id }) });
@@ -234,7 +238,7 @@ describe("exam prep pages", () => {
       expect(description.length, board.id).toBeGreaterThanOrEqual(100);
       expect(description.length, board.id).toBeLessThanOrEqual(160);
       titles.add(title);
-      expect(metadata.robots).toMatchObject({ index: isBoardIndexable(board.id) });
+      expect(metadata.robots).toMatchObject({ index: isBoardIndexable(board.id), ...(examPrepHubsIndexed ? {} : { googleBot: { index: false, follow: true } }) });
     }
     expect(titles.size).toBe(boards.length);
   });

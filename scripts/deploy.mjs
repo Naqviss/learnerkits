@@ -60,7 +60,7 @@ console.log(`\nDeployed with Paddle in ${paddle.mode.toUpperCase()} mode.`);
 if (!env.INDEXNOW_KEY?.trim()) {
   console.warn("Skipping IndexNow: INDEXNOW_KEY is not set in .env.local or the environment.");
 } else {
-  console.log("\nSubmitting the production sitemap to IndexNow...");
+  console.log("\nSubmitting sitemap.xml and sitemap-bing.xml to IndexNow (Bing and partners; not Google)...");
   const indexnow = spawnSync("npm", ["run", "indexnow"], {
     stdio: "inherit",
     env: { ...env, NEXT_PUBLIC_SITE_URL: env.NEXT_PUBLIC_SITE_URL ?? "https://www.learnerkits.com" },

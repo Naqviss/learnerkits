@@ -4,6 +4,8 @@ import { experimentSettings, measurements, pendulumFrame, simulate, type Experim
 import { BorderLab, GeographyQuiz } from "./Geography";
 import { PhysicsScene } from "./PhysicsScene";
 import { PracticalWorkspace } from "./PracticalWorkspace";
+import { investigations, type InvestigationSlug } from "@/lib/simulations/practical/investigations";
+import InvestigationLab from "./InvestigationLab";
 import "./practical.css";
 
 const colors = ["#6ee2c3", "#ffbc70", "#a7b9ff"];
@@ -71,5 +73,6 @@ const notes: Record<Experiment,string> = {
 };
 
 export default function PracticalLab({slug}: {slug:string}) {
+  if (slug in investigations) return <InvestigationLab slug={slug as InvestigationSlug}/>;
   return slug==="world-border-lab" ? <BorderLab/> : slug in experimentSettings ? <ExperimentPanel kind={slug as Experiment}/> : <GeographyQuiz field={slug==="geography-field-detective"}/>;
 }

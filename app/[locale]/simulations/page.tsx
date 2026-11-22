@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
 import { displayDifficulty, getEducationCopy, getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content";
 import { localizedMetadata } from "@/lib/seo/metadata";
-import { hiddenSubjectSlugs, subjectSlugs, subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
+import { hiddenSubjectSlugs, simulationCountLabel, subjectSlugs, subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { SimulationLibrary } from "@/components/simulation/SimulationLibrary";
 import { LearningHub } from "@/components/workspace/LearningHub";
 
@@ -33,8 +33,8 @@ export default async function Simulations({params}:{params:Promise<{locale:strin
       <div className="libCardMeta"><b aria-hidden="true">→</b></div>
     </Link>)}</SimulationLibrary>;
   const publicContent=<main className="container educationLibrary simLibrary">
-    <header className="pageHeader generalPageHeader libHeader"><div className="eyebrow">{copy.library.eyebrow}</div><h1 className="pageTitle">{copy.library.title}</h1><p className="lede">{copy.library.body(all.length,visibleSubjectSlugs.length)}</p></header>
+    <header className="pageHeader generalPageHeader libHeader"><div className="eyebrow">{copy.library.eyebrow}</div><h1 className="pageTitle">{copy.library.title}</h1><p className="lede">{copy.library.body(simulationCountLabel(all.length),visibleSubjectSlugs.length)}</p></header>
     {library}
   </main>;
-  return <LearningHub kind="simulations" title="Simulations" description="Explore interactive labs, continue missions and track the activities you complete." total={all.length} secondaryCount={visibleSubjectSlugs.length} secondaryLabel="Subjects" publicContent={publicContent}>{library}</LearningHub>;
+  return <LearningHub kind="simulations" title="Simulations" description="Explore interactive labs, continue missions and track the activities you complete." total={all.length} totalLabel={simulationCountLabel(all.length)} secondaryCount={visibleSubjectSlugs.length} secondaryLabel="Subjects" publicContent={publicContent}>{library}</LearningHub>;
 }

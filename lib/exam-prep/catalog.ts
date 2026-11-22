@@ -90,7 +90,7 @@ const t = (name: string, content: ContentId, lab: LabId | null = null, section =
 // Cambridge A Level Biology continues the AS topics, so the AS list is shared.
 const cambridgeAsBiology = [t("Cell structure", "cells", null, "1"), t("Biological molecules", "biomolecules", null, "2"), t("Enzymes", "enzymes", null, "3"), t("Cell membranes and transport", "membranes", null, "4"), t("The mitotic cell cycle", "reproduction", null, "5"), t("Nucleic acids and protein synthesis", "dna", null, "6"), t("Transport in plants", "exchange", null, "7"), t("Transport in mammals", "circulation", null, "8"), t("Gas exchange", "exchange", null, "9"), t("Infectious diseases", "immunity", null, "10"), t("Immunity", "immunity", null, "11")] as const;
 
-// Biology and Mathematics topics have no lab link yet: those simulations are unpublished
+// Biology topics have no lab link yet: those simulations are unpublished
 // (hiddenSubjectSlugs in lib/subjects/catalog.ts), so linking them would lead to a 404.
 export const syllabi = {
   cambridge_olevel_physics: [t("Motion, forces and energy", "kinematics", "projectile", "1"), t("Thermal physics", "states", "states", "2"), t("Waves", "waves", "waves", "3"), t("Electricity and magnetism", "circuits", "circuit", "4"), t("Nuclear physics", "particles", null, "5"), t("Space physics", "orbit", "kepler", "6", false)],
@@ -278,13 +278,22 @@ export function canonicalTopicCourse(course: Course, topic: Topic): Course | nul
 }
 
 /**
- * Topic lessons are published for learners and linked from every course page, but are unlisted
- * (noindex, out of the sitemap) for now. About 80 lessons built from one template went live while
+ * Topic lessons are published for learners and linked from every course page, but are kept out of
+ * Google (googlebot noindex, out of the sitemap; Bing may list them from /sitemap-bing.xml) for now. About 80 lessons built from one template went live while
  * Google had the site demoted by its September 2026 spam update, and that update acted on exactly
- * this pattern. Board, level, course, papers and practical pages stay indexable. Set this to true
- * to open the lessons to search once rankings have recovered.
+ * this pattern. Set this to true to open the lessons to search once rankings have recovered.
  */
 export const topicLessonsIndexed: boolean = false;
+
+/**
+ * Board, level, course and papers pages are kept out of Google (googlebot noindex; out of the sitemap
+ * and llms.txt), though Bing may still list them. They are navigation built from one template, and pairs of them repeat each other almost
+ * word for word (IB SL and HL, Cambridge AS and A Level, Pearson IAS and IAL), with roughly 20–150 words
+ * of their own. On 2026-11-21 Google had left 28 of the 32 Exam Prep URLs unindexed. Only the Exam Prep
+ * home, the any-board guide and the practical pages stay open to search. Set this to true once these
+ * pages carry substantial content of their own.
+ */
+export const examPrepHubsIndexed: boolean = false;
 
 export const isLevelIndexable = (board: string, level: string) => liveSubjects.some((subject) => isVerified({ board, level, subject: subject.id }));
 export const isBoardIndexable = (board: string) => Boolean(getBoard(board)?.levels.some((level) => isLevelIndexable(board, level.id)));

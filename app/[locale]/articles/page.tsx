@@ -29,7 +29,7 @@ export default async function ArticlesPage({ params }: { params: Promise<{ local
   return <main className={`container ${styles.page}`}>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(collection)} />
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbJsonLd("en", [{ name: "Home", path: "/" }, { name: "News & Articles", path: "/articles" }]))} />
-    <nav className={styles.breadcrumbs} aria-label="Breadcrumb"><Link href="/en">Home</Link><span aria-hidden="true">/</span><span aria-current="page">News &amp; Articles</span></nav>
+    <nav className={styles.breadcrumbs} aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><span aria-current="page">News &amp; Articles</span></nav>
     <header className={styles.indexHero}>
       <span className="eyebrow">News &amp; Articles · Students &amp; teachers</span>
       <h1>Better questions.<br />Deeper science learning.</h1>

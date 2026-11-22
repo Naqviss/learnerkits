@@ -23,7 +23,7 @@ function metrics(slug:string,v:Values,time:number):[string,string][]{switch(slug
  case"quadratic-transformation":{const q=quadraticTargets[v.target];return[["Target vertex",`(${q.h}, ${q.k})`],["Your vertex",`(${v.h}, ${v.k})`],["Target scale",String(q.a)]];}
  case"slope-intercept-challenge":{const q=lineTargets[v.target];return[["Target slope",String(q.m)],["Target intercept",String(q.b)],["Your equation",`y = ${v.m}x ${v.b<0?"−":"+"} ${Math.abs(v.b)}`]];}
  case"geometry-transformation":return[["Challenge",["Translation","Rotation","Reflection","Dilation"][v.challenge]],["Invariant",["Lengths & angles","Lengths & angles","Lengths & angles","Angles"][v.challenge]],["Area scale",v.challenge===3?fmt(v.scale**2):"1.00"]];
- case"probability-experiment":{const p=probability({...v,trials:Math.max(1,Math.floor(v.trials*time/10))});return[["Trials complete",fmt(v.trials*time/10,0)],["Experimental",`${fmt(p.experimental*100,1)}%`],["Theoretical",`${fmt(p.theory*100,1)}%`]];}
+ case"probability-experiment":{const done=Math.floor(v.trials*time/10),p=probability({...v,trials:Math.max(1,done)});return[["Trials complete",String(done)],["Experimental",done?`${fmt(p.experimental*100,1)}%`:"—"],["Theoretical",`${fmt(p.theory*100,1)}%`]];}
  case"derivative-tangent":return[["Point x",fmt(v.x,1)],["Exact derivative",fmt(derivative(v.function,v.x),3)],["Your slope",fmt(v.guess,2)]];
  case"area-under-curve":{const q=riemann(v);return[["Riemann sum",fmt(q.sum,4)],["Exact integral",fmt(q.exact,4)],["Absolute error",fmt(q.error,4)]];}
  default:return[["Determinant",fmt(matrix(v).det)],["Basis i image",`⟨${v.a}, ${v.c}⟩`],["Basis j image",`⟨${v.b}, ${v.d}⟩`]];

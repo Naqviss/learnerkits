@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, topic: slug, ...course } = await params, found = find(course, slug);
   if (locale !== "en" || !found) return {};
   const content = lessonContent[found.topic.content], title = `${found.topic.name} – ${courseTitle(course)}`;
-  const metadata = localizedMetadata("en", topicPath(course, found.topic), title, `${found.topic.name} for ${courseTitle(course)}: ${content.brief}`.slice(0, 300), { englishOnly: true, noIndex: !isVerified(course), unlisted: !topicLessonsIndexed });
+  const metadata = localizedMetadata("en", topicPath(course, found.topic), title, `${found.topic.name} for ${courseTitle(course)}: ${content.brief}`.slice(0, 300), { englishOnly: true, noIndex: !isVerified(course), googleUnlisted: !topicLessonsIndexed });
   // A level that repeats an earlier level's topic points search engines at that single page.
   const owner = canonicalTopicCourse(course, found.topic);
   return { ...metadata, title: { absolute: brandedTitle(title) }, ...(owner ? { alternates: { ...metadata.alternates, canonical: localizedUrl("en", topicPath(owner, found.topic)) } } : {}) };

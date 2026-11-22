@@ -1,6 +1,6 @@
 // Runs after `next build` (output: "export") to finish the static site in out/.
 import { readdirSync, readFileSync, rmSync, rmdirSync, writeFileSync } from "node:fs";
-import { verifyStaticSeo, verifyUnlistedLocales } from "./verify-static-seo.mjs";
+import { verifyBingSitemap, verifyInternalLinks, verifyStaticSeo, verifyUnlistedLocales } from "./verify-static-seo.mjs";
 
 const out = new URL("../out/", import.meta.url);
 const config = readFileSync(new URL("../lib/i18n/config.ts", import.meta.url), "utf8");
@@ -45,6 +45,8 @@ if (process.env.ALLOW_LOCAL_SITE_URL !== "1" && /localhost|127\.0\.0\.1/.test(si
 console.log(`Static site ready in out/ (homepage = /${defaultLocale}, ${removed} not-found pages removed)`);
 const verified = verifyStaticSeo(out, process.env.ALLOW_LOCAL_SITE_URL === "1" ? undefined : "https://www.learnerkits.com");
 console.log(`Verified ${verified} sitemap pages: exported, indexable, and canonical`);
+console.log(`Verified ${verifyBingSitemap(out)} sitemap-bing.xml pages: open to Bing, noindex for Google, and canonical`);
+console.log(`Verified ${verifyInternalLinks(out)} internal links: every one reaches an exported page or file`);
 // Published languages that are not open to search engines must be noindex on every page.
 const localeList = (name) => JSON.parse(config.match(new RegExp(`export const ${name}: readonly Locale\\[\\] = (\\[[^\\]]*\\])`))[1]);
 const unlistedLocales = localeList("locales").filter((locale) => !localeList("indexedLocales").includes(locale));

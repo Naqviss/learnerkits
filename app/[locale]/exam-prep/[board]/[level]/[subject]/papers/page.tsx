@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { coursePath, courseTitle, courses, getBoard, getLevel, getSubject, isCourse } from "@/lib/exam-prep/catalog";
+import { coursePath, courseTitle, courses, examPrepHubsIndexed, getBoard, getLevel, getSubject, isCourse } from "@/lib/exam-prep/catalog";
 import { getPapers, type Paper } from "@/lib/exam-prep/papers";
 import { Breadcrumbs, Notice } from "@/components/exam-prep/Shell";
 import { localizedMetadata } from "@/lib/seo/metadata";
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, ...course } = await params;
   if (locale !== "en" || !isCourse(course) || !getPapers(course)) return {};
   const title = courseTitle(course);
-  return localizedMetadata("en", `${coursePath(course)}/papers`, `${title} Papers Explained`, `See every ${title} exam paper: what it assesses, its duration and marks, and where to practise for it, including practical-skills papers.`, { englishOnly: true });
+  return localizedMetadata("en", `${coursePath(course)}/papers`, `${title} Papers Explained`, `See every ${title} exam paper: what it assesses, its duration and marks, and where to practise for it, including practical-skills papers.`, { englishOnly: true, googleUnlisted: !examPrepHubsIndexed });
 }
 
 function action(paper: Paper, base: string, cambridge: boolean): { href: string; label: string } {

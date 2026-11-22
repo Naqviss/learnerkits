@@ -32,6 +32,12 @@ export type SeoOptions = {
   noIndex?: boolean;
   /** Published for visitors and linked internally, but kept out of search results (noindex, follow) and the sitemap. */
   unlisted?: boolean;
+  /**
+   * Like unlisted, but for Google only: a googlebot noindex tag keeps the page out of Google (recovering
+   * from its September 2026 spam-update demotion), while Bing and the engines built on its index may still
+   * list it. Also left out of the sitemap, which Google reads; Bing finds these pages through internal links.
+   */
+  googleUnlisted?: boolean;
   englishOnly?: boolean;
 };
 
@@ -67,7 +73,7 @@ export function localizedMetadata(
   // A page in a language that is not open to search engines is unlisted, and hreflang only ever
   // points at indexable language versions.
   const unlisted = options.unlisted || !isIndexedLocale(safeLocale);
-  const languages = unlisted
+  const languages = unlisted || options.googleUnlisted
     ? undefined
     : options.englishOnly
       ? { en: localizedUrl(defaultLocale, path), "x-default": localizedUrl(defaultLocale, path) }
@@ -91,7 +97,9 @@ export function localizedMetadata(
       ? { index: false, follow: false }
       : unlisted
         ? { index: false, follow: true }
-        : {
+        : options.googleUnlisted
+          ? { index: true, follow: true, googleBot: { index: false, follow: true } }
+          : {
             index: true,
             follow: true,
             googleBot: {

@@ -3,7 +3,7 @@ import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { isIndexedLocale, locales } from "@/lib/i18n/config";
-import { subjectSlugs, hiddenSubjectSlugs, visibleSubjectSlugs } from "@/lib/subjects/catalog";
+import { subjectSlugs, hiddenSubjectSlugs, isSubjectIndexed, unlistedSubjectSlugs, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { subjectImages } from "@/lib/subjects/images";
 import { localizedUrl, siteUrl } from "@/lib/seo/metadata";
 import SubjectPage, { generateMetadata } from "@/app/[locale]/subjects/[subject]/page";
@@ -31,7 +31,7 @@ describe("subject image discovery", () => {
         const ogUrl = `${siteUrl}${image.og.src}`;
         expect(metadata.openGraph).toMatchObject({ images: [{ url: ogUrl, width: 1200, height: 630, type: "image/jpeg", alt: image.alt[locale] }] });
         expect(metadata.twitter).toMatchObject({ images: [{ url: ogUrl, alt: image.alt[locale] }] });
-        expect(metadata.robots).toMatchObject(isIndexedLocale(locale) ? { index: true, googleBot: { "max-image-preview": "large" } } : { index: false, follow: true });
+        expect(metadata.robots).toMatchObject(!isIndexedLocale(locale) ? { index: false, follow: true } : isSubjectIndexed(subject) ? { index: true, googleBot: { "max-image-preview": "large" } } : { index: true, googleBot: { index: false, follow: true } });
       }
     }
   });
@@ -48,13 +48,15 @@ describe("subject image discovery", () => {
       for (const subject of visibleSubjectSlugs) {
         const image = subjectImages[subject]!;
         expect(html).toContain(`src="${image.src}"`);
-        if (listed) expect(entries.find((entry) => entry.url === localizedUrl(locale, `/subjects/${subject}`))?.images).toContain(`${siteUrl}${image.src}`);
+        if (listed && isSubjectIndexed(subject)) expect(entries.find((entry) => entry.url === localizedUrl(locale, `/subjects/${subject}`))?.images).toContain(`${siteUrl}${image.src}`);
       }
     }
     for (const subject of hiddenSubjectSlugs) {
       expect(subjectImages[subject]).toBeDefined();
       expect(entries.some((entry) => entry.url === localizedUrl("en", `/subjects/${subject}`))).toBe(false);
     }
+    // Unlisted subjects are published but stay out of the sitemap.
+    for (const subject of unlistedSubjectSlugs) expect(entries.some((entry) => entry.url === localizedUrl("en", `/subjects/${subject}`))).toBe(false);
   });
 
   it("provides compressed WebP variants without changing the downloadable originals", () => {

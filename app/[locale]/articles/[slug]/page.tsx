@@ -30,7 +30,7 @@ export default async function ArticlePage({ params }: Props) {
   return <ManagedArticleOverlay slug={slug}><main className={`container ${styles.page}`}>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(articleJsonLd(article))} />
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbJsonLd("en", [{ name: "Home", path: "/" }, { name: "News & Articles", path: "/articles" }, { name: article.title, path: `/articles/${slug}` }]))} />
-    <nav className={styles.breadcrumbs} aria-label="Breadcrumb"><Link href="/en">Home</Link><span aria-hidden="true">/</span><Link href="/en/articles">News &amp; Articles</Link><span aria-hidden="true">/</span><span aria-current="page">{article.category}</span></nav>
+    <nav className={styles.breadcrumbs} aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/en/articles">News &amp; Articles</Link><span aria-hidden="true">/</span><span aria-current="page">{article.category}</span></nav>
     <article>
       <header className={styles.hero}>
         <span className="eyebrow">{article.category} · {article.audience}</span>

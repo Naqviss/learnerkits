@@ -46,11 +46,13 @@ function readTopicProgress(): Progress {
   } catch { return emptyProgress; }
 }
 
-export function LearningHub({ kind, title, description, total, secondaryCount, secondaryLabel, publicContent, children }: {
+export function LearningHub({ kind, title, description, total, totalLabel, secondaryCount, secondaryLabel, publicContent, children }: {
   kind: HubKind;
   title: string;
   description: string;
   total: number;
+  /** How the total is shown (for example "100+"); `total` stays exact for progress maths. */
+  totalLabel?: string;
   secondaryCount: number;
   secondaryLabel: string;
   publicContent: ReactNode;
@@ -106,7 +108,7 @@ export function LearningHub({ kind, title, description, total, secondaryCount, s
     <section className={styles.tabPanel} role="tabpanel">
       {tab === "overview" ? <>
         <div className={styles.stats}>
-          <article><span>{copy.item}</span><strong>{total}</strong><small>Available now</small></article>
+          <article><span>{copy.item}</span><strong>{totalLabel ?? total}</strong><small>Available now</small></article>
           <article><span>{secondaryLabel}</span><strong>{secondaryCount}</strong><small>Browse and choose</small></article>
           <article><span>{copy.completed}</span><strong>{progress.completed}</strong><small>Saved progress</small></article>
           <article><span>{copy.average}</span><strong>{percent}</strong><small>{progress.attempts ? `${progress.attempts} ${copy.attempt.toLowerCase()}` : "Start an activity below"}</small></article>
@@ -122,7 +124,7 @@ export function LearningHub({ kind, title, description, total, secondaryCount, s
     </section>
 
     <section id="learning-list" className={styles.list} aria-labelledby="learning-list-title">
-      <div className={styles.listHeading}><div><span className={styles.eyebrow}>Continue learning</span><h2 id="learning-list-title">{copy.list}</h2></div><span>{total} available</span></div>
+      <div className={styles.listHeading}><div><span className={styles.eyebrow}>Continue learning</span><h2 id="learning-list-title">{copy.list}</h2></div><span>{totalLabel ?? total} available</span></div>
       {children}
     </section>
   </main>;

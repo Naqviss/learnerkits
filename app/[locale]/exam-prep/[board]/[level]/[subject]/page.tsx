@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { coursePath, courseTitle, courses, getBoard, getLevel, getSubject, getSyllabus, isCourse, isFreeTopic, isVerified, labs, sources, subjectCode, syllabusKey, topicPath } from "@/lib/exam-prep/catalog";
+import { coursePath, courseTitle, courses, examPrepHubsIndexed, getBoard, getLevel, getSubject, getSyllabus, isCourse, isFreeTopic, isVerified, labs, sources, subjectCode, syllabusKey, topicPath } from "@/lib/exam-prep/catalog";
 import { getPapers } from "@/lib/exam-prep/papers";
 import { Breadcrumbs, IllustrativeNotice, Notice } from "@/components/exam-prep/Shell";
 import { jsonLd, localizedMetadata, localizedUrl } from "@/lib/seo/metadata";
@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, ...course } = await params;
   if (locale !== "en" || !isCourse(course)) return {};
   const title = courseTitle(course);
-  return localizedMetadata("en", coursePath(course), `${title} Topics & Practice`, `Browse ${title} topics. Each one has a short concept lesson, a worked example, a practice question and a linked interactive LearnerKits lab.`, { englishOnly: true, noIndex: !isVerified(course) });
+  return localizedMetadata("en", coursePath(course), `${title} Topics & Practice`, `Browse ${title} topics. Each one has a short concept lesson, a worked example, a practice question and a linked interactive LearnerKits lab.`, { englishOnly: true, noIndex: !isVerified(course), googleUnlisted: !examPrepHubsIndexed });
 }
 
 export default async function CoursePage({ params }: Props) {
