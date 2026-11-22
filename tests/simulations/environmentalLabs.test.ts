@@ -1,3 +1,4 @@
+import { practicalLabs } from "@/lib/simulations/practical/catalog";
 import { describe, expect, it } from "vitest";
 import { subjectsCatalog } from "@/lib/subjects/catalog";
 import { activities, initialValues, normalizeValues, type Values } from "@/lib/simulations/environmentalLabs/model";
@@ -8,7 +9,7 @@ const final=(slug:string,changes:Values={})=>run(slug,changes).samples.at(-1)!;
 
 describe("Environmental experiments: physical behavior and bookkeeping",()=>{
  it("provides a deterministic finite trajectory for every catalog lab, scenario, and control boundary",()=>{
-  expect(activities.map(a=>a.slug).sort()).toEqual(subjectsCatalog["environmental-science"].simulations.map(s=>s.slug).sort());
+  expect([...activities, ...practicalLabs["environmental-science"]].map(a=>a.slug).sort()).toEqual(subjectsCatalog["environmental-science"].simulations.map(s=>s.slug).sort());
   for(const a of activities){
    const inputs=[initialValues(a),...a.presets.map(p=>({...initialValues(a),...p.values})),...["min","max"].map(end=>Object.fromEntries(a.controls.map(c=>[c.key,c[end as "min"|"max"]])))];
    for(const input of inputs){const e=runExperiment(a.slug,input);expect(e.samples).toHaveLength(121);expect(e.samples[0].time).toBe(0);expect(e.samples.at(-1)!.time).toBeCloseTo(e.duration);for(const s of e.samples)for(const value of Object.values(s))expect(Number.isFinite(value),`${a.slug}: ${value}`).toBe(true);}

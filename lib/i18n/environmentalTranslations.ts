@@ -19,6 +19,9 @@ export const environmentalSubjectTranslations: Record<L, Prose> = {
 
 export const environmentalSimulationTranslations: Record<L, Record<string, Sim>> = {
   es:{
+    "ecosystem-survival":s("Simulación de ecosistemas","Compara las poblaciones a lo largo de mil años.","",""),
+    "climate-change-scenarios":s("Simulador de cambio climático","Observa cómo cambia el hábitat de montaña con el calentamiento.","",""),
+    "aquarium-food-web":s("Simulador del ecosistema de un acuario","Retira una especie y observa las otras dos.","",""),
     "greenhouse-effect-simulator":s("Simulador del efecto invernadero","Explora cómo los gases de efecto invernadero y la reflectividad planetaria influyen en el balance energético de la Tierra y en el calentamiento modelado.","Dióxido de carbono · metano · albedo · forzamiento radiativo","Simulación climática"),
     "carbon-cycle-simulator":s("Simulador del ciclo del carbono","Equilibra las emisiones y los sumideros de carbono para ver cómo cambia el CO₂ atmosférico a lo largo de tres décadas.","Emisiones · sumideros de carbono · atmósfera · cero neto","Simulación de sistemas"),
     "sea-level-rise-simulator":s("Simulador del aumento del nivel del mar","Compara la expansión térmica, el deshielo continental y el hundimiento local en un escenario simplificado del nivel del mar.","Expansión térmica · deshielo · calentamiento · riesgo costero","Simulación costera"),
@@ -31,6 +34,9 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("Constructor de ciudades resilientes al clima","Asigna un presupuesto limitado de adaptación para reducir los riesgos de inundación, calor y tormentas en una ciudad.","Adaptación · inundaciones · calor · tormentas · presupuesto","Juego de estrategia de resiliencia")
   },
   fr:{
+    "ecosystem-survival":s("Simulation d’écosystème","Suivez les populations pendant mille ans.","",""),
+    "climate-change-scenarios":s("Simulateur de changement climatique","Étudiez le déplacement d’un habitat en altitude.","",""),
+    "aquarium-food-web":s("Écosystème d’aquarium","Retirez une espèce et observez les deux autres.","",""),
     "greenhouse-effect-simulator":s("Simulateur de l’effet de serre","Explorez comment les gaz à effet de serre et la réflectivité planétaire influencent le bilan énergétique de la Terre et le réchauffement modélisé.","Dioxyde de carbone · méthane · albédo · forçage radiatif","Simulation climatique"),
     "carbon-cycle-simulator":s("Simulateur du cycle du carbone","Équilibrez émissions et puits de carbone pour voir comment le CO₂ atmosphérique évolue sur trois décennies.","Émissions · puits de carbone · atmosphère · neutralité carbone","Simulation de systèmes"),
     "sea-level-rise-simulator":s("Simulateur de montée du niveau de la mer","Comparez la dilatation thermique, la fonte des glaces continentales et l’affaissement local dans un scénario simplifié du niveau de la mer.","Dilatation thermique · fonte des glaces · réchauffement · risque côtier","Simulation côtière"),
@@ -43,6 +49,9 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("Bâtisseur de ville résiliente au climat","Répartissez un budget d’adaptation limité pour réduire les risques d’inondation, de chaleur et de tempêtes dans une ville.","Adaptation · inondations · chaleur · tempêtes · budget","Jeu de stratégie de résilience")
   },
   de:{
+    "ecosystem-survival":s("Ökosystemsimulation","Verfolge Populationen über tausend Jahre.","",""),
+    "climate-change-scenarios":s("Klimawandel-Simulator","Untersuche die Höhenverschiebung eines Lebensraums.","",""),
+    "aquarium-food-web":s("Aquarium-Ökosystem","Entferne eine Art und beobachte die anderen.","",""),
     "greenhouse-effect-simulator":s("Treibhauseffekt-Simulator","Erkunde, wie Treibhausgase und das Rückstrahlvermögen des Planeten die Energiebilanz der Erde und die modellierte Erwärmung beeinflussen.","Kohlendioxid · Methan · Albedo · Strahlungsantrieb","Klimasimulation"),
     "carbon-cycle-simulator":s("Kohlenstoffkreislauf-Simulator","Bringe Emissionen und Kohlenstoffsenken ins Gleichgewicht und beobachte, wie sich das atmosphärische CO₂ über drei Jahrzehnte verändert.","Emissionen · Kohlenstoffsenken · Atmosphäre · Netto-Null","Systemsimulation"),
     "sea-level-rise-simulator":s("Meeresspiegelanstieg-Simulator","Vergleiche thermische Ausdehnung, Landeisschmelze und lokale Absenkung in einem vereinfachten Meeresspiegel-Szenario.","Thermische Ausdehnung · Eisschmelze · Erwärmung · Küstenrisiko","Küstensimulation"),
@@ -55,6 +64,9 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("Klimaresiliente Stadt bauen","Verteile ein begrenztes Anpassungsbudget, um Überschwemmungs-, Hitze- und Sturmrisiken in einer Stadt zu senken.","Anpassung · Überschwemmung · Hitze · Stürme · Budget","Resilienz-Strategiespiel")
   },
   pt:{
+    "ecosystem-survival":s("Simulação de ecossistema","Acompanhe as populações por mil anos.","",""),
+    "climate-change-scenarios":s("Simulador de mudanças climáticas","Investigue o deslocamento de um habitat em altitude.","",""),
+    "aquarium-food-web":s("Ecossistema de aquário","Remova uma espécie e observe as outras duas.","",""),
     "greenhouse-effect-simulator":s("Simulador do efeito estufa","Explore como os gases de efeito estufa e a refletividade planetária influenciam o balanço energético da Terra e o aquecimento modelado.","Dióxido de carbono · metano · albedo · forçante radiativa","Simulação climática"),
     "carbon-cycle-simulator":s("Simulador do ciclo do carbono","Equilibre emissões e sumidouros de carbono para ver como o CO₂ atmosférico muda ao longo de três décadas.","Emissões · sumidouros de carbono · atmosfera · emissões líquidas zero","Simulação de sistemas"),
     "sea-level-rise-simulator":s("Simulador de aumento do nível do mar","Compare expansão térmica, derretimento do gelo continental e subsidência local em um cenário simplificado do nível do mar.","Expansão térmica · derretimento do gelo · aquecimento · risco costeiro","Simulação costeira"),
@@ -67,6 +79,9 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("Construtor de cidades resilientes ao clima","Distribua um orçamento limitado de adaptação para reduzir os riscos de enchentes, calor e tempestades em uma cidade.","Adaptação · enchentes · calor · tempestades · orçamento","Jogo de estratégia de resiliência")
   },
   ru:{
+    "ecosystem-survival":s("Модель экосистемы","Проследите за популяциями на протяжении тысячи лет.","",""),
+    "climate-change-scenarios":s("Симулятор изменения климата","Изучите смещение горной среды обитания при потеплении.","",""),
+    "aquarium-food-web":s("Экосистема аквариума","Уберите один вид и проследите за остальными.","",""),
     "greenhouse-effect-simulator":s("Симулятор парникового эффекта","Исследуйте, как парниковые газы и отражательная способность планеты влияют на энергетический баланс Земли и моделируемое потепление.","Углекислый газ · метан · альбедо · радиационное воздействие","Климатическая симуляция"),
     "carbon-cycle-simulator":s("Симулятор круговорота углерода","Сбалансируйте выбросы и поглотители углерода и посмотрите, как меняется содержание CO₂ в атмосфере за три десятилетия.","Выбросы · поглотители углерода · атмосфера · нулевой баланс","Симуляция систем"),
     "sea-level-rise-simulator":s("Симулятор повышения уровня моря","Сравните тепловое расширение, таяние материковых льдов и местное опускание суши в упрощённом сценарии уровня моря.","Тепловое расширение · таяние льдов · потепление · риски для побережья","Прибрежная симуляция"),
@@ -79,6 +94,9 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("Строитель климатически устойчивого города","Распределите ограниченный бюджет на адаптацию, чтобы снизить риски наводнений, жары и штормов в городе.","Адаптация · наводнения · жара · штормы · бюджет","Стратегическая игра об устойчивости")
   },
   ja:{
+    "ecosystem-survival":s("生態系シミュレーション","千年間の個体数の変化を調べます。","",""),
+    "climate-change-scenarios":s("気候変動シミュレーター","温暖化に伴う山の生息域の移動を調べます。","",""),
+    "aquarium-food-web":s("水槽の生態系","一種を取り除き、残りの変化を観察します。","",""),
     "greenhouse-effect-simulator":s("温室効果シミュレーター","温室効果ガスと惑星の反射率が、地球のエネルギー収支とモデル上の温暖化にどう影響するかを調べます。","二酸化炭素 · メタン · アルベド · 放射強制力","気候シミュレーション"),
     "carbon-cycle-simulator":s("炭素循環シミュレーター","排出量と炭素吸収源のバランスをとり、30年間で大気中のCO₂がどう変化するかを確かめます。","排出 · 炭素吸収源 · 大気 · ネットゼロ","システムシミュレーション"),
     "sea-level-rise-simulator":s("海面上昇シミュレーター","簡略化した海面シナリオで、熱膨張、陸氷の融解、局所的な地盤沈下の影響を比較します。","熱膨張 · 氷の融解 · 温暖化 · 沿岸リスク","沿岸シミュレーション"),
@@ -91,6 +109,9 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("気候レジリエンス都市ビルダー","限られた適応予算を配分し、都市全体の洪水・猛暑・暴風のリスクを減らします。","適応 · 洪水 · 猛暑 · 暴風 · 予算","レジリエンス戦略ゲーム")
   },
   zh:{
+    "ecosystem-survival":s("生态系统模拟","观察一千年内种群的变化。","",""),
+    "climate-change-scenarios":s("气候变化模拟器","研究升温如何改变山地栖息地的海拔。","",""),
+    "aquarium-food-web":s("水族箱生态系统","移除一个物种并观察其他物种。","",""),
     "greenhouse-effect-simulator":s("温室效应模拟器","探索温室气体和行星反照率如何影响地球的能量平衡以及模型中的变暖程度。","二氧化碳 · 甲烷 · 反照率 · 辐射强迫","气候模拟"),
     "carbon-cycle-simulator":s("碳循环模拟器","平衡排放与碳汇，观察大气中的CO₂在三十年间如何变化。","排放 · 碳汇 · 大气 · 净零","系统模拟"),
     "sea-level-rise-simulator":s("海平面上升模拟器","在简化的海平面情景中比较热膨胀、陆地冰融化和局部地面沉降的影响。","热膨胀 · 冰川融化 · 变暖 · 海岸风险","海岸模拟"),
@@ -103,6 +124,9 @@ export const environmentalSimulationTranslations: Record<L, Record<string, Sim>>
     "climate-resilience-city-builder":s("气候韧性城市建造","分配有限的适应预算，降低城市面临的洪水、高温和风暴风险。","适应 · 洪水 · 高温 · 风暴 · 预算","韧性策略游戏")
   },
   ar:{
+    "ecosystem-survival":s("محاكاة النظام البيئي","تتبّع أعداد الفرائس والمفترسات على مدى ألف عام.","",""),
+    "climate-change-scenarios":s("محاكي تغير المناخ","ادرس تغير ارتفاع الموطن الجبلي مع الاحترار.","",""),
+    "aquarium-food-web":s("النظام البيئي لحوض السمك","أزل نوعًا وراقب النوعين الآخرين.","",""),
     "greenhouse-effect-simulator":s("محاكي ظاهرة الاحتباس الحراري","استكشف كيف تؤثر غازات الدفيئة وانعكاسية الكوكب في توازن الطاقة على الأرض وفي الاحترار الذي يقدّره النموذج.","ثاني أكسيد الكربون · الميثان · الألبيدو · التأثير الإشعاعي","محاكاة مناخية"),
     "carbon-cycle-simulator":s("محاكي دورة الكربون","وازن بين الانبعاثات ومصارف الكربون لترى كيف يتغير CO₂ في الغلاف الجوي على مدى ثلاثة عقود.","الانبعاثات · مصارف الكربون · الغلاف الجوي · الحياد الكربوني","محاكاة أنظمة"),
     "sea-level-rise-simulator":s("محاكي ارتفاع مستوى سطح البحر","قارن بين التمدد الحراري وذوبان الجليد القاري والهبوط المحلي لليابسة في سيناريو مبسّط لمستوى سطح البحر.","التمدد الحراري · ذوبان الجليد · الاحترار · المخاطر الساحلية","محاكاة ساحلية"),

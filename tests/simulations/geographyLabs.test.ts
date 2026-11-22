@@ -1,3 +1,4 @@
+import { practicalLabs } from "@/lib/simulations/practical/catalog";
 import { describe, expect, it } from "vitest";
 import { subjectsCatalog } from "@/lib/subjects/catalog";
 import { activities, arrivals, distanceFromGap, initialValues, initialJourney, mission, ocean, plate, river, tsunami, volcano, hurricane, front, stationData, stations, events, travel, type Values } from "@/lib/simulations/geographyLabs/model";
@@ -7,7 +8,7 @@ const rockTour=()=>["Cool","Weather","Compact & cement","Heat & pressure","Melt"
 const waterTour=()=>["Evaporate","Condense","Precipitate","Infiltrate","Groundwater discharge","River outflow"].reduce((j,a)=>travel(j,a,true),initialJourney(true));
 describe("Geography & Earth expeditions",()=>{
  it("replaces every catalog placeholder with an achievable expedition",()=>{
-  expect(activities.map(a=>a.slug).sort()).toEqual(subjectsCatalog.geography.simulations.map(s=>s.slug).sort());
+  expect([...activities, ...practicalLabs["geography"]].map(a=>a.slug).sort()).toEqual(subjectsCatalog.geography.simulations.map(s=>s.slug).sort());
   const solutions:Record<string,Values>={"seismic-wave-lab":{estimate:280},"plate-motion-lab":{speed:5,years:10,heading:0},"volcano-eruption-3d":{gas:1,viscosity:2},"earthquake-epicenter-finder":{x:350,y:220},"plate-tectonics-3d":{landform:1},"tsunami-3d":{estimate:17},"hurricane-simulator":{temperature:29,shear:5},"weather-front-simulator":{humidity:85},"river-erosion":{depth:.5,slope:.03},"rock-cycle-challenge":{},"water-cycle-adventure":{},"ocean-currents-3d":{}};
   for(const a of activities)expect(mission(a.slug,values(a.slug,solutions[a.slug]),true,a.slug==="water-cycle-adventure"?waterTour():rockTour()).ok,a.slug).toBe(true);
  });

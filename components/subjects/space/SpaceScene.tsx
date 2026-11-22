@@ -12,7 +12,9 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
   const design=slug==="mars-landing-challenge"?slug:JSON.stringify(values);
   useEffect(()=>{
     const container=host.current;if(!container)return;let renderer:THREE.WebGLRenderer;
-    try{renderer=rendererRef.current??new THREE.WebGLRenderer({antialias:true,alpha:true});rendererRef.current=renderer;}catch{setFailed(true);return;}
+    try{renderer=rendererRef.current??new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:"high-performance"});rendererRef.current=renderer;}catch{setFailed(true);return;}
+    const onContextLost=(event:Event)=>{event.preventDefault();setFailed(true);};
+    renderer.domElement.addEventListener("webglcontextlost",onContextLost,false);
     const profile=renderProfile(loadSettings().quality);renderer.setPixelRatio(Math.min(devicePixelRatio,profile.pixelRatioCap));renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;container.appendChild(renderer.domElement);
     const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(45,1,.1,200);camera.position.set(0,7,17);cameraRef.current=camera;
     const controls=new OrbitControls(camera,renderer.domElement);controls.enablePan=false;controls.enableZoom=true;controls.minDistance=3;controls.maxDistance=40;controls.zoomSpeed=.7;controls.rotateSpeed=.65;controls.enableDamping=true;controls.target.set(0,0,0);controls.saveState();if(view.current){camera.position.copy(view.current.position);controls.target.copy(view.current.target);}orbit.current=controls;
@@ -22,7 +24,7 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
     function mesh(g:THREE.BufferGeometry,m:THREE.Material,parent:THREE.Object3D=scene){geometries.add(g);materials.add(m);const o=new THREE.Mesh(g,m);parent.add(o);return o;}
     const sphere=new THREE.SphereGeometry(1,64,48);geometries.add(sphere);
     const loader=new THREE.TextureLoader();
-    function texture(path:string){const tex=loader.load(path,loaded=>{if(!alive)loaded.dispose();});tex.colorSpace=THREE.SRGBColorSpace;textures.add(tex);return tex;}
+    function texture(path:string){const tex=loader.load(path,loaded=>{if(!alive)loaded.dispose();},undefined,()=>{if(alive)setFailed(true);});tex.colorSpace=THREE.SRGBColorSpace;textures.add(tex);return tex;}
     function body(radius:number,color:number,map?:string,parent:THREE.Object3D=scene){
       const mat=new THREE.MeshStandardMaterial({color:map?0xffffff:color,roughness:.86});
       const o=mesh(sphere,mat,parent);o.scale.setScalar(radius);
@@ -116,7 +118,7 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
       update=()=>{const s=live.current.mars;ship.position.set(0,-1.82+s.altitude*.008,0);ship.rotation.z=s.status==="crashed"?.7:0;flame.visible=s.status==="flying"&&s.throttle>.01;flame.scale.y=s.throttle;flame.position.y=-.4-.75*s.throttle;};
     }
     const resize=()=>{renderer.setSize(container.clientWidth,container.clientHeight,false);camera.aspect=container.clientWidth/Math.max(1,container.clientHeight);camera.fov=2*Math.atan(Math.tan(Math.PI/8)/Math.min(1,Math.max(.4,camera.aspect)))*180/Math.PI;camera.updateProjectionMatrix();};const ro=new ResizeObserver(resize);ro.observe(container);resize();let raf=0;const frame=()=>{update();controls.update();if(!document.hidden)renderer.render(scene,camera);raf=requestAnimationFrame(frame);};raf=requestAnimationFrame(frame);
-    return()=>{alive=false;view.current={position:camera.position.clone(),target:controls.target.clone()};cancelAnimationFrame(raf);ro.disconnect();controls.dispose();orbit.current=null;geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());renderer.domElement.removeEventListener("pointerdown",focus);};
+    return()=>{alive=false;view.current={position:camera.position.clone(),target:controls.target.clone()};cancelAnimationFrame(raf);ro.disconnect();controls.dispose();orbit.current=null;geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());renderer.domElement.removeEventListener("pointerdown",focus);renderer.domElement.removeEventListener("webglcontextlost",onContextLost);};
   },[slug,design]);
   useEffect(()=>()=>{rendererRef.current?.dispose();rendererRef.current?.domElement.remove();rendererRef.current=null;},[]);
   function cameraView(mode:string){const c=cameraRef.current,o=orbit.current;if(!c||!o)return;setCameraMode(mode);o.target.set(0,0,0);c.position.set(0,mode==="top"?18:7,mode==="top"?.01:17);o.update();}

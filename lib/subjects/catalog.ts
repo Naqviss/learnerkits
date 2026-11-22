@@ -1,3 +1,4 @@
+import { practicalLabs } from "@/lib/simulations/practical/catalog";
 import { chemistryCoursePublished, courseLabs, courseSimulationCards } from "@/lib/simulations/chemistry/course/catalog";
 
 export const subjectSlugs = ["space", "physics", "geography", "environmental-science", "biology", "chemistry", "mathematics"] as const;
@@ -74,6 +75,7 @@ const fullSubjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
     gradeBand: "Grades 6–12",
     learningObjectives: ["Predict motion from initial conditions", "Connect forces and energy to measurable change", "Use equations as models, not memorized rules"],
     simulations: [
+      ...practicalLabs["physics"],
       { slug: "projectile-lab", title: "Projectile Lab", concepts: "Velocity · angle · gravity · trajectory", difficulty: "Beginner", duration: "5–10 min", kind: "Motion lab", outcome: "Predict how launch speed and angle change range and flight time.", visualMode: "simulation" },
       { slug: "circuit-builder", title: "Circuit Builder", concepts: "Voltage · resistance · current · power", difficulty: "Beginner", duration: "5–10 min", kind: "Electricity lab", outcome: "Use Ohm’s law to explain changes in current and power.", visualMode: "simulation" },
       { slug: "inclined-plane-friction", title: "Inclined Plane & Friction Simulator", concepts: "Normal force · friction · slope angle · acceleration", difficulty: "Intermediate", duration: "6–12 min", kind: "3D simulation", outcome: "Predict when an object will slide and calculate its acceleration on an incline.", seoTarget: "inclined plane friction simulator", opportunity: "Very High", featured: true, visualMode: "3d" },
@@ -99,6 +101,7 @@ const fullSubjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
     gradeBand: "Grades 6–10",
     learningObjectives: ["Interpret Earth processes across different time scales", "Use observations to locate and explain geologic events", "Connect energy and flow to changing landscapes"],
     simulations: [
+      ...practicalLabs["geography"],
       { slug: "seismic-wave-lab", title: "Seismic Wave Lab", concepts: "P-waves · S-waves · distance · arrival time", difficulty: "Intermediate", duration: "6–12 min", kind: "Earth lab", outcome: "Use wave-arrival evidence to reason about earthquake distance.", visualMode: "simulation" },
       { slug: "plate-motion-lab", title: "Plate Motion Lab", concepts: "Plate speed · direction · geologic time · displacement", difficulty: "Beginner", duration: "5–10 min", kind: "Tectonics lab", outcome: "Connect slow plate motion with large geologic changes over time.", visualMode: "simulation" },
       { slug: "volcano-eruption-3d", title: "Volcano Eruption 3D Simulator", concepts: "Magma pressure · gas · viscosity · eruption style", difficulty: "Intermediate", duration: "7–12 min", kind: "3D simulation", outcome: "Relate magma properties and gas pressure to different eruption behaviors.", seoTarget: "volcano eruption simulator", opportunity: "Very High", visualMode: "3d" },
@@ -124,6 +127,7 @@ const fullSubjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
     gradeBand: "Grades 6–12",
     learningObjectives: ["Trace cause and effect across environmental systems", "Interpret evidence from simplified quantitative models", "Compare mitigation, conservation, and adaptation strategies"],
     simulations: [
+      ...practicalLabs["environmental-science"],
       { slug:"greenhouse-effect-simulator", title:"Greenhouse Effect Simulator", concepts:"Carbon dioxide · methane · albedo · radiative forcing", difficulty:"Intermediate", duration:"7–12 min", kind:"Climate simulation", outcome:"Explore how greenhouse gases and planetary reflectivity influence Earth's energy balance and modeled warming.", seoTarget:"greenhouse effect simulator", opportunity:"Very High", featured:true, visualMode:"simulation" },
       { slug:"carbon-cycle-simulator", title:"Carbon Cycle Simulator", concepts:"Emissions · carbon sinks · atmosphere · net zero", difficulty:"Intermediate", duration:"8–14 min", kind:"Systems simulation", outcome:"Balance emissions and carbon sinks to see how atmospheric CO₂ changes over three decades.", seoTarget:"carbon cycle simulator", opportunity:"Very High", featured:true, visualMode:"simulation" },
       { slug:"sea-level-rise-simulator", title:"Sea Level Rise Simulator", concepts:"Thermal expansion · ice melt · warming · coastal risk", difficulty:"Intermediate", duration:"7–12 min", kind:"Coastal simulation", outcome:"Compare thermal expansion, land-ice melt, and local subsidence in a simplified sea-level scenario.", seoTarget:"sea level rise simulator", opportunity:"Very High", visualMode:"simulation" },

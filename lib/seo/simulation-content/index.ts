@@ -1,3 +1,4 @@
+import practicalContent from "./practical.json";
 import { balancingFaq } from "@/lib/seo/balancing-equations";
 import { chemistryContent } from "./chemistry";
 import { environmentalContent } from "./environmental";
@@ -29,6 +30,7 @@ const balancing: SimulationContent = {
 };
 
 const content: Record<string, SimulationContent> = {
+  ...practicalContent,
   ...spaceContent,
   ...physicsContent,
   ...geographyContent,

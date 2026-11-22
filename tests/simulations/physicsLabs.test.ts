@@ -1,3 +1,4 @@
+import { practicalLabs } from "@/lib/simulations/practical/catalog";
 import { describe, expect, it } from "vitest";
 import { subjectsCatalog } from "@/lib/subjects/catalog";
 import { activities, bridge, checkMission, circuit, collision, energyAt, energyTrack, initialValues, lens, period, projectile, ramp, waveAmplitude, type Values } from "@/lib/simulations/physicsLabs/model";
@@ -6,7 +7,7 @@ const completedAttempt={started:true,time:60,closed:true,installed:true,steps:[]
 const values=(slug:string,override:Values={})=>({...initialValues(activities.find(a=>a.slug===slug)!),...override});
 describe("physics labs",()=>{
   it("replaces every physics topic and provides an achievable mission",()=>{
-    expect(activities.map(a=>a.slug).sort()).toEqual(subjectsCatalog.physics.simulations.map(s=>s.slug).sort());
+    expect([...activities, ...practicalLabs["physics"]].map(a=>a.slug).sort()).toEqual(subjectsCatalog.physics.simulations.map(s=>s.slug).sort());
     const solutions:Record<string,Values>={
       "projectile-lab":{speed:20,angle:45},"circuit-builder":{resistance:14},"inclined-plane-friction":{angle:20,mu:.2},
       "momentum-collision":{massA:2,massB:2,speedB:0,restitution:1},"ray-optics-lens":{focal:20,distance:30},

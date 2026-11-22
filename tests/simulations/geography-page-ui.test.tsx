@@ -1,3 +1,4 @@
+import { practicalSlugs } from "@/lib/simulations/practical/catalog";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { GeographyActivitiesClient } from "@/components/subjects/geography/GeographyActivitiesClient";
@@ -10,7 +11,7 @@ describe("Geography and Earth simulation page integration", () => {
   const simulation = getSimulationCard("seismic-wave-lab")!;
 
   it("removes duplicate internal Guide and Measurements controls from every Earth lab", () => {
-    for (const earthSimulation of subject.simulations) {
+    for (const earthSimulation of subject.simulations.filter(item => !practicalSlugs.has(item.slug))) {
       const html = renderToStaticMarkup(<GeographyActivitiesClient locale="en" subject={subject} simulation={earthSimulation}/>);
       expect(html).not.toContain('aria-label="Field guide"');
       expect(html).not.toContain('aria-label="Measurements"');

@@ -1,0 +1,331 @@
+{
+  "gravity-planet-orbit": {
+    "question": "What happens to a planet if gravity changes while its launch speed stays fixed?",
+    "answer": "Gravity bends a moving planet toward its star. One particular strength bends its path just enough to maintain a circle at the starting distance. Stronger attraction pulls the same planet inward before it swings back out. Sufficiently weak attraction lets the planet travel away on an open path, even though the star continues to pull on it.",
+    "science": [
+      "A planet launched sideways already has a velocity across the line joining it to the star. Attraction accelerates it along that line. During a short interval it travels forward and falls inward a little. Repeating those two effects produces a curved trajectory. A circular orbit requires exactly the inward acceleration associated with its radius and its sideways speed.",
+      "The moving dot leaves a trail, but distance from the star provides better evidence of circular motion than the apparent size of that trail. The view automatically expands to keep a departing planet visible. A dot that seems to slow down on screen can still be moving rapidly through the model coordinates."
+    ],
+    "steps": [
+      "Set gravitational pull to one and run a full trial. Note the range of distances displayed.",
+      "Double the pull without changing the launch conditions. Pause at the closest approach and record the distance.",
+      "Restart with half the original attraction. Follow the trail and compare the final separation with both previous trials.",
+      "Sketch the three paths around a single marked star. Label which trials brought the planet inside its starting radius."
+    ],
+    "misconception": {
+      "myth": "A circular orbit has no acceleration.",
+      "fact": "Even at constant speed the direction of velocity changes continuously, requiring acceleration toward the center of the circle."
+    },
+    "modelNote": "One fixed central mass dominates the attraction. The planet has no engine, atmospheric drag, neighboring planets or finite stellar surface in this calculation.",
+    "faq": [
+      {
+        "q": "Why does the planet speed up near the star?",
+        "a": "On the inward part of an eccentric orbit, gravity has a component along the direction of travel. Gravitational potential energy falls while kinetic energy grows. On the outward part the same attraction takes kinetic energy back, slowing the planet as the distance increases."
+      },
+      {
+        "q": "Can gravity act on an escaping planet?",
+        "a": "Attraction persists at every finite separation. An escaping object starts with enough kinetic energy to climb away despite that attraction. At the limiting escape speed its speed approaches zero only at indefinitely large distance, so a short outward trail alone cannot establish whether escape has occurred."
+      },
+      {
+        "q": "How can I compare two orbit trials fairly?",
+        "a": "Keep the initial position and tangential velocity the same, as the restart control does here. Inspect both trials at equal model times and record their numerical distances. Comparing screen pixels can be misleading because a wide trajectory makes the display change its scale."
+      }
+    ]
+  },
+  "n-body-space": {
+    "question": "Why do some bodies merge earlier than others in a self-gravitating cluster?",
+    "answer": "Every body feels the combined attraction of its neighbors. Initially small differences in separation can produce quite different accelerations, close approaches and collisions. When two bodies touch in the model, a single heavier body continues with their combined momentum. The live body count lets you distinguish an actual merger from two points merely passing close together.",
+    "science": [
+      "Unlike a planet orbiting a fixed star, the centers of attraction move throughout this experiment. A nearby pair may curve toward one another while a third body deflects their shared path. The spiral starting positions give each trial a repeatable structure so that the consequences of increasing the starting population can be investigated.",
+      "A merger replaces two masses with their sum and assigns the result a mass-weighted velocity. Two equal masses moving in opposite directions can therefore produce a nearly stationary remnant. Much of their original kinetic energy disappears from the motion being tracked. Real collisions can transfer that energy to heat, deformation and debris."
+    ],
+    "steps": [
+      "Release ten bodies and pause at the first drop in the body count. Identify the enlarged remnant.",
+      "Run a fifty-body cluster to the end. Divide the merger count by the initial population.",
+      "Repeat with one hundred starting bodies. Compare fractions as well as raw collision totals.",
+      "Use the time slider to inspect a crowded interval slowly. Check apparent collisions against the numerical count."
+    ],
+    "misconception": {
+      "myth": "Every close approach must cause a collision.",
+      "fact": "Gravity can turn two trajectories past each other while their separation stays larger than the contact distance."
+    },
+    "modelNote": "Bodies interact in a plane with softened short-range attraction. Contact always produces a single remnant and the displayed time has no astronomical calibration.",
+    "faq": [
+      {
+        "q": "Why compare a fraction of mergers?",
+        "a": "A larger cluster begins with more possible pairs and more bodies available to lose. Ten mergers in an initial group of twenty consume a different fraction of the starting count than ten in a group of one hundred. Record both starting and remaining counts to make the comparison interpretable."
+      },
+      {
+        "q": "Does a merged body stop attracting its neighbors?",
+        "a": "The remnant participates in subsequent force calculations with the sum of the two incoming masses. Nearby paths can bend more strongly toward that growing concentration. A large dot late in a trial may therefore represent material collected through several successive encounters."
+      },
+      {
+        "q": "Would real planets always stick together?",
+        "a": "Collision outcomes depend on speed, angle, composition and internal structure. Material can rebound, fragment or escape from the pair. Perfect merging isolates the bookkeeping of mass and momentum and makes the reduction in body count particularly easy to observe during a classroom trial."
+      },
+      {
+        "q": "What controls the starting spiral?",
+        "a": "The starting positions are spaced by a fixed angle with radius increasing outward. Running the same body count again therefore reproduces the same arrangement. Changing the count also changes the spacing, which should be considered when interpreting a difference between runs."
+      }
+    ]
+  },
+  "pendulum-wave": {
+    "question": "How can independent pendulums make a traveling wave?",
+    "answer": "Pendulums of slightly different lengths take slightly different times to swing. When released together their phases gradually separate, creating a pattern that seems to travel across the row. If each neighboring pendulum completes exactly one additional cycle per minute, the accumulated differences become whole cycles after sixty seconds and the original alignment returns.",
+    "science": [
+      "For small swings the period increases with the square root of length. Doubling a pendulum's length therefore increases its period by less than a factor of two. A designer who wants equally spaced frequencies must choose unequal length increments. Look at the strings near each end of the row to see that length pattern.",
+      "Count cycles over a fixed interval instead of trying to follow one crest across the display. A bob stays attached to the same support throughout. What moves across the row is an arrangement of phases, created as some bobs turn back toward the middle while others are still moving outward."
+    ],
+    "steps": [
+      "Choose zero extra cycles and release the row. Observe whether any bob gains on its neighbor.",
+      "Choose one extra cycle and predict the arrangement at sixty seconds. Scrub directly to check your prediction.",
+      "Try two additional cycles between neighbors. Look for a return to the starting configuration before the minute ends.",
+      "Pause halfway between two alignments and sketch the strings. Use their lengths to explain which bobs have completed more swings."
+    ],
+    "misconception": {
+      "myth": "The visible wave carries each bob along the row.",
+      "fact": "Every bob oscillates about its own pivot while differences in phase create the appearance of a moving pattern."
+    },
+    "modelNote": "Ideal strings support small oscillations under uniform gravity. The calculation excludes friction, elastic stretching and motion transmitted between neighboring supports.",
+    "faq": [
+      {
+        "q": "Why do the shortest strings move fastest?",
+        "a": "At small angles the return acceleration relative to the angular displacement grows as string length decreases. A shorter pendulum completes its outward and return trip sooner. With the same starting angle, that difference accumulates until neighboring bobs are visibly out of step."
+      },
+      {
+        "q": "What happens if all strings have equal length?",
+        "a": "Equal lengths under the same gravity give equal periods. Bobs released at the same angle and time remain synchronized in this idealization. Choosing zero additional cycles produces that control case and helps establish why variation in length matters."
+      },
+      {
+        "q": "How can I predict the next alignment?",
+        "a": "Multiply the neighboring frequency difference by the elapsed time in minutes. When the result is a whole number, the neighbors differ by a whole number of cycles and share a phase. To recover the starting pose the first bob must also have returned to its initial phase."
+      },
+      {
+        "q": "Why use a minute to compare cycles?",
+        "a": "A common measurement window makes different periods easy to compare. Counting one extra cycle in sixty seconds means that the two bobs gain exactly one full turn of phase relative to each other over that interval."
+      }
+    ]
+  },
+  "ecosystem-survival": {
+    "question": "How much prey habitat can sustain a predator population for a thousand years?",
+    "answer": "Predators persist when feeding produces enough new predators to balance losses. Increasing prey carrying capacity gives the food source room to recover after grazing by predators. A low capacity can support some prey yet leave predators with too little food. Comparing the two abundance curves reveals which population declines first and whether either recovers.",
+    "science": [
+      "Carrying capacity describes the abundance the prey population approaches in the absence of predators under the specified resources. At low density there is room to grow. Near capacity competition slows that growth. Predation removes individuals from this renewing population, so the long-term prey count can settle well below the carrying capacity selected on the slider.",
+      "Predator births depend on encounters between predators and prey. When prey become scarce, encounters decline before the remaining predators disappear. A delayed predator decline can then allow prey to rebound. Watch the early part of the trajectory as well as the last year, since the final counts alone conceal overshoots and reversals."
+    ],
+    "steps": [
+      "Start at capacity one hundred and predict which population will be larger at year one thousand.",
+      "Run the model and record the final prey and predator abundances. Scrub back to inspect early changes.",
+      "Lower capacity to twenty and repeat the thousand-year trial. Identify the first point at which predators disappear.",
+      "Increase the capacity in steps of five and bracket the transition between predator extinction and persistence."
+    ],
+    "misconception": {
+      "myth": "Carrying capacity fixes both population sizes.",
+      "fact": "Resource limits constrain prey growth directly while predator survival depends on feeding and its own loss rate."
+    },
+    "modelNote": "Continuous abundances represent a simplified isolated community. Predators below half an individual disappear permanently, with no immigration or seasonal changes in food supply.",
+    "faq": [
+      {
+        "q": "Why can prey survive after predators disappear?",
+        "a": "Prey have their own source of population growth in the equations. Once predators disappear, predation losses stop and competition for resources becomes the main limit. The prey curve then tends toward the selected carrying capacity from its current abundance."
+      },
+      {
+        "q": "Does a flat population curve mean nothing is happening?",
+        "a": "A stable abundance can hide ongoing births and deaths. At a steady state the gains and losses balance over the measurement interval. Individuals can still be consumed and replaced even while the displayed count stays at nearly the same level."
+      },
+      {
+        "q": "Why specify a cutoff for local extinction?",
+        "a": "A continuous model can produce ever smaller positive fractions during a decline. Those fractions cannot represent a reproducing group indefinitely in a closed habitat. The cutoff provides an explicit rule for interpreting such a trajectory and influences the threshold inferred from the experiment."
+      },
+      {
+        "q": "Can the surviving community withstand another disturbance?",
+        "a": "Persistence at a particular capacity answers a limited question about the specified starting conditions. It does not establish resilience to a drought, disease or loss of habitat. Those events could push a population below the extinction threshold even after a long stable interval."
+      }
+    ]
+  },
+  "climate-change-scenarios": {
+    "question": "How far uphill does a temperature boundary move under three degrees of warming?",
+    "answer": "If air temperature decreases by 6.5 degrees Celsius per kilometre of elevation, a uniform warming of three degrees shifts a fixed temperature boundary uphill by about 462 metres. A boundary starting at 2,000 metres reaches roughly 2,462 metres. The estimate depends directly on the assumed temperature gradient and the local warming experienced by the mountain.",
+    "science": [
+      "Think of a thermometer placed at the original boundary. After warming, that instrument reads higher even though its elevation stays fixed. Moving the thermometer uphill takes it into progressively cooler air. The height gain needed to recover the original temperature can be calculated by dividing the warming by the temperature decrease per unit height.",
+      "A triangular mountain narrows toward its summit. In the cross section you can see the cooler band shrink as its lower edge rises. A real mountain's area at each elevation depends on its shape, and habitat suitability also depends on moisture, soils and other organisms. A temperature boundary is only one part of a habitat description."
+    ],
+    "steps": [
+      "Set the warming scenario to zero and note the elevation of the dashed baseline.",
+      "Choose three degrees and advance to the end of the scenario. Record the new boundary elevation.",
+      "Subtract the baseline height and divide by three to estimate metres of rise per degree.",
+      "Double-check that estimate with a different warming value. Explain the assumption that makes the relationship linear."
+    ],
+    "misconception": {
+      "myth": "Three degrees of warming raises habitat by three metres.",
+      "fact": "Degrees measure temperature and metres measure elevation, so converting between them requires a temperature gradient expressed per unit height."
+    },
+    "modelNote": "Uniform warming and a fixed environmental lapse rate determine the boundary. The progress slider represents a fraction of the scenario and carries no calendar date.",
+    "faq": [
+      {
+        "q": "Why is the mountain shaded above the boundary?",
+        "a": "Air above the threshold elevation is cool enough to satisfy the chosen temperature condition in this ideal profile. The pale cross section identifies that region. It gives a visual reason why a shrinking amount of higher ground can matter to cold-adapted organisms."
+      },
+      {
+        "q": "Does global warming equal local mountain warming?",
+        "a": "A global average combines many places with different responses. Elevation, season, circulation and snow cover affect local conditions. Applying the same increment to the mountain is a scenario assumption that makes the arithmetic transparent and allows different warming levels to be compared."
+      },
+      {
+        "q": "Would trees move uphill at the same speed?",
+        "a": "The thermal conditions suitable for a tree can shift before seeds reach new ground or mature there. Soil development, dispersal, competition and disturbance all affect migration. The moving line estimates a temperature threshold without predicting how quickly a population can follow it."
+      },
+      {
+        "q": "What does the halfway position represent?",
+        "a": "Halfway along the progress slider the model applies half of the chosen warming. For a three-degree scenario that means a rise of one and a half degrees. The boundary has then completed half of its final elevation change."
+      }
+    ]
+  },
+  "aquarium-food-web": {
+    "question": "What happens to an aquarium food web when its snails disappear?",
+    "answer": "Snails link algae to fish in this simplified tank. Removing them releases algae from grazing and cuts off the fish population's only modeled food source. As the trial progresses, algae approach their resource limit while fish decline. Removing fish instead leaves grazers in place and produces a different sequence of changes.",
+    "science": [
+      "Read each curve as an abundance index for one group. The algae use incoming light to grow under a resource limit. Snails gain from consuming algae and lose individuals to fish. Fish gain from hunting and decline when feeding cannot compensate for losses. The arrows in that reasoning follow transfers of food between levels.",
+      "A removal experiment tests an indirect effect by disturbing one part of the web and watching the others. Removing predators can change producers even when those predators never eat the producers themselves. Compare the grazers between the two trials to identify the intermediate step connecting the original disturbance to the algal response."
+    ],
+    "steps": [
+      "Run the intact aquarium for one hundred days. Record all three abundance indices at day fifty.",
+      "Remove snails at day zero and predict whether algae will rise above the intact-tank measurement.",
+      "Move the time control to day fifty again. Compare fish as well as algae with the original tank.",
+      "Repeat after removing fish and describe the chain of responses from predators through snails to algae."
+    ],
+    "misconception": {
+      "myth": "Removing fish affects only the fish curve.",
+      "fact": "Releasing snails from predation changes the grazing pressure on algae, allowing a predator removal to affect producers indirectly."
+    },
+    "modelNote": "Indices are continuous and use constant feeding and growth rates. The tank exchanges no organisms with its surroundings and excludes oxygen and nutrient cycling.",
+    "faq": [
+      {
+        "q": "Why do fish remain visible after food disappears?",
+        "a": "The fish abundance loses a fraction over each time interval when snails are unavailable. A gradual decline reflects that rate assumption. The absence of replenishment through feeding becomes clear over several days even though fish do not vanish immediately."
+      },
+      {
+        "q": "Can algae grow forever after snail removal?",
+        "a": "Algal growth slows as the population approaches its assigned resource limit. Constant light supplies energy but the modeled tank still imposes competition at high abundance. The curve bends toward a ceiling even when grazing losses have been removed entirely."
+      },
+      {
+        "q": "How do I compare two tank treatments fairly?",
+        "a": "Use the same day for both readings and identify which group was removed at the start. Comparing day ten in one treatment with day ninety in another would mix the effect of removal with ordinary changes taking place over time."
+      },
+      {
+        "q": "Why inspect more than the endpoint?",
+        "a": "An early increase in snail abundance can be followed by a decrease if algae become scarce. Reading only the final value hides that sequence. Scrubbing backward helps identify which population peaked first and suggests a mechanism for the later response."
+      }
+    ]
+  },
+  "country-shape-quiz": {
+    "question": "How can an outline help you identify a country?",
+    "answer": "An outline combines several clues, including coastlines, elongated peninsulas, islands and the relative positions of major bends. A reliable identification usually depends on more than one feature. Italy's projecting peninsula suggests a boot, for example, while nearby island outlines help distinguish it from another country with a long narrow mainland.",
+    "science": [
+      "The apparent size of a silhouette depends on the scale used to fit it into the viewing window. Use proportions within the same outline, such as the width of a northern region compared with the length of its southern extension. A large appearance in a quiz window gives little evidence about actual land area.",
+      "Some outlines contain multiple disconnected parts. Water can separate an island from the mainland, or an entire country can consist of an archipelago. Look at the arrangement of the pieces together before selecting a name. Regional feedback after the guess provides a second way to remember the association between the feature and its location."
+    ],
+    "steps": [
+      "Inspect the outline without reading the options. Name one distinctive bend, island chain or peninsula.",
+      "Read the four candidate names and eliminate one whose overall proportions conflict with the drawing.",
+      "Choose a country and check the regional feedback. Associate the most diagnostic feature with that region.",
+      "Complete all eight outlines and replay. Try explaining each identification aloud before selecting an answer."
+    ],
+    "misconception": {
+      "myth": "The largest picture represents the largest country.",
+      "fact": "Each silhouette is fitted to its own display area, so relative area cannot be read by comparing separate rounds."
+    },
+    "modelNote": "The starter set uses eight countries. The full atlas uses generalized Natural Earth boundaries. Small islands and fine coastal details may be omitted at this map resolution.",
+    "faq": [
+      {
+        "q": "Why can two outlines both look familiar?",
+        "a": "Long coastlines and narrow peninsulas recur in different parts of the world. A single feature can suggest several candidates. Check a second independent feature such as the island arrangement or the shape of the opposite end before committing to a name."
+      },
+      {
+        "q": "How does a projection affect shape recognition?",
+        "a": "A flat map represents a curved surface and must distort some spatial relationships. These outlines use geographic coordinates in a rectangular frame. At high latitudes the east-west dimension can appear stretched, so a silhouette may differ from its appearance on a globe."
+      },
+      {
+        "q": "How can a wrong guess help memory?",
+        "a": "Read the country and region in the feedback, then point to the feature that caused the confusion. On a later round recall both the chosen feature and the corrected association. That explanation provides a more specific retrieval cue than remembering a score alone."
+      },
+      {
+        "q": "What should I look for in an island chain?",
+        "a": "Look at the direction in which the chain curves and the relative spacing of its main islands. Those features remain visible when the picture is scaled to fit. Very small offshore islands may be absent from a generalized drawing."
+      }
+    ]
+  },
+  "world-border-lab": {
+    "question": "Which countries would a straight north–south boundary divide?",
+    "answer": "A line of constant longitude runs from pole to pole and can cross several separate landmasses. Countries with mapped land on both sides of the line within a continuous polygon appear in the crossing count. Sliding the line east or west reveals how coastline shape and the arrangement of political territories affect that count.",
+    "science": [
+      "Meridians look parallel on this rectangular map but converge at the poles on Earth. Their angular separation stays constant while the ground distance between them decreases with latitude. Moving a line by ten degrees therefore sweeps a wider strip near the equator than at high latitudes, even though the movement looks uniform on screen.",
+      "The highlighted countries keep their existing geographic outlines while the imaginary boundary cuts across them. A country's inclusion depends on whether a mapped land polygon spans the selected longitude. Islands can contribute crossings of their own, and ocean between disconnected parts does not by itself establish that a line crosses the country's land."
+    ],
+    "steps": [
+      "Begin at zero degrees and identify the ocean and land regions along the prime meridian.",
+      "Move the fictional border to thirty degrees west. Record the count and one highlighted country if present.",
+      "Set the border to thirty degrees east. Trace it from north to south and compare the list.",
+      "Find two nearby longitudes with different counts. Look for a coastline or territorial extremity that explains the change."
+    ],
+    "misconception": {
+      "myth": "Every meridian crosses the same number of countries.",
+      "fact": "The angular definition of longitude is uniform while the distribution of land and political boundaries varies around Earth."
+    },
+    "modelNote": "Generalized country polygons supply the crossing list. Antarctica, unrepresented small islands and offshore maritime claims are excluded from the land comparison.",
+    "faq": [
+      {
+        "q": "Why does the count change in jumps?",
+        "a": "As the meridian moves through the interior of a polygon, that country continues to qualify. The count can change when the meridian passes a polygon's eastern or western limit. A small movement near one of those limits can therefore change the list abruptly."
+      },
+      {
+        "q": "What is special about zero longitude?",
+        "a": "The prime meridian provides the reference from which longitude is measured east or west. Its location is a human convention. It has no special physical property that would force coastlines, national boundaries or distributions of population to follow its path."
+      },
+      {
+        "q": "Could a straight border divide one landscape?",
+        "a": "A meridian follows a coordinate definition regardless of drainage basins, mountain chains or settlements. Drawing one across a country can split connected landscapes. The colored map identifies territory touched by the line, while explaining local consequences would require more detailed physical and human geography."
+      },
+      {
+        "q": "Why is a country listed only once?",
+        "a": "A meridian might enter the same country in several places, particularly where islands lie offshore. The count answers how many distinct mapped countries are crossed, so multiple intersections with one country's land still produce a single entry."
+      }
+    ]
+  },
+  "geography-field-detective": {
+    "question": "How can field observations reveal a country's location?",
+    "answer": "A field observation can combine landforms, water bodies and relative directions to narrow a location. A mountain chain alone may fit many countries, while a named river that flows from that highland toward a particular sea gives a more selective clue. Use the combination to decide which destination best explains the whole note.",
+    "science": [
+      "Start by identifying the scale of each clue. A continent or ocean places the observation within a broad region. A particular mountain, river basin or island channel may distinguish neighboring countries. Keeping the broad clue in mind also helps catch mistaken associations based on a familiar place name in an otherwise incompatible setting.",
+      "As the number of candidate countries increases, guessing becomes less reliable. Comparing alternatives makes geographic reasoning visible. For example, two countries can share a coastline along the same ocean, but a specific relationship between a desert and a mountain range can make one a closer match for the field observation."
+    ],
+    "steps": [
+      "Read the entire field note and separate place names from directional clues before looking at the options.",
+      "Choose two plausible destinations. Say which detail supports one more strongly than the other.",
+      "Submit a guess and use the regional feedback and extra observation to check your explanation.",
+      "Continue through eight rounds as the candidate list grows. Recall an earlier clue that excludes a newly offered destination."
+    ],
+    "misconception": {
+      "myth": "One famous feature always identifies a single country.",
+      "fact": "Rivers, mountain ranges and deserts often cross political boundaries, so several observations can be needed to distinguish neighboring locations."
+    },
+    "modelNote": "Eight authored field notes describe recognizable geographic settings. The rounds use text observations and fixed country choices rather than street photographs or exact coordinates.",
+    "faq": [
+      {
+        "q": "What makes a clue geographically diagnostic?",
+        "a": "A clue is diagnostic among a set of candidates when it favors some over the others. A detail shared by every candidate adds little discrimination. Pairing an ocean-facing coast with a particular mountain range often narrows the set substantially."
+      },
+      {
+        "q": "Why pay attention to relative direction?",
+        "a": "The same two features can occur within a broad region while only one country fits the stated arrangement. Describing a desert to the north or a river flowing toward a named sea conveys spatial information that a simple list of landmarks leaves out."
+      },
+      {
+        "q": "How should I review a missed destination?",
+        "a": "Identify the assumption that led to your choice and find one observation that contradicts it. Then connect the correct country's name with the relevant landform and nearby water body. This gives you a geographic relationship to recall when the field note returns."
+      },
+      {
+        "q": "How does the challenge change between rounds?",
+        "a": "The first observation comes with three possible destinations. Later rounds add candidates until the full set is available. With more alternatives to eliminate, identifying a distinctive combination of clues becomes more valuable than recognizing a single familiar word."
+      }
+    ]
+  }
+}

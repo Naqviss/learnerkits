@@ -1,3 +1,4 @@
+import { practicalSlugs } from "@/lib/simulations/practical/catalog";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { PhysicsActivitiesClient } from "@/components/subjects/physics/PhysicsActivitiesClient";
@@ -10,7 +11,7 @@ describe("Physics simulation page integration", () => {
   const simulation = getSimulationCard("projectile-lab")!;
 
   it("renders every Physics lab without the legacy device notebook", () => {
-    for (const physicsSimulation of subject.simulations) {
+    for (const physicsSimulation of subject.simulations.filter(item => !practicalSlugs.has(item.slug))) {
       const html = renderToStaticMarkup(<PhysicsActivitiesClient locale="en" subject={subject} simulation={physicsSimulation}/>);
       expect(html).not.toContain("YOUR PHYSICS NOTEBOOK");
       expect(html).toContain("Tools &amp; controls");
