@@ -11,6 +11,7 @@ import { solidStructures } from "@/lib/simulations/chemistry/solidStructures";
 import { ChemistryCourseClient } from "./course/ChemistryCourseClient";
 import { getCourseLab } from "@/lib/simulations/chemistry/course/catalog";
 import { LegacyEnhancements } from "./course/LegacyEnhancements";
+import { NomenclaturePractice } from "./NomenclaturePractice";
 import { BenchScene, Chart } from "./BenchScene";
 import { MolecularScene, type Attachment } from "./MolecularScene";
 import { MoleculeBuilder } from "./builder/MoleculeBuilder";
@@ -30,6 +31,10 @@ const format = (v:number, digits=2) => v.toFixed(digits);
 
 type ChemistryProps = { locale:string; subject:SubjectDefinition; simulation:SimulationCard; kitLabel?:string };
 export function ChemistryActivitiesClient(props: ChemistryProps) {
+  const slug = props.simulation.slug;
+  if (slug === "iupac-inorganic-nomenclature" || slug === "iupac-organic-nomenclature") {
+    return <NomenclaturePractice key={slug} organic={slug === "iupac-organic-nomenclature"}/>;
+  }
   if (props.simulation.slug === "molecule-builder-3d") return <MoleculeBuilder locale={props.locale}/>;
   if (props.simulation.slug === "periodic-table-hunt") return <PeriodicTableExplorer locale={props.locale} subject={props.subject} simulation={props.simulation}/>;
   return getCourseLab(props.simulation.slug) ? <ChemistryCourseClient key={props.simulation.slug} {...props}/> : <LegacyChemistryActivitiesClient key={props.simulation.slug} {...props}/>;

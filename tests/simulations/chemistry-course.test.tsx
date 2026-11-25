@@ -121,7 +121,7 @@ describe("chemistry course models",()=>{
  });
  it.skipIf(chemistryCoursePublished)("unpublishes every course lab while keeping the original chemistry labs",()=>{
   const slugs=subjectsCatalog.chemistry.simulations.map(s=>s.slug);
-  expect(slugs).toHaveLength(13);
+  expect(slugs).toHaveLength(15);
   expect(slugs).toContain("periodic-table-hunt");
   for(const lab of courseLabs){expect(slugs).not.toContain(lab.slug);expect(hiddenSimulationSlugs.has(lab.slug)).toBe(true);}
  });

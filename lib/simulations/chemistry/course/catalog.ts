@@ -161,6 +161,7 @@ export const courseSimulationCards: SimulationCard[] = courseLabs.map(lab=>({slu
 export const getCourseLab = (slug:string) => courseLabs.find(lab=>lab.slug===slug);
 
 export const chemistryTopics = [
+  {title:"IUPAC Nomenclature",slugs:["iupac-inorganic-nomenclature","iupac-organic-nomenclature"],text:"Practise naming inorganic compounds from formulas and organic compounds from condensed structures."},
   {title:"Atomic Structure",slugs:["atomic-structure","molecular-geometry-3d","molecule-builder-3d"],text:"Atom structure, protons, neutrons, electrons, isotopes, ions, electron configurations, shells, subshells, and orbitals."},
   {title:"Periodic Table",slugs:["periodic-trends","chemical-bonding"],text:"Atomic radius, ionization energy, electron affinity, electronegativity, and metallic or non-metallic character."},
   {title:"States of Matter",slugs:["states-of-matter-3d","phase-changes-diffusion","gas-law-lab"],text:"Particle models, solid/liquid/gas, melting, freezing, evaporation, condensation, sublimation, diffusion, temperature, pressure, and gas laws."},

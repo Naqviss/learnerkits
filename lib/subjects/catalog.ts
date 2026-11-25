@@ -22,6 +22,7 @@ export const isSubjectIndexed = (slug: SubjectSlug) => !unlistedSubjectSlugs.has
 // recovery, and their text has not been reviewed by a person; several also overlap older labs. Remove a
 // slug once a person has reviewed and rewritten that page.
 export const unlistedSimulationSlugs: ReadonlySet<string> = new Set([
+  "iupac-inorganic-nomenclature", "iupac-organic-nomenclature",
   "fluid-dynamics-simulator", "water-impact-simulator", "planet-collision-simulator", "projectile-target-simulator", "pendulum-wave-designer",
   "food-chain-simulator", "population-ecosystem-simulator", "deforestation-simulator", "ocean-pollution-simulator", "carbon-footprint-simulator",
   "animated-world-map", "country-border-simulator", "population-growth-map", "climate-zones-map", "natural-disaster-map",
@@ -206,6 +207,8 @@ const fullSubjectsCatalog: Record<SubjectSlug, SubjectDefinition> = {
       { slug: "solubility-curve", title: "Solubility Curve Simulator", concepts: "Solubility · temperature · saturation · crystallization", difficulty: "Intermediate", duration: "7–12 min", kind: "Simulation", outcome: "Read and manipulate solubility curves to predict saturation and crystal formation.", seoTarget: "solubility curve simulator", opportunity: "Very High", featured: true, visualMode: "graph" },
       { slug: "limiting-reagent", title: "Limiting Reagent Challenge", concepts: "Stoichiometry · mole ratios · limiting reactant · excess reactant · percentage yield", difficulty: "Advanced", duration: "8–15 min", kind: "Chemistry game", outcome: "Identify the limiting reactant and predict product yield from mole ratios.", seoTarget: "limiting reagent game", opportunity: "Very High", visualMode: "game" },
       { slug: "balance-equation", title: "Balancing Chemical Equations", concepts: "Conservation of mass · coefficients · atoms · reactions", difficulty: "Beginner", duration: "5–10 min", kind: "Chemistry game", outcome: "Balance chemical equations by changing coefficients until every atom, and in ionic equations the charge, is conserved.", seoTarget: "balancing chemical equations practice", opportunity: "Medium", visualMode: "game" },
+      { slug: "iupac-inorganic-nomenclature", title: "IUPAC Nomenclature of Inorganic Compounds", concepts: "Ionic compounds · oxidation states · molecular prefixes", difficulty: "Beginner", duration: "5 min", kind: "Naming practice", outcome: "Use a chemical formula to name salts and binary molecular compounds.", visualMode: "game" },
+      { slug: "iupac-organic-nomenclature", title: "IUPAC Nomenclature of Organic Compounds", concepts: "Parent chains · substituents · functional groups", difficulty: "Beginner", duration: "5 min", kind: "Naming practice", outcome: "Read condensed structures and use chain length, numbering, and suffixes to name organic compounds.", visualMode: "game" },
       { slug: "periodic-table-hunt", title: "Interactive Periodic Table", concepts: "118 elements · groups · periods · families · periodic trends · element properties", difficulty: "Beginner", duration: "5–20 min", kind: "Interactive explorer", outcome: "Explore all 118 elements, compare properties, and investigate periodic families and trends.", seoTarget: "interactive periodic table for students", opportunity: "High", featured: true, visualMode: "game" },
       ...courseSimulationCards,
     ],

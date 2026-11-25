@@ -5,7 +5,7 @@ import { hiddenSimulationSlugs, subjectsCatalog } from "@/lib/subjects/catalog";
 
 describe("chemistry experiments", () => {
   it("covers every chemistry catalog route with distinct activity controls", () => {
-    expect([...activities,...courseLabs].filter(a=>!hiddenSimulationSlugs.has(a.slug)).map(a=>a.slug).sort()).toEqual(subjectsCatalog.chemistry.simulations.map(s=>s.slug).sort());
+    expect([...activities, ...courseLabs, { slug: "iupac-inorganic-nomenclature" }, { slug: "iupac-organic-nomenclature" }].filter(a=>!hiddenSimulationSlugs.has(a.slug)).map(a=>a.slug).sort()).toEqual(subjectsCatalog.chemistry.simulations.map(s=>s.slug).sort());
     expect(new Set(activities.map(a=>a.slug)).size).toBe(13);
     for (const a of activities) for (const c of a.controls) expect(initialValues(a)[c.key]).toBeGreaterThanOrEqual(c.min);
   });
