@@ -31,3 +31,19 @@
 .controlsPanel{height:100%;min-height:0;padding:16px!important;border-color:#dce5f1!important;border-radius:18px;background:#fff!important;color:#17263f;box-shadow:0 18px 45px #172f570e;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#c5d2e4 transparent}.controlTitle{margin-bottom:12px}.controlTitle h2{color:#17263f}.controlTitle button{color:#61738f}.presets{padding-bottom:11px;margin-bottom:12px;border-color:#dce5f1}.presets>span{margin-bottom:7px;color:#6a7e9b}.presets button{min-height:31px;padding:6px 9px;border-color:#d5dfec;background:#f3f7fc;color:#31558f}.presets button:hover{border-color:#7895e9;background:#edf2ff}.controls{gap:13px}.control>span{margin-bottom:5px;color:#304260}.control b{font-weight:700}.control output{color:#4669e8}.control select{min-height:37px;padding:7px 10px;border-color:#d5dfec;background:#f8fafe;color:#263b5d}.precision{margin-top:2px}.precision span{color:#7b8ca4}.precision input{min-height:29px;border-color:#d5dfec;background:#f8fafe;color:#304b73}.playback{padding-top:10px;margin-top:12px;border-color:#dce5f1;color:#60738e}.playback button{border-color:#d5dfec;background:#f3f7fc;color:#526987}.playback button[aria-pressed=true]{border-color:#6e8ee8;background:#e9efff;color:#3156b2}.action,.checkButton{min-height:42px;padding:10px;margin-top:12px;border-color:#4669e8;background:#4669e8;color:#fff;box-shadow:none}.action:hover,.checkButton:hover{background:#385bd0}.shortcuts{display:none}.page button:focus-visible,.page input:focus-visible,.page select:focus-visible,.page a:focus-visible,.page summary:focus-visible{outline-color:#4669e8}
 @media(max-width:850px){.workspace{height:auto}.scenePanel,.controlsPanel{height:auto}.page :global(.spaceThree){height:430px}.page :global(.spaceObserver){overflow:visible}.page :global(.spaceObserver svg){max-height:210px}.controlsPanel{overflow:visible}.shortcuts{display:block}}
 @media(max-width:560px){.page :global(.spaceThree){height:365px}.metrics>div{padding:10px 8px}.controlsPanel{padding:16px!important}}
+
+.lunarObserver { display:flex; flex:1 0 auto; align-items:center; justify-content:center; gap:clamp(12px,3vw,28px); padding:12px 16px; background:#14243b; color:#eef4ff; }
+.lunarObserver svg { width:clamp(64px,10vw,94px); flex:none; }
+.lunarObserver small { color:#b1c3dc; font-size:.78rem; }
+.lunarObserver h3 { color:#f0f5fd; margin:3px 0; font-size:clamp(1rem,2vw,1.4rem); }
+.lunarObserver span { color:#cad8eb; font-size:.85rem; }
+
+.lunarSceneNote { margin:0; padding:8px 14px; background:#f3f7fc; color:#405772; font-size:.85rem; line-height:1.45; }
+
+.studentPrompt { margin:0 0 12px; padding:10px 12px; border-radius:9px; background:#eef4ff; color:#304f80; font-size:.78rem; line-height:1.5; }
+.page .presets button[aria-pressed="true"] { border-color:#7895e9; background:#e9efff; color:#3156b2; }
+@media(min-width:851px) {
+  .focusedWorkspace { height:auto; align-items:start; }
+  .focusedWorkspace .scenePanel { height:auto; min-height:520px; }
+  .focusedWorkspace .controlsPanel { height:auto; overflow:visible; }
+}

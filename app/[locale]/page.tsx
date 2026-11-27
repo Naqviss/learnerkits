@@ -1,3 +1,4 @@
+import { MoonOrbit } from "@/components/home/MoonOrbit";
 import Link from "next/link";
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
@@ -6,13 +7,19 @@ import { getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content
 import { isLocale } from "@/lib/i18n/config";
 import { localizedMetadata, localizedUrl, jsonLd, siteUrl, websiteJsonLd } from "@/lib/seo/metadata";
 import { simulationCountLabel, visibleSubjectSlugs } from "@/lib/subjects/catalog";
-import { boards, liveSubjects } from "@/lib/exam-prep/catalog";
+import { isVerified, liveSubjects } from "@/lib/exam-prep/catalog";
 import { mockExams } from "@/lib/mock-exams/catalog";
 import { getHomeCopy } from "@/lib/home/content";
 import { HomeStart } from "@/components/home/HomeStart";
 import { HomeMotion } from "@/components/home/HomeMotion";
 import { LabArtwork } from "@/components/home/LabArtwork";
 import styles from "@/components/home/home.module.css";
+
+const reachIcons = [
+  <path key="students" d="m2 9 10-5 10 5-10 5L2 9Zm4 2v5q6 5 12 0v-5m4-2v7" />,
+  <g key="instructors"><path d="M10 4h11v12h-6m-4-5 5-3M2 21v-3a5 5 0 0 1 10 0v3" /><circle cx="7" cy="9" r="3" /></g>,
+  <path key="institutions" d="m2 8 10-5 10 5H2Zm3 3v7m5-7v7m4-7v7m5-7v7M3 21h18" />,
+];
 
 const featuredLabIds = [["space", "moon-phases-3d"], ["physics", "projectile-lab"], ["geography", "earthquake-epicenter-finder"], ["chemistry", "molecule-builder-3d"]] as const;
 const guideSlugs = ["how-virtual-science-labs-work", "how-to-create-a-digital-science-notebook", "how-teachers-use-ai-to-prepare-science-lessons"];
@@ -50,26 +57,35 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     <HomeMotion />
     <section className={`container ${styles.hero}`} aria-labelledby="home-heading">
       <div className={styles.heroCopy}>
-        <span className={styles.heroEyebrow}><i aria-hidden="true" />{c.eyebrow}</span>
+        <span className={styles.heroEyebrow}>{labCount} {c.labs} · {visibleSubjectSlugs.length} {c.subjects}</span>
         <h1 id="home-heading">{c.heading}<br /><span>{c.highlight}</span></h1>
         <p>{c.intro}</p>
-        <div className={styles.heroActions}><Link className={styles.primaryButton} href={`/${locale}/simulations`}>{c.explore}<span aria-hidden="true">↗</span></Link><Link className={styles.secondaryButton} href="/en/teacher-kit">{c.teacherCta}</Link></div>
+        <div className={styles.heroActions}><Link className={styles.primaryButton} href={`/${locale}/simulations`}>{c.explore}<span aria-hidden="true">↗</span></Link><a className={styles.secondaryButton} href="#student-exam-prep">{c.examHeading}</a><Link className={styles.secondaryButton} href="/en/teacher-kit">{c.teacherCta}</Link></div>
         <p className={styles.heroFootnote}><span aria-hidden="true">✓</span>{c.free}</p>
-        <div className={styles.heroProof}><span><b>{labCount}</b>{c.labs}</span><span><b>{visibleSubjectSlugs.length}</b>{c.subjects}</span><span><b aria-hidden="true">↗</b>{c.browser}</span></div>
       </div>
-      <HomeStart locale={locale} copy={c.preview} />
-      <div className={styles.heroGlow} aria-hidden="true"><i /><i /></div>
+      {featuredLabs[0] && <div className={styles.cover}>
+        <MoonOrbit earthView={c.earthView} moveMoon={c.moveMoon} pauseOrbit={c.pauseOrbit} />
+        <Link className={styles.coverCaption} href={`/${locale}/simulations/${featuredLabs[0].slug}`}><span><small>{featuredLabs[0].subjectName}</small><strong>{featuredLabs[0].title}</strong></span><b aria-hidden="true">↗</b></Link>
+        <p className={styles.orbitNote}>{c.orbitNote}</p>
+      </div>}
     </section>
 
     <nav className={`container ${styles.subjectStrip}`} aria-label={c.subjectLabel}>
       <span>{c.subjectLabel}</span><div>{visibleSubjectSlugs.map((slug) => <Link key={slug} href={`/${locale}/subjects/${slug}`}>{getLocalizedSubjectName(locale, slug)}<span aria-hidden="true">↗</span></Link>)}</div>
     </nav>
 
-    <section className={`container ${styles.section}`} aria-labelledby="paths-heading" data-home-reveal>
-      <header className={styles.head}><div><span className="eyebrow">{c.toolsLabel}</span><h2 id="paths-heading">{c.toolsHeading}</h2></div><p>{c.toolsIntro}</p></header>
-      <div className={styles.featureGrid}>{c.features.map((feature, index) => <Link key={feature.label} className={`${styles.featureCard} ${[styles.learnCard, styles.reviseCard, styles.teachCard][index]}`} href={featureLinks[index]}>
-        <div className={styles.featureTop}><span>{feature.label}</span><span className={styles.featureGlyph} aria-hidden="true">{["✳", "▤", "✎"][index]}</span></div><h3>{feature.title}</h3><p>{feature.body}</p><span className={styles.featureFoot}>{feature.footer}<b aria-hidden="true">↗</b></span>
-      </Link>)}</div>
+    <section id="our-reach" className={`container ${styles.reach}`} aria-labelledby="reach-heading">
+      <h2 id="reach-heading">{c.reachHeading}</h2>
+      <ul>
+        {c.reach.map(({ count, label }, index) => (
+          <li key={label}>
+            <svg className={styles.reachIcon} viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              {reachIcons[index]}
+            </svg>
+            <strong>{count}</strong> {label}
+          </li>
+        ))}
+      </ul>
     </section>
 
     <section className={`container ${styles.section}`} aria-labelledby="lab-heading" data-home-reveal>
@@ -79,11 +95,29 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       </Link>)}</div><p className={styles.fine}>{c.labNote}</p>
     </section>
 
-    <section className={`container ${styles.section}`} aria-labelledby="exam-heading" data-home-reveal>
+    <section className={`container ${styles.section}`} aria-labelledby="paths-heading" data-home-reveal>
+      <header className={styles.head}><div><span className="eyebrow">{c.toolsLabel}</span><h2 id="paths-heading">{c.toolsHeading}</h2></div><p>{c.toolsIntro}</p></header>
+      <div className={styles.workbench}><HomeStart locale={locale} copy={c.preview} /><div className={styles.featureGrid}>{c.features.map((feature, index) => <Link key={feature.label} className={`${styles.featureCard} ${[styles.learnCard, styles.reviseCard, styles.teachCard][index]}`} href={featureLinks[index]}>
+        <div className={styles.featureTop}><span>{feature.label}</span><span className={styles.featureGlyph} aria-hidden="true">{["✳", "▤", "✎"][index]}</span></div><h3>{feature.title}</h3><p>{feature.body}</p><span className={styles.featureFoot}>{feature.footer}<b aria-hidden="true">↗</b></span>
+      </Link>)}</div></div>
+    </section>
+
+    <section id="student-exam-prep" className={`container ${styles.section}`} aria-labelledby="exam-heading" data-home-reveal>
       <header className={styles.head}><div><span className="eyebrow">{c.examEyebrow}</span><h2 id="exam-heading">{c.examHeading}</h2></div><p>{c.examIntro}</p></header>
       <div className={styles.examGrid}>
-        <article className={`${styles.panel} ${styles.panelTinted}`}><span className={styles.badge}>EXAM PREP</span><h3>{c.prepTitle}</h3><p>{c.prepBody}</p><ol className={styles.steps}>{c.prepSteps.map((step) => <li key={step}>{step}</li>)}</ol><div className={styles.panelFoot}><Link className={styles.primaryButton} href="/en/exam-prep">{c.prepCta} →</Link><span className={styles.fine}>{boards.length} {c.boardLabel} · {liveSubjects.length} {c.subjectLabelShort}</span></div></article>
-        <article className={styles.panel}><span className={styles.badge}>MOCK EXAMS</span><h3>{c.mockTitle}</h3><p>{c.mockBody}</p><ul className={styles.mocks}>{freeMocks.map((exam) => <li key={exam.id}><Link className={styles.mock} href={`/en/mock-exams/${exam.id}`} hrefLang="en"><strong>{exam.title}</strong><span>{exam.paper} · {exam.minutes} {c.minutes}</span><b>{c.tryFree} →</b></Link></li>)}</ul><p className={styles.fine}>{c.mockNote}</p></article>
+        <article className={`${styles.panel} ${styles.panelTinted}`}>
+          <h3>{c.prepTitle}</h3><p>{c.prepBody}</p>
+          <ul className={styles.courseList}>{liveSubjects.map(subject => {
+            const level = subject.id === "physics" ? "as" : "igcse";
+            const verified = isVerified({ board: "cambridge", level, subject: subject.id });
+            return <li key={subject.id}><Link href={`/en/exam-prep/cambridge/${level}/${subject.id}`} hrefLang="en">
+              <strong>{c.courseNames[subject.id as keyof typeof c.courseNames]}</strong>
+              <small>{level.toUpperCase()} · {verified ? c.syllabus : c.previewCourse}</small>
+            </Link></li>;
+          })}</ul>
+          <Link className={styles.arrowLink} href="/en/exam-prep" hrefLang="en">{c.prepCta} →</Link>
+        </article>
+        <article className={styles.panel}><h3>{c.mockTitle}</h3><p>{c.mockBody}</p><ul className={styles.mocks}>{freeMocks.map((exam) => <li key={exam.id}><Link className={styles.mock} href={`/en/mock-exams/${exam.id}`} hrefLang="en"><strong>{exam.title}</strong><span>{exam.paper} · {exam.minutes} {c.minutes}</span><b>{c.tryFree} →</b></Link></li>)}</ul><p className={styles.fine}>{c.mockNote}</p></article>
       </div>
     </section>
 

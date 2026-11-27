@@ -85,6 +85,8 @@ export const simulationDescriptions: Record<string, string> = {
   "solubility-curve": "Learn to read a solubility curve by experiment: dissolve 80 g of solute at 80 °C, cool the water to 50 °C and predict how many grams crystallize.",
   "limiting-reagent": "Mix hydrogen and oxygen in any amounts and find the limiting reagent. See why 5 mol H₂ with 3 mol O₂ runs out of hydrogen first, not oxygen.",
   "periodic-table-hunt": "Explore all 118 elements on an interactive periodic table. Color it by block or family, and compare lithium, sodium and potassium side by side.",
+  "iupac-inorganic-nomenclature": "Name salts and simple compounds from their formulas: work out iron(III) from the charges in FeCl₃, tell carbon monoxide from dioxide, and search 23 compounds.",
+  "iupac-organic-nomenclature": "Name carbon chains from condensed structures: find the longest chain, number from the nearest OH or double bond, and see why C₂H₆O can be two compounds.",
   // Mathematics
   "vector-lab": "Add vectors by components on a grid: combine ⟨2, 3⟩ and ⟨4, 5⟩ into ⟨6, 8⟩, then read its magnitude of 10 and its direction of 53.1°.",
   "function-explorer": "Change a, b and c in ax² + bx + c and watch the parabola move. Read the discriminant, vertex and roots, and build x² + x − 6 with roots −3 and 2.",

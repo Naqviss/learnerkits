@@ -25,7 +25,7 @@
     "launchNotice": "LearnerKits estará completamente disponible el 30 de noviembre. Hasta entonces, algunas funciones siguen en versión preliminar."
   },
   "search": {
-    "placeholder": "Buscar simulaciones y materias…",
+    "placeholder": "Buscar laboratorios…",
     "ariaLabel": "Buscar simulaciones y materias",
     "noResults": "No se encontraron resultados."
   },

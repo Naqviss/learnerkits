@@ -25,7 +25,7 @@
     "launchNotice": "A LearnerKits entra totalmente no ar em 30 de novembro. Até lá, alguns recursos ainda estão em pré-visualização."
   },
   "search": {
-    "placeholder": "Buscar simulações e disciplinas…",
+    "placeholder": "Buscar…",
     "ariaLabel": "Buscar simulações e disciplinas",
     "noResults": "Nenhum resultado encontrado."
   },

@@ -2,14 +2,27 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { blackHole, flybyTrace, sampleTrajectory, kepler, orbitTrace, orbital, planets, rad, type MarsState, type Values } from "@/lib/simulations/spaceLabs/model";
+import { blackHole, eclipse, flybyTrace, sampleTrajectory, kepler, orbitTrace, orbital, planets, rad, type MarsState, type Values } from "@/lib/simulations/spaceLabs/model";
 import { loadSettings, renderProfile } from "@/lib/settings/storage";
+
+function usesTopView(slug:string) {
+  return slug === "moon-phases-3d" || slug === "solar-eclipse-3d";
+}
+
+function frameCamera(camera:THREE.PerspectiveCamera, controls:OrbitControls, slug:string, top:boolean) {
+  const wide = usesTopView(slug);
+  const seasonsView = slug === "earth-seasons-tilt";
+  const center = wide ? -5.5 : 0;
+  controls.target.set(center, 0, 0);
+  camera.position.set(center, top ? (wide ? 31 : seasonsView ? 40 : 18) : (wide ? 10 : seasonsView ? 14 : 7), top ? .01 : (wide ? 29 : seasonsView ? 36 : 17));
+  controls.update();
+}
 
 export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;time:number;mars:MarsState}){
   const host=useRef<HTMLDivElement>(null),live=useRef({values,time,mars});live.current={values,time,mars};const orbit=useRef<OrbitControls|null>(null);
   const cameraRef=useRef<THREE.PerspectiveCamera|null>(null),rendererRef=useRef<THREE.WebGLRenderer|null>(null);
-  const [failed,setFailed]=useState(false),[cameraMode,setCameraMode]=useState("perspective");const view=useRef<{position:THREE.Vector3;target:THREE.Vector3}|null>(null);
-  const design=slug==="mars-landing-challenge"?slug:JSON.stringify(values);
+  const [failed,setFailed]=useState(false),[cameraMode,setCameraMode]=useState(usesTopView(slug)?"top":"perspective");const view=useRef<{position:THREE.Vector3;target:THREE.Vector3}|null>(null);
+  const design=slug==="mars-landing-challenge"||usesTopView(slug)?slug:JSON.stringify(values);
   useEffect(()=>{
     const container=host.current;if(!container)return;let renderer:THREE.WebGLRenderer;
     try{renderer=rendererRef.current??new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:"high-performance"});rendererRef.current=renderer;}catch{setFailed(true);return;}
@@ -17,7 +30,7 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
     renderer.domElement.addEventListener("webglcontextlost",onContextLost,false);
     const profile=renderProfile(loadSettings().quality);renderer.setPixelRatio(Math.min(devicePixelRatio,profile.pixelRatioCap));renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;container.appendChild(renderer.domElement);
     const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(45,1,.1,200);camera.position.set(0,7,17);cameraRef.current=camera;
-    const controls=new OrbitControls(camera,renderer.domElement);controls.enablePan=false;controls.enableZoom=true;controls.minDistance=3;controls.maxDistance=40;controls.zoomSpeed=.7;controls.rotateSpeed=.65;controls.enableDamping=true;controls.target.set(0,0,0);controls.saveState();if(view.current){camera.position.copy(view.current.position);controls.target.copy(view.current.target);}orbit.current=controls;
+    const controls=new OrbitControls(camera,renderer.domElement);controls.enablePan=false;controls.enableZoom=true;controls.minDistance=3;controls.maxDistance=slug==="earth-seasons-tilt"?70:40;controls.zoomSpeed=.7;controls.rotateSpeed=.65;controls.enableDamping=true;frameCamera(camera, controls, slug, usesTopView(slug));controls.saveState();if(view.current){camera.position.copy(view.current.position);controls.target.copy(view.current.target);}orbit.current=controls;
     const focus=()=>container.closest("main")?.focus({preventScroll:true});renderer.domElement.addEventListener("pointerdown",focus);
     const ambient=new THREE.AmbientLight(0x95a7c5,.22);scene.add(ambient);const sun=new THREE.DirectionalLight(0xffffff,3);sun.position.set(12,3,4);scene.add(sun);
     const geometries=new Set<THREE.BufferGeometry>(),materials=new Set<THREE.Material>(),textures=new Set<THREE.Texture>();let alive=true;
@@ -26,15 +39,32 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
     const loader=new THREE.TextureLoader();
     function texture(path:string){const tex=loader.load(path,loaded=>{if(!alive)loaded.dispose();},undefined,()=>{if(alive)setFailed(true);});tex.colorSpace=THREE.SRGBColorSpace;textures.add(tex);return tex;}
     function body(radius:number,color:number,map?:string,parent:THREE.Object3D=scene){
-      const mat=new THREE.MeshStandardMaterial({color:map?0xffffff:color,roughness:.86});
+      const detailedEarth = map === "/textures/earth-day.jpg" && ["moon-phases-3d", "solar-eclipse-3d", "earth-seasons-tilt", "gravity-slingshot"].includes(slug);
+      const mat = detailedEarth
+        ? new THREE.MeshPhongMaterial({color:0xffffff, specular:0x728ca2, shininess:32})
+        : new THREE.MeshStandardMaterial({color:map?0xffffff:color,roughness:.86});
+      if (mat instanceof THREE.MeshPhongMaterial) {
+        mat.specularMap = texture("/textures/earth-specular.jpg");
+        mat.specularMap.colorSpace = THREE.NoColorSpace;
+      }
       const o=mesh(sphere,mat,parent);o.scale.setScalar(radius);
       if(map)mat.map=texture(map);
       if(map==="/textures/earth-day.jpg"){
         mat.normalMap=texture("/textures/earth-normal.jpg");mat.normalMap.colorSpace=THREE.NoColorSpace;mat.normalScale.set(.35,.35);
-        const clouds=mesh(sphere,new THREE.MeshStandardMaterial({map:texture("/textures/earth-clouds.png"),transparent:true,opacity:.6,depthWrite:false}),o);clouds.scale.setScalar(1.008);
+        const clouds=mesh(sphere,new THREE.MeshStandardMaterial({map:texture("/textures/earth-clouds.png"),transparent:true,opacity:detailedEarth ? .92 : .6,depthWrite:false}),o);clouds.scale.setScalar(1.008);
         const atmosphere=mesh(sphere,new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.BackSide,blending:THREE.AdditiveBlending,
           vertexShader:"varying vec3 n; varying vec3 eye; void main(){ vec4 p=modelViewMatrix*vec4(position,1.0); n=normalize(normalMatrix*normal); eye=normalize(-p.xyz); gl_Position=projectionMatrix*p; }",
-          fragmentShader:"varying vec3 n; varying vec3 eye; void main(){ float rim=pow(1.0-abs(dot(normalize(n),normalize(eye))),3.0); gl_FragColor=vec4(0.15,0.48,1.0,rim*0.5); }"}),o);atmosphere.scale.setScalar(1.035);
+          fragmentShader: detailedEarth && usesTopView(slug) ? `
+            varying vec3 n;
+            varying vec3 eye;
+            void main() {
+              vec3 normal = normalize(n);
+              vec3 sunlight = normalize(mat3(viewMatrix) * vec3(-1.0, 0.0, 0.0));
+              float daylight = smoothstep(-0.25, 0.55, dot(normal, sunlight));
+              float rim = pow(1.0 - abs(dot(normal, normalize(eye))), 3.0);
+              gl_FragColor = vec4(0.22, 0.58, 1.0, rim * mix(0.06, 0.6, daylight));
+            }
+          ` : "varying vec3 n; varying vec3 eye; void main(){ float rim=pow(1.0-abs(dot(normalize(n),normalize(eye))),3.0); gl_FragColor=vec4(0.15,0.48,1.0,rim*0.5); }"}),o);atmosphere.scale.setScalar(1.035);
       }
       if(!map){
         // Deterministic illustrative cloud bands / rocky albedo; no remote assets.
@@ -61,18 +91,79 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
     function line(points:THREE.Vector3[],color=0x81a9e9,parent:THREE.Object3D=scene){const g=new THREE.BufferGeometry().setFromPoints(points),m=new THREE.LineBasicMaterial({color,transparent:true,opacity:.7});geometries.add(g);materials.add(m);const l=new THREE.Line(g,m);parent.add(l);return l;}
     function ring(radius:number,color:number,parent:THREE.Object3D=scene){return line(Array.from({length:181},(_,i)=>new THREE.Vector3(radius*Math.cos(i*Math.PI/90),0,radius*Math.sin(i*Math.PI/90))),color,parent);}
     function rod(a:THREE.Vector3,b:THREE.Vector3,r:number,color:number,parent:THREE.Object3D=scene){const o=mesh(new THREE.CylinderGeometry(r,r,a.distanceTo(b),12),new THREE.MeshStandardMaterial({color,metalness:.45,roughness:.4}),parent);o.position.copy(a).add(b).multiplyScalar(.5);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),b.clone().sub(a).normalize());return o;}
-    const starPoints:number[]=[];for(let i=0;i<profile.starCount;i++){const a=i*2.39996,z=1-2*(i+.5)/profile.starCount,r=Math.sqrt(1-z*z);starPoints.push(60*r*Math.cos(a),60*z,60*r*Math.sin(a));}const starsG=new THREE.BufferGeometry();starsG.setAttribute("position",new THREE.Float32BufferAttribute(starPoints,3));geometries.add(starsG);const starsM=new THREE.PointsMaterial({color:0xc5d6ef,size:.12,transparent:true,opacity:.85});materials.add(starsM);scene.add(new THREE.Points(starsG,starsM));
+    const naturalSky = usesTopView(slug) || ["planet-size-comparison-3d", "earth-seasons-tilt", "keplers-laws-orbit", "gravity-slingshot", "black-hole-orbit"].includes(slug);
+    if (naturalSky) scene.background = new THREE.Color(0x050811);
+    const starPoints:number[] = [];
+    const starColors:number[] = [];
+    for (let i = 0; i < profile.starCount; i++) {
+      const longitude = naturalSky ? Math.random() * Math.PI * 2 : i * 2.39996;
+      const height = 1 - 2 * (naturalSky ? Math.random() : (i + .5) / profile.starCount);
+      const horizontal = Math.sqrt(1 - height * height);
+      const distance = naturalSky ? 65 + 30 * Math.random() : 60;
+      starPoints.push(distance * horizontal * Math.cos(longitude), distance * height, distance * horizontal * Math.sin(longitude));
+      if (naturalSky) {
+        const brightness = .19 + .81 * Math.random() ** 2;
+        const warmth = Math.random();
+        starColors.push(brightness * (.77 + .23 * warmth), brightness * .89, brightness * (1 - .22 * warmth));
+      }
+    }
+    const starsG = new THREE.BufferGeometry();
+    starsG.setAttribute("position", new THREE.Float32BufferAttribute(starPoints, 3));
+    if (naturalSky) starsG.setAttribute("color", new THREE.Float32BufferAttribute(starColors, 3));
+    geometries.add(starsG);
+    const starsM = new THREE.PointsMaterial({
+      color: naturalSky ? 0xffffff : 0xc5d6ef, size: naturalSky ? .23 : .12,
+      vertexColors: naturalSky, transparent: true, opacity: .85,
+    });
+    materials.add(starsM);
+    scene.add(new THREE.Points(starsG, starsM));
     let update:()=>void=()=>{};
-    if(slug==="moon-phases-3d"){
-      ambient.intensity=.07;sun.position.set(50,0,0);body(1.25,0xffffff,"/textures/earth-day.jpg");const moon=body(.48,0xcccccc,"/textures/moon.jpg");ring(5,0x44536d);line([new THREE.Vector3(9,0,0),new THREE.Vector3(6,0,0)],0xe5c692);
-      update=()=>{const a=rad(live.current.values.angle);moon.position.set(5*Math.cos(a),0,5*Math.sin(a));moon.rotation.y=-a;};
-    }else if(slug==="solar-eclipse-3d"){
-      sun.position.set(-30,0,0);ambient.intensity=.06;const earth=body(1.55,0xffffff,"/textures/earth-day.jpg");earth.position.x=4;
-      const moon=body(.48,0xbbbbbb,"/textures/moon.jpg");moon.position.set(-1,live.current.values.offset*3,0);
-      const solar=mesh(sphere,new THREE.MeshBasicMaterial({color:0xffdca1}));solar.scale.setScalar(1.7);solar.position.x=-7;
-      const distance=live.current.values.distance,shadowLength=1737.4*(149597870-distance)/(695700-1737.4)/(distance-6371)*3.45;
-      const cone=mesh(new THREE.ConeGeometry(.49,shadowLength,40,1,true),new THREE.MeshBasicMaterial({color:0x090d16,transparent:true,opacity:.65,side:THREE.DoubleSide,depthWrite:false}));cone.rotation.z=-Math.PI/2;cone.position.set(-1+shadowLength/2,moon.position.y,0);
-      line([new THREE.Vector3(-7,0,0),new THREE.Vector3(6,0,0)],0x55677e);
+    if(usesTopView(slug)){
+      ambient.intensity = .1;
+      sun.position.set(-50, 0, 0);
+      // Keep the Sun in world space so the light direction holds as the camera turns.
+      const sunlight = new THREE.SpriteMaterial({
+        map: texture("/textures/lunar-lab-sun.webp"),
+        transparent: true, depthWrite: false, toneMapped: false,
+      });
+      materials.add(sunlight);
+      const solar = new THREE.Sprite(sunlight);
+      solar.position.set(-13, 0, 0);
+      // The bright disk fills half the sprite.
+      const solarSize = 15;
+      solar.scale.setScalar(solarSize);
+      scene.add(solar);
+      const earth = body(1.55, 0xffffff, "/textures/earth-day.jpg");
+      // Tilt the polar axis relative to the orbital plane, including the cloud layer.
+      earth.rotation.order = "ZXY";
+      earth.rotation.z = THREE.MathUtils.degToRad(-23.4);
+      earth.rotation.y = THREE.MathUtils.degToRad(65);
+      const moon = body(.48, 0xcccccc, "/textures/moon.jpg");
+      if (slug === "moon-phases-3d") {
+        ring(5, 0x6984a6);
+        update = () => {
+          const a = rad(live.current.values.angle);
+          moon.position.set(-5 * Math.cos(a), 0, 5 * Math.sin(a));
+          moon.rotation.y = a;
+          solar.scale.setScalar(solarSize * (1 + .008 * Math.sin(3 * a)));
+        };
+      } else {
+        earth.position.x = 4;
+        const shadow = mesh(new THREE.ConeGeometry(.48, 1, 40, 1, true),
+          new THREE.MeshBasicMaterial({color:0x253550, transparent:true, opacity:.65, side:THREE.DoubleSide, depthWrite:false}));
+        shadow.rotation.z = -Math.PI / 2;
+        line([new THREE.Vector3(-13,0,0), new THREE.Vector3(4,0,0)], 0x55677e);
+        update = () => {
+          const {distance, offset} = live.current.values;
+          const observerX = earth.position.x - 1.55;
+          const scale = 3.45 / (384000 - 6371);
+          moon.position.set(observerX - (distance - 6371) * scale, 0, offset * .48 / eclipse(live.current.values).moon);
+          const length = 1737.4 * (149597870 - distance) / (695700 - 1737.4) * scale;
+          shadow.scale.y = length;
+          shadow.position.copy(moon.position);
+          shadow.position.x += length / 2;
+        };
+      }
     }else if(slug==="escape-velocity"||slug==="satellite-orbit-builder"){
       const satellite=slug==="satellite-orbit-builder",v=live.current.values,o=orbital(v,satellite),trace=orbitTrace(v,satellite);const extent=Math.max(...trace.points.map(p=>Math.hypot(p.x,p.y))),scale=6/Math.max(1.4,extent);const system=new THREE.Group();scene.add(system);if(satellite)system.rotation.x=rad(v.inclination);
       body(o.world.radius/o.radius*scale,0xc88268,o.world.name==="Earth"?"/textures/earth-day.jpg":o.world.name==="Moon"?"/textures/moon.jpg":undefined,system);
@@ -85,17 +176,34 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
         const count=trace.points.findIndex(point=>point.t>=p.t);trail.geometry.setDrawRange(0,count<0?points.length:count+1);
       };
     }else if(slug==="keplers-laws-orbit"){
-      const v=live.current.values,scale=3.1/v.axis;const star=mesh(sphere,new THREE.MeshBasicMaterial({color:0xf5d399}));star.scale.setScalar(.35);const planet=body(.2,0x91acdc);const path=Array.from({length:241},(_,i)=>{const p=kepler(v.axis,v.eccentricity,i*Math.PI/120);return new THREE.Vector3(p.x*scale,0,p.y*scale);});line(path);
+      const v=live.current.values,scale=3.1/v.axis;
+      const solarMaterial = new THREE.SpriteMaterial({map:texture("/textures/lunar-lab-sun.webp"),transparent:true,depthWrite:false,toneMapped:false});
+      materials.add(solarMaterial);
+      const star = new THREE.Sprite(solarMaterial); star.scale.setScalar(1.4); scene.add(star);
+      const planet=body(.2,0x91acdc,"/textures/earth-day.jpg");const path=Array.from({length:241},(_,i)=>{const p=kepler(v.axis,v.eccentricity,i*Math.PI/120);return new THREE.Vector3(p.x*scale,0,p.y*scale);});line(path);
       for(const start of [0,Math.PI]){const points=[new THREE.Vector3()];for(let i=0;i<=30;i++){const p=kepler(v.axis,v.eccentricity,start+i/30*.45);points.push(new THREE.Vector3(p.x*scale,0,p.y*scale));}points.push(new THREE.Vector3());line(points,0xbed5f8);}
-      update=()=>{const p=kepler(v.axis,v.eccentricity,rad(v.anomaly)+live.current.time/12/(v.axis**1.5)*Math.PI*2);planet.position.set(p.x*scale,0,p.y*scale);};
+      update=()=>{const p=kepler(v.axis,v.eccentricity,rad(v.anomaly)+live.current.time/12/(v.axis**1.5)*Math.PI*2);planet.position.set(p.x*scale,0,p.y*scale);sun.position.set(-p.x,0,-p.y).normalize().multiplyScalar(20);};
     }else if(slug==="earth-seasons-tilt"){
       const v=live.current.values,globe=new THREE.Group();scene.add(globe);globe.rotation.z=-rad(v.tilt);const earth=body(2.5,0xffffff,"/textures/earth-day.jpg",globe);rod(new THREE.Vector3(0,-3.3,0),new THREE.Vector3(0,3.3,0),.025,0xbad0f0,globe);ring(2.52,0x7b91b8,globe);
       const latitude=rad(v.latitude),latRing=ring(2.54*Math.cos(latitude),0xedc18c,globe);latRing.position.y=2.54*Math.sin(latitude);
-      sun.position.set(20*Math.sin(rad(v.longitude)),0,-20*Math.cos(rad(v.longitude)));ambient.intensity=.06;
+      sun.position.set(20*Math.sin(rad(v.longitude)),0,-20*Math.cos(rad(v.longitude)));ambient.intensity=.12;
+      const sunMaterial = new THREE.SpriteMaterial({map:texture("/textures/lunar-lab-sun.webp"),transparent:true,depthWrite:false,toneMapped:false});
+      materials.add(sunMaterial);
+      const sunMarker = new THREE.Sprite(sunMaterial);
+      sunMarker.position.copy(sun.position).normalize().multiplyScalar(16);
+      sunMarker.scale.setScalar(14);
+      scene.add(sunMarker);
       update=()=>{earth.rotation.y=live.current.time*.12;};
     }else if(slug==="planet-size-comparison-3d"){
       const v=live.current.values,a=planets[v.planetA],b=planets[v.planetB],max=Math.max(a.radius,b.radius),ar=2.6*a.radius/max,br=2.6*b.radius/max;
-      const left=body(ar,a.color,a.name==="Earth"?"/textures/earth-day.jpg":undefined),right=body(br,b.color,b.name==="Earth"?"/textures/earth-day.jpg":undefined);left.position.x=-ar-.55;right.position.x=br+.55;ambient.intensity=.5;line([new THREE.Vector3(-6,-3,0),new THREE.Vector3(6,-3,0)],0x445571);
+      const maps = ["/textures/planet-mercury.jpg", "/textures/planet-venus_atmosphere.jpg", "/textures/earth-day.jpg", "/textures/planet-mars.jpg", "/textures/planet-jupiter.jpg", "/textures/planet-saturn.jpg", "/textures/planet-uranus.jpg", "/textures/planet-neptune.jpg"];
+      const left = body(ar, a.color, maps[v.planetA]);
+      const right = body(br, b.color, maps[v.planetB]);
+      left.position.x = -ar - .55;
+      right.position.x = br + .55;
+      ambient.intensity = .48;
+      sun.position.set(-8, 5, 12);
+      line([new THREE.Vector3(-6,-3,0),new THREE.Vector3(6,-3,0)],0x445571);
       update=()=>{left.rotation.y=right.rotation.y=live.current.time*.07;};
     }else if(slug==="black-hole-orbit"){
       const v=live.current.values,scale=5/Math.max(5,v.radius);const hole=mesh(sphere,new THREE.MeshBasicMaterial({color:0x010205}));hole.scale.setScalar(scale);ring(scale*1.5,0xc9a278);ring(scale*3,0x759aca);ring(scale*v.radius,0xb8d1f4);const probe=body(.12,0xe6bf8a);const b=blackHole(v);probe.visible=b.stable;
@@ -121,7 +229,7 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
     return()=>{alive=false;view.current={position:camera.position.clone(),target:controls.target.clone()};cancelAnimationFrame(raf);ro.disconnect();controls.dispose();orbit.current=null;geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());renderer.domElement.removeEventListener("pointerdown",focus);renderer.domElement.removeEventListener("webglcontextlost",onContextLost);};
   },[slug,design]);
   useEffect(()=>()=>{rendererRef.current?.dispose();rendererRef.current?.domElement.remove();rendererRef.current=null;},[]);
-  function cameraView(mode:string){const c=cameraRef.current,o=orbit.current;if(!c||!o)return;setCameraMode(mode);o.target.set(0,0,0);c.position.set(0,mode==="top"?18:7,mode==="top"?.01:17);o.update();}
+  function cameraView(mode:string){const c=cameraRef.current,o=orbit.current;if(!c||!o)return;setCameraMode(mode);frameCamera(c, o, slug, mode==="top");}
   function zoom(factor:number){const c=cameraRef.current,o=orbit.current;if(!c||!o)return;const offset=c.position.clone().sub(o.target);offset.setLength(Math.max(o.minDistance,Math.min(o.maxDistance,offset.length()*factor)));c.position.copy(o.target).add(offset);o.update();}
-  return <div className="spaceThree"><div className="spaceCanvas" ref={host} role="img" aria-label={`${slug.replaceAll("-"," ")} 3D view`}/>{failed&&<p className="spaceFallback">3D is unavailable on this device. You can still use the controls, measurements, and mission checks.</p>}<div className="spaceCameraBar"><span>Drag to orbit · Scroll / pinch to zoom<br/><small>Illustrative overview scale</small></span><div><button aria-label="Zoom in" onClick={()=>zoom(.8)}>＋</button><button aria-label="Zoom out" onClick={()=>zoom(1.25)}>−</button><button aria-pressed={cameraMode==="top"} onClick={()=>cameraView(cameraMode==="top"?"perspective":"top")}>Top view</button><button onClick={()=>cameraView("perspective")}>Reset view</button></div></div></div>;
+  return <div className="spaceThree"><div className="spaceCanvas" ref={host} role="img" aria-label={`${slug.replaceAll("-"," ")} 3D view`}/>{failed&&<p className="spaceFallback">3D is unavailable on this device. You can still use the controls, measurements, and mission checks.</p>}<div className="spaceCameraBar"><span>Drag to orbit · Scroll / pinch to zoom<br/><small>{slug==="earth-seasons-tilt"?"Sun and Earth sizes and distance are illustrative":slug==="planet-size-comparison-3d"?"Planet radii shown to the same scale · Saturn’s rings omitted":"Illustrative overview scale"}</small></span><div><button aria-label="Zoom in" onClick={()=>zoom(.8)}>＋</button><button aria-label="Zoom out" onClick={()=>zoom(1.25)}>−</button><button aria-pressed={cameraMode==="top"} onClick={()=>cameraView(cameraMode==="top"?"perspective":"top")}>Top view</button><button onClick={()=>cameraView(usesTopView(slug)?"top":"perspective")}>Reset view</button></div></div></div>;
 }

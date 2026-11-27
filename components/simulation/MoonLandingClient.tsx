@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { createPortal } from "react-dom";
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { MoonLandingEngine, type MoonLandingState } from "@/lib/simulations/moonLanding/engine";
 import { FixedStepRunner } from "@/lib/simulations/fixedStep";
 import { MOON_GRAVITY } from "@/lib/physics/constants";
@@ -34,19 +36,6 @@ function makeTerrain(quality: "low" | "medium" | "high") {
   return geometry;
 }
 
-function createCrater(x: number, z: number, radius: number) {
-  const group = new THREE.Group();
-  const floor = new THREE.Mesh(new THREE.CircleGeometry(radius * 0.7, 28), new THREE.MeshStandardMaterial({ color: 0x292a31, roughness: 1, metalness: 0 }));
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.y = 0.04;
-  const rim = new THREE.Mesh(new THREE.RingGeometry(radius * 0.7, radius, 28), new THREE.MeshStandardMaterial({ color: 0x666671, roughness: 1, metalness: 0, side: THREE.DoubleSide }));
-  rim.rotation.x = -Math.PI / 2;
-  rim.position.y = 0.07;
-  group.add(floor, rim);
-  group.position.set(x, 0, z);
-  return group;
-}
-
 export function MoonLandingClient({ m }: { m: Messages }) {
   const searchParams = useSearchParams();
   const selectedMission = SIMULATION_LEARNING_TOOLS_ENABLED ? missions.find((mission) => mission.id === searchParams.get("mission") && mission.simulation === "moonLanding") : undefined;
@@ -59,6 +48,7 @@ export function MoonLandingClient({ m }: { m: Messages }) {
   const cameraModeRef = useRef<"close" | "third" | "overview">("third");
   const [state, setState] = useState<MoonLandingState>(initialState);
   const [paused, setPaused] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(true);
   const [mode, setMode] = useState<"play" | "learn" | "experiment">("play");
   const [timeScale, setTimeScale] = useState(1);
   const [cameraMode, setCameraMode] = useState<"close" | "third" | "overview">("third");
@@ -145,15 +135,17 @@ export function MoonLandingClient({ m }: { m: Messages }) {
     sun.shadow.camera.bottom = -90;
     scene.add(sun);
 
-    const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x70717b, roughness: 1, metalness: 0 });
+    // Apollo 11 landing-site photography supplies detail over the illustrative terrain.
+    const groundTexture = new THREE.TextureLoader().load("/textures/apollo11-landing-ground.webp");
+    groundTexture.colorSpace = THREE.SRGBColorSpace;
+    groundTexture.wrapS = groundTexture.wrapT = THREE.MirroredRepeatWrapping;
+    groundTexture.repeat.set(5, 3);
+    const groundMaterial = new THREE.MeshStandardMaterial({ map: groundTexture, color: 0xb0ada8, roughness: 1, metalness: 0 });
     const ground = new THREE.Mesh(makeTerrain(settings.quality), groundMaterial);
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.12;
     ground.receiveShadow = true;
     scene.add(ground);
-
-    const craterCount = settings.quality === "low" ? 15 : settings.quality === "medium" ? 22 : 30;
-    for (let i = 0; i < craterCount; i += 1) scene.add(createCrater((Math.random() - 0.5) * 370, (Math.random() - 0.5) * 84, 0.8 + Math.random() * 4.4));
 
     const rockMaterial = new THREE.MeshStandardMaterial({ color: 0x4b4c55, roughness: 1, metalness: 0 });
     for (let i = 0; i < (settings.quality === "low" ? 16 : 28); i += 1) {
@@ -194,7 +186,9 @@ export function MoonLandingClient({ m }: { m: Messages }) {
     scene.add(stars);
 
     const earth = new THREE.Group();
-    const earthCore = new THREE.Mesh(new THREE.SphereGeometry(7.5, 32, 32), new THREE.MeshStandardMaterial({ color: 0x2674bd, roughness: 0.86, metalness: 0.05, emissive: 0x071d3b, emissiveIntensity: 0.55 }));
+    const earthTexture = new THREE.TextureLoader().load("/textures/earth-day.jpg");
+    earthTexture.colorSpace = THREE.SRGBColorSpace;
+    const earthCore = new THREE.Mesh(new THREE.SphereGeometry(7.5, 48, 32), new THREE.MeshStandardMaterial({ map: earthTexture, roughness: 0.9 }));
     earthCore.castShadow = true;
     earth.add(earthCore);
     earth.add(new THREE.Mesh(new THREE.SphereGeometry(7.9, 32, 32), new THREE.MeshBasicMaterial({ color: 0x6ebcff, transparent: true, opacity: 0.18, side: THREE.BackSide })));
@@ -202,54 +196,56 @@ export function MoonLandingClient({ m }: { m: Messages }) {
     scene.add(earth);
 
     const lander = new THREE.Group();
+    const fallbackLander = new THREE.Group();
+    lander.add(fallbackLander);
     const bodyMaterial = new THREE.MeshPhysicalMaterial({ color: 0xd7dde3, roughness: 0.3, metalness: 0.64, clearcoat: 0.24 });
     const darkMetal = new THREE.MeshStandardMaterial({ color: 0x283340, roughness: 0.34, metalness: 0.8 });
     const goldFoil = new THREE.MeshStandardMaterial({ color: 0xd4a957, roughness: 0.48, metalness: 0.68 });
     const windowMaterial = new THREE.MeshPhysicalMaterial({ color: 0x071927, roughness: 0.15, metalness: 0.38, clearcoat: 0.55, emissive: 0x071c2b, emissiveIntensity: 1.1 });
     const body = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 3.5, 4.8, 8), bodyMaterial);
     body.castShadow = true;
-    lander.add(body);
+    fallbackLander.add(body);
     const tank = new THREE.Mesh(new THREE.CylinderGeometry(2.35, 2.5, 1.2, 8), goldFoil);
     tank.position.y = -2.45;
     tank.castShadow = true;
-    lander.add(tank);
+    fallbackLander.add(tank);
     const cabin = new THREE.Mesh(new THREE.CylinderGeometry(2.05, 2.65, 2.15, 8), bodyMaterial);
     cabin.position.y = 3.35;
     cabin.castShadow = true;
-    lander.add(cabin);
+    fallbackLander.add(cabin);
     const frontWindow = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.72, 0.12), windowMaterial);
     frontWindow.position.set(0, 3.45, 2.2);
     frontWindow.castShadow = true;
-    lander.add(frontWindow);
+    fallbackLander.add(frontWindow);
     const instrumentBox = new THREE.Mesh(new THREE.BoxGeometry(1.05, 0.72, 0.66), darkMetal);
     instrumentBox.position.set(-2.1, 0.75, 0.6);
     instrumentBox.rotation.z = -0.18;
     instrumentBox.castShadow = true;
-    lander.add(instrumentBox);
+    fallbackLander.add(instrumentBox);
     const antenna = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.09, 3.4, 8), darkMetal);
     antenna.position.set(1.25, 5.4, -0.3);
     antenna.rotation.z = -0.28;
-    lander.add(antenna);
+    fallbackLander.add(antenna);
     const antennaDish = new THREE.Mesh(new THREE.SphereGeometry(0.52, 12, 6, 0, Math.PI * 2, 0, Math.PI / 2), bodyMaterial);
     antennaDish.position.set(1.72, 6.98, -0.3);
     antennaDish.rotation.x = Math.PI;
-    lander.add(antennaDish);
+    fallbackLander.add(antennaDish);
     const legMaterial = new THREE.MeshStandardMaterial({ color: 0xabb7c4, roughness: 0.28, metalness: 0.86 });
     for (const x of [-1, 1]) {
       const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.22, 4.75, 8), legMaterial);
       leg.position.set(x * 3.45, -3.25, 0);
       leg.rotation.z = x * 0.58;
       leg.castShadow = true;
-      lander.add(leg);
+      fallbackLander.add(leg);
       const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.68, 0.68, 0.18, 12), darkMetal);
       foot.position.set(x * 4.8, -5.47, 0);
       foot.castShadow = true;
-      lander.add(foot);
+      fallbackLander.add(foot);
     }
     const nozzle = new THREE.Mesh(new THREE.ConeGeometry(1.1, 1.05, 16), darkMetal);
     nozzle.position.y = -3.2;
     nozzle.rotation.z = Math.PI;
-    lander.add(nozzle);
+    fallbackLander.add(nozzle);
     const flameOuter = new THREE.Mesh(new THREE.ConeGeometry(1.22, 6, 18), new THREE.MeshBasicMaterial({ color: 0x68d7ff, transparent: true, opacity: 0.72 }));
     flameOuter.position.y = -6;
     flameOuter.rotation.z = Math.PI;
@@ -262,6 +258,34 @@ export function MoonLandingClient({ m }: { m: Messages }) {
     flameLight.position.y = -4.9;
     lander.add(flameLight);
     scene.add(lander);
+    let sceneAlive = true;
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("/draco/");
+    const modelLoader = new GLTFLoader();
+    modelLoader.setDRACOLoader(dracoLoader);
+    modelLoader.load("/textures/apollo-lunar-module.glb", (gltf) => {
+      const model = gltf.scene;
+      if (!sceneAlive) {
+        model.traverse((object) => {
+          if (object instanceof THREE.Mesh) {
+            object.geometry.dispose();
+            const materials = Array.isArray(object.material) ? object.material : [object.material];
+            materials.forEach((material) => material.dispose());
+          }
+        });
+        return;
+      }
+      const bounds = new THREE.Box3().setFromObject(model);
+      const size = bounds.getSize(new THREE.Vector3());
+      const center = bounds.getCenter(new THREE.Vector3());
+      const scaleFactor = 10.8 / size.y;
+      model.scale.setScalar(scaleFactor);
+      model.position.set(-center.x * scaleFactor, -5.47 - bounds.min.y * scaleFactor, -center.z * scaleFactor);
+      model.traverse((object) => { if (object instanceof THREE.Mesh) object.castShadow = profile.shadows; });
+      fallbackLander.visible = false;
+      lander.add(model);
+    });
+
 
     let previous = performance.now();
     let raf = 0;
@@ -328,8 +352,12 @@ export function MoonLandingClient({ m }: { m: Messages }) {
     raf = requestAnimationFrame(loop);
 
     return () => {
+      sceneAlive = false;
+      dracoLoader.dispose();
       cancelAnimationFrame(raf);
       resizeObserver.disconnect();
+      groundTexture.dispose();
+      earthTexture.dispose();
       renderer.dispose();
       scene.traverse((object) => {
         if (object instanceof THREE.Mesh || object instanceof THREE.Line || object instanceof THREE.Points) {
@@ -382,11 +410,11 @@ export function MoonLandingClient({ m }: { m: Messages }) {
     <div className="simLayout moonMissionShell">
       <section className="simViewport moonViewport" aria-label={m.moonLanding.title}>
         <div ref={host} className="threeHost" />
-        <div className="overlayTop missionOverlay">
+        {showInstructions && <div id="moon-flight-instructions" className="overlayTop missionOverlay">
           <div className="missionOverlayTop"><span className="missionBadge"><i /> FLIGHT DECK</span><span className="missionClock">LUNAR APPROACH / 01</span></div>
           <strong className="simulationSceneTitle">{m.moonLanding.title}</strong>
           <p>{m.moonLanding.instructions}</p>
-        </div>
+        </div>}
         <div className="sceneReadout"><span>TARGET ZONE</span><strong>PAD 01</strong><small>Keep lateral drift low</small></div>
         <div className="sceneLegend"><span><i className="legendDot cyan" />THRUST</span><span><i className="legendDot amber" />LANDING PAD</span></div>
         {state.status !== "flying" && <div className={`statusBanner ${state.status === "landed" ? "success" : "danger"}`}><strong>{state.status === "landed" ? m.moonLanding.resultSafe : state.status === "hard-landing" ? m.moonLanding.resultHard : m.moonLanding.resultCrash}</strong><span>{state.status === "landed" ? m.moonLanding.safeReason : state.status === "hard-landing" ? m.moonLanding.hardReason : m.moonLanding.crashReason} {m.moonLanding.retry}</span></div>}
@@ -395,27 +423,34 @@ export function MoonLandingClient({ m }: { m: Messages }) {
       <aside className="hud flightHud" aria-live="polite">
         <div className="hudHeader"><div><span className="eyebrow">MISSION CONTROL / TELEMETRY</span><h2>{m.moonLanding.telemetry}</h2></div><span className="livePill"><i /> LIVE</span></div>
         {selectedMission && <div className="missionCard"><div className="missionCardTop"><span className="eyebrow">{m.missions.active}</span><span className={missionComplete ? "missionState complete" : "missionState"}>{missionComplete ? "COMPLETE" : "IN PROGRESS"}</span></div><h3>{t(m, selectedMission.titleKey)}</h3><p>{t(m, selectedMission.descriptionKey)}</p>{score > 0 && <span className="scoreChip">{m.missions.score}: {score}</span>}</div>}
+        <label className="moonInstructionsToggle"><input type="checkbox" checked={showInstructions} onChange={(event) => setShowInstructions(event.target.checked)} aria-controls="moon-flight-instructions" /> Show flight instructions</label>
         <div className="statusStrip"><span className={`statusDot ${state.status}`} /><span>{m.common.status}</span><strong>{displayStatus}</strong></div>
         <div className="telemetryGrid">
           <div className="metric heroMetric"><span>{m.common.altitude}</span><strong>{fmt(state.position.y, 1)}<small> m AGL</small></strong></div>
           <div className="metric heroMetric"><span>{m.common.verticalVelocity}</span><strong className={state.velocity.y < -7 ? "warningValue" : ""}>{fmt(state.velocity.y, 1)}<small> m/s</small></strong></div>
           <div className="metric"><span>{m.common.horizontalVelocity}</span><strong>{fmt(state.velocity.x, 1)} m/s</strong></div>
-          <div className="metric"><span>{m.common.acceleration}</span><strong>{fmt(Math.hypot(state.acceleration.x, state.acceleration.y), 2)} m/s²</strong></div>
           <div className="metric"><span>{m.common.fuel}</span><strong>{fmt(fuelPct, 0)}%</strong></div>
-          <div className="metric"><span>{m.common.mass}</span><strong>{fmt(state.dryMass + state.fuelMass, 0)} kg</strong></div>
-          <div className="metric"><span>{m.common.gravity}</span><strong>{MOON_GRAVITY.toFixed(2)} m/s²</strong></div>
           <div className="metric"><span>ATTITUDE</span><strong>{attitude}</strong></div>
         </div>
-        <div className="attitudeCard"><div className="attitudeDial"><div className="dialTicks" /><div className="dialNeedle" style={{ transform: `rotate(${state.angle}rad)` }}><i /></div><span className="dialCenter">+</span></div><div><span className="eyebrow">ATTITUDE CONTROL</span><strong>{fmt(state.angle * 180 / Math.PI, 1)}°</strong><small>Keep the marker centered for a stable touchdown.</small></div></div>
-        <div className="controlGroup throttleControl"><div className="controlHeading"><label htmlFor="throttle-range">{m.common.throttle}</label><output>{fmt(state.throttle * 100, 0)}%</output></div><input id="throttle-range" className="throttleRange" aria-label={m.common.throttle} type="range" min="0" max="1" step=".01" value={state.throttle} onChange={(event) => { engineRef.current.handleInput({ throttle: Number(event.target.value) }); setState(engineRef.current.getState()); }} /><div className="throttleScale"><span>IDLE</span><span>HOVER</span><span>MAX</span></div></div>
-        <div className="controlGroup"><div className="controlHeading"><label>{m.common.controls}</label><span className="keyHint">A / D or ← / →</span></div><div className="pilotControls"><button aria-label="Rotate left" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); engineRef.current.handleInput({ rotate: -1 }); }} onPointerUp={() => engineRef.current.handleInput({ rotate: 0 })} onPointerCancel={() => engineRef.current.handleInput({ rotate: 0 })} onPointerLeave={() => engineRef.current.handleInput({ rotate: 0 })}>↶ <span>ROTATE</span></button><button aria-label="Rotate right" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); engineRef.current.handleInput({ rotate: 1 }); }} onPointerUp={() => engineRef.current.handleInput({ rotate: 0 })} onPointerCancel={() => engineRef.current.handleInput({ rotate: 0 })} onPointerLeave={() => engineRef.current.handleInput({ rotate: 0 })}><span>ROTATE</span> ↷</button></div></div>
+        <div className="controlGroup throttleControl"><div className="controlHeading"><label htmlFor="throttle-range">{m.common.throttle}</label><output>{fmt(state.throttle * 100, 0)}%</output></div><input id="throttle-range" className="throttleRange" aria-label={m.common.throttle} type="range" min="0" max="1" step=".01" value={state.throttle} onChange={(event) => { engineRef.current.handleInput({ throttle: Number(event.target.value) }); setState(engineRef.current.getState()); }} /><div className="throttleScale"><span>IDLE</span><span>MAX</span></div></div>
+        <div className="controlGroup"><div className="controlHeading"><label>{m.common.controls}</label><span className="keyHint">A / D or ← / →</span></div><div className="pilotControls">{([-1, 1] as const).map((direction) => <button key={direction} type="button"
+          aria-label={direction === -1 ? "Hold to rotate left" : "Hold to rotate right"}
+          onPointerDown={(event) => { if (event.button !== 0) return; event.currentTarget.setPointerCapture(event.pointerId); engineRef.current.handleInput({ rotate: direction }); }}
+          onPointerUp={() => engineRef.current.handleInput({ rotate: 0 })}
+          onPointerCancel={() => engineRef.current.handleInput({ rotate: 0 })}
+          onLostPointerCapture={() => engineRef.current.handleInput({ rotate: 0 })}
+          onKeyDown={(event) => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); engineRef.current.handleInput({ rotate: direction }); } }}
+          onKeyUp={(event) => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); engineRef.current.handleInput({ rotate: 0 }); } }}
+          onBlur={() => engineRef.current.handleInput({ rotate: 0 })}>
+          <svg className="pilotArrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={direction === 1 ? { transform: "scaleX(-1)" } : undefined}><path d="M20 12H4"/><path d="m10 6-6 6 6 6"/></svg><span>{direction === -1 ? "Rotate left" : "Rotate right"}</span>
+        </button>)}</div></div>
         <div className="controlGroup modeControl"><div className="controlHeading"><label>{m.common.mode}</label><span className="keyHint">SPACE {paused ? "TO RESUME" : "TO PAUSE"}</span></div><div className="segmented threeWay"><button className={mode === "play" ? "active" : ""} onClick={() => setMode("play")}>{m.common.play}</button><button className={mode === "learn" ? "active" : ""} onClick={() => setMode("learn")}>{m.common.learn}</button><button className={mode === "experiment" ? "active" : ""} onClick={() => setMode("experiment")}>{m.common.experiment}</button></div></div>
         {mode === "learn" && <div className="card learnCard"><strong>{m.moonLanding.learnTitle}</strong><p className="muted">{m.moonLanding.learnBody}</p><div className="formula">a_net = F/m − 1.62 m/s²</div></div>}
         {mode === "experiment" && <div className="card experimentCard"><span className="eyebrow">{m.common.experimentPreset}</span><p>{m.moonLanding.experimentCopy}</p><div className="miniGrid"><div className="field"><label>{m.common.startAltitude} (m)</label><input className="numberInput" type="number" value={experiment.altitude} onChange={(event) => setExperiment((value) => ({ ...value, altitude: Number(event.target.value) }))} /></div><div className="field"><label>{m.common.startVelocity} (m/s)</label><input className="numberInput" type="number" value={experiment.verticalVelocity} onChange={(event) => setExperiment((value) => ({ ...value, verticalVelocity: Number(event.target.value) }))} /></div><div className="field"><label>{m.common.fuelMass} (kg)</label><input className="numberInput" type="number" value={experiment.fuelMass} onChange={(event) => setExperiment((value) => ({ ...value, fuelMass: Number(event.target.value) }))} /></div><div className="field"><label>{m.common.maxThrust} (N)</label><input className="numberInput" type="number" value={experiment.maxThrust} onChange={(event) => setExperiment((value) => ({ ...value, maxThrust: Number(event.target.value) }))} /></div></div><button className="button primary" onClick={applyExperiment}>{m.common.applyRestart}</button></div>}
         <div className="controlGroup cameraControl"><div className="controlHeading"><label>{m.common.camera}</label><span className="keyHint">VIEW</span></div><div className="segmented threeWay"><button className={cameraMode === "close" ? "active" : ""} onClick={() => setCameraMode("close")}>{m.common.closeCamera}</button><button className={cameraMode === "third" ? "active" : ""} onClick={() => setCameraMode("third")}>{m.common.thirdPerson}</button><button className={cameraMode === "overview" ? "active" : ""} onClick={() => setCameraMode("overview")}>{m.common.overview}</button></div></div>
         <div className="bottomControls"><select className="langSelect" aria-label={m.common.timeScale} value={timeScale} onChange={(event) => setTimeScaleValue(Number(event.target.value))}><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1">1×</option><option value="2">2×</option></select><button className="button" onClick={() => { pausedRef.current = !paused; setPaused(!paused); }}>{paused ? m.common.resume : m.common.pause}</button><button className="button primary" onClick={reset}>{m.common.restart}</button></div>
       </aside>
-      {portalTargets.guide && createPortal(<section className="spaceMissionExtension" aria-labelledby="moon-landing-guide-title"><header><span>SPACE MISSION GUIDE</span><h3 id="moon-landing-guide-title">Plan a controlled lunar landing</h3></header><p>{m.moonLanding.instructions}</p><h3>How to explore</h3><ol><li>Predict how thrust and vehicle mass will affect the descent.</li><li>Use throttle to reduce vertical speed while keeping the lander upright.</li><li>Compare a safe landing with a hard landing, then change one experiment condition.</li><li>Open Measurements to record the touchdown evidence.</li></ol><h3>Physics represented by this model</h3><p>{m.moonLanding.learnBody}</p><div className="simulationConceptFormula">a<sub>net</sub> = F/m − 1.62 m/s²</div></section>, portalTargets.guide)}
+      {portalTargets.guide && createPortal(<section className="spaceMissionExtension" aria-labelledby="moon-landing-guide-title"><header><span>SPACE MISSION GUIDE</span><h3 id="moon-landing-guide-title">Plan a controlled lunar landing</h3></header><p>{m.moonLanding.instructions}</p><h3>How to explore</h3><ol><li>Predict how thrust and vehicle mass will affect the descent.</li><li>Use throttle to reduce vertical speed while keeping the lander upright.</li><li>Compare a safe landing with a hard landing, then change one experiment condition.</li><li>Open Measurements to record the touchdown evidence.</li></ol><p>Spacecraft model: NASA / Michael D. Carbajal. Surface imagery: NASA, Apollo 11 landing panorama. Terrain and landing site are illustrative.</p><h3>Physics represented by this model</h3><p>{m.moonLanding.learnBody}</p><div className="simulationConceptFormula">a<sub>net</sub> = F/m − 1.62 m/s²</div></section>, portalTargets.guide)}
       {portalTargets.measurements && createPortal(<section className="spaceMissionExtension" aria-labelledby="moon-landing-measurements-title"><header><span>LIVE MISSION TELEMETRY</span><h3 id="moon-landing-measurements-title">Measurements & landing conditions</h3></header><dl><div><dt>{m.common.status}</dt><dd>{displayStatus}</dd></div><div><dt>{m.common.altitude}</dt><dd>{fmt(state.position.y, 1)} m</dd></div><div><dt>{m.common.verticalVelocity}</dt><dd>{fmt(state.velocity.y, 1)} m/s</dd></div><div><dt>{m.common.horizontalVelocity}</dt><dd>{fmt(state.velocity.x, 1)} m/s</dd></div><div><dt>{m.common.acceleration}</dt><dd>{fmt(Math.hypot(state.acceleration.x, state.acceleration.y), 2)} m/s²</dd></div><div><dt>{m.common.fuel}</dt><dd>{fmt(fuelPct, 0)}%</dd></div><div><dt>{m.common.mass}</dt><dd>{fmt(state.dryMass + state.fuelMass, 0)} kg</dd></div><div><dt>{m.common.gravity}</dt><dd>{MOON_GRAVITY.toFixed(2)} m/s²</dd></div></dl><a href="#simulation">Return to simulation</a></section>, portalTargets.measurements)}
     </div>
   );

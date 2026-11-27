@@ -1,6 +1,6 @@
 import type { Values } from "./model";
 export const spacePresets: Record<string, { label: string; values: Values }[]> = {
-  "moon-phases-3d": [{ label: "New moon", values: { angle: 0 } }, { label: "Quarter", values: { angle: 90 } }, { label: "Full moon", values: { angle: 180 } }],
+  "moon-phases-3d": [{ label: "New moon", values: { angle: 0 } }, { label: "First quarter", values: { angle: 90 } }, { label: "Full moon", values: { angle: 180 } }, { label: "Last quarter", values: { angle: 270 } }],
   "solar-eclipse-3d": [{ label: "Total", values: { offset: 0, distance: 356000 } }, { label: "Annular", values: { offset: 0, distance: 406000 } }, { label: "Partial", values: { offset: .25, distance: 384000 } }],
   "escape-velocity": [{ label: "Earth orbit", values: { world: 0, altitude: 400, speed: 7.7 } }, { label: "Escape Earth", values: { world: 0, altitude: 400, speed: 11 } }, { label: "Escape Moon", values: { world: 1, altitude: 100, speed: 2.4 } }],
   "satellite-orbit-builder": [{ label: "Circular", values: { altitude: 400, speedScale: 100, inclination: 28 } }, { label: "Elliptical", values: { altitude: 400, speedScale: 120, inclination: 45 } }, { label: "Reentry", values: { altitude: 400, speedScale: 85, inclination: 15 } }],

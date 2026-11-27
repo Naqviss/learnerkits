@@ -47,6 +47,16 @@ const DEFAULT_STATE: OrbitalState = {
   status: "active",
 };
 
+// Begin within rendezvous range, overtaking the target on a near-circular orbit.
+export function createApproachPractice() {
+  const lead = 3000 / radius;
+  return new OrbitalRescueEngine({
+    velocity: { x: 0, y: circularSpeed + 14 },
+    targetPosition: { x: radius * Math.cos(lead), y: radius * Math.sin(lead) },
+    targetVelocity: { x: -circularSpeed * Math.sin(lead), y: circularSpeed * Math.cos(lead) },
+  });
+}
+
 export class OrbitalRescueEngine implements Simulation<OrbitalState, OrbitalInput, OrbitalResult> {
   private state: OrbitalState;
   constructor(private readonly initial: Partial<OrbitalState> = {}) { this.state = this.makeInitialState(); }
@@ -68,7 +78,7 @@ export class OrbitalRescueEngine implements Simulation<OrbitalState, OrbitalInpu
   }
   update(dt: number) {
     const s = this.state;
-    if (s.status !== "active") return;
+    if (s.status !== "active" || !Number.isFinite(dt) || dt <= 0) return;
     const grav = gravitationalAcceleration(s.position);
     const targetGrav = gravitationalAcceleration(s.targetPosition);
     let thrustAcceleration: Vec2 = { x: 0, y: 0 };
@@ -78,8 +88,10 @@ export class OrbitalRescueEngine implements Simulation<OrbitalState, OrbitalInpu
       const prograde = normalize(s.velocity);
       const radial = normalize(s.position);
       const dir = s.direction === "prograde" ? prograde : s.direction === "retrograde" ? scale(prograde, -1) : s.direction === "radial-out" ? radial : scale(radial, -1);
-      thrustAcceleration = scale(dir, force / mass);
-      s.fuelMass -= Math.min(s.fuelMass, massFlowRate(force, s.isp) * dt);
+      const requiredFuel = massFlowRate(force, s.isp) * dt;
+      const consumed = Math.min(s.fuelMass, requiredFuel);
+      thrustAcceleration = scale(dir, force / mass * (consumed / requiredFuel));
+      s.fuelMass -= consumed;
     }
     const ship = semiImplicitEuler(s.position, s.velocity, add(grav, thrustAcceleration), dt);
     const target = semiImplicitEuler(s.targetPosition, s.targetVelocity, targetGrav, dt);

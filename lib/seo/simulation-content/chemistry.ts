@@ -348,4 +348,62 @@ export const chemistryContent: Record<string, SimulationContent> = {
       { q: "Where are metals, nonmetals and metalloids on the periodic table?", a: "Metals make up most of the table, filling the left side and the center, including all the transition metals, lanthanides and actinides. Nonmetals are clustered at the upper right, with hydrogen as the exception at the top left. Between them a diagonal staircase of metalloids, such as boron, silicon, germanium, arsenic, antimony and tellurium, shows mixed properties." },
     ],
   },
+
+  "iupac-inorganic-nomenclature": {
+    question: "How do you name inorganic compounds using IUPAC rules?",
+    answer: "To name an ionic compound, write the metal or positive ion first and the negative ion second, changing a single-element anion’s ending to -ide: NaCl is sodium chloride. If the metal can form more than one ion, a Roman numeral in brackets gives its charge, so FeCl₃ is iron(III) chloride. Polyatomic ions keep their own names, as in calcium carbonate, CaCO₃. Compounds of two nonmetals use number prefixes instead: CO is carbon monoxide and SO₃ is sulfur trioxide.",
+    science: [
+      "Ionic compounds are named from their ions, positive ion first. A metal keeps its element name, and a nonmetal that forms a single-atom anion takes the ending -ide: chlorine becomes chloride, oxygen becomes oxide and fluorine becomes fluoride. Because the charges must cancel, the formula already fixes how many of each ion there are, so ionic names never use number prefixes. MgCl₂ is magnesium chloride, and Al₂O₃ is aluminium oxide (aluminum oxide in US spelling).",
+      "Transition metals such as iron and copper form ions with different charges, and the name has to say which one is present. The Stock system puts the charge, as a Roman numeral, in brackets after the metal. Work it out from the anions: in Cu₂O the single oxide ion is −2, so each copper is +1 and the compound is copper(I) oxide, while CuO is copper(II) oxide. The difference is visible, because copper(I) oxide is red and copper(II) oxide is black.",
+      "Polyatomic ions keep their own names, and brackets in a formula show more than one of them: Ca(OH)₂ is calcium hydroxide and (NH₄)₂SO₄ is ammonium sulfate. An -ate ending means the ion contains oxygen, so sodium chlorate (NaClO₃) is a different substance from sodium chloride. Two nonmetals bonded covalently are named with prefixes (mono-, di-, tri-, tetra-), dropping mono- on the first element: SO₂ is sulfur dioxide, and N₂O, the laughing gas used as an anesthetic, is dinitrogen monoxide.",
+    ],
+    formula: { expression: "Σ (ion charge × number of ions) = 0", meaning: "The charges in an ionic formula add up to zero. In FeCl₃, iron’s charge x satisfies x + 3 × (−1) = 0, so x = +3 and the name is iron(III) chloride." },
+    steps: [
+      "Read the worked example under Name a simple salt: KCl splits into K, potassium, and Cl, which becomes chloride. Then name NaCl the same way in the first practice question.",
+      "For each formula, choose one of the two names. If you are unsure, press Give me a hint, then Show the next hint; every formula has two hints.",
+      "On FeCl₃, add up the charge of the three chloride ions before choosing between Iron(II) chloride and Iron(III) chloride, then read the explanation that appears after your choice.",
+      "Work through all four compounds, from Compound 1 of 4 to 4 of 4, then press Practise again and try to answer each one without a hint.",
+      "Under Look up a compound, type CuO and then Cu2O. Compare the two names and use the oxide ion’s −2 charge to work out the charge on copper in each.",
+    ],
+    misconception: {
+      myth: "The Roman numeral in a name tells you how many negative ions there are.",
+      fact: "The numeral is the metal’s charge, not a count of anions. Copper(II) oxide, CuO, has a II but only one oxide ion, because one −2 oxide balances one Cu²⁺. The numeral matches the number of anions in iron(III) chloride only because each chloride is −1.",
+    },
+    modelNote: "Four practice formulas, each with two candidate names and two hints, plus a lookup list of 23 compounds: salts of single-charge metals, iron and copper compounds that need a numeral, common polyatomic ions and binary nonmetal oxides. It does not name acids, hydrates or complex ions, and it can only find compounds in that list rather than naming any formula you type.",
+    faq: [
+      { q: "What does the Roman numeral in a compound name mean?", a: "It gives the oxidation state, or ion charge, of the metal in front of it. Iron(II) chloride, FeCl₂, contains Fe²⁺ ions, and iron(III) chloride, FeCl₃, contains Fe³⁺ ions. The numeral is needed only for metals that commonly form more than one ion, such as iron, copper, tin and lead. Sodium, potassium, magnesium, calcium and aluminium each form one common ion, so their names have no numeral." },
+      { q: "When do you use prefixes like di- and tri- in chemical names?", a: "Use number prefixes only for compounds of two nonmetals, such as carbon dioxide (CO₂) or sulfur trioxide (SO₃), because the same two elements can combine in several ratios. Leave out mono- on the first element, so CO is carbon monoxide. Many textbooks shorten tetraoxide to tetroxide, as in dinitrogen tetroxide (N₂O₄), but the 2005 IUPAC recommendations keep the full prefix, with monoxide as the one exception." },
+      { q: "What is the difference between chloride and chlorate?", a: "Chloride is the single-atom ion Cl⁻, formed when a chlorine atom gains one electron. Chlorate is the polyatomic ion ClO₃⁻, which contains one chlorine and three oxygen atoms. The -ate ending signals the oxygen, so sodium chloride (NaCl) is table salt, while sodium chlorate (NaClO₃) is a strong oxidizer used to make bleaching chemicals for paper pulp." },
+      { q: "Why is NaHCO₃ called sodium hydrogen carbonate?", a: "NaHCO₃ contains Na⁺ and the hydrogen carbonate ion, HCO₃⁻, which is a carbonate ion that still carries one hydrogen. Its name follows the usual order of positive ion first, then the polyatomic ion. Sodium bicarbonate is the older common name, and baking soda is the kitchen name for the same white powder, which gives off carbon dioxide when it meets an acid or is heated." },
+    ],
+  },
+
+  "iupac-organic-nomenclature": {
+    question: "How do you name organic compounds using IUPAC rules?",
+    answer: "An IUPAC organic name is built in three parts. Find the longest continuous carbon chain and give it a stem: meth-, eth-, prop- or but- for one to four carbons. Add a suffix for the bond type or functional group, such as -ane, -ene, -yne, -ol, -al, -one or -oic acid. Then number the chain so the functional group or double bond gets the lowest number and put branches in front, so CH₃–CH(OH)–CH₂–CH₃ is butan-2-ol and CH₃–CH(CH₃)–CH₃ is 2-methylpropane.",
+    science: [
+      "An organic name has a stem, a suffix and sometimes prefixes. The stem counts the carbons in the longest continuous chain: meth- (1), eth- (2), prop- (3), but- (4), pent- (5). The suffix names the bond type or main functional group: -ane for single bonds only, -ene for a C=C double bond, -yne for a C≡C triple bond, -ol for an alcohol, -al for an aldehyde, -one for a ketone and -oic acid for a carboxylic acid.",
+      "Numbers called locants say where things are. Number the chain from the end that gives the functional group or multiple bond the lowest number, and write the locant just before the suffix: CH₂=CH–CH₂–CH₃ is but-1-ene, and in butan-2-ol the OH is on carbon 2 counting from the nearer end. A side group is named as an alkyl prefix with its own locant, such as the methyl group in 2-methylpropane.",
+      "Names matter because one molecular formula can describe several compounds, called isomers. C₂H₆O is both ethanol, a liquid that boils at 78 °C, and methoxymethane, a gas that boils at about −24 °C, because the oxygen sits between a carbon and a hydrogen in one and between two carbons in the other. IUPAC’s 2013 recommendations keep a few traditional names, such as acetic acid and acetone, as preferred names; ethanoic acid and propanone are the systematic forms most school courses use.",
+    ],
+    formula: { expression: "CₙH₂ₙ₊₂ (alkanes) · CₙH₂ₙ (alkenes)", meaning: "n is the number of carbon atoms. Butane, with n = 4, is C₄H₁₀, while but-1-ene and but-2-ene are both C₄H₈: each C=C double bond removes two hydrogens from the alkane formula." },
+    steps: [
+      "Start with the worked example under Name a carbon chain: CH₃–CH₃ has two carbons, giving eth-, and only single bonds, giving -ane, so it is ethane.",
+      "In the practice set, count the carbons in CH₃–CH₂–CH₃ and choose between Propane and Propene. Press Give me a hint if the bond type is unclear.",
+      "For CH₃–CH(OH)–CH₂–CH₃, count from both ends to the OH group before choosing Butan-1-ol or Butan-2-ol, then read the explanation after you answer.",
+      "On CH₃–CH(CH₃)–CH₃, trace the longest chain without going back over a carbon, and decide whether the bracketed CH₃ belongs to the chain or is a branch.",
+      "Under Look up a compound, type C2H6O. Two matches appear, Ethanol and Methoxymethane; compare their structures to see where the oxygen sits in each.",
+    ],
+    misconception: {
+      myth: "A compound is named after the total number of carbon atoms it contains.",
+      fact: "The stem comes from the longest continuous chain only. 2-Methylpropane has four carbons, but its longest chain has three, so it is named as propane with a methyl branch; butane is its unbranched isomer, CH₃–CH₂–CH₂–CH₃.",
+    },
+    modelNote: "Four practice structures, each with two candidate names and two hints, plus a lookup list of 19 compounds with one to four carbons: alkanes, alkenes, ethyne, alcohols, an ether, an aldehyde, a ketone and a carboxylic acid. Names put the locant before the suffix, as in propan-2-ol. Rings, longer chains and cis/trans isomers, such as the two forms of but-2-ene, are not covered.",
+    faq: [
+      { q: "What do the numbers in names like but-1-ene mean?", a: "They are locants: the numbers of the carbon atoms where a double bond, functional group or branch is found. In but-1-ene, CH₂=CH–CH₂–CH₃, the double bond starts at carbon 1 of a four-carbon chain. The chain is always numbered from the end that gives the lowest locant, so the same molecule is never called but-3-ene." },
+      { q: "How do you find the longest carbon chain in a branched molecule?", a: "Trace every path from one end carbon to another without going back over a carbon, and count the atoms in each. The longest path is the main chain, even if it bends through a branch point in the written formula. Anything left over is a substituent named with -yl, such as methyl (CH₃–) or ethyl (CH₃CH₂–). If two paths tie, choose the one with more branches." },
+      { q: "What is the difference between propan-1-ol and propan-2-ol?", a: "Both have the formula C₃H₈O, but the OH group sits on an end carbon in propan-1-ol and on the middle carbon in propan-2-ol. That changes their properties: propan-1-ol boils at about 97 °C and propan-2-ol at about 82 °C. Propan-2-ol, also called isopropanol or isopropyl alcohol, is the main ingredient of rubbing alcohol and many hand sanitizers." },
+      { q: "What is the difference between an alkane, an alkene and an alkyne?", a: "All three are hydrocarbons, containing only carbon and hydrogen. Alkanes have only single C–C bonds and end in -ane, like propane. Alkenes contain at least one C=C double bond and end in -ene, like ethene, which plants release to ripen fruit. Alkynes contain a C≡C triple bond and end in -yne, like ethyne, also called acetylene, the fuel in oxy-acetylene welding torches." },
+    ],
+  },
 };

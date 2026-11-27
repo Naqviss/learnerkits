@@ -360,10 +360,43 @@ html[data-theme="dark"] .educationFeature>span{background:#202a43}
 }
 .educationSubjectPage .labType{padding-left:0!important}
 
-/* Cute, calm learning shell — shared across discovery pages. */
-:root,[data-theme="light"]{--bg:#f6f8ff;--surface:#ffffff;--surface-2:#f0f4ff;--text:#22304a;--muted:#68758e;--line:#dce4f2;--soft-line:#edf1f8;--accent:#5275e7;--accent2:#8a72de;--nav-bg:rgba(250,251,255,.9);--shadow:0 14px 38px rgba(54,76,128,.1);--radius:24px}
-html[data-theme="dark"]{--bg:#111725;--surface:#192235;--surface-2:#202c42;--text:#f2f6ff;--muted:#abb8cf;--line:#303e58;--soft-line:#253149;--accent:#91adff;--accent2:#c0a9ff;--nav-bg:rgba(17,23,37,.9);--shadow:0 16px 42px rgba(0,0,0,.24)}
-body{background:radial-gradient(circle at 8% 4%,rgba(132,177,255,.22),transparent 24rem),radial-gradient(circle at 95% 14%,rgba(192,169,255,.18),transparent 25rem),var(--bg);background-attachment:fixed}
+/* Shared field-journal palette for public pages and signed-in workspaces. */
+:root, [data-theme="light"] {
+  --bg: #eef4fb;
+  --surface: #fbfdff;
+  --surface-2: #e2ebf7;
+  --text: #172b48;
+  --muted: #4e6078;
+  --line: #c6d4e5;
+  --soft-line: #dce6f1;
+  --accent: #245ba2;
+  --accent2: #475f91;
+  --nav-bg: rgb(238 244 251 / 96%);
+  --shadow: 0 4px 16px rgb(23 43 72 / 6%);
+  --radius: 4px;
+  --ink-button: #214e88;
+  --display-font: Georgia, "Times New Roman", serif;
+}
+html[data-theme="dark"] {
+  --bg: #101d30;
+  --surface: #172941;
+  --surface-2: #223750;
+  --text: #e9f2ff;
+  --muted: #b7c8df;
+  --line: #394d69;
+  --soft-line: #293e58;
+  --accent: #a4cfff;
+  --accent2: #b4c8ef;
+  --nav-bg: rgb(16 29 48 / 96%);
+}
+html[data-theme] {
+  --panel: var(--surface);
+  --panel-solid: var(--surface);
+  --button-bg: var(--surface);
+  --button-text: var(--text);
+  --input: var(--surface);
+}
+body { background: var(--bg); }
 .container{width:min(1200px,calc(100% - 40px))}
 .nav{padding:10px 0;background:var(--nav-bg);border:0;box-shadow:0 6px 28px rgba(44,60,101,.07)}.navInner{min-height:56px;padding:0 15px;border:1px solid color-mix(in srgb,var(--accent) 12%,var(--line));border-radius:20px;background:color-mix(in srgb,var(--surface) 88%,transparent);box-shadow:0 8px 22px rgba(54,76,128,.06)}.brandLogo{width:158px}.navLinks{justify-content:center;gap:5px}.navLinks a{display:flex;align-items:center;gap:7px;padding:10px 12px;border-radius:12px;font-weight:700;color:var(--muted);transition:background .16s ease,color .16s ease,transform .16s ease}.navLinks a span{width:21px;height:21px;display:grid;place-items:center;border-radius:7px;background:var(--surface-2);color:var(--accent);font-size:.68rem}.navLinks a:hover{color:var(--accent);background:var(--surface-2);transform:translateY(-1px)}.navActions{gap:7px}.progressLink{min-height:36px;display:flex;align-items:center;gap:6px;padding:0 11px;border-radius:11px;background:#fff0f6;color:#b54e79;font-size:.78rem;font-weight:800}html[data-theme="dark"] .progressLink{background:#392637;color:#ffc1dd}.settingsLink{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--muted);font-size:0;transition:background .16s ease,color .16s ease,border-color .16s ease,transform .16s ease}.settingsLink:before{content:"⚙";font-size:1rem}.settingsLink:hover{color:var(--accent);background:var(--surface-2);border-color:color-mix(in srgb,var(--accent) 30%,var(--line));transform:translateY(-1px)}.langSelect,.themeToggle{border-radius:11px}.mobileNav{display:none;position:relative}.mobileNav summary{list-style:none;width:40px;height:40px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:10px;cursor:pointer}.mobileNav summary::-webkit-details-marker{display:none}.mobileNav summary span{display:block;height:2px;margin:4px 0;border-radius:2px;background:var(--text)}.mobileNav>div{position:absolute;right:0;top:48px;width:min(270px,calc(100vw - 30px));padding:10px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:var(--shadow);display:grid;gap:4px}.mobileNav a{padding:12px 14px;border-radius:11px;font-size:.9rem;font-weight:720}.mobileNav a:hover{background:var(--surface-2);color:var(--accent)}
 .navSearch{position:relative;flex:0 1 240px;min-width:0}.navSearchInput{width:100%;min-height:38px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--text);padding:0 14px;font-size:.85rem}.navSearchInput::placeholder{color:var(--muted);font-size:.68rem}.navSearchInput:focus-visible{outline:2px solid var(--accent);outline-offset:1px}.navSearchResults{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:60;margin:0;padding:6px;list-style:none;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:var(--shadow);max-height:min(60vh,420px);overflow-y:auto}.navSearchResults li{border-radius:10px}.navSearchResults a{display:flex;flex-direction:column;gap:2px;padding:9px 11px;border-radius:10px;color:var(--text)}.navSearchResults a:hover{background:var(--surface-2)}.navSearchResultTitle{font-weight:720;font-size:.86rem}.navSearchResultDetail{color:var(--muted);font-size:.74rem}.navSearchEmpty{padding:9px 11px;color:var(--muted);font-size:.82rem}.mobileNav .navSearch{flex:none;width:100%;margin-bottom:4px}
@@ -948,7 +981,6 @@ html[data-theme="dark"] .homeHero{background:radial-gradient(ellipse at 87% 10%,
 .navLinks .navDropdownPanel a:hover{background:var(--surface-2);color:var(--accent);transform:none}
 .navDropdownPanel small{color:var(--muted);font-size:.76rem;font-weight:500}
 @media(max-width:1340px){.navDropdownToggle{padding:9px 8px}.navDropdownToggle span{display:none}}
-.mobileNav a.mobileNavSub{padding-inline-start:30px;color:var(--muted)}
 .authMenuLink{display:grid;place-items:center;text-decoration:none}
 .authMenuLink:hover{border-color:color-mix(in srgb,var(--accent) 35%,var(--line));color:var(--accent)}
 /* Topic guide shown inside its simulation page */
@@ -1070,7 +1102,7 @@ html[data-theme="dark"] .protectedFeatureOverlay{background:rgba(12,16,14,.28)}
 
 /* Simulation-page visual system — matches the supplied desktop and mobile references. */
 .simulationFooterLinks{display:none}
-body:has(.universalSimulationPage){--bg:#f7f9fc;--surface:#fff;--surface-2:#f3f6fb;--panel:#fff;--panel-solid:#fff;--text:#17263f;--muted:#61738f;--line:#dce5f1;--soft-line:#e8eef6;--accent:#4669e8;--accent2:#4669e8;--button-bg:#fff;--button-text:#17263f;--nav-bg:#fff;background:#f7f9fc;color:#17263f}
+.universalSimulationPage{--bg:#f7f9fc;--surface:#fff;--surface-2:#f3f6fb;--panel:#fff;--panel-solid:#fff;--text:#17263f;--muted:#61738f;--line:#dce5f1;--soft-line:#e8eef6;--accent:#4669e8;--accent2:#4669e8;--button-bg:#fff;--button-text:#17263f;--nav-bg:#fff;background:#f7f9fc;color:#17263f}
 .universalSimulationPage .container{width:min(1168px,calc(100% - 32px))}
 .universalSimulationPage{--simulation-sticky-offset:142px;padding-bottom:14px;color:#17263f}
 .simulationPageHeader{padding:15px 0 10px}
@@ -1206,3 +1238,364 @@ body:has(.universalSimulationPage) .tutorFab{width:50px;min-width:50px;height:50
 .mobileNav .navDropdownToggle{width:100%;justify-content:space-between;padding:12px 14px;color:var(--text);font-size:.9rem}
 .mobileNav .navDropdownPanel{display:grid;padding-inline-start:12px}
 .mobileNav .navDropdownPanel a{display:block;padding:9px 14px}
+
+/* Journal typography and surfaces shared across route layouts. */
+main :is(h1, h2) { font-family: var(--display-font); font-weight: 400; }
+main :is(.pageTitle, .sectionHeading h2, .subjectHeroCopy h1) { letter-spacing: -.04em; }
+.eyebrow {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  font-family: ui-monospace, monospace;
+}
+.eyebrow::before { content: none; }
+.navSearchInput, .button, .card, .educationIndexCard, .libCard, .subjectQuickNav,
+.subjectPage .subjectSimCard, .librarySimCard, .labCanvas, .labExplain {
+  border-radius: var(--radius);
+}
+.button.primary { color: #fff; background: var(--ink-button); border-color: var(--ink-button); }
+.footer { background: #12263e; }
+
+/* Journal header: flat masthead on a hairline rule, underlined links, square controls,
+   ruled menus. Scoped to .nav so the workspace app bar keeps its own controls. */
+.nav { background: var(--nav-bg); border-bottom: 1px solid var(--line); box-shadow: none; }
+.navInner { border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+
+.navLinks > a, .navDropdownToggle {
+  border-radius: 0;
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: underline 1px transparent;
+  text-underline-offset: 6px;
+  transition: color .16s ease, text-decoration-color .16s ease;
+}
+.navLinks > a:hover, .navDropdownToggle:hover, .navDropdownToggle[aria-expanded="true"] {
+  background: transparent;
+  color: var(--accent);
+  text-decoration-color: currentColor;
+  transform: none;
+}
+/* Drawn chevron: a text caret would pick up the label's underline. */
+.navDropdownToggle i {
+  width: 5px;
+  height: 5px;
+  margin: -3px 2px 0;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  font-size: 0;
+  transform: rotate(45deg);
+}
+.navDropdownToggle[aria-expanded="true"] i { margin-top: 3px; transform: rotate(-135deg); }
+
+.navLinks .navDropdownPanel {
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--text);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 28px rgb(23 43 72 / 12%);
+}
+.navLinks .navDropdownPanel a, .navLinks .navDropdownPanel .navDropdownExpand { border-radius: 2px; }
+.navDropdownPanel strong { font-weight: 600; }
+.navLinks .navDropdownPanel a:hover { background: var(--surface-2); color: var(--text); }
+.navDropdownPanel a:hover strong { color: var(--accent); text-decoration: underline 1px; text-underline-offset: 3px; }
+.navDropdownDivider { margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--line); }
+.navDropdownNested { border-inline-start: 1px solid var(--line); }
+
+.nav :is(.themeToggle, .settingsLink, .authButton, .langSelectWrap.langIconOnly), .mobileNav summary {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: none;
+  transition: color .16s ease, border-color .16s ease;
+}
+.nav :is(.themeToggle, .settingsLink, .authButton, .langSelectWrap.langIconOnly):hover, .mobileNav summary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: none;
+}
+.nav .authButton { font-weight: 600; }
+.mobileNav summary span { border-radius: 0; }
+
+.mobileNav > div {
+  gap: 0;
+  padding: 10px 12px 6px;
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--text);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 28px rgb(23 43 72 / 12%);
+}
+.mobileNav > div > :is(a, .navDropdown) { border-top: 1px solid var(--line); }
+.mobileNav a, .mobileNav .navDropdownToggle { padding: 12px 4px; border-radius: 0; font-weight: 600; }
+.mobileNav a:hover { background: transparent; color: var(--accent); text-decoration: underline 1px; text-underline-offset: 4px; }
+.mobileNav .navDropdownPanel { gap: 0; padding: 0 0 6px 16px; }
+.mobileNav .navDropdownPanel a { padding: 8px 4px; }
+.mobileNav .navSearch { margin-bottom: 8px; }
+.navSearchInput::placeholder { font-size: inherit; }
+
+/* Simulation library, journal edition: ruled filter strip, serif section heads, flat lab cards.
+   Mirrors the homepage subject strip and lab cards; subject colour survives only as small dots. */
+.simLibrary .libHeader { padding-bottom: 28px; }
+.simLibrary .libHeader .pageTitle { margin: 14px 0; font-size: clamp(2.5rem, 4.8vw, 4.2rem); line-height: 1.02; }
+.simLibrary .libHeader .lede { max-width: 62ch; color: var(--muted); }
+
+.libToolbar {
+  gap: 0;
+  margin: 0 0 40px;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--text);
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.libSearch { padding: 16px 0; border-bottom: 1px solid var(--line); }
+.libSearchInput { min-height: 50px; border-radius: var(--radius); background: var(--surface); }
+/* The label sits in its own gutter so wrapped chips line up under the first chip. */
+.libFilterRow { position: relative; align-items: flex-start; flex-wrap: nowrap; gap: 12px; padding: 10px 0; padding-inline-start: 100px; }
+.libFilterLabel {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 10px;
+  color: var(--muted);
+  font: 600 .68rem/34px ui-monospace, monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.libChip {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  font-size: .86rem;
+  font-weight: 600;
+}
+.libChip span {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font: 500 .72rem/1 ui-monospace, monospace;
+}
+.libChip:hover:not(:disabled) { border-color: var(--line); background: var(--surface); }
+.libChip[aria-pressed="true"], .libChipSubject[aria-pressed="true"],
+.libChip[aria-pressed="true"]:hover:not(:disabled) {
+  border-color: var(--ink-button);
+  background: var(--ink-button);
+  color: #fff;
+}
+.libChip[aria-pressed="true"] span { background: transparent; color: rgb(255 255 255 / 78%); }
+.libChipSubject::before { width: 8px; height: 8px; }
+.libChipSoon span { font-size: .6rem; }
+.libClear { flex: none; min-height: 34px; font-weight: 650; text-decoration: underline 1px; text-underline-offset: 3px; }
+
+/* Hairline dividers between subject chips. Each item draws its divider on its start edge; the
+   inner list is pulled 6px outward and the outer one clips it, so no line opens a wrapped row. */
+.libChipList { flex: 1 1 0; min-width: 0; overflow: hidden; }
+.libChipList > div { display: flex; flex-wrap: wrap; row-gap: 4px; margin-inline-start: -6px; }
+.libChipList > div > span { position: relative; display: flex; padding-inline-start: 6px; padding-inline-end: 5px; }
+.libChipList > div > span::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 9px;
+  bottom: 9px;
+  width: 1px;
+  background: var(--line);
+}
+.libChipList .libChip:focus-visible { outline-offset: -2px; }
+
+.libGroup { margin: 0 0 48px; }
+.libGroupHeader { padding: 0 0 12px; margin: 0 0 18px; border-bottom: 1px solid var(--text); }
+.libGroupHeader h2 { display: flex; align-items: center; gap: 12px; font-size: clamp(1.75rem, 2.8vw, 2.4rem); line-height: 1.1; }
+.libGroup:not(.libUpcoming) .libGroupHeader h2::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--subject);
+}
+.libGroupHeader a { color: var(--accent); font-size: .88rem; font-weight: 650; }
+.libGroupHeader a:hover { text-decoration: underline 1px; text-underline-offset: 4px; }
+
+.libCard {
+  gap: 8px;
+  min-height: 196px;
+  padding: 18px 18px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: none;
+  transition: border-color .15s ease;
+}
+.libCard:hover { border-color: var(--accent); box-shadow: none; transform: none; }
+.libCard:focus-visible { outline-color: var(--accent); }
+.libKind { color: var(--accent); font: 600 .66rem/1.4 ui-monospace, monospace; letter-spacing: .08em; }
+.libCard h3 {
+  font-family: var(--display-font);
+  font-size: 1.32rem;
+  font-weight: 400;
+  line-height: 1.18;
+  letter-spacing: -.02em;
+}
+.libCard:hover h3 { text-decoration: underline 1px; text-underline-offset: 4px; }
+.libCardMeta b { color: var(--accent); font-weight: 400; }
+.libCard .priorityBadge {
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--muted);
+  font: 600 .6rem/1 ui-monospace, monospace;
+  letter-spacing: .08em;
+}
+.libCardSoon, .libCardSoon:hover { border-style: dashed; border-color: var(--line); background: transparent; min-height: 150px; }
+.libCardSoon .libKind { color: var(--muted); }
+.libCardSoon:hover h3 { text-decoration: none; }
+
+@media (max-width: 650px) {
+  .libFilterLabel { display: none; }
+  .libFilterRow { padding-inline-start: 0; overflow: visible; }
+  .libChipList { overflow-x: auto; scrollbar-width: none; }
+  .libChipList > div { flex-wrap: nowrap; }
+  .libChipList > div > span { flex: none; }
+  .libCard { min-height: 0; }
+}
+
+.rescueBrief { margin-bottom:16px; padding:12px 14px; border:1px solid #c8dced; border-radius:10px; background:#edf5fc; color:#183955; }
+.rescueBrief p { margin:6px 0 10px; font-size:.85rem; line-height:1.5; }
+.rescueMap { position:absolute; inset:15% 0; width:100%; height:70%; pointer-events:none; }
+
+@media (min-width:901px) {
+  .subject-space .simulationEngine .rescueLayout { height:auto; align-items:start; }
+  .subject-space .simulationEngine .rescueLayout .simViewport { min-height:650px; position:sticky; top:16px; }
+  .subject-space .simulationEngine .rescueLayout > .rescueHud { height:auto; overflow:visible; }
+}
+.subject-space .simulationEngine .rescueLayout > .rescueHud > .rescueBrief { grid-column:1 / -1; }
+
+.simulationEmbedCredit { display:none; }
+html[data-simulation-embed="true"] body:has(.universalSimulationPage) :is(header, footer, nav):not(.simulationEngine *) { display:none; }
+html[data-simulation-embed="true"] .simulationPageHeader,
+html[data-simulation-embed="true"] .simulationSectionNav,
+html[data-simulation-embed="true"] .simulationIntroduction,
+html[data-simulation-embed="true"] .simulationGuideAnchor { display:none; }
+html[data-simulation-embed="true"] .simulationPrimary { padding:0; }
+html[data-simulation-embed="true"] .simulationEmbedCredit { display:block; text-align:center; padding:10px; font-size:.8rem; }
+
+html[data-simulation-embed="true"] body:has(.universalSimulationPage) [data-workspace] { display:block; }
+html[data-simulation-embed="true"] body:has(.universalSimulationPage) [data-workspace] > div:has(> #workspace-sidebar) { display:none; }
+html[data-simulation-embed="true"] body:has(.universalSimulationPage) [data-workspace] > div:has(.universalSimulationPage) { margin:0; padding:0; width:100%; }
+
+.simulationTitleRow { display:flex; align-items:center; justify-content:flex-start; flex-wrap:wrap; gap:12px; }
+.simulationTitleRow h1 { min-width:0; }
+html[data-simulation-embed="true"] body:has(.universalSimulationPage) :is(.tutorFab,.tutorPanel,.consentBanner) { display:none; }
+html[data-simulation-embed="true"] .universalSimulationPage { padding:0; }
+html[data-simulation-embed="true"] .simulationPrimary { width:100%; max-width:none; margin:0; }
+html[data-simulation-embed="true"] .simulationEmbedCredit { background:#fff; }
+
+html[data-simulation-embed="true"] .simulationEmbedCredit a { display:inline-flex; align-items:center; gap:7px; color:#24466b; font-weight:700; text-decoration:none; }
+
+/* Keep primary Moon Landing controls visible together. */
+.subject-space .moonMissionShell .flightHud { padding:12px; }
+.subject-space .moonMissionShell .hudHeader { padding-bottom:7px; }
+.subject-space .moonMissionShell .hudHeader .eyebrow, .subject-space .moonMissionShell .livePill { display:none; }
+.subject-space .moonMissionShell .flightHud h2 { margin:0; font-size:1rem; }
+.subject-space .moonMissionShell .statusStrip { margin:6px 0; padding:5px 8px; }
+.subject-space .moonMissionShell .flightHud .metric, .subject-space .moonMissionShell .flightHud .heroMetric { padding:4px 0; }
+.subject-space .moonMissionShell .flightHud .metric strong { margin-top:2px; }
+.subject-space .moonMissionShell .flightHud .controlGroup, .subject-space .moonMissionShell .cameraControl { margin-top:7px!important; }
+.subject-space .moonMissionShell .controlHeading { margin-bottom:4px; }
+.subject-space .moonMissionShell .pilotControls button { min-height:36px; border-radius:9px; background:#eaf1ff; color:#284b98; font-size:1rem; }
+.subject-space .moonMissionShell .pilotControls button span { color:#385a9e; font-size:.7rem; }
+.subject-space .moonMissionShell .pilotControls button:active { background:#d3e2ff; }
+.subject-space .moonMissionShell .segmented button { min-height:32px; padding:5px; font-size:.7rem; }
+.subject-space .moonMissionShell .bottomControls { margin-top:8px; padding-top:8px; }
+.subject-space .moonMissionShell button:focus-visible, .subject-space .moonMissionShell select:focus-visible, .subject-space .moonMissionShell input:focus-visible { outline:3px solid #88a6ef; outline-offset:2px; }
+@media (min-width:901px) {
+  .subject-space .simulationEngine .moonMissionShell { height:auto; min-height:clamp(480px,calc(100svh - 220px),650px); }
+  .subject-space .simulationEngine .moonMissionShell > .flightHud { height:auto; overflow:visible; }
+  .subject-space .simulationEngine .moonMissionShell > .moonViewport { min-height:clamp(480px,calc(100svh - 220px),650px); }
+}
+
+.subject-space .moonMissionShell .pilotControls button { display:flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:7px 10px; border:1px solid #b6c9ee; box-shadow:0 2px 4px #244b9912; }
+.subject-space .moonMissionShell .pilotControls button span { text-transform:none; letter-spacing:0; font-size:.78rem; }
+.subject-space .moonMissionShell .pilotControls button .pilotArrow { font-size:1.4rem; line-height:1; }
+.subject-space .moonMissionShell .pilotControls button:hover { background:#dce9ff; border-color:#789ce3; }
+.subject-space .moonMissionShell .pilotControls button:active { transform:translateY(1px); box-shadow:none; }
+
+.moonInstructionsToggle { display:flex; align-items:center; gap:8px; margin:8px 0; color:#526681; font-size:.78rem; cursor:pointer; }
+.moonInstructionsToggle input { accent-color:#4669e8; width:16px; height:16px; margin:0; }
+@media (max-width:900px) { .flightHud .moonInstructionsToggle { grid-column:1 / -1; } }
+
+.subject-space .moonMissionShell .pilotControls button svg.pilotArrow { width:20px; height:20px; flex:none; }
+
+.rescueInstructionsToggle { grid-column:1 / -1; }
+.subject-space .rescueHud .segmented button { min-height:38px; border:1px solid #b6c9ee; border-radius:9px; background:#f3f7ff; color:#284b98; font-weight:700; cursor:pointer; }
+.subject-space .rescueHud .segmented button:hover { background:#dce9ff; border-color:#789ce3; }
+.subject-space .rescueHud .segmented button.active { background:#dce8ff; border-color:#7895e9; color:#244783; }
+.subject-space .rescueHud button:focus-visible, .subject-space .rescueHud input:focus-visible, .subject-space .rescueHud select:focus-visible { outline:3px solid #88a6ef; outline-offset:2px; }
+
+.subject-space .simulationEngine .rescueLayout > .rescueHud { display:flex; flex-direction:column; gap:12px; padding:16px; }
+.rescueHeader { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.rescueHeader h2 { margin:0; font-size:1rem; }
+.rescueHeader .moonInstructionsToggle { margin:0; font-size:.72rem; }
+.rescueReadings { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }
+.rescueReadings > div { display:grid; gap:4px; padding:9px 10px; background:#f3f7fc; border:1px solid #e1eaf5; border-radius:9px; min-width:0; }
+.rescueReadings span { color:#647a96; font-size:.72rem; }
+.rescueReadings strong { color:#244f82; font-size:.92rem; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.subject-space .rescueHud .controlGroup { margin:0; padding:0; }
+.subject-space .rescueHud .controlGroup label { color:#526681; font-weight:700; font-size:.78rem; }
+.subject-space .rescueHud .segmented { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.rescuePlayback { display:grid; grid-template-columns:.8fr 1fr 1fr; gap:6px; align-items:end; }
+.rescuePlayback label { display:grid; gap:4px; color:#526681; font-size:.72rem; }
+.rescuePlayback select { width:100%; min-width:0; min-height:38px; }
+.rescuePlayback button { min-height:38px; padding:6px; }
+.rescueBrief { margin:0; padding:10px 12px; }
+.rescueBrief p { margin:4px 0 8px; font-size:.76rem; }
+.rescueBrief .button { padding:7px 10px; font-size:.75rem; }
+.rescueMore { border-top:1px solid #e1eaf5; padding-top:10px; }
+.rescueMore summary { cursor:pointer; color:#3156a5; font-size:.8rem; font-weight:700; }
+.rescueMore .controlGroup { margin-top:10px!important; }
+
+/* Orbital Rescue's panel uses a single column at every viewport width. */
+.subject-space .simulationEngine .simLayout.rescueLayout > .hud.rescueHud {
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:12px;
+  padding:16px;
+  min-width:0;
+  height:auto;
+  overflow:visible;
+}
+.subject-space .rescueHeader {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-width:0;
+}
+.subject-space .rescueHeader h2 {
+  margin:0;
+  color:#17263f;
+  font-family:inherit;
+  font-size:1rem;
+  font-weight:750;
+  letter-spacing:normal;
+  text-transform:none;
+}
+.subject-space .rescueHeader label { flex:none; white-space:nowrap; }
+.subject-space .rescueReadings { width:100%; grid-template-columns:repeat(2,minmax(0,1fr)); }
+.subject-space .rescueReadings > div { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; min-height:58px; }
+.subject-space .rescueReadings strong { white-space:nowrap; overflow-wrap:normal; font-size:clamp(.8rem,1.1vw,.95rem); }
+.subject-space .rescuePlayback { grid-template-columns:minmax(78px,.8fr) minmax(0,1fr) minmax(0,1fr); width:100%; gap:7px; }
+.subject-space .rescuePlayback label { min-width:0; }
+.subject-space .rescuePlayback select { max-width:none; padding:6px 24px 6px 9px; }
+.subject-space .rescuePlayback button { width:100%; min-width:0; font-size:.8rem; white-space:nowrap; }
+.subject-space .rescueHud .rescueBrief { width:100%; }
+@media (max-width:420px) {
+  .subject-space .rescueHeader { align-items:flex-start; flex-direction:column; }
+}

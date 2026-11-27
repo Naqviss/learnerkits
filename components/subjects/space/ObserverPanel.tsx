@@ -1,13 +1,42 @@
+import styles from "./space.module.css";
 import { eclipse, flyby, phaseFraction, rad, seasons, type Values } from "@/lib/simulations/spaceLabs/model";
 
 export function ObserverPanel({slug,values:v}:{slug:string;values:Values}){
   if(slug==="moon-phases-3d"){
-    const angle=rad(v.angle),right=Math.sin(angle)>=0;
-    return <div className="spaceObserver"><svg viewBox="0 0 540 220" role="img" aria-label={`Moon from Earth: ${(phaseFraction(v.angle)*100).toFixed(0)}% illuminated`}><circle cx="130" cy="108" r="75" fill="#101725" stroke="#54627b"/>{Array.from({length:150},(_,i)=>{const y=(i+.5)/75-1,edge=Math.sqrt(Math.max(0,1-y*y))*75,terminator=Math.cos(angle)*edge;return <path key={i} d={`M${130+(right?terminator:-edge)} ${33+i+.5}H${130+(right?edge:-terminator)}`} stroke="#cfd6e3" strokeWidth="1.05"/>;})}<text x="251" y="81" fill="#92a9cc" fontSize="11" letterSpacing="1">VIEW FROM EARTH</text><text x="251" y="119" fill="#dce7f7" fontSize="28">{(phaseFraction(v.angle)*100).toFixed(0)}% illuminated</text><text x="251" y="148" fill="#a6b4cb" fontSize="12">Sunlight changes the visible phase.</text><text x="251" y="168" fill="#a6b4cb" fontSize="12">Earth’s shadow does not cause phases.</text></svg></div>;
+    const angle = ((v.angle % 360) + 360) % 360;
+    const fraction = phaseFraction(angle);
+    const phase = angle === 0 ? "New moon" : angle === 180 ? "Full moon"
+      : angle === 90 ? "First quarter" : angle === 270 ? "Last quarter"
+      : angle < 90 ? "Waxing crescent" : angle < 180 ? "Waxing gibbous"
+      : angle < 270 ? "Waning gibbous" : "Waning crescent";
+    const terminator = Math.abs(Math.cos(rad(angle)) * 75);
+    const waxing = angle <= 180;
+    const litDisk = `M130 33 A75 75 0 0 ${waxing ? 1 : 0} 130 183 A${terminator} 75 0 0 ${fraction > .5 ? Number(waxing) : Number(!waxing)} 130 33Z`;
+    return <section className={styles.lunarObserver} aria-label="View from Earth">
+      <svg viewBox="50 28 160 160" aria-hidden="true">
+        <defs><clipPath id="lunar-observer-light"><path d={litDisk}/></clipPath></defs>
+        <circle cx="130" cy="108" r="76" fill="#293447"/>
+        <image href="/textures/moon-observer.webp" x="55" y="33" width="150" height="150" opacity=".12"/>
+        {angle !== 0 && <image href="/textures/moon-observer.webp" x="55" y="33" width="150" height="150"
+          clipPath={angle === 180 ? undefined : "url(#lunar-observer-light)"}/>}
+      </svg>
+      <div><small>View from Earth</small><h3>{phase}</h3>
+        <span>{Math.round(fraction * 100)}% illuminated · Day {(angle / 360 * 29.53).toFixed(1)}</span>
+      </div>
+    </section>;
   }
   if(slug==="solar-eclipse-3d"){
-    const e=eclipse(v),scale=75/e.sun;
-    return <div className="spaceObserver"><svg viewBox="0 0 540 220" role="img" aria-label={`${e.kind}, ${(e.coverage*100).toFixed(1)}% solar coverage`}><circle cx="137" cy="108" r="78" fill="#f1c57d" opacity=".14"/><circle cx="137" cy="108" r="75" fill="#f3cc8b"/><circle cx={137+v.offset*scale} cy="108" r={e.moon*scale} fill="#151c29" stroke="#52617b"/><rect x="279" y="25" width="255" height="178" fill="#1d2532"/><text x="295" y="75" fill="#91a8c9" fontSize="11">OBSERVER’S SKY · TRUE ANGULAR SCALE</text><text x="295" y="111" fill="#d9e6fb" fontSize="26">{e.kind}</text><text x="295" y="141" fill="#c2d0e7" fontSize="13">{(e.coverage*100).toFixed(1)}% solar coverage</text><text x="295" y="169" fill="#94a7c1" fontSize="11">Move the alignment toward 0°.</text></svg></div>;
+    const {kind, sun, moon, coverage} = eclipse(v);
+    const scale = 40 / sun;
+    return <section className={styles.lunarObserver} aria-label="View from Earth">
+      <svg viewBox="-60 -60 120 120" aria-hidden="true">
+        <image href="/textures/lunar-lab-sun.webp" x="-80" y="-80" width="160" height="160"/>
+        <circle cx={v.offset * scale} cy="0" r={moon * scale} fill="#101724"/>
+      </svg>
+      <div><small>View from Earth</small><h3>{kind === "No eclipse" ? kind : kind + " eclipse"}</h3>
+        <span>{(coverage * 100).toFixed(1)}% of the Sun covered</span>
+      </div>
+    </section>;
   }
   if(slug==="earth-seasons-tilt"){
     const s=seasons(v);return <div className="spaceObserver"><div className="spaceDayTitle"><span>DAYLIGHT AT {v.latitude}° LATITUDE</span><strong>{s.daylight.toFixed(2)} hours</strong></div><div className="spaceDayBar"><i style={{left:`${(24-s.daylight)/48*100}%`,width:`${s.daylight/24*100}%`}}/></div><div className="spaceDayScale"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div><p>Blue: daylight · dark: night · amber ring: observer latitude</p></div>;

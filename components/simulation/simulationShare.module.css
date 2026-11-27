@@ -1,0 +1,28 @@
+.share { position:relative; flex:none; }
+.share summary { display:flex; align-items:center; gap:8px; list-style:none; cursor:pointer; padding:10px 16px; border:1px solid #d4def2; border-radius:12px; background:linear-gradient(135deg,#f5f8ff,#e8efff); color:#284d9b; box-shadow:0 3px 10px #274b9b14; font-size:.86rem; font-weight:700; }
+.share summary svg { width:18px; height:18px; }
+.share summary:focus-visible { outline:3px solid #7899e9; outline-offset:3px; }
+.share summary::-webkit-details-marker { display:none; }
+.share summary:hover, .share[open] summary { border-color:#839fe0; background:#e1eaff; box-shadow:0 5px 16px #274b9b25; }
+.panel { position:absolute; z-index:80; top:100%; right:0; width:min(400px,calc(100vw - 32px)); max-height:min(72vh,680px); overflow:auto; padding:14px; border:1px solid #dce5f1; border-radius:14px; background:#fff; color:#17263f; box-shadow:0 16px 42px #172f5730; display:grid; gap:8px; }
+.heading { font-size:1rem; }
+.description { margin:0 0 5px; color:#61738f; font-size:.8rem; line-height:1.4; }
+.links { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; margin-bottom:6px; }
+.links a, .panel button { display:flex; align-items:center; gap:8px; cursor:pointer; border:1px solid #dce5f1; border-radius:8px; background:#f8fafd; color:#24466b; padding:6px 7px; font:inherit; font-size:.75rem; text-decoration:none; text-align:left; }
+.links a:hover, .panel button:hover { background:#edf3ff; border-color:#a7bce5; }
+.icon { display:grid; place-items:center; width:22px; height:22px; border-radius:6px; background:#e5edfa; color:#315fab; font-size:.8rem; font-weight:800; }
+.panel label { display:grid; gap:4px; font-size:.78rem; font-weight:650; }
+.panel input, .panel textarea { width:100%; padding:8px; border:1px solid #cad8ec; border-radius:6px; color:#24466b; background:#f6f9fc; font:inherit; font-size:.75rem; }
+.panel > button { justify-self:start; }
+.panel > span { font-size:.8rem; }
+
+.wrapper { position:relative; flex:none; }
+.notification:not(:empty) { position:fixed; z-index:1000; inset:auto 20px 20px auto; max-width:min(350px,calc(100vw - 40px)); padding:12px 16px; border-radius:10px; background:#173456; color:#fff; font-size:.85rem; box-shadow:0 8px 24px #172f5738; }
+
+.copyRow { display:grid; gap:3px; }
+.copyRow > div { display:flex; gap:6px; min-width:0; }
+.copyRow input { flex:1; min-width:0; }
+.copyRow button { flex:none; justify-content:center; width:38px; }
+@media (max-width:380px) { .links { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+.icon svg { width:15px; height:15px; }

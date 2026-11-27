@@ -25,7 +25,7 @@
     "launchNotice": "LearnerKits 将于11月30日全面上线。在此之前，部分功能仍处于预览阶段。"
   },
   "search": {
-    "placeholder": "搜索模拟和学科…",
+    "placeholder": "搜索实验…",
     "ariaLabel": "搜索模拟和学科",
     "noResults": "未找到结果。"
   },

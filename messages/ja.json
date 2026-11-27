@@ -25,7 +25,7 @@
     "launchNotice": "LearnerKitsは11月30日に正式公開されます。それまでは一部の機能がプレビュー版です。"
   },
   "search": {
-    "placeholder": "シミュレーションと分野を検索…",
+    "placeholder": "ラボを検索…",
     "ariaLabel": "シミュレーションと分野を検索",
     "noResults": "検索結果はありません。"
   },

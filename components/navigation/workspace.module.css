@@ -1,5 +1,5 @@
 .shell {
-  --workspace-accent: #1967d2;
+  --workspace-accent: var(--accent);
   --workspace-gutter: clamp(18px, 3.2vw, 46px);
   --workspace-page-width: 1180px;
   display: grid;
@@ -11,7 +11,7 @@
 }
 .shell[data-nav-collapsed="true"] { grid-template-columns: 72px minmax(0, 1fr); }
 
-.content { min-width: 0; min-height: 100dvh; background: #f8fafd; }
+.content { min-width: 0; min-height: 100dvh; background: var(--bg); }
 .content > :global(main),
 .content > :global(.container) {
   width: min(var(--workspace-page-width), calc(100% - 2 * var(--workspace-gutter))) !important;

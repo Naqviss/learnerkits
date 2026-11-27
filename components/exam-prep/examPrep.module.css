@@ -15,7 +15,7 @@
 .sectionHead h2{font-size:clamp(1.4rem,2.6vw,1.9rem);letter-spacing:-.035em;margin:6px 0}
 .sectionHead p{color:var(--muted);margin:0;line-height:1.6}
 .tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.tile{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;min-height:170px;padding:22px;border:1px solid var(--line);border-radius:20px;background:var(--surface);transition:transform .17s,border-color .17s}
+.tile{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;min-height:170px;padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);transition:transform .17s,border-color .17s}
 a.tile:hover{transform:translateY(-3px);border-color:var(--accent)}
 .tile h3{font-size:1.15rem;letter-spacing:-.025em;margin:6px 0 0;line-height:1.25}
 .tile p{color:var(--muted);font-size:.86rem;line-height:1.55;margin:0}
@@ -89,14 +89,14 @@ a.tile:hover{transform:translateY(-3px);border-color:var(--accent)}
 .chapterNav a span:nth-child(2){flex:1}
 .backLink{display:block;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:.8rem;font-weight:700;color:var(--accent)}
 .main{display:flex;flex-direction:column;gap:16px;min-width:0}
-.panel{padding:22px;border:1px solid var(--line);border-radius:20px;background:var(--surface)}
+.panel{padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
 .panel h2{font-size:1.2rem;letter-spacing:-.035em;margin:0}
 .panel p{color:var(--muted);font-size:.9rem;line-height:1.7;margin:8px 0 12px}
 .panelTop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px}
 .formula{margin:14px 0;padding:17px;border-radius:12px;background:var(--surface-2);text-align:center;font-size:1.5rem;font-weight:830;letter-spacing:-.02em}
 .example{padding:13px 15px;border-left:3px solid var(--accent);border-radius:0 11px 11px 0;background:color-mix(in srgb,var(--accent) 6%,var(--surface));font-size:.86rem;line-height:1.6}
 .example strong{display:block;margin-bottom:4px}
-.labCard{padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--surface-2)}
+.labCard{padding:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface-2)}
 .labCard h3{font-size:1rem;margin:4px 0}
 .labCard p{font-size:.82rem;margin:0 0 12px}
 .labTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
@@ -129,7 +129,7 @@ a.tile:hover{transform:translateY(-3px);border-color:var(--accent)}
 .gateIcon{width:50px;height:50px;margin:0 auto 10px;display:grid;place-items:center;border-radius:17px;font-size:1.4rem;background:color-mix(in srgb,var(--accent2) 13%,var(--surface))}
 .gateActions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .paperGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.paperCard{display:flex;flex-direction:column;gap:11px;min-height:230px;padding:22px;border:1px solid var(--line);border-radius:20px;background:var(--surface)}
+.paperCard{display:flex;flex-direction:column;gap:11px;min-height:230px;padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
 .emphasis{border-color:color-mix(in srgb,var(--accent) 36%,var(--line));background:color-mix(in srgb,var(--accent) 4%,var(--surface))}
 .paperCard h3{font-size:1.15rem;letter-spacing:-.03em;line-height:1.25;margin:0}
 .paperCard p{color:var(--muted);font-size:.84rem;margin:0}

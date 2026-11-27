@@ -39,6 +39,6 @@ export default async function ArticlesPage({ params }: { params: Promise<{ local
       {articles.map((article) => <ArticleCard key={article.slug} article={article} readingMinutes={article.readingMinutes} headingLevel={2} />)}
     </ArticleFilter>
     <ManagedArticleList sourceSlugs={articles.map((article) => article.slug)} />
-    <aside className={styles.note}><h2>Learn it. Then try it.</h2><p>Pair these articles with our focused science guides and interactive labs. Every model has assumptions; make them part of your explanation.</p><div className={styles.links}><Link href="/en/simulations">Explore simulations →</Link><Link href="/en/guides">Read science guides →</Link><Link href="/en/editorial-policy">Editorial policy →</Link></div></aside>
+    <aside className={styles.note}><h2>Learn it. Then try it.</h2><p>Pair these articles with our interactive labs. Every model has assumptions; make them part of your explanation.</p><div className={styles.links}><Link href="/en/simulations">Explore simulations →</Link><Link href="/en/editorial-policy">Editorial policy →</Link></div></aside>
   </main>;
 }

@@ -58,6 +58,12 @@ export function getSimulationDescription(slug: string, locale: string): string |
   return locale === "en" ? simulationDescriptions[slug] : undefined;
 }
 
+// Pages whose content was written after the main review, so the visible "Updated" date stays truthful.
+const laterReviewDates: Record<string, string> = {
+  "iupac-inorganic-nomenclature": "2026-11-28",
+  "iupac-organic-nomenclature": "2026-11-28",
+};
+
 export function simulationReviewDate(slug: string) {
-  return Object.hasOwn(investigationContent, slug) ? "2026-11-22" : simulationContentUpdated;
+  return laterReviewDates[slug] ?? (Object.hasOwn(investigationContent, slug) ? "2026-11-22" : simulationContentUpdated);
 }

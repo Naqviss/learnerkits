@@ -20,10 +20,7 @@ export function Nav({ locale, m }: { locale: string; m: Messages }) {
   ];
   return <nav className="nav"><div className="container navInner">
     <Link className="brand" href={locale === "en" ? "/" : `/${locale}`} aria-label={siteName}><img className="brandLogo" src="/learnerkits-logo.svg" width="300" height="64" alt={siteName}/></Link>
-    <div className="navLinks"><NavDropdown label={m.navigation.simulations} items={[
-        ...subjectLinks,
-        ...(locale === "en" ? [{ href: "/en/guides", label: "Guides", detail: "How each simulation works and what to try", divider: true }] : []),
-      ]}/>{locale === "en" && <><NavDropdown label="Exam Preparation" items={[
+    <div className="navLinks"><NavDropdown label={m.navigation.simulations} items={subjectLinks}/>{locale === "en" && <><NavDropdown label="Exam Preparation" items={[
         { href: "/en/exam-prep", label: "Preparation", detail: "Choose your exam board, explore syllabus topics, and practise with interactive lessons.", children: [
           ...boards.map((board) => ({ href: `/en/exam-prep/${board.id}`, label: board.name, detail: board.sub })),
           { href: "/en/exam-prep/any-board", label: "Another exam board", detail: "Explore resources for any syllabus." },
@@ -35,7 +32,7 @@ export function Nav({ locale, m }: { locale: string; m: Messages }) {
     <MobileNav>
       <SearchBar locale={locale} search={m.search} id="nav-search-mobile"/>
       <NavDropdown label={m.navigation.simulations} items={subjectLinks}/>
-      {locale === "en" && <Link className="mobileNavSub" href="/en/guides">↳ Simulation guides</Link>}{locale === "en" && <><Link href="/en/exam-prep">▣ Exam Preparation</Link><Link href="/en/mock-exams">◷ Mock Exams</Link><Link href="/en/teacher-kit">✎ Teacher Kit</Link><Link href="/en/pricing">$ Pricing</Link><Link href="/en/classroom">♙ My classroom</Link><Link href="/en/articles">▤ News &amp; Articles</Link></>}
+      {locale === "en" && <><Link href="/en/exam-prep">Exam Preparation</Link><Link href="/en/mock-exams">Mock Exams</Link><Link href="/en/teacher-kit">Teacher Kit</Link><Link href="/en/pricing">Pricing</Link><Link href="/en/classroom">My classroom</Link><Link href="/en/articles">News &amp; Articles</Link></>}
     </MobileNav>
   </div></nav>;
 }

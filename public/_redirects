@@ -3,6 +3,8 @@
 /en/ / 301
 
 # Topic guides moved onto their simulation pages (one URL per topic). Keep these permanent.
+/en/guides /en/simulations 301
+/en/guides/ /en/simulations 301
 /en/guides/moon-phases-3d /en/simulations/moon-phases-3d 301
 /en/guides/escape-velocity /en/simulations/escape-velocity 301
 /en/guides/earth-seasons-tilt /en/simulations/earth-seasons-tilt 301

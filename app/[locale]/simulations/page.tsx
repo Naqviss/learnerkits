@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n/config";
-import { displayDifficulty, getEducationCopy, getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content";
+import { getEducationCopy, getLocalizedSubject, getLocalizedSubjectName } from "@/lib/i18n/content";
 import { localizedMetadata } from "@/lib/seo/metadata";
 import { hiddenSubjectSlugs, simulationCountLabel, subjectSlugs, subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { SimulationLibrary } from "@/components/simulation/SimulationLibrary";
@@ -19,13 +19,11 @@ export default async function Simulations({params}:{params:Promise<{locale:strin
   const subjects=visibleSubjectSlugs.map(slug=>({slug,name:getLocalizedSubjectName(raw,slug),data:getLocalizedSubject(raw,slug)}));
   const all=subjects.flatMap(({data})=>data.simulations);
   const labs=subjects.flatMap(({slug,name,data})=>data.simulations.map((sim,index)=>({slug,name,sim,base:subjectsCatalog[slug].simulations[index]})));
-  const levels=(["Beginner","Intermediate","Advanced"] as const).map(value=>({value,label:displayDifficulty(raw,value)}));
   const library=<SimulationLibrary
-      groups={subjects.map(({slug,name,data})=>({slug,name,meta:`${data.simulations.length} ${copy.generic.labs}`,href:`/${raw}/subjects/${slug}`,viewLabel:copy.library.viewSubject}))}
+      groups={subjects.map(({slug,name})=>({slug,name,href:`/${raw}/subjects/${slug}`,viewLabel:copy.library.viewSubject}))}
       upcoming={subjectSlugs.filter(slug=>hiddenSubjectSlugs.has(slug)).map(slug=>({slug,name:getLocalizedSubjectName(raw,slug)}))}
-      items={labs.map(({slug,name,sim,base})=>({subject:slug,level:sim.difficulty,text:[sim.title,sim.kind,sim.concepts,sim.outcome,name,base.title,base.concepts,sim.slug.replace(/-/g," ")].filter(Boolean).join(" ")}))}
-      levels={levels}
-      labels={{comingSoon:copy.home.comingSoon,comingSoonBody:copy.home.comingSoonBody,search:copy.library.searchLabel,placeholder:copy.library.searchPlaceholder,allSubjects:copy.library.allSubjects,allLevels:copy.library.allLevels,subjectFilter:copy.library.subjectFilter,levelFilter:copy.library.levelFilter,count:copy.subject.labSearchCount("{shown}","{total}"),empty:copy.subject.labSearchEmpty,clear:copy.subject.labSearchClear}}
+      items={labs.map(({slug,name,sim,base})=>({subject:slug,text:[sim.title,sim.kind,sim.concepts,sim.outcome,name,base.title,base.concepts,sim.slug.replace(/-/g," ")].filter(Boolean).join(" ")}))}
+      labels={{comingSoon:copy.home.comingSoon,comingSoonBody:copy.home.comingSoonBody,search:copy.library.searchLabel,placeholder:copy.library.searchPlaceholder,allSubjects:copy.library.allSubjects,subjectFilter:copy.library.subjectFilter,count:copy.subject.labSearchCount("{shown}","{total}"),empty:copy.subject.labSearchEmpty,clear:copy.subject.labSearchClear}}
     >{labs.map(({slug,sim})=><Link href={`/${raw}/simulations/${sim.slug}`} className={`libCard subject-${slug}`} key={sim.slug}>
       <div className="libCardTop"><span className="libKind">{sim.kind}</span>{sim.featured&&<span className="priorityBadge">{copy.library.priorityBadge}</span>}</div>
       <h3>{sim.title}</h3>

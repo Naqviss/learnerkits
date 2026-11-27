@@ -1,5 +1,5 @@
 .dash { display: grid; gap: 22px; }
-.overviewHero { display: flex; justify-content: space-between; align-items: end; gap: 20px; padding: 27px 30px; border: 1px solid var(--line); border-radius: 24px; background: linear-gradient(115deg,color-mix(in srgb,var(--accent) 9%,var(--surface)),color-mix(in srgb,var(--accent2) 7%,var(--surface))); }
+.overviewHero { display: flex; justify-content: space-between; align-items: end; gap: 20px; padding: 27px 30px; border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(115deg,color-mix(in srgb,var(--accent) 9%,var(--surface)),color-mix(in srgb,var(--accent2) 7%,var(--surface))); }
 .overviewHero h2 { margin: 8px 0 6px; font-size: clamp(1.6rem,3vw,2.15rem); letter-spacing: -.04em; }
 .overviewHero p { margin: 0; color: var(--muted); }
 .metricGrid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; }
@@ -8,7 +8,7 @@
 .metric strong { font-size: 1.72rem; letter-spacing: -.04em; line-height: 1; }
 .metric small { color: var(--muted); font-size: .68rem; }
 .columns { display: grid; grid-template-columns: 1.1fr .9fr; gap: 14px; }
-.card { min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: 19px; background: var(--surface); }
+.card { min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
 .card h2 { margin: 0 0 6px; font-size: 1.05rem; letter-spacing: -.02em; }
 .card > p { margin: 0 0 14px; color: var(--muted); font-size: .8rem; line-height: 1.5; }
 .rowList { display: grid; }

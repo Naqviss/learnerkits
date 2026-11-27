@@ -1,5 +1,5 @@
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.card{display:flex;flex-direction:column;gap:14px;padding:22px;border:1px solid var(--line);border-radius:20px;background:var(--surface)}
+.card{display:flex;flex-direction:column;gap:14px;padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
 .card h3{font-size:1.25rem;letter-spacing:-.035em;line-height:1.2;margin:0}
 .card p{color:var(--muted);font-size:.86rem;line-height:1.6;margin:0}
 .cardTop,.foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
@@ -43,7 +43,7 @@
 .number[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
 .flagged::after{content:"◆";position:absolute;right:3px;top:1px;font-size:.55rem;color:#c98a12}
 .legend{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;color:var(--muted);font-size:.7rem}
-.resultHero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(117deg,color-mix(in srgb,var(--success,#18784b) 10%,var(--surface)),var(--surface))}
+.resultHero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(117deg,color-mix(in srgb,var(--success,#18784b) 10%,var(--surface)),var(--surface))}
 .resultHero h2{font-size:clamp(1.5rem,3vw,2.3rem);letter-spacing:-.045em;margin:6px 0}
 .resultHero p{color:var(--muted);font-size:.9rem;margin:0}
 .circle{position:relative;flex:none;width:132px;height:132px;display:grid;place-items:center;border-radius:50%;background:conic-gradient(var(--success,#18784b) var(--pct),var(--surface-2) var(--pct))}

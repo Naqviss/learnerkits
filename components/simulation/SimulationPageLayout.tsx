@@ -8,6 +8,7 @@ import { getSimulationContent, simulationReviewDate } from "@/lib/seo/simulation
 import { ProtectedFeaturePreview } from "./ProtectedFeaturePreview";
 
 const dateFormat = new Intl.DateTimeFormat("en", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+import { SimulationShare } from "./SimulationShare";
 import { SimulationSectionNav } from "./SimulationSectionNav";
 
 export function SimulationPageLayout({
@@ -40,12 +41,13 @@ export function SimulationPageLayout({
           <li aria-current="page">{simulation.title}</li>
         </ol>
       </nav>
-      <h1>{simulation.title}</h1>
+      <div className="simulationTitleRow"><h1>{simulation.title}</h1><SimulationShare locale={locale} slug={simulation.slug} title={simulation.title}/></div>
       <p>{simulation.outcome}</p>
     </header>
     <SimulationSectionNav/>
     <article>
       <section id="simulation" className="simulationPrimary" aria-label={`${simulation.title} interactive simulation`}>
+        <div className="simulationEmbedCredit"><a href="https://www.learnerkits.com/" target="_blank" rel="noopener noreferrer"><img src="/learnerkits-mark.svg" width="22" height="22" alt="" />learnerkits.com</a></div>
         <div className="simulationEngine">{children}</div>
       </section>
       {/* Answer-first block: the page's main question and a self-contained answer that search

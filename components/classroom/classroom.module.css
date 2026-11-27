@@ -9,7 +9,7 @@
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
 .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.panel{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:20px;min-width:0}
+.panel{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);padding:20px;min-width:0}
 .panel h2{font-size:1.15rem;letter-spacing:-.02em;margin:0 0 8px}
 .panel h3{font-size:.98rem;margin:0 0 4px}
 .panel>p,.hint{color:var(--muted);font-size:.86rem;line-height:1.6;margin:4px 0 12px}
@@ -111,7 +111,7 @@
   padding: clamp(22px, 3.8vw, 42px);
   min-height: 190px;
   border: 0;
-  border-radius: 14px;
+  border-radius: var(--radius);
   background: radial-gradient(circle at 88% 16%, #5c94e8 0 6px, transparent 7px), radial-gradient(circle at 93% 30%, #83adeb 0 4px, transparent 5px), linear-gradient(125deg, #174ea6, #1967d2 68%, #4285f4);
   color: #f4f8ff;
   box-shadow: 0 2px 6px #174ea62b;
@@ -126,7 +126,7 @@
 :global([data-workspace]) .rankCard { color: var(--text); }
 :global([data-workspace]) .stat { padding: 18px; border-radius: 12px; box-shadow: 0 1px 3px #12224212; }
 :global([data-workspace]) .stat strong { font-variant-numeric: tabular-nums; }
-:global([data-workspace]) .panel { border-radius: 12px; box-shadow: 0 1px 3px #12224212; }
+:global([data-workspace]) .panel { border-radius: var(--radius); box-shadow: 0 1px 3px #12224212; }
 :global([data-workspace]) .tabs { border-radius: 10px; padding: 4px; box-shadow: 0 1px 2px #1222420a; }
 :global([data-workspace="teacher"]) .tabs { display: none; }
 :global([data-workspace]) .tabs button { border-radius: 7px; }

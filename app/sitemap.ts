@@ -26,9 +26,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Unlisted subjects (unlistedSubjectSlugs) are published but left out, along with their simulations,
   // and so are single unlisted simulations (unlistedSimulationSlugs).
   const simulationPaths = indexedSubjectSlugs.flatMap((slug) => subjectsCatalog[slug].simulations.filter((sim) => !unlistedSimulationSlugs.has(sim.slug)).map((sim) => `/simulations/${sim.slug}`));
-  // Topic guides now live on their simulation pages (the old /guides/<slug> URLs 301 there). The
-  // /guides/<lab>/mission and /how-to-measure worksheets are unlisted and left out.
-  const topicGuidePaths = ["/guides", "/guides/environmental-city-builder"];
+  // Topic guides now live on their simulation pages (the old /guides and /guides/<slug> URLs 301
+  // there). The /guides/<lab>/mission and /how-to-measure worksheets are unlisted and left out.
+  const topicGuidePaths = ["/guides/environmental-city-builder"];
   const articlePaths = ["/articles", ...articleSummaries.map((article) => `/articles/${article.slug}`)];
   // Only the molecule pages open to search; the rest are unlisted (see indexedMoleculeSlugs).
   const moleculePaths = ["/molecules", ...indexedMoleculeReferences().map((molecule) => `/molecules/${molecule.slug}`)];
