@@ -12,6 +12,11 @@ export type SimulationContent = {
   formula?: { expression: string; meaning: string };
   /** Four or five steps that name this lab's real controls and readouts. */
   steps: string[];
+  /**
+   * Optional worked example with real numbers taken from this lab's model: a specific setting, the
+   * reading it gives and how to reason from it. Title is specific to the page (never a shared heading).
+   */
+  example?: { title: string; paragraphs: string[] };
   /** One common misconception and its correction. */
   misconception: { myth: string; fact: string };
   /** What this model includes and what it simplifies or leaves out. */

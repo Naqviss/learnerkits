@@ -41,6 +41,7 @@ export function SimulationGuide({ locale, subject, simulation, protectedSections
           <ul>{concepts.map((concept) => <li key={concept}>{concept}</li>)}</ul>
         </section>
       </div>
+      {content?.example && <section className="simulationModelNote simulationWorkedExample" aria-labelledby="simulation-example-title"><span className="simulationSectionKicker">Worked example</span><h3 id="simulation-example-title">{content.example.title}</h3>{content.example.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</section>}
       {content && <aside className="simulationModelNote simulationMisconception"><h3>Common misconception</h3><p><b>Myth:</b> {content.misconception.myth}</p><p><b>Fact:</b> {content.misconception.fact}</p></aside>}
       <aside className="simulationModelNote"><h3>{content ? "What the model includes" : "Model scope and learning focus"}</h3><p>{content ? content.modelNote : `${simulation.outcome} This educational model simplifies the real system so you can isolate variables, compare evidence, and explain the relationship you observe.`}</p>{content && <Link className="textLink" href="/en/editorial-policy">How we build and check our models →</Link>}</aside>
       <div id="simulation-guide-extension" className="simulationFeatureExtension"/>
@@ -54,8 +55,8 @@ export function SimulationGuide({ locale, subject, simulation, protectedSections
 
     {protectedSections}
 
-    <section className="simulationFaqPanel" aria-labelledby="simulation-faq-title">
-      <div className="simulationFaqIntro"><span className="simulationSectionKicker">Quick answers</span><h2 id="simulation-faq-title">{guide.questions}</h2>{!content && <p>Clear explanations of the science behind this lab, useful before or after an experiment.</p>}</div>
+    {/* Just the questions and answers: no shared "Quick answers / Common questions" heading repeated on every page. */}
+    <section className="simulationFaqPanel" aria-label={`${simulation.title}: questions and answers`}>
       <div className="simulationFaq">{guide.faq.map((item) => <details key={item.q}><summary>{item.q}</summary><p>{item.a}</p></details>)}</div>
     </section>
 

@@ -6,7 +6,7 @@ import { getSimulationContent, getSimulationDescription, type SimulationContent 
 // `npx vitest run tests/seo/simulation-content.test.ts -t space`.
 
 const words = (text: string) => text.trim().split(/\s+/).filter(Boolean).length;
-const allText = (c: SimulationContent) => [c.question, c.answer, ...c.science, c.formula?.expression ?? "", c.formula?.meaning ?? "", ...c.steps, c.misconception.myth, c.misconception.fact, c.modelNote, ...c.faq.flatMap((f) => [f.q, f.a])];
+const allText = (c: SimulationContent) => [c.question, c.answer, ...c.science, c.formula?.expression ?? "", c.formula?.meaning ?? "", ...(c.example ? [c.example.title, ...c.example.paragraphs] : []), ...c.steps, c.misconception.myth, c.misconception.fact, c.modelNote, ...c.faq.flatMap((f) => [f.q, f.a])];
 const sentences = (c: SimulationContent) => allText(c).flatMap((t) => t.split(/(?<=[.!?])\s+/)).map((s) => s.trim().toLowerCase()).filter((s) => words(s) >= 6);
 
 // Phrases from the old shared template, and filler that reads as generated text.
@@ -37,6 +37,13 @@ for (const { subject, slugs } of bySubject) {
           expect(c.steps.length).toBeGreaterThanOrEqual(4);
           expect(c.steps.length).toBeLessThanOrEqual(5);
           for (const s of c.steps) expect(words(s)).toBeLessThanOrEqual(40);
+        });
+        if (c.example) it("has a specific worked example", () => {
+          expect(words(c.example!.title)).toBeLessThanOrEqual(14);
+          expect(c.example!.paragraphs.length).toBeGreaterThanOrEqual(1);
+          expect(c.example!.paragraphs.length).toBeLessThanOrEqual(3);
+          for (const p of c.example!.paragraphs) { expect(words(p)).toBeGreaterThanOrEqual(30); expect(words(p)).toBeLessThanOrEqual(120); }
+          expect(c.example!.paragraphs.join(" ")).toMatch(/\d/);
         });
         it("has a misconception and a model note", () => {
           expect(words(c.misconception.myth)).toBeGreaterThanOrEqual(4);

@@ -3,8 +3,12 @@ import { getBoard, getLevel, getSubject, isVerified, liveSubjects, type Course }
 export const examPrepSeo = {
   title: "Science Exam Prep by Exam Board",
   description: "Prepare for Cambridge, Edexcel, AQA and IB science exams with structured lessons, interactive labs, topic checks, AI help and saved activity progress.",
-  answer: "LearnerKits is a complete science learning and exam-preparation platform organised by board, qualification, subject and syllabus topic. Students can learn in a supported language, explore concepts interactively, check their understanding, save supported activity progress and ask a topic-aware AI tutor for help.",
+  answer: "LearnerKits is a complete science learning and exam-preparation platform organised by board, qualification, subject and syllabus topic. Students can explore concepts interactively, check their understanding, save supported activity progress and ask a topic-aware AI tutor for help.",
   faqs: [
+    {
+      q: "Do I need an account to use Exam Prep?",
+      a: "Yes, a free one. Courses, topic lessons, topic tests, practicals and mock exams open after you sign in with Google, which costs nothing and needs no card. The simulations themselves stay open to everyone without an account.",
+    },
     {
       q: "Which exam boards can I revise with on LearnerKits?",
       a: "LearnerKits has pathways for Cambridge International, Pearson Edexcel, AQA and the International Baccalaureate, plus a board-neutral route for other curricula. Published syllabus coverage varies by board and level, and previews are clearly labelled.",

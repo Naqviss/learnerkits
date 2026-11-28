@@ -4,7 +4,11 @@ export const defaultLocale: Locale = "en";
 
 // Published languages. Keep dictionaries and locale types intact for the rest of
 // supportedLocales so more translations can be restored by adding them here.
-export const locales: readonly Locale[] = ["en", "es"];
+// Spanish ("es") is unpublished for now (2026-11-28): its pages still carry the old generic
+// translated copy, which reads as thin content, so it is held back until AdSense approves the site.
+// Add "es" back here to restore it; the header language picker reappears on its own (it only shows
+// when more than one language is published), and the Worker stops redirecting /es/ URLs.
+export const locales: readonly Locale[] = ["en"];
 
 // Languages search engines may index. A published language that is not listed here stays
 // available to visitors but is `noindex` and left out of the sitemap and hreflang. Add a

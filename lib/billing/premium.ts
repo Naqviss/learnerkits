@@ -3,8 +3,8 @@ import { authEnabled, getAuthClient } from "@/lib/auth/client";
 import { getAccessToken, useAuth } from "@/lib/auth/session";
 import { isEntitled } from "./entitlement";
 
-/** Premium UI (30-second prompt, AI tutor, account-menu links) only appears once billing is configured. */
-export const premiumEnabled = authEnabled && process.env.NEXT_PUBLIC_PREMIUM_ENABLED === "true";
+export { premiumEnabled } from "./flags";
+import { premiumEnabled } from "./flags";
 
 /**
  * Paddle has not enabled checkouts on the live account yet (transaction_checkout_not_enabled), so the

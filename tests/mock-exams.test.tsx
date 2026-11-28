@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import { mockBanks, mockExamIndexablePaths, mockExams } from "@/lib/mock-exams/catalog";
+import { getMockExam, mockBanks, mockExamHref, mockExamIndexablePaths, mockExams } from "@/lib/mock-exams/catalog";
 import { clockText, remainingSeconds, resultHeadline, scoreAttempt } from "@/lib/mock-exams/engine";
 import { getSimulationCard } from "@/lib/subjects/catalog";
 import MockExamsPage from "@/app/[locale]/mock-exams/page";
-import MockExamPage, { generateMetadata, generateStaticParams } from "@/app/[locale]/mock-exams/[examId]/page";
+import { MockExamList, MockExamView } from "@/components/mock-exams/MockExamStudy";
+import { legacyRedirect } from "@/lib/seo/legacy-redirects";
 
 describe("mock exam catalog", () => {
   it("has well-formed questions with stable unique ids and real lab slugs", () => {
@@ -26,8 +27,10 @@ describe("mock exam catalog", () => {
   it("points every exam at an existing bank and lists only free sets for indexing", () => {
     for (const exam of mockExams) expect(mockBanks[exam.bank], exam.id).toBeDefined();
     expect(new Set(mockExams.map((exam) => exam.id)).size).toBe(mockExams.length);
-    expect(mockExamIndexablePaths).toEqual(["/mock-exams", "/mock-exams/9702free", "/mock-exams/0620free"]);
-    expect(generateStaticParams()).toHaveLength(mockExams.length);
+    // Practice sets are for signed-in students; only the public hub is listed.
+    expect(mockExamIndexablePaths).toEqual(["/mock-exams"]);
+    expect(mockExamHref("9702free")).toBe("/en/mock-exams?exam=9702free");
+    expect(mockExamHref("bad id")).toBe("/en/mock-exams");
   });
 });
 
@@ -58,20 +61,28 @@ describe("mock exam engine", () => {
 });
 
 describe("mock exam pages", () => {
-  it("lists every set on the hub with the not-official notice", async () => {
+  it("describes every set on the public hub without any question text", async () => {
     const html = renderToStaticMarkup(await MockExamsPage({ params: Promise.resolve({ locale: "en" }) }));
-    for (const exam of mockExams) expect(html).toContain(`/en/mock-exams/${exam.id}`);
+    for (const exam of mockExams) expect(html).toContain(exam.paper);
+    for (const bank of Object.values(mockBanks)) for (const question of bank) expect(html).not.toContain(question.q);
+    expect(html).not.toContain('href="/en/mock-exams/');
     expect(html).toContain("not endorsed by Cambridge");
+    expect(html).toContain("How long you have for each question");
   });
 
-  it("opens a free set on its intro and soft-locks Premium sets", async () => {
-    const free = renderToStaticMarkup(await MockExamPage({ params: Promise.resolve({ locale: "en", examId: "9702free" }) }));
+  it("opens a free set on its intro and soft-locks Premium sets in the signed-in view", () => {
+    const list = renderToStaticMarkup(<MockExamList />);
+    for (const exam of mockExams) expect(list).toContain(mockExamHref(exam.id));
+    const free = renderToStaticMarkup(<MockExamView exam={getMockExam("9702free")!} />);
     expect(free).toContain("Start test");
     expect(free).not.toContain(mockBanks.physicsA[0].q);
-    const premium = renderToStaticMarkup(await MockExamPage({ params: Promise.resolve({ locale: "en", examId: "9702premium" }) }));
+    const premium = renderToStaticMarkup(<MockExamView exam={getMockExam("9702premium")!} />);
     expect(premium).toContain("part of Premium");
     expect(premium).not.toContain("Start test");
-    expect((await generateMetadata({ params: Promise.resolve({ locale: "en", examId: "9702premium" }) })).robots).toEqual({ index: false, follow: false });
-    expect((await generateMetadata({ params: Promise.resolve({ locale: "en", examId: "9702free" }) })).robots).toMatchObject({ index: true });
+  });
+
+  it("sends the retired practice-set URLs into the signed-in view", () => {
+    expect(legacyRedirect("/en/mock-exams/0620free")).toBe("/en/mock-exams?exam=0620free");
+    expect(legacyRedirect("/en/mock-exams")).toBeNull();
   });
 });

@@ -7,6 +7,7 @@ import { localizedMetadata } from "@/lib/seo/metadata";
 import { hiddenSubjectSlugs, simulationCountLabel, subjectSlugs, subjectsCatalog, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { SimulationLibrary } from "@/components/simulation/SimulationLibrary";
 import { LearningHub } from "@/components/workspace/LearningHub";
+import { SimulationLibraryGuide } from "@/components/seo/HubGuides";
 
 export async function generateMetadata({params}:{params:Promise<{locale:string}>}):Promise<Metadata>{
   const {locale:raw}=await params,locale=isLocale(raw)?raw:"en",copy=getEducationCopy(locale);
@@ -33,6 +34,7 @@ export default async function Simulations({params}:{params:Promise<{locale:strin
   const publicContent=<main className="container educationLibrary simLibrary">
     <header className="pageHeader generalPageHeader libHeader"><div className="eyebrow">{copy.library.eyebrow}</div><h1 className="pageTitle">{copy.library.title}</h1><p className="lede">{copy.library.body(simulationCountLabel(all.length),visibleSubjectSlugs.length)}</p></header>
     {library}
+    {raw==="en"&&<SimulationLibraryGuide/>}
   </main>;
   return <LearningHub kind="simulations" title="Simulations" description="Explore interactive labs, continue missions and track the activities you complete." total={all.length} totalLabel={simulationCountLabel(all.length)} secondaryCount={visibleSubjectSlugs.length} secondaryLabel="Subjects" publicContent={publicContent}>{library}</LearningHub>;
 }

@@ -62,9 +62,8 @@ describe("balancing chemical equations reference", () => {
     for (const item of balancingFaq) expect(html).toContain(item.q.replace(/'/g, "&#x27;"));
   });
 
-  it("keeps the English reference out of other languages", async () => {
-    const html = renderToStaticMarkup(await SimulationPage({ params: Promise.resolve({ locale: "es", slug: "balance-equation" }) }));
-    expect(html).not.toContain("How to balance chemical equations");
-    expect(html).not.toContain('"@type":"HowTo"');
+  it("is not published in other languages while English is the only one", async () => {
+    // Spanish is held back (lib/i18n/config.ts), so its URL is a 404 here and a 301 to English in the Worker.
+    await expect(SimulationPage({ params: Promise.resolve({ locale: "es", slug: "balance-equation" }) })).rejects.toThrow();
   });
 });

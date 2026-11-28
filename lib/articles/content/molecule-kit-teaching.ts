@@ -29,7 +29,7 @@ Teachers will find several practical tools: a molecule library for quick startin
 
 ### Molecular Geometry 3D Explorer
 
-The [Molecular Geometry 3D Explorer](/en/simulations/molecular-geometry-3d) focuses on VSEPR. Students select a molecule, display its lone pairs and bond angles, and rotate it to compare electron-domain geometry with molecular shape. The kit also links to a [VSEPR shapes chart](/en/molecules) with reference pages for more than 100 molecules and ions, such as [water](/en/molecules/water-h2o) and [ammonia](/en/molecules/ammonia-nh3).
+The [Molecular Geometry 3D Explorer](/en/simulations/molecular-geometry-3d) focuses on VSEPR. Students select a molecule, display its lone pairs and bond angles, and rotate it to compare electron-domain geometry with molecular shape. The kit also links to a [VSEPR shapes chart](/en/molecules) with reference pages for more than 100 molecules and ions, such as [water](/en/molecules#water-h2o) and [ammonia](/en/molecules#ammonia-nh3).
 
 ## Lesson idea 1: build before you name
 
@@ -53,7 +53,7 @@ Have students predict each shape on paper first. Then open the Geometry Explorer
 
 The question to pose is: “Why are methane, ammonia, and water different shapes even though each has four electron domains?” Look for the explanation that lone pairs occupy space and repel bonding pairs more strongly, which narrows the bond angle. Students should also say that molecular shape describes only atom positions, so lone pairs are “invisible” in the shape name even though they determine it.
 
-Extend the lesson with molecules beyond four domains, such as [boron trifluoride](/en/molecules/boron-trifluoride-bf3) (trigonal planar, 120°) and [sulfur hexafluoride](/en/molecules/sulfur-hexafluoride-sf6) (octahedral, 90°).
+Extend the lesson with molecules beyond four domains, such as [boron trifluoride](/en/molecules#boron-trifluoride-bf3) (trigonal planar, 120°) and [sulfur hexafluoride](/en/molecules#sulfur-hexafluoride-sf6) (octahedral, 90°).
 
 ## A 45-minute Molecule Kit lesson plan
 

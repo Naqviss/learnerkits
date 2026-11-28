@@ -4,7 +4,8 @@
     "answer": "Gravity bends a moving planet toward its star. One particular strength bends its path just enough to maintain a circle at the starting distance. Stronger attraction pulls the same planet inward before it swings back out. Sufficiently weak attraction lets the planet travel away on an open path, even though the star continues to pull on it.",
     "science": [
       "A planet launched sideways already has a velocity across the line joining it to the star. Attraction accelerates it along that line. During a short interval it travels forward and falls inward a little. Repeating those two effects produces a curved trajectory. A circular orbit requires exactly the inward acceleration associated with its radius and its sideways speed.",
-      "The moving dot leaves a trail, but distance from the star provides better evidence of circular motion than the apparent size of that trail. The view automatically expands to keep a departing planet visible. A dot that seems to slow down on screen can still be moving rapidly through the model coordinates."
+      "The moving dot leaves a trail, but distance from the star provides better evidence of circular motion than the apparent size of that trail. The view automatically expands to keep a departing planet visible. A dot that seems to slow down on screen can still be moving rapidly through the model coordinates.",
+      "Circular speed comes from matching gravity to the inward acceleration a circle needs: v = √(GM/r). Earth moves around the Sun at about 29.8 km/s, close to that value at 150 million kilometres. Escape speed at the same distance is √2 times larger, about 42.1 km/s. Both speeds scale with the square root of the star's mass, so if the Sun had half its mass, Earth's present speed would almost exactly equal the escape speed for its distance. The 0.5 setting models that case: the planet sets off on a parabola and never returns."
     ],
     "steps": [
       "Set gravitational pull to one and run a full trial. Note the range of distances displayed.",
@@ -12,6 +13,13 @@
       "Restart with half the original attraction. Follow the trail and compare the final separation with both previous trials.",
       "Sketch the three paths around a single marked star. Label which trials brought the planet inside its starting radius."
     ],
+    "example": {
+      "title": "Doubling the pull: why the planet dips to one third of its radius",
+      "paragraphs": [
+        "Set Gravitational pull to 2 and run the trial. The distance reading starts at 1 and falls to its smallest value, 0.33 initial radii, at a model time of about 1.2, before the planet swings back out to 1. At 1.5 the closest approach is 0.5, and at exactly 1 the reading stays between 1.00 and 1.01 for the whole run, the signature of a circular orbit.",
+        "Those numbers match orbit theory. The planet is launched at right angles to the star, so when the pull is too strong the launch point becomes the farthest point of an ellipse. With twice the circular-orbit pull the near point works out to exactly one third of the starting distance. Weaker settings make the launch point the nearest point instead: at 0.7 the planet coasts out to about 2.5 radii by the end of the run, at 0.6 or below it is still moving outward when the run stops, and at 0.5 it has exactly escape speed."
+      ]
+    },
     "misconception": {
       "myth": "A circular orbit has no acceleration.",
       "fact": "Even at constant speed the direction of velocity changes continuously, requiring acceleration toward the center of the circle."
@@ -29,6 +37,10 @@
       {
         "q": "How can I compare two orbit trials fairly?",
         "a": "Keep the initial position and tangential velocity the same, as the restart control does here. Inspect both trials at equal model times and record their numerical distances. Comparing screen pixels can be misleading because a wide trajectory makes the display change its scale."
+      },
+      {
+        "q": "What speed does a planet need for a circular orbit?",
+        "a": "Circular orbital speed is the square root of GM/r, where G is the gravitational constant, M the star's mass and r the orbital radius. A closer orbit therefore needs a higher speed: Mercury averages about 47 km/s, Earth about 29.8 km/s and Neptune about 5.4 km/s. Moving a planet four times farther out halves the speed required for a circle."
       }
     ]
   },
@@ -37,7 +49,8 @@
     "answer": "Every body feels the combined attraction of its neighbors. Initially small differences in separation can produce quite different accelerations, close approaches and collisions. When two bodies touch in the model, a single heavier body continues with their combined momentum. The live body count lets you distinguish an actual merger from two points merely passing close together.",
     "science": [
       "Unlike a planet orbiting a fixed star, the centers of attraction move throughout this experiment. A nearby pair may curve toward one another while a third body deflects their shared path. The spiral starting positions give each trial a repeatable structure so that the consequences of increasing the starting population can be investigated.",
-      "A merger replaces two masses with their sum and assigns the result a mass-weighted velocity. Two equal masses moving in opposite directions can therefore produce a nearly stationary remnant. Much of their original kinetic energy disappears from the motion being tracked. Real collisions can transfer that energy to heat, deformation and debris."
+      "A merger replaces two masses with their sum and assigns the result a mass-weighted velocity. Two equal masses moving in opposite directions can therefore produce a nearly stationary remnant. Much of their original kinetic energy disappears from the motion being tracked. Real collisions can transfer that energy to heat, deformation and debris.",
+      "Planets are thought to have grown this way. In the young solar system a disk of rocky planetesimals collided and merged over millions of years, and the Moon is widely explained as debris from a collision between the early Earth and a Mars-sized body named Theia about 4.5 billion years ago. Astronomers study such stages with N-body codes. The work grows quickly with the body count, because every pair must be checked: a 100-body run already has 4,950 pairs to update at each step."
     ],
     "steps": [
       "Release ten bodies and pause at the first drop in the body count. Identify the enlarged remnant.",
@@ -45,6 +58,13 @@
       "Repeat with one hundred starting bodies. Compare fractions as well as raw collision totals.",
       "Use the time slider to inspect a crowded interval slowly. Check apparent collisions against the numerical count."
     ],
+    "example": {
+      "title": "Ten, fifty and one hundred bodies: counting mergers over a full run",
+      "paragraphs": [
+        "With 10 starting bodies the first merger appears at a model time of about 2.3, and only 2 mergers happen in the whole run, leaving 8 bodies: a merger fraction of 20%. Raising the count to 50 brings the first collision forward to about 0.8 and ends with 48 mergers and 2 survivors, or 96%.",
+        "At 100 bodies the first merger comes at about 0.5, and 99 mergers leave a single body holding all 100 units of mass. Its dot is drawn ten times wider than a starting body, because drawn size grows with the square root of mass. The trend has a clear cause: the spiral always fills the same circle, so more bodies start closer together, attract one another more strongly and meet sooner."
+      ]
+    },
     "misconception": {
       "myth": "Every close approach must cause a collision.",
       "fact": "Gravity can turn two trajectories past each other while their separation stays larger than the contact distance."
@@ -66,6 +86,10 @@
       {
         "q": "What controls the starting spiral?",
         "a": "The starting positions are spaced by a fixed angle with radius increasing outward. Running the same body count again therefore reproduces the same arrangement. Changing the count also changes the spacing, which should be considered when interpreting a difference between runs."
+      },
+      {
+        "q": "Why do merged bodies collide more often later in a run?",
+        "a": "In this model the contact distance grows with the square root of each body's mass, the same rule that sets its drawn size. A remnant built from several mergers is therefore a larger target, and its greater mass pulls neighbors in more strongly. Both effects let one body sweep up the cluster, which is why a 100-body run can end with a single survivor."
       }
     ]
   },
@@ -74,7 +98,8 @@
     "answer": "Pendulums of slightly different lengths take slightly different times to swing. When released together their phases gradually separate, creating a pattern that seems to travel across the row. If each neighboring pendulum completes exactly one additional cycle per minute, the accumulated differences become whole cycles after sixty seconds and the original alignment returns.",
     "science": [
       "For small swings the period increases with the square root of length. Doubling a pendulum's length therefore increases its period by less than a factor of two. A designer who wants equally spaced frequencies must choose unequal length increments. Look at the strings near each end of the row to see that length pattern.",
-      "Count cycles over a fixed interval instead of trying to follow one crest across the display. A bob stays attached to the same support throughout. What moves across the row is an arrangement of phases, created as some bobs turn back toward the middle while others are still moving outward."
+      "Count cycles over a fixed interval instead of trying to follow one crest across the display. A bob stays attached to the same support throughout. What moves across the row is an arrangement of phases, created as some bobs turn back toward the middle while others are still moving outward.",
+      "Museum pendulum-wave displays use the same design rule with real strings. If the longest pendulum makes 24 swings a minute, its period is 2.5 seconds and, from T = 2π√(L/g), its string is about 1.55 metres long. A neighbor making 25 swings needs a 2.4-second period and a string of about 1.43 metres. Further down the row each extra swing per minute costs a smaller cut in length, because length falls with the square of the swing rate. Halving the swing rate would need a string four times as long."
     ],
     "steps": [
       "Choose zero extra cycles and release the row. Observe whether any bob gains on its neighbor.",
@@ -82,6 +107,13 @@
       "Try two additional cycles between neighbors. Look for a return to the starting configuration before the minute ends.",
       "Pause halfway between two alignments and sketch the strings. Use their lengths to explain which bobs have completed more swings."
     ],
+    "example": {
+      "title": "One extra swing per minute: a row running from 24 to 35 cycles",
+      "paragraphs": [
+        "With the slider at 1, the twelve pendulums complete 24, 25, 26 and so on up to 35 cycles per minute, so the longest swings once every 2.5 seconds and the shortest about every 1.71 seconds. Their drawn strings follow the length rule exactly: the shortest is (24 ÷ 35)², about 0.47, times the length of the longest. On real strings that is 0.73 m against 1.55 m.",
+        "At 30 seconds every second pendulum has completed a whole number of cycles while its neighbors sit exactly half a cycle out of step, so the row splits into two interleaved lines swinging in opposite directions. At 60 seconds every pendulum has finished a whole number of cycles, from 24 to 35, and the single line re-forms. Setting the slider to 2 halves that wait to 30 seconds, and 3 brings the reunion forward to 20 seconds."
+      ]
+    },
     "misconception": {
       "myth": "The visible wave carries each bob along the row.",
       "fact": "Every bob oscillates about its own pivot while differences in phase create the appearance of a moving pattern."
@@ -103,6 +135,10 @@
       {
         "q": "Why use a minute to compare cycles?",
         "a": "A common measurement window makes different periods easy to compare. Counting one extra cycle in sixty seconds means that the two bobs gain exactly one full turn of phase relative to each other over that interval."
+      },
+      {
+        "q": "How long should the strings be for a pendulum wave?",
+        "a": "Choose the reunion time and a whole number of swings for each pendulum in that time, rising by one from bob to bob. Each period is the reunion time divided by its swing count, and each length follows from L = g(T/2π)². For a 60-second reunion starting at 24 swings, the strings run from about 1.55 m down to 0.73 m for 35 swings."
       }
     ]
   },
@@ -111,7 +147,8 @@
     "answer": "Predators persist when feeding produces enough new predators to balance losses. Increasing prey carrying capacity gives the food source room to recover after grazing by predators. A low capacity can support some prey yet leave predators with too little food. Comparing the two abundance curves reveals which population declines first and whether either recovers.",
     "science": [
       "Carrying capacity describes the abundance the prey population approaches in the absence of predators under the specified resources. At low density there is room to grow. Near capacity competition slows that growth. Predation removes individuals from this renewing population, so the long-term prey count can settle well below the carrying capacity selected on the slider.",
-      "Predator births depend on encounters between predators and prey. When prey become scarce, encounters decline before the remaining predators disappear. A delayed predator decline can then allow prey to rebound. Watch the early part of the trajectory as well as the last year, since the final counts alone conceal overshoots and reversals."
+      "Predator births depend on encounters between predators and prey. When prey become scarce, encounters decline before the remaining predators disappear. A delayed predator decline can then allow prey to rebound. Watch the early part of the trajectory as well as the last year, since the final counts alone conceal overshoots and reversals.",
+      "The curves come from a Lotka–Volterra predator–prey model, first written down by Alfred Lotka and Vito Volterra in the 1920s, here with logistic prey growth. One result surprises most students: while predators persist, the prey settle where each predator just replaces itself, not at the carrying capacity. Extra habitat feeds more predators instead of leaving more prey. In models where predators become full when prey are plentiful, enrichment can instead destabilize the cycles, which Michael Rosenzweig called the paradox of enrichment in 1971. Predators here never become full, so the populations settle."
     ],
     "steps": [
       "Start at capacity one hundred and predict which population will be larger at year one thousand.",
@@ -119,6 +156,13 @@
       "Lower capacity to twenty and repeat the thousand-year trial. Identify the first point at which predators disappear.",
       "Increase the capacity in steps of five and bracket the transition between predator extinction and persistence."
     ],
+    "example": {
+      "title": "Bracketing the threshold: capacity 45 fails and capacity 50 persists",
+      "paragraphs": [
+        "At capacity 45 the prey climb to 45 while predators slowly dwindle, dropping below the half-an-individual cutoff in year 780. At 50 they hold on, and year 1,000 ends with about 45.2 prey and 4.8 predators. The slider moves in steps of 5, so 50 is the smallest setting that sustains predators. Lower settings lose them faster: by year 190 at a capacity of 40 and by year 55 at 20.",
+        "Now compare capacities 100 and 160. Both runs end with the same 45.24 prey, but predators rise from about 27.4 to 35.9. The fixed prey value comes from the predator equation: each predator produces new predators at 0.3 × 0.007 × prey and is lost at a rate of 0.095, and those balance at 0.095 ÷ 0.0021 ≈ 45.2 prey. A capacity below that level cannot feed a stable predator population."
+      ]
+    },
     "misconception": {
       "myth": "Carrying capacity fixes both population sizes.",
       "fact": "Resource limits constrain prey growth directly while predator survival depends on feeding and its own loss rate."
@@ -140,6 +184,10 @@
       {
         "q": "Can the surviving community withstand another disturbance?",
         "a": "Persistence at a particular capacity answers a limited question about the specified starting conditions. It does not establish resilience to a drought, disease or loss of habitat. Those events could push a population below the extinction threshold even after a long stable interval."
+      },
+      {
+        "q": "Why doesn't more habitat give more prey when predators are present?",
+        "a": "With predators present, extra prey are eaten as fast as they appear, so the prey settle where each predator just replaces itself. In this model that level is about 45 prey at every capacity from 50 to 160. The extra habitat shows up in the predator count instead, which grows from roughly 5 to 36 across that range."
       }
     ]
   },
@@ -148,7 +196,8 @@
     "answer": "If air temperature decreases by 6.5 degrees Celsius per kilometre of elevation, a uniform warming of three degrees shifts a fixed temperature boundary uphill by about 462 metres. A boundary starting at 2,000 metres reaches roughly 2,462 metres. The estimate depends directly on the assumed temperature gradient and the local warming experienced by the mountain.",
     "science": [
       "Think of a thermometer placed at the original boundary. After warming, that instrument reads higher even though its elevation stays fixed. Moving the thermometer uphill takes it into progressively cooler air. The height gain needed to recover the original temperature can be calculated by dividing the warming by the temperature decrease per unit height.",
-      "A triangular mountain narrows toward its summit. In the cross section you can see the cooler band shrink as its lower edge rises. A real mountain's area at each elevation depends on its shape, and habitat suitability also depends on moisture, soils and other organisms. A temperature boundary is only one part of a habitat description."
+      "A triangular mountain narrows toward its summit. In the cross section you can see the cooler band shrink as its lower edge rises. A real mountain's area at each elevation depends on its shape, and habitat suitability also depends on moisture, soils and other organisms. A temperature boundary is only one part of a habitat description.",
+      "The 6.5 °C per kilometre figure is the average lapse rate of the International Standard Atmosphere. Dry rising air cools faster, about 9.8 °C per kilometre, and saturated air more slowly, typically between about 4 and 7 °C. With a 5 °C rate the same 3 °C of warming would lift the boundary 600 m; at 9.8 °C it would move about 306 m. Living things lag behind such estimates: across 171 forest plant species in French mountains, the elevation where each grew best rose by an average of 29 m per decade during the twentieth century."
     ],
     "steps": [
       "Set the warming scenario to zero and note the elevation of the dashed baseline.",
@@ -156,6 +205,13 @@
       "Subtract the baseline height and divide by three to estimate metres of rise per degree.",
       "Double-check that estimate with a different warming value. Explain the assumption that makes the relationship linear."
     ],
+    "example": {
+      "title": "From 2,000 to about 2,462 metres: reading the three-degree scenario",
+      "paragraphs": [
+        "Set the warming scenario to 3 °C and drag the progress control to the end. The boundary reading moves from the 2,000 m baseline to 2,461.54 m, a rise of about 462 m. Halfway through the scenario, with 1.5 °C applied, it reads 2,230.77 m, exactly half the final change, because the model converts every degree into the same 153.8 m of height.",
+        "Repeat at 5 °C and the boundary ends at 2,769.23 m, about 769 m above the baseline. On a real peak the consequence depends on how much land lies above the new line: a summit at 2,500 m would keep a thin cold zone under 3 °C of warming but lose it entirely under 5 °C, because the boundary would pass the top."
+      ]
+    },
     "misconception": {
       "myth": "Three degrees of warming raises habitat by three metres.",
       "fact": "Degrees measure temperature and metres measure elevation, so converting between them requires a temperature gradient expressed per unit height."
@@ -177,6 +233,10 @@
       {
         "q": "What does the halfway position represent?",
         "a": "Halfway along the progress slider the model applies half of the chosen warming. For a three-degree scenario that means a rise of one and a half degrees. The boundary has then completed half of its final elevation change."
+      },
+      {
+        "q": "What is the environmental lapse rate?",
+        "a": "The environmental lapse rate is how fast air temperature falls with height in the lower atmosphere. A widely used average is 6.5 °C per kilometre, so a valley at 500 m reading 20 °C suggests about 13.5 °C at 1,500 m. Actual values change with humidity, season and time of day, and temperature inversions can even make air warmer higher up."
       }
     ]
   },
@@ -185,7 +245,8 @@
     "answer": "Snails link algae to fish in this simplified tank. Removing them releases algae from grazing and cuts off the fish population's only modeled food source. As the trial progresses, algae approach their resource limit while fish decline. Removing fish instead leaves grazers in place and produces a different sequence of changes.",
     "science": [
       "Read each curve as an abundance index for one group. The algae use incoming light to grow under a resource limit. Snails gain from consuming algae and lose individuals to fish. Fish gain from hunting and decline when feeding cannot compensate for losses. The arrows in that reasoning follow transfers of food between levels.",
-      "A removal experiment tests an indirect effect by disturbing one part of the web and watching the others. Removing predators can change producers even when those predators never eat the producers themselves. Compare the grazers between the two trials to identify the intermediate step connecting the original disturbance to the algal response."
+      "A removal experiment tests an indirect effect by disturbing one part of the web and watching the others. Removing predators can change producers even when those predators never eat the producers themselves. Compare the grazers between the two trials to identify the intermediate step connecting the original disturbance to the algal response.",
+      "Ecologists call a chain of effects running down a food web a trophic cascade. The classic marine case links sea otters, sea urchins and kelp: where otters had been hunted out, urchins multiplied and grazed kelp forests down to bare rock, as James Estes and John Palmisano reported from the Aleutian Islands in 1974. Aquarium keepers rely on the grazing link directly, adding algae-eating snails such as nerites to keep glass and plants clean."
     ],
     "steps": [
       "Run the intact aquarium for one hundred days. Record all three abundance indices at day fifty.",
@@ -193,6 +254,13 @@
       "Move the time control to day fifty again. Compare fish as well as algae with the original tank.",
       "Repeat after removing fish and describe the chain of responses from predators through snails to algae."
     ],
+    "example": {
+      "title": "Fish removed at day zero: the snails boom and the algae crash",
+      "paragraphs": [
+        "In the intact tank at day 50 the indices read algae 75.9, snails 12.65 and fish 13.3. Remove the fish instead and the same day shows algae 17.24, snails 39.24 and no fish. Without predation the snails peak at about 56 on day 22, and the algae fall to their lowest value, about 14.4, on day 37.5.",
+        "Removing the snails produces the opposite pattern. Algae reach 99.83 by day 25 and sit at their limit of 100 from day 50, while the fish index falls from 7 to 0.93 by day 50 and 0.12 by day 100. In both experiments a change at one level travels two steps along the chain, which is the evidence for an indirect effect."
+      ]
+    },
     "misconception": {
       "myth": "Removing fish affects only the fish curve.",
       "fact": "Releasing snails from predation changes the grazing pressure on algae, allowing a predator removal to affect producers indirectly."
@@ -214,6 +282,14 @@
       {
         "q": "Why inspect more than the endpoint?",
         "a": "An early increase in snail abundance can be followed by a decrease if algae become scarce. Reading only the final value hides that sequence. Scrubbing backward helps identify which population peaked first and suggests a mechanism for the later response."
+      },
+      {
+        "q": "What is a trophic cascade?",
+        "a": "A trophic cascade is a chain of effects that runs down a food web after a change at the top or middle. Removing a predator lets its prey increase, and the larger prey population then eats more of the level below. In this aquarium, losing the fish lets snails rise to about 56 and pushes algae down to about 14 within about five and a half weeks."
+      },
+      {
+        "q": "Why does the intact tank change before it settles?",
+        "a": "The starting abundances, algae 65, snails 22 and fish 7, are not in balance. Plentiful algae let snails grow to about 25.4 by day 9.5, which pulls algae down to their low of 56.3 on day 15.5. The fish then catch up, peaking near 13.9 on day 36, and the tank settles with algae in the low to mid-70s."
       }
     ]
   },
@@ -222,7 +298,8 @@
     "answer": "An outline combines several clues, including coastlines, elongated peninsulas, islands and the relative positions of major bends. A reliable identification usually depends on more than one feature. Italy's projecting peninsula suggests a boot, for example, while nearby island outlines help distinguish it from another country with a long narrow mainland.",
     "science": [
       "The apparent size of a silhouette depends on the scale used to fit it into the viewing window. Use proportions within the same outline, such as the width of a northern region compared with the length of its southern extension. A large appearance in a quiz window gives little evidence about actual land area.",
-      "Some outlines contain multiple disconnected parts. Water can separate an island from the mainland, or an entire country can consist of an archipelago. Look at the arrangement of the pieces together before selecting a name. Regional feedback after the guess provides a second way to remember the association between the feature and its location."
+      "Some outlines contain multiple disconnected parts. Water can separate an island from the mainland, or an entire country can consist of an archipelago. Look at the arrangement of the pieces together before selecting a name. Regional feedback after the guess provides a second way to remember the association between the feature and its location.",
+      "Distinctive proportions make some outlines easy once you know what to look for. Chile stretches about 4,300 km from north to south yet averages under 200 km across. Italy's peninsula ends beside Sicily, with Sardinia to the west. Japan's four main islands, Hokkaido, Honshu, Shikoku and Kyushu, form a curving arc, and Madagascar, the world's fourth-largest island, stands alone off southeast Africa. Learning one such feature per country gives you a cue to test against the regional hint."
     ],
     "steps": [
       "Inspect the outline without reading the options. Name one distinctive bend, island chain or peninsula.",
@@ -230,6 +307,13 @@
       "Choose a country and check the regional feedback. Associate the most diagnostic feature with that region.",
       "Complete all eight outlines and replay. Try explaining each identification aloud before selecting an answer."
     ],
+    "example": {
+      "title": "Round 5 of the starter set: picking Chile from four candidates",
+      "paragraphs": [
+        "On a first play of the starter set, round 5 outlines Chile in yellow and offers Chile, Egypt, Japan and Pakistan. Egypt is close to a square with long straight borders, Japan is an arc of islands, and Pakistan runs diagonally from the Arabian Sea up to the Karakoram. Only one candidate is a thin ribbon squeezed between an ocean and a mountain range.",
+        "If you are unsure, the hint “Look in South America” settles it, and the feedback adds that the Atacama Desert lies to the north. Switching to the full atlas raises the deck to 176 mapped outlines, still with four names per round, so proportion clues like these matter more than memorizing a short list."
+      ]
+    },
     "misconception": {
       "myth": "The largest picture represents the largest country.",
       "fact": "Each silhouette is fitted to its own display area, so relative area cannot be read by comparing separate rounds."
@@ -251,6 +335,14 @@
       {
         "q": "What should I look for in an island chain?",
         "a": "Look at the direction in which the chain curves and the relative spacing of its main islands. Those features remain visible when the picture is scaled to fit. Very small offshore islands may be absent from a generalized drawing."
+      },
+      {
+        "q": "How many countries are in the full atlas?",
+        "a": "The full atlas draws 176 country outlines from Natural Earth's generalized boundaries, leaving out Antarctica, and each round still offers four names. The starter set keeps eight well-known shapes, Italy, Japan, Brazil, Egypt, Chile, Madagascar, Pakistan and Norway, which is a good place to build recall before the larger deck."
+      },
+      {
+        "q": "Why do some quiz maps show grey areas with white outlines?",
+        "a": "Grey shapes with white edges mark disputed territories from Natural Earth's disputed-areas layer, which records places claimed by more than one government, under indeterminate control or held by breakaway authorities. They are drawn over the satellite image so that an outline is not read as a settled international boundary where it is still contested."
       }
     ]
   },
@@ -259,7 +351,8 @@
     "answer": "A line of constant longitude runs from pole to pole and can cross several separate landmasses. Countries with mapped land on both sides of the line within a continuous polygon appear in the crossing count. Sliding the line east or west reveals how coastline shape and the arrangement of political territories affect that count.",
     "science": [
       "Meridians look parallel on this rectangular map but converge at the poles on Earth. Their angular separation stays constant while the ground distance between them decreases with latitude. Moving a line by ten degrees therefore sweeps a wider strip near the equator than at high latitudes, even though the movement looks uniform on screen.",
-      "The highlighted countries keep their existing geographic outlines while the imaginary boundary cuts across them. A country's inclusion depends on whether a mapped land polygon spans the selected longitude. Islands can contribute crossings of their own, and ocean between disconnected parts does not by itself establish that a line crosses the country's land."
+      "The highlighted countries keep their existing geographic outlines while the imaginary boundary cuts across them. A country's inclusion depends on whether a mapped land polygon spans the selected longitude. Islands can contribute crossings of their own, and ocean between disconnected parts does not by itself establish that a line crosses the country's land.",
+      "The count depends on how much land a meridian meets and how finely that land is divided. Lines between 10° E and 40° E run the length of Europe and then Africa, two continents split into many countries, so every whole degree in that band crosses between 11 and 23 of them. Meridians across the Pacific meet little land: from 150° W to 141° W the only mapped territory crossed is Alaska. The Americas hold fewer, larger countries, so the line at 100° W crosses only Canada, the United States and Mexico."
     ],
     "steps": [
       "Begin at zero degrees and identify the ocean and land regions along the prime meridian.",
@@ -267,6 +360,13 @@
       "Set the border to thirty degrees east. Trace it from north to south and compare the list.",
       "Find two nearby longitudes with different counts. Look for a coastline or territorial extremity that explains the change."
     ],
+    "example": {
+      "title": "Thirty degrees east or west: seventeen crossings against one",
+      "paragraphs": [
+        "Start at 0°: the prime meridian crosses 7 mapped countries, the United Kingdom, France and Spain, then Algeria, Mali, Burkina Faso and Ghana. Move to 30° W and the count drops to 1, Greenland, because that meridian runs through the open Atlantic for almost its whole length.",
+        "At 30° E the count jumps to 17. The line runs through Norway, Finland, Russia, Belarus, Ukraine and Turkey, crosses Egypt and Sudan, and then passes down East and southern Africa to South Africa. Sweep west to 22° E and the total peaks at 23, the highest of any whole-degree setting, as the line threads the many smaller countries of central and eastern Europe."
+      ]
+    },
     "misconception": {
       "myth": "Every meridian crosses the same number of countries.",
       "fact": "The angular definition of longitude is uniform while the distribution of land and political boundaries varies around Earth."
@@ -288,6 +388,14 @@
       {
         "q": "Why is a country listed only once?",
         "a": "A meridian might enter the same country in several places, particularly where islands lie offshore. The count answers how many distinct mapped countries are crossed, so multiple intersections with one country's land still produce a single entry."
+      },
+      {
+        "q": "Which real borders follow a line of longitude?",
+        "a": "Several borders were drawn along meridians. Most of the Egypt–Libya boundary follows 25° E, and the 141st meridian east separates Papua New Guinea from Indonesia's Papua provinces except where the line bends around the Fly River. The long US–Canada border west of Lake of the Woods follows a line of latitude, the 49th parallel, instead."
+      },
+      {
+        "q": "Why is Greenland listed as a separate country?",
+        "a": "Greenland is an autonomous territory within the Kingdom of Denmark, but Natural Earth's country layer maps it as its own unit, separate from Denmark. The crossing list follows that data, so a meridian through Greenland counts it on its own, which is why 30° W returns Greenland as its only entry."
       }
     ]
   },
@@ -296,7 +404,8 @@
     "answer": "A field observation can combine landforms, water bodies and relative directions to narrow a location. A mountain chain alone may fit many countries, while a named river that flows from that highland toward a particular sea gives a more selective clue. Use the combination to decide which destination best explains the whole note.",
     "science": [
       "Start by identifying the scale of each clue. A continent or ocean places the observation within a broad region. A particular mountain, river basin or island channel may distinguish neighboring countries. Keeping the broad clue in mind also helps catch mistaken associations based on a familiar place name in an otherwise incompatible setting.",
-      "As the number of candidate countries increases, guessing becomes less reliable. Comparing alternatives makes geographic reasoning visible. For example, two countries can share a coastline along the same ocean, but a specific relationship between a desert and a mountain range can make one a closer match for the field observation."
+      "As the number of candidate countries increases, guessing becomes less reliable. Comparing alternatives makes geographic reasoning visible. For example, two countries can share a coastline along the same ocean, but a specific relationship between a desert and a mountain range can make one a closer match for the field observation.",
+      "Rivers are among the most diagnostic clues because a named river fixes both a drainage basin and a direction of flow. The Nile runs north into the Mediterranean, the Indus flows from the Karakoram through Pakistan to the Arabian Sea, and the Amazon carries roughly a fifth of all the river water reaching the world's oceans to a wide Atlantic mouth. Pairing a river with the sea it reaches usually leaves only one country that fits."
     ],
     "steps": [
       "Read the entire field note and separate place names from directional clues before looking at the options.",
@@ -304,6 +413,13 @@
       "Submit a guess and use the regional feedback and extra observation to check your explanation.",
       "Continue through eight rounds as the candidate list grows. Recall an earlier clue that excludes a newly offered destination."
     ],
+    "example": {
+      "title": "Rounds 1 and 2: when two candidates share the Mediterranean",
+      "paragraphs": [
+        "On a first play, round 1 reads “I can see a boot-shaped peninsula stretching into the Mediterranean” and offers Brazil, Italy and Madagascar. Only Italy borders the Mediterranean, so the sea alone decides it. After the guess, the extra observation “The Alps rise to the north” confirms the choice and the world map highlights Italy.",
+        "Round 2 is harder because two of its four candidates share that sea: “A broad river forms a triangular delta on the Mediterranean,” with Brazil, Egypt, Italy and Madagascar on offer. Italy's Po also ends in a delta, but on the Adriatic and far smaller, so a broad triangle on the Mediterranean shore points to the Nile and Egypt. From round 6 all 8 destinations are offered."
+      ]
+    },
     "misconception": {
       "myth": "One famous feature always identifies a single country.",
       "fact": "Rivers, mountain ranges and deserts often cross political boundaries, so several observations can be needed to distinguish neighboring locations."
@@ -325,6 +441,14 @@
       {
         "q": "How does the challenge change between rounds?",
         "a": "The first observation comes with three possible destinations. Later rounds add candidates until the full set is available. With more alternatives to eliminate, identifying a distinctive combination of clues becomes more valuable than recognizing a single familiar word."
+      },
+      {
+        "q": "Which clues narrow a location fastest?",
+        "a": "Clues tied to one drainage basin or coastline narrow a location fastest. A named river is especially strong because it fixes a region and a direction of flow: the Indus runs south-west to the Arabian Sea and the Nile north to the Mediterranean. Generic features such as mountains or a desert fit dozens of countries until paired with a sea, river or neighboring range."
+      },
+      {
+        "q": "How are the field notes written?",
+        "a": "Each of the eight field notes is a short first-person observation of a recognizable setting, such as following the Amazon to the Atlantic in Brazil or crossing a volcanic island chain in Japan. The extra observation shown after a guess adds a second clue, like Mount Fuji or the Atacama Desert, so reviewing a round teaches a new feature."
       }
     ]
   }

@@ -4,8 +4,6 @@ import { cleanItemData, handleClassroom, markPaper, newJoinCode, paperForStudent
 import { plans } from "@/lib/classroom/plans";
 import { csv, lessonOutline, topicStats, wordDocument } from "@/lib/classroom/templates";
 import type { PaperData } from "@/lib/classroom/types";
-import { canonicalTopicCourse, getSyllabus } from "@/lib/exam-prep/catalog";
-import { examPrepIndexablePaths } from "@/lib/exam-prep/paths";
 
 const paper: PaperData = { subject: "Physics", minutes: 15, questions: [
   { id: "a", topic: "Dynamics", q: "F = ma, a?", options: ["2", "4"], answer: 1, why: "20/5" },
@@ -194,13 +192,3 @@ describe("teacher templates and exports", () => {
   });
 });
 
-describe("exam prep canonical pages", () => {
-  it("lists a topic repeated at a higher level only once in the sitemap", () => {
-    const aLevel = { board: "cambridge", level: "a", subject: "physics" };
-    const repeated = getSyllabus(aLevel).filter((topic) => canonicalTopicCourse(aLevel, topic));
-    expect(repeated.length).toBeGreaterThan(0);
-    expect(canonicalTopicCourse(aLevel, repeated[0])).toMatchObject({ level: "as" });
-    for (const topic of repeated) expect(examPrepIndexablePaths).not.toContain(`/exam-prep/cambridge/a/physics/${topic.slug}`);
-    expect(new Set(examPrepIndexablePaths).size).toBe(examPrepIndexablePaths.length);
-  });
-});

@@ -264,36 +264,9 @@ export function courseTitle(course: Course) {
 }
 
 /** Level and board hubs are indexable only when they lead to at least one verified syllabus. */
-/**
- * Some levels repeat an earlier level's topics word for word (Cambridge A Level includes the AS topics,
- * Pearson IAL includes the IAS units). Returns the earlier course that owns the canonical page, if any.
- */
-export function canonicalTopicCourse(course: Course, topic: Topic): Course | null {
-  const levels = getBoard(course.board)?.levels ?? [];
-  for (const level of levels.slice(0, levels.findIndex((entry) => entry.id === course.level))) {
-    const earlier = { ...course, level: level.id };
-    if (isVerified(earlier) && getSyllabus(earlier).some((entry) => entry.slug === topic.slug && entry.content === topic.content && entry.name === topic.name)) return earlier;
-  }
-  return null;
-}
-
-/**
- * Topic lessons are published for learners and linked from every course page, but are kept out of
- * Google (googlebot noindex, out of the sitemap; Bing may list them from /sitemap-bing.xml) for now. About 80 lessons built from one template went live while
- * Google had the site demoted by its September 2026 spam update, and that update acted on exactly
- * this pattern. Set this to true to open the lessons to search once rankings have recovered.
- */
-export const topicLessonsIndexed: boolean = false;
-
-/**
- * Board, level, course and papers pages are kept out of Google (googlebot noindex; out of the sitemap
- * and llms.txt), though Bing may still list them. They are navigation built from one template, and pairs of them repeat each other almost
- * word for word (IB SL and HL, Cambridge AS and A Level, Pearson IAS and IAL), with roughly 20–150 words
- * of their own. On 2026-11-21 Google had left 28 of the 32 Exam Prep URLs unindexed. Only the Exam Prep
- * home, the any-board guide and the practical pages stay open to search. Set this to true once these
- * pages carry substantial content of their own.
- */
-export const examPrepHubsIndexed: boolean = false;
+// Courses, topic lessons, paper guides and practicals are for signed-in students only and have no
+// public page each (see lib/exam-prep/study.ts). The former switches that held those public pages out
+// of Google, and the canonical-page helper for topics repeated at a higher level, were removed with them.
 
 export const isLevelIndexable = (board: string, level: string) => liveSubjects.some((subject) => isVerified({ board, level, subject: subject.id }));
 export const isBoardIndexable = (board: string) => Boolean(getBoard(board)?.levels.some((level) => isLevelIndexable(board, level.id)));

@@ -104,7 +104,7 @@ export default async function MoleculeKitPage({ params }: { params: Promise<{ lo
           <h2>{copy.chart.title}</h2>
           <p>{copy.chart.body}</p>
           <div className="moleculeKitChart" lang="en">
-            {featured.map((m) => <Link key={m.slug} href={`/en/molecules/${m.slug}`}>{m.formula} · {m.name}</Link>)}
+            {featured.map((m) => <Link key={m.slug} href={`/en/molecules#${m.slug}`}>{m.formula} · {m.name}</Link>)}
           </div>
           <div className="topicGuideHeroActions"><Link className="button subjectButton" href="/en/molecules">{copy.chart.cta} →</Link></div>
         </section>
@@ -120,7 +120,7 @@ export default async function MoleculeKitPage({ params }: { params: Promise<{ lo
           <p>{allMoleculesCopy[locale].body}</p>
           {getVseprClasses().map((group) => <div className="moleculeKitGroup" key={`${group.axe}-${group.shape}`} lang="en">
             <h3>{group.shape} <span>{group.axe} · {group.electronGeometry.toLowerCase()} electron geometry · {group.examples.length}</span></h3>
-            <div className="moleculeKitChart">{group.examples.map((m) => <Link key={m.slug} href={`/en/molecules/${m.slug}`}>{m.formula} · {m.name}</Link>)}</div>
+            <div className="moleculeKitChart">{group.examples.map((m) => <Link key={m.slug} href={`/en/molecules#${m.slug}`}>{m.formula} · {m.name}</Link>)}</div>
           </div>)}
         </section>
       </div>

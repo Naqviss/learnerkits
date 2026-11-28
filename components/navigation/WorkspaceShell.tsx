@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth/session";
 import { isWorkspaceLandingPath, workspaceHome, workspaceModeForPath, type WorkspaceMode } from "@/lib/auth/workspace";
 import type { Messages } from "@/lib/i18n/getMessages";
 import { LanguageSelector } from "./LanguageSelector";
+import { locales } from "@/lib/i18n/config";
 import { SearchBar } from "./SearchBar";
 import { ThemeToggle } from "./ThemeToggle";
 import { WorkspaceProfile } from "./WorkspaceProfile";
@@ -176,7 +177,7 @@ export function WorkspaceShell({ locale, m, guestNav, guestFooter, children }: {
           {mode && <WorkspaceProfile key={user.id} user={user} mode={mode} setMode={changeMode} locale={locale} signOutLabel={m.auth.signOut} />}
           <div className={styles.preferences}>
             <Link href={`/${locale}/settings`} onClick={open ? closeDrawer : undefined}>{m.navigation.settings}</Link>
-            <LanguageSelector locale={locale} label={m.common.languageLabel} inWorkspace />
+            {locales.length > 1 && <LanguageSelector locale={locale} label={m.common.languageLabel} inWorkspace />}
             <ThemeToggle labels={{ toLight: `${m.settings.theme}: ${m.settings.light}`, toDark: `${m.settings.theme}: ${m.settings.dark}` }} />
           </div>
         </div>

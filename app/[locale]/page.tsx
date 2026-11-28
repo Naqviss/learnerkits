@@ -8,7 +8,8 @@ import { isLocale } from "@/lib/i18n/config";
 import { localizedMetadata, localizedUrl, jsonLd, siteUrl, websiteJsonLd } from "@/lib/seo/metadata";
 import { simulationCountLabel, visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { isVerified, liveSubjects } from "@/lib/exam-prep/catalog";
-import { mockExams } from "@/lib/mock-exams/catalog";
+import { studyHref } from "@/lib/exam-prep/study";
+import { mockExamHref, mockExams } from "@/lib/mock-exams/catalog";
 import { getHomeCopy } from "@/lib/home/content";
 import { HomeStart } from "@/components/home/HomeStart";
 import { HomeMotion } from "@/components/home/HomeMotion";
@@ -50,6 +51,13 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     return lab ? [{ ...lab, subject, subjectName: getLocalizedSubjectName(locale, subject) }] : [];
   });
   const freeMocks = mockExams.filter((exam) => !exam.premium).slice(0, 2);
+  // English only: one concrete reason to open each featured lab first (text written for the home page).
+  const startHere: Record<string, string> = locale === "en" ? {
+    "moon-phases-3d": "Place the Moon yourself and the name “first quarter” makes sense: the Moon looks half lit because it is a quarter of the way round its orbit.",
+    "projectile-lab": "Launch at 30° and then at 60° with the same speed. On level ground both land in the same spot, because angles that add to 90° share a range.",
+    "earthquake-epicenter-finder": "Each seismic station only gives a distance, which is a circle on the map. The epicenter is the one point where all three circles meet.",
+    "molecule-builder-3d": "Start with a molecule you know, such as water or carbon dioxide; the live valence check tells you when every atom has the right number of bonds.",
+  } : {};
   const featureLinks = [`/${locale}/subjects`, "/en/exam-prep", "/en/teacher-kit"];
 
   return <main id="home" className={styles.home}>
@@ -91,7 +99,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     <section className={`container ${styles.section}`} aria-labelledby="lab-heading" data-home-reveal>
       <header className={styles.head}><div><span className="eyebrow">{c.labEyebrow}</span><h2 id="lab-heading">{c.labHeading}</h2></div><Link className={styles.arrowLink} href={`/${locale}/simulations`}>{c.browseLabs} →</Link></header>
       <div className={styles.simGrid}>{featuredLabs.map((lab, index) => <Link key={lab.slug} className={styles.sim} href={`/${locale}/simulations/${lab.slug}`} style={{ "--card-index": index } as CSSProperties}>
-        <div className={styles.labArt}><LabArtwork kind={lab.subject} /><span>{lab.subjectName}</span></div><div className={styles.simBody}><small>{lab.kind}</small><h3>{lab.title}</h3><p>{lab.outcome}</p><b>{c.openLab}<span aria-hidden="true">↗</span></b></div>
+        <div className={styles.labArt}><LabArtwork kind={lab.subject} /><span>{lab.subjectName}</span></div><div className={styles.simBody}><small>{lab.kind}</small><h3>{lab.title}</h3><p>{lab.outcome}</p>{startHere[lab.slug] && <p>{startHere[lab.slug]}</p>}<b>{c.openLab}<span aria-hidden="true">↗</span></b></div>
       </Link>)}</div><p className={styles.fine}>{c.labNote}</p>
     </section>
 
@@ -110,14 +118,14 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <ul className={styles.courseList}>{liveSubjects.map(subject => {
             const level = subject.id === "physics" ? "as" : "igcse";
             const verified = isVerified({ board: "cambridge", level, subject: subject.id });
-            return <li key={subject.id}><Link href={`/en/exam-prep/cambridge/${level}/${subject.id}`} hrefLang="en">
+            return <li key={subject.id}><Link href={studyHref({ board: "cambridge", level, subject: subject.id })} hrefLang="en">
               <strong>{c.courseNames[subject.id as keyof typeof c.courseNames]}</strong>
               <small>{level.toUpperCase()} · {verified ? c.syllabus : c.previewCourse}</small>
             </Link></li>;
           })}</ul>
           <Link className={styles.arrowLink} href="/en/exam-prep" hrefLang="en">{c.prepCta} →</Link>
         </article>
-        <article className={styles.panel}><h3>{c.mockTitle}</h3><p>{c.mockBody}</p><ul className={styles.mocks}>{freeMocks.map((exam) => <li key={exam.id}><Link className={styles.mock} href={`/en/mock-exams/${exam.id}`} hrefLang="en"><strong>{exam.title}</strong><span>{exam.paper} · {exam.minutes} {c.minutes}</span><b>{c.tryFree} →</b></Link></li>)}</ul><p className={styles.fine}>{c.mockNote}</p></article>
+        <article className={styles.panel}><h3>{c.mockTitle}</h3><p>{c.mockBody}</p><ul className={styles.mocks}>{freeMocks.map((exam) => <li key={exam.id}><Link className={styles.mock} href={mockExamHref(exam.id)} hrefLang="en"><strong>{exam.title}</strong><span>{exam.paper} · {exam.minutes} {c.minutes}</span><b>{c.tryFree} →</b></Link></li>)}</ul><p className={styles.fine}>{c.mockNote}</p></article>
       </div>
     </section>
 

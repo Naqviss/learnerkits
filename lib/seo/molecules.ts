@@ -1,8 +1,8 @@
 import { moleculeNames as names, molecules } from "@/lib/simulations/chemistry/model";
 import { bondLengthText, bondLengths } from "@/lib/simulations/chemistry/bondLengths";
 
-// Per-molecule reference pages are generated from the same dataset that drives the
-// Molecular Geometry 3D lab, so the shape, angle, and 3D model can never disagree.
+// The VSEPR chart page (/en/molecules) and its molecule dialogs are generated from the same dataset
+// that drives the Molecular Geometry 3D lab, so the shape, angle, and 3D model can never disagree.
 
 // Simple s/p/d hybridization labels are a poor description of transition-metal and
 // actinide centers, so those pages omit the label instead of teaching a misconception.
@@ -82,13 +82,10 @@ export const moleculeReferences: MoleculeReference[] = molecules.map((m, index) 
   };
 });
 
-// Reference pages open to search engines: the standard examples general-chemistry courses teach
-// for each of the 13 VSEPR classes. Every other molecule page stays published and linked from
-// the shapes chart, but is kept out of Google (googlebot noindex, out of the sitemap; Bing may list
-// it from /sitemap-bing.xml). Google's September 2026 spam
-// update demoted the site when all ~120 pages built from this one template were indexable at
-// once. To open another page to search, add its slug here.
-const indexedMoleculeSlugs = new Set([
+// The standard examples general-chemistry courses teach for each of the 13 VSEPR classes. The chart
+// page offers them as a "textbook examples" filter so students can start with the molecules they meet
+// in class.
+export const coreMoleculeSlugs: ReadonlySet<string> = new Set([
   // AX₂, AX₂E, AX₂E₂, AX₂E₃
   "carbon-dioxide-co2", "beryllium-chloride-becl2",
   "sulfur-dioxide-so2", "ozone-o3", "nitrite-ion-no2",
@@ -107,15 +104,9 @@ const indexedMoleculeSlugs = new Set([
   "bromine-pentafluoride-brf5", "iodine-pentafluoride-if5",
   "sulfur-hexafluoride-sf6",
 ]);
-export const isMoleculeIndexed = (m: MoleculeReference) => indexedMoleculeSlugs.has(m.slug);
-export const indexedMoleculeReferences = () => moleculeReferences.filter(isMoleculeIndexed);
 
 export function getMoleculeReference(slug: string) {
   return moleculeReferences.find((m) => m.slug === slug);
-}
-
-export function getMoleculesWithShape(shape: string, axe: string) {
-  return moleculeReferences.filter((m) => m.shape === shape && m.axe === axe);
 }
 
 // One row per VSEPR class, in electron-domain order, for the shapes chart.
@@ -157,38 +148,6 @@ export function plainFormula(m: MoleculeReference) {
   const ascii = m.asciiFormula.replace(/[+-]$/, "");
   const charge = `${magnitude.replace(/./g, (d) => superscriptDigits[d])}${sign === "⁻" ? "-" : sign === "⁺" ? "+" : ""}`;
   return magnitude ? `${ascii} ${charge}` : `${ascii}${charge}`;
-}
-
-export function moleculeSearchCopy(m: MoleculeReference) {
-  const formula = plainFormula(m);
-  const angle = angleShort(m);
-  const plural = angle.includes("&") ? "s" : "";
-  // Search Console (Sep–Oct 2026) showed these pages earning 0.1% CTR where their positions normally earn
-  // about 4%. Titles therefore use the words searchers type: the formula first, then the chemical name
-  // (a large share of queries use the name, e.g. "ammonia molecular geometry", "triiodide shape"), and
-  // "Shape" (in about a fifth of queries) rather than "Lewis Structure" (2%). Titles have no site-name
-  // suffix so the words fit before Google truncates; Google shows the site name separately.
-  const name = titleCase(m.name);
-  const title = [
-    `${formula} (${name}) Molecular Geometry, Shape & Bond Angle${plural} (3D)`,
-    `${formula} (${name}) Molecular Geometry, Shape & Bond Angle${plural}`,
-    `${formula} (${name}) Molecular Geometry & Shape (3D)`,
-    `${formula} (${name}) Molecular Geometry & Shape`,
-    `${formula} Molecular Geometry, Shape & Bond Angle${plural} (3D)`,
-    `${formula} Molecular Geometry & Shape (3D Model)`,
-  ].find((text) => text.length <= 60) ?? `${formula} Molecular Geometry & Shape`;
-  // Descriptions lead with the question the page answers and the name, then what only the page has.
-  const lowerName = m.name[0].toLowerCase() + m.name.slice(1);
-  const checks = m.polarity === "Ion" ? "electron geometry, bond angles and hybridization" : "electron geometry, bond angles, hybridization and polarity";
-  const shape = m.shape.toLowerCase();
-  const lewis = lewisSteps(m) ? ", draw the Lewis structure," : "";
-  const description = [
-    `Why is ${formula} (${lowerName}) ${shape}? Rotate a free 3D model${lewis} and check ${checks}.`,
-    `Why is ${formula} (${lowerName}) ${shape}? Rotate a free 3D model and check ${checks}.`,
-    `Why is ${formula} ${shape}? Rotate a free 3D model${lewis} and check ${checks}.`,
-    `Why is ${formula} ${shape}? Rotate a free 3D model and check ${checks}.`,
-  ].find((text) => text.length <= 160)!;
-  return { title, description };
 }
 
 export function moleculeCopy(m: MoleculeReference) {
@@ -262,16 +221,6 @@ export function lewisSteps(m: MoleculeReference) {
     ? `This single-bond structure keeps the domain count simple. In the real ${m.isIon ? "ion" : "molecule"} the bonds are equivalent and partly double (resonance), which changes bond lengths but not the shape.`
     : undefined;
   return { total, steps, resonance };
-}
-
-// Molecules with the same VSEPR class, the same outer atom, and a central atom from the same group,
-// ordered down the group, so trends in angle and bond length can be compared.
-export function moleculeFamily(m: MoleculeReference) {
-  const group = groupOf[m.center];
-  if (group === undefined) return [];
-  return moleculeReferences
-    .filter((other) => other.axe === m.axe && other.shape === m.shape && other.outer === m.outer && groupOf[other.center] === group && chargeOf(other.formula) === chargeOf(m.formula))
-    .sort((a, b) => (valenceElectrons[a.center] ?? 0) - (valenceElectrons[b.center] ?? 0) || a.index - b.index);
 }
 
 // One common misconception per VSEPR class, explained for that shape.

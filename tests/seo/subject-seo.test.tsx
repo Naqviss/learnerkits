@@ -4,6 +4,7 @@ import { locales } from "@/lib/i18n/config";
 import { getLocalizedSubject } from "@/lib/i18n/content";
 import { visibleSubjectSlugs } from "@/lib/subjects/catalog";
 import { getSubjectSeo } from "@/lib/seo/subject-seo";
+import { getSubjectGuide } from "@/lib/seo/subject-guides";
 import SubjectPage, { generateMetadata } from "@/app/[locale]/subjects/[subject]/page";
 import SubjectIndex from "@/app/[locale]/subjects/page";
 
@@ -43,14 +44,20 @@ describe("subject search snippets", () => {
     }
   });
 
-  it("presents the complete learning journey on every published subject page", async () => {
+  // English pages show a guide written for each subject in place of the blocks every subject shared;
+  // Spanish (published, noindex) keeps the shared learning-journey block.
+  it("shows each English subject its own guide and keeps the learning journey in Spanish", async () => {
     for (const locale of locales) {
       for (const subject of visibleSubjectSlugs) {
         const html = renderToStaticMarkup(await SubjectPage({ params: Promise.resolve({ locale, subject }) }));
-        expect(html, `${locale}/${subject}`).toContain(locale === "es" ? "Un recorrido de aprendizaje completo" : "A complete learning journey");
-        expect(html).toContain(locale === "es" ? "Pregunta al tutor de IA del tema" : "Ask the topic-aware AI tutor");
-        expect(html).toContain(locale === "es" ? "Consulta tu progreso" : "See learning progress");
-        expect(html).toContain(`/${locale}/premium`);
+        if (locale === "es") {
+          expect(html, `${locale}/${subject}`).toContain("Un recorrido de aprendizaje completo");
+          expect(html).toContain("Pregunta al tutor de IA del tema");
+          expect(html).toContain(`/${locale}/premium`);
+        } else {
+          expect(html, `${locale}/${subject}`).toContain(getSubjectGuide(subject)!.heading.replace(/&/g, "&amp;").replace(/’/g, "’"));
+          expect(html).not.toContain("A complete learning journey");
+        }
       }
     }
   });
@@ -66,7 +73,6 @@ describe("unlisted subjects", () => {
     const googleOnly = { index: true, follow: true, googleBot: { index: false, follow: true } };
     for (const subject of unlistedSubjectSlugs) {
       expect(await generateMetadata({ params: Promise.resolve({ locale: "en", subject }) })).toMatchObject({ robots: googleOnly });
-      expect(await generateMetadata({ params: Promise.resolve({ locale: "es", subject }) })).toMatchObject({ robots: { index: false, follow: true } });
       expect(urls.has(`https://www.learnerkits.com/en/subjects/${subject}`)).toBe(false);
       for (const { slug } of subjectsCatalog[subject].simulations) {
         expect(await simulationMetadata({ params: Promise.resolve({ locale: "en", slug }) }), slug).toMatchObject({ robots: googleOnly });
@@ -78,10 +84,6 @@ describe("unlisted subjects", () => {
 
 import { unlistedSimulationSlugs } from "@/lib/subjects/catalog";
 import { investigationSlugs } from "@/lib/simulations/practical/investigations";
-import { generateMetadata as worksheetMetadata } from "@/app/[locale]/guides/[lab]/[worksheet]/page";
-import { generateMetadata as boardMetadata } from "@/app/[locale]/exam-prep/[board]/page";
-import { generateMetadata as courseMetadata } from "@/app/[locale]/exam-prep/[board]/[level]/[subject]/page";
-import { generateMetadata as papersMetadata } from "@/app/[locale]/exam-prep/[board]/[level]/[subject]/papers/page";
 
 // The 2026-11-23 content audit: page sets built from one template, or added in bulk during the
 // spam-update recovery, stay published but out of Google (and its sitemap) until they have content of
@@ -100,21 +102,16 @@ describe("pages held out of Google after the content audit", () => {
     expect(listed("/simulations/tsunami-3d")).toBe(true);
   });
 
-  it("unlists the lab worksheets", async () => {
-    for (const lab of investigationSlugs) for (const worksheet of ["mission", "how-to-measure"]) {
-      expect(await worksheetMetadata({ params: Promise.resolve({ locale: "en", lab, worksheet }) }), `${lab}/${worksheet}`).toMatchObject({ robots: googleOnly });
-      expect(listed(`/guides/${lab}/${worksheet}`), `${lab}/${worksheet}`).toBe(false);
+  // The 2026-11-28 thin-content clean-up (for AdSense): these page sets were retired rather than held
+  // out. Worksheets moved onto their lab pages, molecule pages into the VSEPR chart, and exam-prep
+  // courses and lessons into the signed-in study view; none of them is in either sitemap.
+  it("lists no retired worksheet, molecule or exam-prep lesson page in either sitemap", () => {
+    const bing = new Set(googleUnlistedPaths());
+    for (const path of ["/guides/food-chain-simulator/mission", "/molecules/water-h2o", "/exam-prep/cambridge", "/exam-prep/cambridge/as/physics", "/exam-prep/cambridge/as/physics/kinematics", "/exam-prep/practicals/circuit"]) {
+      expect(listed(path), path).toBe(false);
+      expect(bing.has(path), path).toBe(false);
     }
-    expect(listed("/guides")).toBe(true);
-  });
-
-  it("unlists the exam-prep board, level, course and papers pages", async () => {
-    const course = { board: "cambridge", level: "as", subject: "physics" };
-    expect(await boardMetadata({ params: Promise.resolve({ locale: "en", board: "cambridge" }) })).toMatchObject({ robots: googleOnly });
-    expect(await courseMetadata({ params: Promise.resolve({ locale: "en", ...course }) })).toMatchObject({ robots: googleOnly });
-    expect(await papersMetadata({ params: Promise.resolve({ locale: "en", ...course }) })).toMatchObject({ robots: googleOnly });
-    for (const path of ["/exam-prep/cambridge", "/exam-prep/cambridge/as", "/exam-prep/cambridge/as/physics", "/exam-prep/cambridge/as/physics/papers", "/exam-prep/ib/dp-hl/physics"]) expect(listed(path), path).toBe(false);
-    for (const path of ["/exam-prep", "/exam-prep/any-board", "/exam-prep/practicals/circuit", "/exam-prep/practicals/pendulum"]) expect(listed(path), path).toBe(true);
+    for (const path of ["/exam-prep", "/exam-prep/any-board", "/molecules", "/guides/environmental-city-builder"]) expect(listed(path), path).toBe(true);
   });
 });
 
@@ -127,9 +124,10 @@ describe("sitemap-bing.xml", () => {
     expect(new Set(paths).size).toBe(paths.length);
     const google = new Set(sitemap().map((entry) => new URL(entry.url).pathname));
     for (const path of paths) expect(google.has(`/en${path}`), path).toBe(false);
-    for (const path of ["/subjects/mathematics", "/simulations/fluid-dynamics-simulator", "/guides/fluid-dynamics-simulator/mission", "/exam-prep/cambridge/as/physics", "/exam-prep/cambridge/as/physics/kinematics", "/molecules/zinc-bromide-znbr2"]) expect(paths, path).toContain(path);
+    for (const path of ["/subjects/mathematics", "/simulations/fluid-dynamics-simulator"]) expect(paths, path).toContain(path);
     const xml = await bingSitemap().text();
     expect(xml.match(/<loc>/g)).toHaveLength(paths.length);
-    expect(xml).toContain("<loc>https://www.learnerkits.com/en/molecules/zinc-bromide-znbr2</loc>");
+    expect(xml).toContain("<loc>https://www.learnerkits.com/en/simulations/fluid-dynamics-simulator</loc>");
+    expect(xml).not.toContain("/en/molecules/");
   });
 });

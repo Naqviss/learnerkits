@@ -10,6 +10,7 @@ import { ManagedArticleList } from "@/components/articles/ManagedArticleContent"
 import { breadcrumbJsonLd, jsonLd, localizedMetadata, localizedUrl, siteUrl } from "@/lib/seo/metadata";
 import { articleShareImagePath } from "@/lib/seo/share-card";
 import styles from "@/components/articles/articles.module.css";
+import { ArticlesGuide } from "@/components/seo/HubGuides";
 
 export function generateStaticParams() { return [{ locale: "en" }]; }
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -39,6 +40,7 @@ export default async function ArticlesPage({ params }: { params: Promise<{ local
       {articles.map((article) => <ArticleCard key={article.slug} article={article} readingMinutes={article.readingMinutes} headingLevel={2} />)}
     </ArticleFilter>
     <ManagedArticleList sourceSlugs={articles.map((article) => article.slug)} />
+    <ArticlesGuide />
     <aside className={styles.note}><h2>Learn it. Then try it.</h2><p>Pair these articles with our interactive labs. Every model has assumptions; make them part of your explanation.</p><div className={styles.links}><Link href="/en/simulations">Explore simulations →</Link><Link href="/en/editorial-policy">Editorial policy →</Link></div></aside>
   </main>;
 }

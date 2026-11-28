@@ -1,14 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { molecules } from "@/lib/simulations/chemistry/model";
-import { classMistake, getMoleculeReference, getVseprClasses, indexedMoleculeReferences, isMoleculeIndexed, lewisSteps, moleculeCopy, moleculeFamily, moleculeReferences, moleculeSearchCopy } from "@/lib/seo/molecules";
+import { classMistake, coreMoleculeSlugs, getMoleculeReference, getVseprClasses, lewisSteps, moleculeCopy, moleculeReferences } from "@/lib/seo/molecules";
 import sitemap from "@/app/sitemap";
-import MoleculePage, { generateMetadata } from "@/app/[locale]/molecules/[slug]/page";
+import MoleculesPage, { generateMetadata } from "@/app/[locale]/molecules/page";
+import { moleculeDetails } from "@/lib/seo/molecule-details";
+import { legacyRedirect } from "@/lib/seo/legacy-redirects";
 import { moleculeImageAlt, moleculeImageSvg } from "@/lib/seo/molecule-image";
 import { renderToStaticMarkup } from "react-dom/server";
 import { moleculeAbout } from "@/lib/seo/molecule-about";
 import { bondLengths } from "@/lib/simulations/chemistry/bondLengths";
 
-describe("molecule reference pages", () => {
+describe("molecule reference data", () => {
   it("covers every lab molecule with a real name and a unique URL-safe slug", () => {
     expect(moleculeReferences).toHaveLength(molecules.length);
     for (const m of moleculeReferences) {
@@ -16,20 +18,6 @@ describe("molecule reference pages", () => {
       expect(m.slug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
     }
     expect(new Set(moleculeReferences.map((m) => m.slug)).size).toBe(moleculeReferences.length);
-  });
-  it("opens a core set covering every VSEPR class to search and keeps the rest unlisted", async () => {
-    const indexed = indexedMoleculeReferences();
-    // Every slug in the core list must be a real page, so a typo cannot silently drop one.
-    expect(indexed).toHaveLength(40);
-    expect(new Set(indexed.map((m) => `${m.axe}|${m.shape}`)).size).toBe(getVseprClasses().length);
-    const listed = sitemap().map((entry) => new URL(entry.url).pathname).filter((path) => path.startsWith("/en/molecules/"));
-    expect(listed.sort()).toEqual(indexed.map((m) => `/en/molecules/${m.slug}`).sort());
-    for (const m of moleculeReferences) {
-      const metadata = await generateMetadata({ params: Promise.resolve({ locale: "en", slug: m.slug }) });
-      expect(metadata.alternates?.canonical, m.slug).toBe(`https://www.learnerkits.com/en/molecules/${m.slug}`);
-      if (isMoleculeIndexed(m)) expect(metadata.robots, m.slug).toMatchObject({ index: true, follow: true });
-      else expect(metadata.robots, m.slug).toEqual({ index: true, follow: true, googleBot: { index: false, follow: true } });
-    }
   });
   it("derives textbook VSEPR facts", () => {
     const water = getMoleculeReference("water-h2o")!;
@@ -50,24 +38,7 @@ describe("molecule reference pages", () => {
     expect(faq.map((f) => f.q)).toContain("Is H₂O polar or nonpolar?");
     expect(faq.every((f) => f.a.includes("H₂O") || f.a.includes("Water"))).toBe(true);
   });
-  it("writes search titles and descriptions with the plain formula people type", () => {
-    expect(moleculeSearchCopy(getMoleculeReference("phosphorus-pentafluoride-pf5")!).title).toBe("PF5 (Phosphorus Pentafluoride) Molecular Geometry & Shape");
-    expect(moleculeSearchCopy(getMoleculeReference("ammonia-nh3")!).title).toBe("NH3 (Ammonia) Molecular Geometry, Shape & Bond Angle (3D)");
-    expect(moleculeSearchCopy(getMoleculeReference("hydrogen-sulfide-h2s")!).description).toMatch(/^Why is H2S \(hydrogen sulfide\) bent\? .*Lewis structure/);
-    expect(moleculeSearchCopy(getMoleculeReference("carbon-dioxide-co2")!).description).toContain("Why is CO2 (carbon dioxide) linear?");
-    expect(moleculeSearchCopy(getMoleculeReference("sulfate-ion-so4")!).title).toBe("SO4 2- (Sulfate Ion) Molecular Geometry, Shape & Bond Angle");
-    expect(moleculeSearchCopy(getMoleculeReference("nitrate-ion-no3")!).title).toMatch(/^NO3- \(Nitrate Ion\) /);
-    // Every page that is open to search carries both the formula and the chemical name in its title.
-    for (const m of indexedMoleculeReferences()) expect(moleculeSearchCopy(m).title, m.slug).toContain(`(${m.name.replace(/(^|[\s-])([a-z])/g, (_, gap: string, letter: string) => gap + letter.toUpperCase())})`);
-    for (const m of moleculeReferences) {
-      const { title, description } = moleculeSearchCopy(m);
-      expect(title, m.slug).not.toMatch(/[₀-₉⁰¹²³⁴-⁹]/);
-      expect(title.length, title).toBeLessThanOrEqual(60);
-      expect(description.length, description).toBeLessThanOrEqual(160);
-      expect(description.toLowerCase()).toContain("electron geometry");
-    }
-  });
-  it("adds sourced background, Lewis bookkeeping, family trends, and a class-specific mistake", () => {
+  it("adds sourced background, Lewis bookkeeping and a class-specific mistake", () => {
     expect(Object.keys(moleculeAbout).length).toBeGreaterThanOrEqual(100);
     for (const [formula, entry] of Object.entries(moleculeAbout)) {
       expect(moleculeReferences.some((m) => m.formula === formula), formula).toBe(true);
@@ -82,7 +53,6 @@ describe("molecule reference pages", () => {
     expect(lewisSteps(getMoleculeReference("sulfate-ion-so4")!)?.total).toBe(32);
     expect(lewisSteps(getMoleculeReference("xenon-tetrafluoride-xef4")!)?.total).toBe(36);
     expect(lewisSteps(getMoleculeReference("permanganate-ion-mno4")!)).toBeUndefined();
-    expect(moleculeFamily(getMoleculeReference("water-h2o")!).map((m) => m.formula)).toEqual(["H₂O", "H₂S", "H₂Se", "H₂Te"]);
     expect(moleculeReferences.every((m) => classMistake(m))).toBe(true);
   });
 });
@@ -101,15 +71,58 @@ describe("molecule search images", () => {
     expect(moleculeImageAlt(getMoleculeReference("mercury-ii-chloride-hgcl2")!)).toContain("(mercury(II) chloride)");
     expect(moleculeImageAlt(getMoleculeReference("sulfate-ion-so4")!)).toMatch(/^Ball-and-stick model of SO4 2- \(sulfate ion\)/);
   });
+});
 
-  it("gives each molecule page its own image instead of the site logo", async () => {
-    const metadata = await generateMetadata({ params: Promise.resolve({ locale: "en", slug: "ammonia-nh3" }) });
-    expect(metadata.title).toEqual({ absolute: "NH3 (Ammonia) Molecular Geometry, Shape & Bond Angle (3D)" });
-    expect(metadata.openGraph?.images).toEqual([expect.objectContaining({ url: "https://www.learnerkits.com/images/molecules/ammonia-nh3.jpg", width: 1200, height: 630 })]);
-    const html = renderToStaticMarkup(await MoleculePage({ params: Promise.resolve({ locale: "en", slug: "ammonia-nh3" }) }));
-    expect(html).toContain('src="/images/molecules/ammonia-nh3.svg"');
-    expect(html).toContain("NH₃ (ammonia) molecular geometry and shape");
-    const resource = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/g)].map((match) => JSON.parse(match[1])).find((item) => item["@type"]?.includes?.("LearningResource"));
-    expect(resource.primaryImageOfPage).toMatchObject({ "@type": "ImageObject", contentUrl: "https://www.learnerkits.com/images/molecules/ammonia-nh3.svg" });
+describe("VSEPR chart page", () => {
+  it("is the only molecule page in the sitemap and lists every molecule in its own table", async () => {
+    const listed = sitemap().map((entry) => new URL(entry.url).pathname).filter((path) => path.startsWith("/en/molecules"));
+    expect(listed).toEqual(["/en/molecules"]);
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: "en" }) });
+    expect(metadata.alternates?.canonical).toBe("https://www.learnerkits.com/en/molecules");
+    expect(String(metadata.description).length).toBeLessThanOrEqual(160);
+    const html = renderToStaticMarkup(await MoleculesPage({ params: Promise.resolve({ locale: "en" }) }));
+    for (const m of moleculeReferences) expect(html, m.slug).toContain(`href="#${m.slug}"`);
+    expect(html).not.toContain('href="/en/molecules/');
+    expect(html).toContain("Why lone pairs squeeze bond angles");
+    expect(html).toContain(classMistake(getMoleculeReference("water-h2o")!)!);
+    // The per-molecule details load only when a dialog opens; they are not in the page HTML.
+    expect(html).not.toContain(moleculeAbout["CH₄"].about);
+  });
+
+  it("describes every molecule in the page's structured data and offers a textbook filter", async () => {
+    const html = renderToStaticMarkup(await MoleculesPage({ params: Promise.resolve({ locale: "en" }) }));
+    const blocks = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/g)].map((match) => JSON.parse(match[1]));
+    const items = blocks.find((block) => block.mainEntity?.["@type"] === "ItemList").mainEntity.itemListElement;
+    expect(items).toHaveLength(moleculeReferences.length);
+    const sf4 = items.find((entry: { item: { "@id": string } }) => entry.item["@id"].endsWith("#sulfur-tetrafluoride-sf4")).item;
+    expect(sf4).toMatchObject({ "@type": "DefinedTerm", alternateName: "SF4", termCode: "AX₄E" });
+    expect(sf4.description).toMatch(/^SF4 \(sulfur tetrafluoride\) has a seesaw molecular geometry/);
+    expect(sf4.description).toContain("sp³d hybridization");
+    // Every row has a "View 3D" button and shows the plain formula students type.
+    expect(html.match(/>View 3D</g)).toHaveLength(moleculeReferences.length);
+    expect(html).toContain(">SF4</small>");
+    expect(html).toContain("Textbook examples only");
+    expect(coreMoleculeSlugs.size).toBe(40);
+    for (const slug of coreMoleculeSlugs) expect(getMoleculeReference(slug), slug).toBeDefined();
+    expect(new Set([...coreMoleculeSlugs].map((slug) => { const m = getMoleculeReference(slug)!; return `${m.axe}|${m.shape}`; })).size).toBe(getVseprClasses().length);
+  });
+
+  it("writes at least 800 words of its own above the table", async () => {
+    const html = renderToStaticMarkup(await MoleculesPage({ params: Promise.resolve({ locale: "en" }) }));
+    const prose = html.slice(0, html.indexOf('id="all-molecules"')).replace(/<script[^>]*>.*?<\/script>/gs, "").replace(/<table.*?<\/table>/gs, "").replace(/<[^>]+>/g, " ");
+    expect(prose.split(/\s+/).filter(Boolean).length).toBeGreaterThanOrEqual(800);
+  });
+
+  it("opens each molecule with its details and sends the old molecule URLs to it", () => {
+    const water = moleculeDetails("water-h2o")!;
+    expect(water.lewis?.steps.length).toBeGreaterThan(3);
+    expect(water.about?.text).toBe(moleculeAbout["H₂O"].about);
+    expect(water.polarity).toContain("H₂O is polar");
+    expect(moleculeDetails("not-a-molecule")).toBeUndefined();
+    expect(legacyRedirect("/en/molecules/water-h2o")).toBe("/en/molecules#water-h2o");
+    expect(legacyRedirect("/en/guides/food-chain-simulator/mission")).toBe("/en/simulations/food-chain-simulator#investigation");
+    expect(legacyRedirect("/en/guides/food-chain-simulator/how-to-measure")).toBe("/en/simulations/food-chain-simulator#investigation");
+    expect(legacyRedirect("/en/molecules")).toBeNull();
+    expect(legacyRedirect("/en/guides/environmental-city-builder")).toBeNull();
   });
 });

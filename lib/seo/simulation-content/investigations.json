@@ -10,6 +10,13 @@
       "expression": "u(r) = u₀[1 − (r/R)²]",
       "meaning": "The distance r is measured outward from the center. Substituting half the radius gives a squared fraction of one quarter, leaving three quarters of the maximum speed at that location."
     },
+    "example": {
+      "title": "Distances covered in twelve seconds at 1 and 8 millipascal seconds",
+      "paragraphs": [
+        "Set the viscosity to one millipascal second, close to that of water at room temperature. The center reading is 4 centimetres per second and the half-radius reading 3, so in the full twelve-second run a center parcel moves 48 centimetres while a parcel halfway to the wall moves 36. That 12-centimetre lead is the bowing you see in each marker row, and the wall row stays put.",
+        "At eight millipascal seconds, the slider's maximum, the center speed drops to 0.5 centimetres per second and the half-radius speed to 0.375, displayed as 0.38. The same twelve seconds now carry the center parcel 6 centimetres and the half-radius parcel 4.5. Every distance shrinks by the same factor of eight as the viscosity rises, and the average speed across the pipe, half the center value, falls from 2 to 0.25 centimetres per second."
+      ]
+    },
     "steps": [
       "Set viscosity to two and record the three speed readings.",
       "Predict how far a center parcel travels in six seconds, then follow one during playback.",
@@ -46,6 +53,13 @@
     "formula": {
       "expression": "F = ½ρv²ACᴅ",
       "meaning": "The calculation uses fresh water at a density of 1,000 kilograms per cubic metre, a two metre per second current and a fixed frontal area. These values make the force in newtons twenty times the chosen coefficient."
+    },
+    "example": {
+      "title": "Ranking the hollow hemisphere, sphere and long ellipsoid over ten seconds",
+      "paragraphs": [
+        "The hemisphere with its hollow facing upstream has the largest coefficient in the list, 1.42, so it feels 28.4 newtons, the strongest drag of the ten objects. The sphere, at 0.47, feels 9.4 newtons, almost exactly a third as much. Turning an ellipsoid so its long axis points upstream brings the coefficient down to 0.18 and the force to 3.6 newtons.",
+        "Run each for the full ten seconds and the impulse readings become 284, 94 and 36 newton seconds, keeping the same ratios as the forces because the exposure time is shared. The hemisphere's support therefore carries nearly eight times the load of the ellipsoid's in the same current. Only the streamlined pod, at 1.6 newtons and 16 newton seconds after ten seconds, beats the ellipsoid."
+      ]
     },
     "steps": [
       "Compare the sphere and flat disk at equal exposure times.",
@@ -84,6 +98,13 @@
       "expression": "v² = 2G(M₁ + M₂)(1/r − 1/r₀)",
       "meaning": "Starting at rest fixes the total energy. The reciprocal separation at contact and the reciprocal starting separation determine the relative kinetic energy gained during the fall."
     },
+    "example": {
+      "title": "Where the planets are halfway through a fall from six radii",
+      "paragraphs": [
+        "From the default separation of six radii, first contact comes after 8.56 time units at a closing speed of 1.41 radii per time unit. Pause at 4.28 units, half the fall time, and the centers are still 5.20 radii apart. In the first half of the time they have closed only 0.8 of the 4 radii between release and contact, and the closing speed is just 0.39.",
+        "The rest happens quickly. At 90 percent of the fall time, 7.70 units, the separation is down to 3.01 radii and the speed has reached 1.00, so the final 0.86 time units close the last radius. Starting from nine radii stretches the fall to 16.49 units, almost twice as long, but raises the contact speed only from 1.41 to 1.53."
+      ]
+    },
     "steps": [
       "Start three radii apart and record the predicted contact time.",
       "Pause just before contact and compare the two distances traveled.",
@@ -120,6 +141,13 @@
     "formula": {
       "expression": "R = v² sin(2θ)/g",
       "meaning": "Equal launch and landing heights give this range expression. Reflecting the launch angle about forty-five degrees leaves the sine term unchanged and explains the paired trajectories."
+    },
+    "example": {
+      "title": "Why a 45° launch overshoots the 30-metre flag",
+      "paragraphs": [
+        "Forty-five degrees gives the longest flight on level ground, so it is a natural first guess, but it is too much for this target. At 18 metres per second the ball stays aloft for 2.59 seconds, rises to 8.26 metres and lands 33.03 metres away. The landing error reads +3.03 metres: the shot carries three metres past the flag. Near forty-five degrees the range barely changes, since 44° still lands at 33.01 metres, only two centimetres shorter.",
+        "Dropping to thirty degrees shortens the flight to 1.83 seconds and the range to 28.60 metres, an error of −1.40 metres, so the low-arc solution lies between thirty and forty-five degrees. Twenty and seventy degrees both land at 21.23 metres, 8.77 metres short. The seventy-degree ball climbs to 14.58 metres and spends 3.45 seconds in the air, against 1.93 metres and 1.26 seconds for the twenty-degree ball, yet both finish in the same spot."
+      ]
     },
     "steps": [
       "Launch at thirty degrees and decide whether the predicted miss is short or long.",
@@ -158,6 +186,13 @@
       "expression": "L = g[T/(2πn)]²",
       "meaning": "Here T is the intended reunion interval and n is the number of complete swings assigned to one bob. Each additional cycle increases frequency while reducing the required length."
     },
+    "example": {
+      "title": "Sizing the strings for six-second and eighteen-second reunions",
+      "paragraphs": [
+        "At the shortest setting, six seconds, the slowest bob must finish five swings, so each swing lasts 1.2 seconds and the longest string reads 0.36 metres. The fastest bob fits twelve swings into the same six seconds, a period of half a second, which needs only 0.06 metres of string. Over the full 24-second timeline the row lines up four times, and the counter shows four completed reunions.",
+        "Tripling the reunion to eighteen seconds multiplies every length by nine, not three. The longest string becomes 3.22 metres and the shortest 0.56 metres, so a frame built for this design must be more than three metres tall, while the six-second version fits on a desk. The bob assigned eight swings shows the same factor, growing from 0.14 to 1.26 metres. Within 24 seconds the eighteen-second design completes only one reunion, because the second falls at 36 seconds."
+      ]
+    },
     "steps": [
       "Choose twelve seconds and record the longest and shortest strings.",
       "Pause at six seconds and identify bobs pointing to opposite sides.",
@@ -194,6 +229,13 @@
     "formula": {
       "expression": "Grazing rate = 0.003 × grass index × rabbit index",
       "meaning": "Either scarce grass or scarce rabbits limits consumption. Multiplying their indices captures that dependence in a simplified encounter model, while separate terms represent births, growth and background losses."
+    },
+    "example": {
+      "title": "Reading the remove-rabbits meadow at weeks 10, 20 and 60",
+      "paragraphs": [
+        "Choose Remove rabbits and play all sixty weeks. Without grazing, the grass index climbs from 90 to 124 by week ten and 129.3 by week twenty, then settles at its limit of 130. The fox index falls from 8 to 4.85 at week ten, 2.94 at week twenty and 0.40 at week sixty, shrinking by the same proportion each week because foxes have no food and lose about 5 percent of their index weekly.",
+        "Put the intact meadow beside it at week sixty: grass 102.5, rabbits 16.1 and foxes 11.6. Removing foxes instead leaves a grass index of 23.0 with 51.0 rabbits at the same week, less than a quarter of the intact meadow's grass. For the producer, the rabbit-free and fox-free meadows are the two extremes, with the intact chain between them."
+      ]
     },
     "steps": [
       "Play the intact meadow and record all three indices at week twenty.",
@@ -232,6 +274,13 @@
       "expression": "K = 20A; N(t) = K/[1 + (K/1000 − 1)e^(−0.28t)]",
       "meaning": "The area A fixes the equilibrium K. The time-dependent expression preserves the initial release size and gradually brings the abundance toward the capacity for the selected reserve."
     },
+    "example": {
+      "title": "A 1,000-animal herd in 10 km² and 100 km² reserves",
+      "paragraphs": [
+        "In the smallest reserve, ten square kilometres, carrying capacity is only 200 animals, a fifth of the release herd. The decline is steep at first: the herd reading falls to about 368 after two years and 249 after five, so three quarters of the herd has gone within five years. It then creeps toward capacity, reaching 210 at year ten and 200.6 at year twenty.",
+        "At one hundred square kilometres the capacity is 2,000, twice the release herd. Growth is fastest early, taking the herd to 1,273 after two years and 1,604 after five. By year ten it reaches 1,885, and at year twenty it stands within eight animals of capacity, at 1,993. A thirty-square-kilometre reserve sits between these cases: its capacity of 600 is below the release herd, which is still 666 after five years. The same growth rate, 0.28 per year, drives all three curves; only the capacity differs."
+      ]
+    },
     "steps": [
       "Set the grazing area to fifty square kilometres and inspect the two readings.",
       "Reduce the area to forty and predict the direction of the first year's change.",
@@ -268,6 +317,13 @@
     "formula": {
       "expression": "A(t) = 1,000(1 − p/100)ᵗ",
       "meaning": "The annual retained fraction compounds over t years. A separate stock calculation multiplies hectares remaining by a uniform carbon density, keeping the area accounting and carbon accounting distinct."
+    },
+    "example": {
+      "title": "How long half the stand lasts at 3 and 5 percent clearing",
+      "paragraphs": [
+        "At three percent annual clearing, 737 hectares remain after ten years, and year twenty-three is the first below half the original stand, at 496 hectares. The halving time works out at about 22.8 years. By year fifty only 218 hectares are left, storing about 17,445 tonnes of carbon instead of the original 80,000. That original stock is equivalent to roughly 293,000 tonnes of carbon dioxide, using the 44/12 mass ratio of carbon dioxide to carbon.",
+        "Five percent brings the halving time down to about 13.5 years, so the forest drops below 500 hectares during year fourteen. After a century just 5.9 hectares stand, under one percent of the original area. Raising the rate from three to five percent shortens the halving time by about 40 percent, because that time equals ln 0.5 divided by the logarithm of the fraction kept each year, 0.97 against 0.95."
+      ]
     },
     "steps": [
       "Set clearing to zero and inspect the forest and carbon readings at year one hundred.",
@@ -306,6 +362,13 @@
       "expression": "Cₙ = C₀(1 − f)ⁿ",
       "meaning": "The exchange fraction f is expressed as a decimal. Solving the retained-fraction equation for a tenth of the original concentration and rounding up gives the first qualifying whole day."
     },
+    "example": {
+      "title": "Threshold days for 5, 25 and 1 percent daily exchange",
+      "paragraphs": [
+        "At five percent daily exchange the tracer halves in about 13.5 days, and the bay first reaches 1 milligram per litre on day 45; after ten days it still reads 5.99 milligrams per litre. Raising the exchange to 25 percent, the slider's maximum, brings the threshold forward to day 9, and by day ten the concentration is down to 0.56.",
+        "The one percent setting shows the long tail. After the full 100-day window the bay still holds 3.66 milligrams per litre, and the threshold readout gives day 230, more than seven months away. For small exchange fractions the threshold day is roughly 230 divided by the percentage, because the natural logarithm of 10 is about 2.30: five percent gives 45 days, close to the 46 that rule predicts."
+      ]
+    },
     "steps": [
       "Start with ten percent exchange and predict the concentration after one day.",
       "Find the last whole day above one milligram per litre and the next day below it.",
@@ -342,6 +405,13 @@
     "formula": {
       "expression": "E = population × annual footprint × years × (1 − reduction)",
       "meaning": "The reduction enters as a fraction of the baseline annual footprint. Subtracting the reduced cumulative total from the baseline total gives avoided emissions over the same interval."
+    },
+    "example": {
+      "title": "An 80 percent cut against a 10 percent cut over thirty years",
+      "paragraphs": [
+        "At an 80 percent reduction each resident's footprint drops from six tonnes to 1.2 tonnes of carbon dioxide equivalent, so the town of 1,000 adds 1,200 tonnes a year. After thirty years the reduced total is 36,000 tonnes against a baseline of 180,000, and avoided emissions reach 144,000 tonnes, four fifths of the baseline.",
+        "A 10 percent cut avoids 600 tonnes a year, or 18,000 tonnes over the same thirty years, one eighth of the larger saving. Read at year ten, the two scenarios have avoided 6,000 and 48,000 tonnes. Put another way, the 80 percent town emits in thirty years what the unchanged town emits in six."
+      ]
     },
     "steps": [
       "Run the baseline with zero reduction and identify the line with a zero reading.",
@@ -380,6 +450,13 @@
       "expression": "Local solar hour = (UTC + longitude/15) modulo 24",
       "meaning": "Longitude uses positive values east of Greenwich. Wrapping the result into a twenty-four-hour interval gives the clock reading for the reference meridian on the ideal rotating Earth."
     },
+    "example": {
+      "title": "Finding the noon meridian at 03:00 and 20:00 UTC",
+      "paragraphs": [
+        "Scrub the timeline to three hours UTC. The noon meridian reads 135° E, the meridian on which Japan Standard Time is based, so a reference line set at 135° E shows a local solar hour of 12. At the same instant Greenwich reads 3, three hours after midnight in local mean solar time.",
+        "Advance to twenty hours UTC and the noon meridian reaches 120° W, the meridian that forms part of the California–Nevada border. A reference at 75° W, the meridian for US Eastern time and about 1° from New York, then reads 15, mid-afternoon by solar time, whereas at 12 UTC it read 7. Between 03:00 and 20:00 UTC the noon line moved 255 degrees westward: seventeen hours at fifteen degrees per hour."
+      ]
+    },
     "steps": [
       "Set the reference to Greenwich and pause at twelve UTC.",
       "Move the reference ninety degrees east and read its solar hour at the same instant.",
@@ -416,6 +493,13 @@
     "formula": {
       "expression": "Boundary longitude = (western longitude + eastern longitude)/2",
       "meaning": "The western capital remains at ten degrees west. Averaging signed coordinates places the boundary at the midpoint and lets you predict its movement before the relocation animation runs."
+    },
+    "example": {
+      "title": "Which settlements change sides as the eastern capital moves",
+      "paragraphs": [
+        "The five settlements sit at 1°, 5°, 9°, 13° and 17° E. With the eastern capital at its starting longitude of 35° E, the boundary lies at 12.5° E and three settlements are west of it. Moving the capital to 25° E puts the boundary at 7.5° E, and the count drops to two, because the settlement at 9° E is now nearer the eastern capital.",
+        "Moving it east has the opposite effect. At 37° E the boundary passes 13.5° E and the settlement at 13° E joins the west, making four; at 45° E the boundary reaches 17.5° E and all five settlements belong to the western capital."
+      ]
     },
     "steps": [
       "Choose fifty degrees east as the destination and locate both square capital markers.",
@@ -491,6 +575,13 @@
       "expression": "Temperature = 30 + warming − 0.5 × absolute latitude",
       "meaning": "A threshold is reached where the latitude-dependent decrease offsets the equatorial temperature excess. The absolute latitude makes the ideal belts symmetric north and south, an assumption that can be checked directly on the map."
     },
+    "example": {
+      "title": "Converting 1 °C and 2 °C of warming into kilometres of shift",
+      "paragraphs": [
+        "With one degree of final warming the 20 °C boundary moves from 20° to 22° of latitude and the 5 °C boundary from 50° to 52°. Two degrees push them to 24° and 54°. Because one degree of latitude spans about 111 kilometres, each degree of warming in this profile carries both boundaries about 222 kilometres poleward, roughly 444 kilometres in a two-degree scenario.",
+        "The temperature gradient sets that conversion. If the profile cooled by 1 °C per degree of latitude instead of 0.5, the same two degrees of warming would move each boundary only 2° of latitude, about 222 kilometres. A gentler gradient, by the same logic, would produce a larger shift."
+      ]
+    },
     "steps": [
       "Record both boundary latitudes before warming starts.",
       "Select three degrees and predict the final latitude of the twenty-degree line.",
@@ -527,6 +618,13 @@
     "formula": {
       "expression": "Westward displacement = steering speed × elapsed hours",
       "meaning": "With constant speed the westward distance grows linearly. Converting that distance to longitude requires a latitude factor because neighboring meridians converge toward the poles."
+    },
+    "example": {
+      "title": "Five-day tracks at the slowest and fastest steering winds",
+      "paragraphs": [
+        "Set the westward steering speed to its maximum, 35 kilometres per hour, and run all 120 hours. The storm center ends 4,200 kilometres west of its start, at about 74.8° W, and the fixed northward drift of 6 kilometres per hour lifts it from 15° N to about 21.5° N. After two days it has already reached roughly 50.9° W and 17.6° N.",
+        "At 5 kilometres per hour the same five days cover only 600 kilometres westward, ending near 40.7° W but at the identical latitude of 21.5° N. The two tracks therefore finish 3,600 kilometres apart. Dividing that gap by the length of a longitude degree at 18° N, about 105.6 kilometres, gives 34.1 degrees, which matches the difference between the two longitude readouts."
+      ]
     },
     "steps": [
       "Start at twenty kilometres per hour and estimate westward displacement after twenty-four hours.",

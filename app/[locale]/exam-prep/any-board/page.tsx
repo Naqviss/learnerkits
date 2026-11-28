@@ -118,6 +118,14 @@ export default async function AnyBoardPage({ params }: { params: Promise<{ local
       <div className={styles.faqList}>{faqs.map((item) => <details key={item.q}><summary>{item.q}</summary><p>{item.a}</p></details>)}</div>
     </section>
 
+    <section className={styles.contentSection} aria-labelledby="matching-examples-heading">
+      <div className={styles.sectionHead}><span className="eyebrow">Worked examples</span><h2 id="matching-examples-heading">Matching a syllabus line to a lab</h2><p>Three real cases from the boards LearnerKits has mapped, showing how close a lab gets to a syllabus topic and where it stops.</p></div>
+      <p><strong>A direct match.</strong> Pearson Edexcel International GCSE Physics opens with “Forces and motion”. The <Link href="/en/simulations/newtons-laws-force-lab">Newton’s Laws Force Lab</Link> covers that topic’s core: change the applied force or the mass and read the acceleration, which is exactly the relationship the topic tests. If your syllabus uses different wording, such as “Dynamics” or “Newton’s laws”, the same lab still fits.</p>
+      <p><strong>A related lab, not a full match.</strong> AQA GCSE Chemistry section 4.3, “Quantitative chemistry”, is paired with the <Link href="/en/simulations/titration-simulator">Titration Simulator</Link>, but only as a related lab. Working out an unknown concentration from a titration is one part of that section; relative formula mass, moles in a reacting mass and percentage yield are not modeled, so you would still revise those from your notes and past questions.</p>
+      <p><strong>A partial fit at a higher level.</strong> AQA A Level Chemistry 3.1, “Physical chemistry”, is matched to the <Link href="/en/simulations/reaction-rate-lab">Reaction Rate Lab</Link>. It handles kinetics, from activation energy to the effect of a catalyst, but the same section also covers energetics, equilibria and electrode potentials, which the lab does not touch.</p>
+      <p><strong>When two syllabus lines share one idea.</strong> Cambridge AS Level Physics 9702 lists “Waves” (section 7) and “Superposition” (section 8) separately. LearnerKits matches the first to the <Link href="/en/simulations/pendulum-physics">Pendulum Physics Lab</Link>, for period and frequency, and the second to the <Link href="/en/simulations/wave-interference">Wave Interference Lab</Link>, where two waves add. If your syllabus keeps them under one heading, use both labs for that one topic.</p>
+      <p>Biology topics have no lab link yet, because the biology simulations are not published. When you map your own syllabus, label each topic the same way: direct match, related lab, or no lab, and spend your revision time accordingly.</p>
+    </section>
     <IndependenceNotice />
   </main>;
 }

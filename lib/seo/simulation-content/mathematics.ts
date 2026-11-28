@@ -12,6 +12,10 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       "Pilots and sailors combine vectors constantly. A plane heading north at 200 km/h in a 50 km/h wind blowing east has a ground velocity of ⟨50, 200⟩, so it travels at about 206 km/h on a heading roughly 14° east of north.",
     ],
     formula: { expression: "R = A + B = ⟨Aₓ + Bₓ, Aᵧ + Bᵧ⟩, |R| = √(Rₓ² + Rᵧ²)", meaning: "R is the resultant vector, A and B the vectors being added and |R| the length of the resultant. Components are added separately before the length is found." },
+    example: { title: "Building the target resultant ⟨6, 8⟩ from different pairs", paragraphs: [
+      "The mission asks for R = ⟨6, 8⟩, which has magnitude √(36 + 64) = 10 and direction 53.1°. Keep A at its starting value ⟨2, 3⟩ and subtract it from the target: B = ⟨6 − 2, 8 − 3⟩ = ⟨4, 5⟩. The lengths of A and B are √13 ≈ 3.61 and √41 ≈ 6.40, which add to 10.01, only just more than 10, because A and B point in nearly the same direction.",
+      "A very different pair works too. A = ⟨10, 0⟩ and B = ⟨−4, 8⟩ also add to ⟨6, 8⟩, but their lengths are 10 and about 8.94, a total of 18.94. The resultant is still 10 long. The more the two arrows disagree in direction, the further the sum of their lengths overshoots the length of the resultant.",
+    ] },
     steps: [
       "Leave the starting values in place and read the panel: Resultant shows ⟨3, 4⟩, Magnitude 5.00 and Direction 53.1°.",
       "Predict the resultant before you change Vector B · x to 4 and Vector B · y to 5, then compare your prediction with the Resultant readout.",
@@ -38,6 +42,10 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       "Quadratics model anything whose rate of change grows steadily. A ball’s height over time, the area of a square pen as its side grows and the profit from a price that also cuts sales all trace parabolas, and the vertex marks the highest or lowest value.",
     ],
     formula: { expression: "x = (−b ± √(b² − 4ac)) ÷ 2a", meaning: "x gives the roots of ax² + bx + c = 0. The expression b² − 4ac is the discriminant, and the vertex lies at x = −b ÷ 2a, halfway between the roots." },
+    example: { title: "Solving 2x² + 3x − 2 = 0 with the explorer’s readouts", paragraphs: [
+      "Set Coefficient a = 2, Coefficient b = 3 and Coefficient c = −2. The discriminant is 3² − 4 × 2 × (−2) = 9 + 16 = 25, a perfect square, so the roots are rational: x = (−3 ± 5) ÷ 4, which gives −2 and 0.5. The quadratic factors as (2x − 1)(x + 2).",
+      "The vertex is at x = −3 ÷ 4 = −0.75, exactly halfway between the roots, and its height is −2 − 9 ÷ 8 = −3.125, which the Vertex readout rounds to −3.13. Because a = 2 is positive, that vertex is the lowest point on the curve.",
+    ] },
     steps: [
       "Start from y = x² and read the panel: Discriminant 0, Vertex (0, 0) and a single repeated root at 0.",
       "Raise Coefficient c to 4 and predict what happens to the roots before looking. The curve lifts off the x-axis and Roots reports no two real roots.",
@@ -63,6 +71,11 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       "Moving the plane away from the center changes the size of a section and sometimes its type. A sphere cut 2 units from the center of a 2.5-unit sphere leaves a circle of radius √(2.5² − 2²) = 1.5. A vertical cut through a cone that misses the tip produces a curved hyperbola instead of a triangle.",
       "Cross-sections are how doctors read CT and MRI scans, which image the body as a stack of thin slices. Engineers use them to calculate the strength of beams, and geologists reconstruct rock layers from core samples in the same way.",
     ],
+    example: { title: "Measuring the circle a horizontal plane cuts from the cone", paragraphs: [
+      "The lab’s cone is 5 units tall with a base radius of 2.5 units. A horizontal plane cuts it in a circle whose radius shrinks steadily toward the apex, because each cut is a smaller copy of the base. By similar triangles, the radius equals 2.5 × (distance below the apex ÷ 5). At the default offset of 0 the plane sits 2.5 units below the apex, so the section has radius 1.25.",
+      "Its area is π × 1.25² ≈ 4.91 square units, while the base has area π × 2.5² ≈ 19.63. Halving the radius divided the area by four. The cylinder, with the same 2.5-unit radius, gives a circle of about 19.63 square units at every height, which is the quickest way to tell the two solids apart from their slices.",
+      "The 5-unit cube behaves differently again. Every cut parallel to a face, horizontal or vertical, is a 5 × 5 square of area 25. A vertical plane through two opposite vertical edges, which the lab does not offer, would instead give a rectangle 5 units tall and 5√2 ≈ 7.07 units wide, because the plane runs along the diagonal of the square base.",
+    ] },
     steps: [
       "Choose Cylinder, keep Slice orientation on Horizontal and Plane offset at 0. The amber outline and the Cross-section readout both show a circle.",
       "Switch Slice orientation to Vertical and predict the new shape before the outline redraws as a rectangle.",
@@ -75,6 +88,7 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       { q: "What is a cross-section in geometry?", a: "A cross-section is the two-dimensional shape left when a plane cuts through a three-dimensional solid. Its outline is the set of points where the plane meets the surface of the solid. Slicing a loaf of bread shows the idea: every slice has roughly the same cross-section as the loaf." },
       { q: "Can a cube have a hexagonal cross-section?", a: "Yes. A plane that passes through the midpoints of six edges, tilted perpendicular to a long diagonal of the cube, cuts all six faces and leaves a regular hexagon. Other tilted planes give triangles, rectangles and pentagons, so a cube has a surprising variety of sections." },
       { q: "What shapes are conic sections?", a: "Conic sections are the curves made by cutting a double cone with a plane: circles, ellipses, parabolas and hyperbolas. A horizontal cut gives a circle, a slight tilt gives an ellipse, a cut parallel to the side gives a parabola and a steeper cut gives a hyperbola." },
+      { q: "What shape is the cross-section of a cylinder cut at an angle?", a: "A tilted plane that crosses only the curved side of a cylinder cuts an ellipse. Its short axis equals the cylinder’s diameter, and its long axis grows as the tilt increases: for a radius of 2.5 and a plane tilted 60° from horizontal, the semi-major axis is 2.5 ÷ cos 60° = 5. If the plane also cuts a base, part of the outline becomes a straight line." },
     ],
   },
 
@@ -87,6 +101,11 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       "The converse is equally useful: if a² + b² = c² for the three sides, the triangle must contain a right angle. The same idea gives the distance between two points on a graph, √((x₂ − x₁)² + (y₂ − y₁)²), which is how maps and GPS receivers measure straight-line distance.",
     ],
     formula: { expression: "a² + b² = c², so c = √(a² + b²)", meaning: "a and b are the two legs that meet at the right angle and c is the hypotenuse, the longest side, opposite the right angle." },
+    example: { title: "Solving Puzzle C, then using its hypotenuse as a base", paragraphs: [
+      "Puzzle C has legs of 8 and 15. Squaring gives 64 and 225, which add to 289. Since 16² = 256 and 18² = 324, the hypotenuse lies between 16 and 18, and checking 17² = 289 shows it is exactly 17. Setting Your hypotenuse to 17.0 closes the triangle.",
+      "The same triangle has area ½ × 8 × 15 = 60 square units. Treat the hypotenuse as the base instead, and the area formula still has to give 60, so the height to the hypotenuse is 2 × 60 ÷ 17 ≈ 7.06. That height is shorter than either leg, as it must be for a perpendicular drawn from the right angle.",
+      "Most legs do not form a triple. A triangle with legs 2 and 5 has c² = 4 + 25 = 29. Because 29 sits between 25 and 36, the hypotenuse is between 5 and 6, and a calculator gives √29 ≈ 5.39, which rounds to 5.4 on a 0.1-unit scale like the lab’s.",
+    ] },
     steps: [
       "Choose Puzzle A in the Triangle menu. Leg a reads 3 and Leg b reads 4, and the diagram marks the hypotenuse c = ?.",
       "Read the a² + b² value of 25, then set Your hypotenuse to its square root and watch the triangle close.",
@@ -112,6 +131,10 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       "Radians measure an angle by the arc length it cuts on the unit circle. A full turn is 2π radians, so 90° is π/2 and 45° is π/4. Engineers describe alternating current, sound waves and rotating machinery with sine and cosine because each traces the height or width of a point moving around a circle.",
     ],
     formula: { expression: "(x, y) = (cos θ, sin θ), cos²θ + sin²θ = 1", meaning: "θ is the angle measured counterclockwise from the positive x-axis, and (x, y) is the point where that angle meets the circle of radius 1." },
+    example: { title: "Reading 225°, 300° and 15° from reference angles", paragraphs: [
+      "At 225° the angle is 45° past the negative x-axis, in the third quadrant, where both coordinates are negative. Its reference angle is 45°, so the point is (−√2/2, −√2/2) ≈ (−0.707, −0.707), and in radians 225° is 5π/4, shown as 1.25π. At 300° the reference angle is 60° in the fourth quadrant, giving (1/2, −√3/2) ≈ (0.500, −0.866). Its cosine equals cos 60° because the two points are mirror images across the x-axis.",
+      "The 15° steps also reach angles outside the usual table. Since 15° = 45° − 30°, the angle-difference formula gives cos 15° = cos 45° cos 30° + sin 45° sin 30° = (√6 + √2)/4 ≈ 0.966, and sin 15° = sin 45° cos 30° − cos 45° sin 30° = (√6 − √2)/4 ≈ 0.259. Setting Angle to 15° in the lab shows the same two values, with Radians reading 0.08π.",
+    ] },
     steps: [
       "Start at the default Angle of 45° and read Radians 0.25π, cos θ 0.707 and sin θ 0.707.",
       "Set Angle to 90° and predict the coordinates before reading them, then pick the matching option from the Coordinate menu.",
@@ -137,6 +160,10 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       "Any standard-form quadratic can be rewritten in vertex form by completing the square. For example x² − 4x + 1 = (x − 2)² − 3. Designers of satellite dishes and suspension bridges work in vertex form because it puts the turning point exactly where they need it.",
     ],
     formula: { expression: "y = a(x − h)² + k", meaning: "(h, k) is the vertex of the parabola. a is the vertical scale factor; its sign sets the direction of opening and its size sets the width." },
+    example: { title: "Expanding Target B to find its roots and intercept", paragraphs: [
+      "Target B has vertex (−2, 2) and scale −0.5, so its equation is y = −0.5(x + 2)² + 2. Expanding the bracket gives −0.5(x² + 4x + 4) + 2 = −0.5x² − 2x − 2 + 2, which simplifies to y = −0.5x² − 2x. There is no constant term, so this parabola passes through the origin.",
+      "Factoring gives y = −0.5x(x + 4), so the roots are x = 0 and x = −4. They sit 2 units either side of the axis of symmetry x = −2, and the highest point of the curve is the vertex height, 2. Reading the same facts from the target graph is a quick check on your a, h and k.",
+    ] },
     steps: [
       "Pick Target A in the Target graph menu and read Target vertex (2, −3) and Target scale 1.",
       "Set Horizontal shift h and Vertical shift k so that Your vertex matches the target, keeping Vertical scale a at 1.",
@@ -159,8 +186,13 @@ export const mathematicsContent: Record<string, SimulationContent> = {
     science: [
       "Slope is rise over run between any two points on the line: m = (y₂ − y₁) ÷ (x₂ − x₁). Because a straight line has the same steepness everywhere, any two points give the same answer. A positive slope rises from left to right, a negative slope falls, a zero slope is horizontal, and a vertical line has no defined slope at all.",
       "The intercept b is a starting value and the slope is a constant rate of change, which makes linear equations natural models for steady processes. A taxi that charges $4 to start and $1.50 per kilometer has cost = 1.5d + 4, and a phone plan or a filling tank works the same way.",
+      "Multiplying Target C, y = 0.5x − 2, by 2 and rearranging gives the standard form x − 2y = 4. Standard form makes both intercepts quick to find: x = 0 gives y = −2, and y = 0 gives x = 4. Slope-intercept form is better for reading the rate of change and the starting value, so each form suits a different question.",
     ],
     formula: { expression: "y = mx + b, m = (y₂ − y₁) ÷ (x₂ − x₁)", meaning: "m is the slope, the rise for each unit of run, and b is the y-intercept, the value of y when x = 0." },
+    example: { title: "Writing Target B’s equation and finding where it meets Target A", paragraphs: [
+      "Target B crosses the y-axis at 4, so b = 4. Moving 2 units right from (0, 4) brings the line down to (2, 1), a rise of −3 over a run of 2, so the slope is −3 ÷ 2 = −1.5 and the equation is y = −1.5x + 4. Setting y = 0 gives 1.5x = 4, so the line crosses the x-axis at x = 8/3, about 2.67.",
+      "Target A is y = 2x − 3. To find where the two target lines cross, set the right-hand sides equal: 2x − 3 = −1.5x + 4, so 3.5x = 7 and x = 2. Substituting back gives y = 2 × 2 − 3 = 1, and Target B agrees, since −1.5 × 2 + 4 = 1. Both lines pass through (2, 1), the same point used to find B’s slope.",
+    ] },
     steps: [
       "Choose Target A in the Target line menu. Before reading Target slope, estimate the rise and run between the highlighted intercept and the second point on the target line.",
       "Set Intercept b first, so your line passes through the same y-axis point, then adjust Slope m until the two lines overlap.",
@@ -185,6 +217,11 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       "Translations, rotations and reflections are called rigid motions because they never stretch the shape. A reflection does reverse orientation, so the vertices of a triangle that read counterclockwise A, B, C before a flip read clockwise afterward. A dilation produces a similar figure: same shape, different size.",
       "Transformations are the basis of computer graphics, animation and map projections. Every time a game character moves, turns or grows, its vertex coordinates pass through exactly these rules, usually stored as matrices so that the computer can combine several in one step.",
     ],
+    example: { title: "Following the lab’s triangle through all four transformations", paragraphs: [
+      "The blue triangle starts at (−1, −1), (1, −1) and (0.4, 1.2). Its base runs 2 units along y = −1 and its top vertex is 2.2 units above that base, so its area is ½ × 2 × 2.2 = 2.2 square units. The translation ⟨4, −2⟩ adds 4 to every x and subtracts 2 from every y, giving (3, −3), (5, −3) and (4.4, −0.8).",
+      "A 90° counterclockwise rotation applies (x, y) → (−y, x), so the vertices land on (1, −1), (1, 1) and (−1.2, 0.4). The slanted side from (1, −1) to (0.4, 1.2) has length √(0.6² + 2.2²) ≈ 2.28, and its rotated image from (1, 1) to (−1.2, 0.4) has exactly the same length. Reflecting across the y-axis instead gives (1, −1), (−1, −1) and (−0.4, 1.2).",
+      "Dilating by 2 doubles every coordinate: (−2, −2), (2, −2) and (0.8, 2.4). Now the base is 4 and the height 4.4, so the area is ½ × 4 × 4.4 = 8.8, four times the original 2.2. That factor of 4 is the Area scale readout of 4.00, and the slanted side has doubled to about 4.56.",
+    ] },
     steps: [
       "Choose Translation in the Transformation menu and set Horizontal translation to 4 and Vertical translation to −2 to slide the blue image onto the target.",
       "Switch to Rotation and predict which way a positive angle turns the triangle before you drag Rotation to 90°.",
@@ -210,6 +247,10 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       "Polling, clinical trials and quality control all depend on this idea. A survey of 1,000 people has a margin of error of about 3 percentage points at 95% confidence, which is why reputable polls report a sample size alongside their percentages.",
     ],
     formula: { expression: "P(experimental) = successes ÷ trials, standard error ≈ √(p(1 − p) ÷ n)", meaning: "p is the theoretical probability and n the number of trials. The standard error estimates the usual distance between the experimental fraction and p." },
+    example: { title: "What seed 42 shows about sample size", paragraphs: [
+      "With the default seed of 42, 100 coin flips land exactly 50 heads, a result of 50.0%. Raising Number of trials to 500 with the same seed gives 241 heads, or 48.2%, and 1,000 trials give 487 heads, or 48.7%. The perfect score at 100 was luck, not proof that 100 flips are enough.",
+      "Running all 99 seeds makes the pattern clear. At 100 flips the results range from 39% to 61% heads, and only 59 of the 99 runs finish within 5 points of 50%. At 1,000 flips the range narrows to 45.6%–55.0%, and 98 of the 99 runs are within 5 points. For 500 die rolls the standard error is √((1/3)(2/3) ÷ 500) ≈ 2.1 percentage points, so the mission’s 8-point margin is almost four standard errors wide.",
+    ] },
     steps: [
       "Choose Coin: heads in the Random event menu, set Number of trials to 100 and press Run trials. Watch Experimental change as Trials complete counts up.",
       "Press Run a fresh experiment a few times, changing Experiment seed between runs, and note how far each result lands from the 50.0% Theoretical value.",
@@ -236,6 +277,10 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       "Derivatives measure instantaneous rates of change. Velocity is the derivative of position and acceleration the derivative of velocity, and economists call the derivative of cost the marginal cost. Wherever a smooth curve has a peak or a valley, the derivative is zero and the tangent is horizontal.",
     ],
     formula: { expression: "f′(x) = lim₍ₕ→₀₎ (f(x + h) − f(x)) ÷ h", meaning: "f′(x) is the slope of the tangent at x. The fraction is the slope of a secant line over a gap h, and the limit lets that gap shrink to zero." },
+    example: { title: "Finding the tangent line to y = x³ at x = 1.5", paragraphs: [
+      "At x = 1.5 the curve is at y = 1.5³ = 3.375, and the power rule gives the slope 3 × 1.5² = 6.75. Point-slope form then gives y − 3.375 = 6.75(x − 1.5), which simplifies to y = 6.75x − 6.75, so the tangent meets the x-axis at x = 1. In the lab, Exact derivative reads 6.750, and a Your slope of 6.7 or 6.8 is accepted.",
+      "Secants show where 6.75 comes from. Over the gap from 1.5 to 1.6 the slope is (4.096 − 3.375) ÷ 0.1 = 7.21, and over 1.5 to 1.51 it is about 6.795. As the gap shrinks the secant slope falls toward 6.75.",
+    ] },
     steps: [
       "Choose f(x) = x² in the Function menu and set Point x to 1. Predict the tangent’s slope, enter it with Your slope, then compare it with Exact derivative.",
       "Move Point x to 0 and to −2. Watch the tangent flatten at the bottom of the curve and the derivative turn negative on the left side.",
@@ -261,6 +306,10 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       "The fundamental theorem of calculus links these sums to antiderivatives: the exact area equals F(b) − F(a), where F′ = f. That is how the exact values 9, 2 and 16 are calculated. Riemann sums remain the method computers use when no antiderivative is available, for example to total distance from a speed log.",
     ],
     formula: { expression: "∫ₐᵇ f(x) dx = lim₍ₙ→∞₎ Σ f(xᵢ) Δx, Δx = (b − a) ÷ n", meaning: "n is the number of rectangles, Δx their width and xᵢ the sample point in each strip. The limit of the sum is the definite integral." },
+    example: { title: "A four-rectangle midpoint sum for ∫₀³ x² dx, worked by hand", paragraphs: [
+      "With 4 rectangles each strip is Δx = 3 ÷ 4 = 0.75 wide, and the midpoints are 0.375, 1.125, 1.875 and 2.625. Their squares are 0.140625, 1.265625, 3.515625 and 6.890625, which add to 11.8125. Multiplying by 0.75 gives 8.859375, so the lab shows a Riemann sum of 8.8594 and an Absolute error of 0.1406.",
+      "For x² the midpoint error follows an exact pattern: it always equals 2.25 ÷ n², so 10 rectangles miss by 0.0225 and 40 rectangles by about 0.0014, comfortably inside the mission’s 0.03 target.",
+    ] },
     steps: [
       "Choose ∫₀³ x² dx in the Integral menu, set Rectangles to 10 and Sample point to Left. Read the Riemann sum, Exact integral and Absolute error.",
       "Change Sample point to Right, then Midpoint, and predict which will be closest to the exact value of 9.",
@@ -287,6 +336,9 @@ export const mathematicsContent: Record<string, SimulationContent> = {
       "When the determinant is zero, the columns point along the same line and the whole plane collapses onto that line or a single point, so the transformation cannot be undone. Computer graphics, robotics and data compression all chain matrices like these to rotate, scale and project objects efficiently.",
     ],
     formula: { expression: "[[a, b], [c, d]] · (x, y) = (ax + by, cx + dy), det = ad − bc", meaning: "a, b, c and d are the matrix entries. The columns ⟨a, c⟩ and ⟨b, d⟩ are the images of î and ĵ, and the determinant is the factor by which signed area changes." },
+    example: { title: "What [[2, 1], [0, 1]] does to the unit square", paragraphs: [
+      "Set Matrix a = 2, b = 1, c = 0 and d = 1. The corners (0, 0), (1, 0), (0, 1) and (1, 1) move to (0, 0), (2, 0), (1, 1) and (3, 1): î stretches to ⟨2, 0⟩ and ĵ tilts to ⟨1, 1⟩. The image is a parallelogram with base 2 and height 1, so its area is 2, matching the Determinant readout of 2 × 1 − 1 × 0 = 2.00.",
+    ] },
     steps: [
       "Start from the identity matrix, with Matrix a and Matrix d at 1 and b and c at 0. The transformed grid matches the original and Determinant reads 1.",
       "Choose Rotate 90° in the Target transform menu. Predict where î must land, then set the four entries until Basis i image reads ⟨0, 1⟩ and Basis j image reads ⟨−1, 0⟩.",

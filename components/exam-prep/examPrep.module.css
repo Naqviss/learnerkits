@@ -200,3 +200,11 @@ a.tile:hover{transform:translateY(-3px);border-color:var(--accent)}
 .panel p.chatNote{margin:8px 0 0;font-size:.72rem}
 @media(max-width:560px){.chatForm{flex-direction:column}.panel p.msg{max-width:100%}}
 @media(prefers-reduced-motion:reduce){.meter span{transition:none}}
+/* Signed-in study view inside /en/exam-prep: one level down from the page's h1. */
+.study .hero{padding-top:8px}
+.study .hero h2{font-size:clamp(1.6rem,3.2vw,2.4rem);line-height:1.1;letter-spacing:-.045em;margin:12px 0 14px;text-wrap:balance}
+.study .hero h2 small{font-size:.5em;color:var(--muted);letter-spacing:0;font-weight:600;margin-left:6px}
+.study .side h3{font-size:.86rem;margin:2px 0 12px}
+.study .panelTop h3{font-size:1.2rem;letter-spacing:-.035em;margin:0}
+.study .labCard h4{font-size:1rem;margin:4px 0}
+.study .paperCard h3{font-size:1.15rem}

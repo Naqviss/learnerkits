@@ -12,7 +12,7 @@ const en = {
   pauseOrbit: "Pause orbit",
   title: "Science Learning, Virtual Labs & Teaching Tools | LearnerKits",
   description: "Explore free science simulations, revise with exam-board lessons and mock exams, and plan lessons, build question papers and manage classwork with LearnerKits.",
-  updatedAt: "2026-11-12",
+  updatedAt: "2026-11-28",
   eyebrow: "For curious learners. For inspiring teachers.",
   heading: "What happens", highlight: "if you try it?",
   intro: "Move the Moon. Launch a ball. Build a molecule. Pick a question and experiment with it in your browser.",

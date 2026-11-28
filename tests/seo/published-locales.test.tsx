@@ -15,8 +15,10 @@ const disabledLocales = supportedLocales.filter((locale) => !locales.includes(lo
 const env = { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } };
 
 describe("published locales", () => {
-  it("publishes English and Spanish", () => {
-    expect(locales).toEqual(["en", "es"]);
+  // Spanish is held back until AdSense approves the site (lib/i18n/config.ts).
+  it("publishes English only while Spanish is held back", () => {
+    expect(locales).toEqual(["en"]);
+    expect(disabledLocales).toContain("es");
   });
 
   it("opens only English to search engines", () => {
@@ -32,14 +34,9 @@ describe("published locales", () => {
     const metadata = localizedMetadata("en", "/simulations", "Simulations", "Science labs");
     expect(Object.keys(metadata.alternates?.languages ?? {}).sort()).toEqual(["en", "x-default"]);
     expect(metadata.robots).toMatchObject({ index: true, follow: true });
-    expect(metadata.openGraph).toMatchObject({ alternateLocale: ["es_ES"] });
+    expect(metadata.openGraph).toMatchObject({ alternateLocale: [] });
   });
 
-  it("keeps Spanish pages for visitors but out of search results", () => {
-    const metadata = localizedMetadata("es", "/simulations", "Simulaciones", "Laboratorios de ciencias");
-    expect(metadata.robots).toEqual({ index: false, follow: true });
-    expect(metadata.alternates).toEqual({ canonical: "https://www.learnerkits.com/es/simulations" });
-  });
 
   it("lets a page stay published but unlisted, and keeps private pages fully blocked", () => {
     const unlisted = localizedMetadata("en", "/molecules/example", "Example", "Example", { englishOnly: true, unlisted: true });
@@ -48,11 +45,11 @@ describe("published locales", () => {
     expect(localizedMetadata("en", "/settings", "Settings", "Settings", { noIndex: true, unlisted: true }).robots).toEqual({ index: false, follow: false });
   });
 
-  it("shows the language selector with published languages only", () => {
-    const html = renderToStaticMarkup(<LanguageSelector locale="en" label="Language"/>);
-    expect(html).toContain('value="en"');
-    expect(html).toContain('value="es"');
-    for (const locale of disabledLocales) expect(html).not.toContain(`value="${locale}"`);
+  it("offers only published languages, and the header hides the picker while there is one", async () => {
+    // With one published language the picker renders nothing (the globe icon disappears from the header).
+    expect(renderToStaticMarkup(<LanguageSelector locale="en" label="Language"/>)).toBe("");
+    const { readFileSync } = await import("node:fs");
+    for (const file of ["components/navigation/Nav.tsx", "components/navigation/WorkspaceShell.tsx"]) expect(readFileSync(file, "utf8"), file).toMatch(/locales\.length > 1 && <LanguageSelector/);
   });
 
   it.each(disabledLocales)("permanently redirects %s deep links for search engines and preserves the query", async (locale) => {
@@ -71,16 +68,11 @@ describe("published locales", () => {
     }
   });
 
-  it("does not redirect Spanish pages", async () => {
-    const response = await worker.fetch(new Request("https://www.learnerkits.com/es/not-a-page"), env);
-    expect(response.status).toBe(404);
-  });
-
-  it("honours a Spanish language preference for locale-less links", async () => {
+  it("ignores a remembered Spanish preference while Spanish is held back", async () => {
     const response = await worker.fetch(new Request("https://www.learnerkits.com/about", {
-      headers: { cookie: "science-sim-locale=es" },
+      headers: { cookie: "science-sim-locale=es", "accept-language": "es-ES" },
     }), env);
-    expect(response.headers.get("location")).toBe("https://www.learnerkits.com/es/about");
+    expect(response.headers.get("location")).toBe("https://www.learnerkits.com/en/about");
   });
 
   it("ignores preferences for unpublished languages", async () => {

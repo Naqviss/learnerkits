@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { blackHole, eclipse, flybyTrace, sampleTrajectory, kepler, orbitTrace, orbital, planets, rad, type MarsState, type Values } from "@/lib/simulations/spaceLabs/model";
 import { loadSettings, renderProfile } from "@/lib/settings/storage";
@@ -13,15 +15,16 @@ function frameCamera(camera:THREE.PerspectiveCamera, controls:OrbitControls, slu
   const wide = usesTopView(slug);
   const seasonsView = slug === "earth-seasons-tilt";
   const center = wide ? -5.5 : 0;
-  controls.target.set(center, 0, 0);
-  camera.position.set(center, top ? (wide ? 31 : seasonsView ? 40 : 18) : (wide ? 10 : seasonsView ? 14 : 7), top ? .01 : (wide ? 29 : seasonsView ? 36 : 17));
+  const marsView = slug === "mars-landing-challenge";
+  controls.target.set(center, marsView ? 1.4 : 0, 0);
+  camera.position.set(center, top ? (wide ? 31 : seasonsView ? 40 : 18) : (wide ? 10 : seasonsView ? 14 : marsView ? 6 : 7), top ? .01 : (wide ? 29 : seasonsView ? 36 : marsView ? 12 : 17));
   controls.update();
 }
 
 export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;time:number;mars:MarsState}){
   const host=useRef<HTMLDivElement>(null),live=useRef({values,time,mars});live.current={values,time,mars};const orbit=useRef<OrbitControls|null>(null);
   const cameraRef=useRef<THREE.PerspectiveCamera|null>(null),rendererRef=useRef<THREE.WebGLRenderer|null>(null);
-  const [failed,setFailed]=useState(false),[cameraMode,setCameraMode]=useState(usesTopView(slug)?"top":"perspective");const view=useRef<{position:THREE.Vector3;target:THREE.Vector3}|null>(null);
+  const [failed,setFailed]=useState(false),[marsLoading,setMarsLoading]=useState(slug==="mars-landing-challenge"),[cameraMode,setCameraMode]=useState(usesTopView(slug)?"top":"perspective");const view=useRef<{position:THREE.Vector3;target:THREE.Vector3}|null>(null);
   const design=slug==="mars-landing-challenge"||usesTopView(slug)?slug:JSON.stringify(values);
   useEffect(()=>{
     const container=host.current;if(!container)return;let renderer:THREE.WebGLRenderer;
@@ -93,6 +96,7 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
     function rod(a:THREE.Vector3,b:THREE.Vector3,r:number,color:number,parent:THREE.Object3D=scene){const o=mesh(new THREE.CylinderGeometry(r,r,a.distanceTo(b),12),new THREE.MeshStandardMaterial({color,metalness:.45,roughness:.4}),parent);o.position.copy(a).add(b).multiplyScalar(.5);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),b.clone().sub(a).normalize());return o;}
     const naturalSky = usesTopView(slug) || ["planet-size-comparison-3d", "earth-seasons-tilt", "keplers-laws-orbit", "gravity-slingshot", "black-hole-orbit"].includes(slug);
     if (naturalSky) scene.background = new THREE.Color(0x050811);
+    if (slug === "mars-landing-challenge") scene.background = new THREE.Color(0x9c6d52);
     const starPoints:number[] = [];
     const starColors:number[] = [];
     for (let i = 0; i < profile.starCount; i++) {
@@ -116,8 +120,9 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
       vertexColors: naturalSky, transparent: true, opacity: .85,
     });
     materials.add(starsM);
-    scene.add(new THREE.Points(starsG, starsM));
+    if (slug !== "mars-landing-challenge") scene.add(new THREE.Points(starsG, starsM));
     let update:()=>void=()=>{};
+    let dracoLoader:DRACOLoader | undefined;
     if(usesTopView(slug)){
       ambient.intensity = .1;
       sun.position.set(-50, 0, 0);
@@ -191,7 +196,7 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
       materials.add(sunMaterial);
       const sunMarker = new THREE.Sprite(sunMaterial);
       sunMarker.position.copy(sun.position).normalize().multiplyScalar(16);
-      sunMarker.scale.setScalar(14);
+      sunMarker.scale.setScalar(18);
       scene.add(sunMarker);
       update=()=>{earth.rotation.y=live.current.time*.12;};
     }else if(slug==="planet-size-comparison-3d"){
@@ -215,21 +220,58 @@ export function SpaceScene({slug,values,time,mars}:{slug:string;values:Values;ti
       const craft=spacecraft(),trail=line(points,0x69f5d3);
       update=()=>{const t=live.current.time/8,p=sampleTrajectory(trace,t);craft.position.set(p.x*scale,0,p.y*scale);const next=sampleTrajectory(trace,Math.min(1,t+.002));if(t<1)craft.lookAt(next.x*scale,0,next.y*scale);trail.geometry.setDrawRange(0,Math.max(1,Math.ceil(t*(points.length-1))+1));};
     }else if(slug==="mars-landing-challenge"){
-      ambient.intensity=.55;sun.position.set(-10,15,8);const ground=mesh(new THREE.PlaneGeometry(60,60,60,60),new THREE.MeshStandardMaterial({color:0x8c5b45,roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-2.5;
-      const terrain=ground.geometry.attributes.position;for(let i=0;i<terrain.count;i++){const x=terrain.getX(i),y=terrain.getY(i),distance=Math.hypot(x,y);terrain.setZ(i,distance<2?0:Math.sin(x*.8)*Math.cos(y*.65)*.35+Math.sin(x*.2+y*.3)*.45);}ground.geometry.computeVertexNormals();
-      const pad=mesh(new THREE.CylinderGeometry(1.5,1.6,.05,48),new THREE.MeshStandardMaterial({color:0x3d4549,metalness:.4,roughness:.8}));pad.position.y=-2.47;const target=ring(1.15,0x7affd2);target.position.y=-2.43;
+      ambient.intensity=.55;sun.position.set(-10,15,8);
+      const marsGround = texture("/textures/mars-arbot-ground.webp");
+      marsGround.wrapS = marsGround.wrapT = THREE.MirroredRepeatWrapping;
+      marsGround.repeat.set(5,5);
+      const ground=mesh(new THREE.PlaneGeometry(60,60,60,60),new THREE.MeshStandardMaterial({map:marsGround,color:0xcba894,roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-2.5;
+      const terrain=ground.geometry.attributes.position;for(let i=0;i<terrain.count;i++){const x=terrain.getX(i),y=terrain.getY(i),distance=Math.hypot(x,y);terrain.setZ(i,distance<3?0:Math.sin(x*.8)*Math.cos(y*.65)*.35+Math.sin(x*.2+y*.3)*.45);}ground.geometry.computeVertexNormals();
+      const pad=mesh(new THREE.CylinderGeometry(2.15,2.2,.05,64),new THREE.MeshStandardMaterial({color:0x3d4549,metalness:.4,roughness:.8}));pad.position.y=-2.47;
+      const target=mesh(new THREE.RingGeometry(1.85,2.08,64),new THREE.MeshBasicMaterial({color:0x6dfbd3,side:THREE.DoubleSide,toneMapped:false}));
+      target.rotation.x=-Math.PI/2;target.position.y=-2.42;
+      const beacon=mesh(new THREE.CylinderGeometry(.06,.06,1.6,12),new THREE.MeshBasicMaterial({color:0x9affdf,toneMapped:false}));
+      beacon.position.set(2.3,-1.65,0);
+      const beaconLight=mesh(sphere,new THREE.MeshBasicMaterial({color:0xc4ffec,toneMapped:false}));
+      beaconLight.scale.setScalar(.13);beaconLight.position.set(2.3,-.82,0);
       scene.fog=new THREE.FogExp2(0x241913,.017);
       for(let i=0;i<25;i++){const r=mesh(new THREE.IcosahedronGeometry(.15+(i%4)*.08),new THREE.MeshStandardMaterial({color:0x674638,roughness:1}));r.position.set(Math.sin(i*2.4)*12,-2.4,Math.cos(i*1.7)*10);r.scale.y=.55;}
-      const ship=new THREE.Group();scene.add(ship);mesh(new THREE.CylinderGeometry(.45,.68,.65,8),new THREE.MeshStandardMaterial({color:0xd4dce6,metalness:.55,roughness:.35}),ship);const cabin=mesh(sphere,new THREE.MeshStandardMaterial({color:0x8296b2,metalness:.6,roughness:.25}),ship);cabin.scale.set(.34,.3,.34);cabin.position.y=.5;
-      for(const x of [-1,1])for(const z of [-1,1]){rod(new THREE.Vector3(x*.35,-.1,z*.35),new THREE.Vector3(x*.85,-.65,z*.85),.025,0xc4b795,ship);const foot=mesh(new THREE.CylinderGeometry(.13,.13,.05,12),new THREE.MeshStandardMaterial({color:0x657286}),ship);foot.position.set(x*.85,-.65,z*.85);}
+      const ship=new THREE.Group();scene.add(ship);
+      const fallback = new THREE.Group(); fallback.visible = false; ship.add(fallback);
+      setMarsLoading(true);
+      mesh(new THREE.CylinderGeometry(.45,.68,.65,8),new THREE.MeshStandardMaterial({color:0xd4dce6,metalness:.55,roughness:.35}),fallback);const cabin=mesh(sphere,new THREE.MeshStandardMaterial({color:0x8296b2,metalness:.6,roughness:.25}),fallback);cabin.scale.set(.34,.3,.34);cabin.position.y=.5;
+      for(const x of [-1,1])for(const z of [-1,1]){rod(new THREE.Vector3(x*.35,-.1,z*.35),new THREE.Vector3(x*.85,-.65,z*.85),.025,0xc4b795,fallback);const foot=mesh(new THREE.CylinderGeometry(.13,.13,.05,12),new THREE.MeshStandardMaterial({color:0x657286}),fallback);foot.position.set(x*.85,-.65,z*.85);}
+      dracoLoader = new DRACOLoader();
+      dracoLoader.setDecoderPath("/draco/");
+      const modelLoader = new GLTFLoader();
+      modelLoader.setDRACOLoader(dracoLoader);
+      modelLoader.load("/textures/insight-lander.glb", ({scene:model}) => {
+        if (!alive) {
+          model.traverse(object => { if (object instanceof THREE.Mesh) { object.geometry.dispose(); const list = Array.isArray(object.material) ? object.material : [object.material]; list.forEach(material => { Object.values(material).forEach(value => { if (value instanceof THREE.Texture) value.dispose(); }); material.dispose(); }); } });
+          return;
+        }
+        const bounds = new THREE.Box3().setFromObject(model);
+        const size = bounds.getSize(new THREE.Vector3());
+        const center = bounds.getCenter(new THREE.Vector3());
+        const factor = 3 / Math.max(size.x, size.y, size.z);
+        model.scale.setScalar(factor);
+        model.position.set(-center.x * factor, -.65 - bounds.min.y * factor, -center.z * factor);
+        model.traverse(object => { if (object instanceof THREE.Mesh) { geometries.add(object.geometry); const list = Array.isArray(object.material) ? object.material : [object.material]; list.forEach(material => { materials.add(material); Object.values(material).forEach(value => { if (value instanceof THREE.Texture) textures.add(value); }); }); } });
+        ship.add(model);
+        setMarsLoading(false);
+      }, undefined, () => {
+        if (alive) {
+          fallback.visible = true;
+          setMarsLoading(false);
+        }
+      });
       const flame=mesh(new THREE.ConeGeometry(.24,1.5,18),new THREE.MeshBasicMaterial({color:0xa4c9ff,transparent:true,opacity:.7}),ship);flame.rotation.z=Math.PI;
-      update=()=>{const s=live.current.mars;ship.position.set(0,-1.82+s.altitude*.008,0);ship.rotation.z=s.status==="crashed"?.7:0;flame.visible=s.status==="flying"&&s.throttle>.01;flame.scale.y=s.throttle;flame.position.y=-.4-.75*s.throttle;};
+      update=()=>{const s=live.current.mars;ship.position.set(0,-1.795+s.altitude*.008,0);ship.rotation.z=s.status==="crashed"?.7:0;flame.visible=s.status==="flying"&&s.throttle>.01;flame.scale.y=s.throttle;flame.position.y=-.4-.75*s.throttle;};
     }
     const resize=()=>{renderer.setSize(container.clientWidth,container.clientHeight,false);camera.aspect=container.clientWidth/Math.max(1,container.clientHeight);camera.fov=2*Math.atan(Math.tan(Math.PI/8)/Math.min(1,Math.max(.4,camera.aspect)))*180/Math.PI;camera.updateProjectionMatrix();};const ro=new ResizeObserver(resize);ro.observe(container);resize();let raf=0;const frame=()=>{update();controls.update();if(!document.hidden)renderer.render(scene,camera);raf=requestAnimationFrame(frame);};raf=requestAnimationFrame(frame);
-    return()=>{alive=false;view.current={position:camera.position.clone(),target:controls.target.clone()};cancelAnimationFrame(raf);ro.disconnect();controls.dispose();orbit.current=null;geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());renderer.domElement.removeEventListener("pointerdown",focus);renderer.domElement.removeEventListener("webglcontextlost",onContextLost);};
+    return()=>{alive=false;dracoLoader?.dispose();view.current={position:camera.position.clone(),target:controls.target.clone()};cancelAnimationFrame(raf);ro.disconnect();controls.dispose();orbit.current=null;geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());renderer.domElement.removeEventListener("pointerdown",focus);renderer.domElement.removeEventListener("webglcontextlost",onContextLost);};
   },[slug,design]);
   useEffect(()=>()=>{rendererRef.current?.dispose();rendererRef.current?.domElement.remove();rendererRef.current=null;},[]);
   function cameraView(mode:string){const c=cameraRef.current,o=orbit.current;if(!c||!o)return;setCameraMode(mode);frameCamera(c, o, slug, mode==="top");}
   function zoom(factor:number){const c=cameraRef.current,o=orbit.current;if(!c||!o)return;const offset=c.position.clone().sub(o.target);offset.setLength(Math.max(o.minDistance,Math.min(o.maxDistance,offset.length()*factor)));c.position.copy(o.target).add(offset);o.update();}
-  return <div className="spaceThree"><div className="spaceCanvas" ref={host} role="img" aria-label={`${slug.replaceAll("-"," ")} 3D view`}/>{failed&&<p className="spaceFallback">3D is unavailable on this device. You can still use the controls, measurements, and mission checks.</p>}<div className="spaceCameraBar"><span>Drag to orbit · Scroll / pinch to zoom<br/><small>{slug==="earth-seasons-tilt"?"Sun and Earth sizes and distance are illustrative":slug==="planet-size-comparison-3d"?"Planet radii shown to the same scale · Saturn’s rings omitted":"Illustrative overview scale"}</small></span><div><button aria-label="Zoom in" onClick={()=>zoom(.8)}>＋</button><button aria-label="Zoom out" onClick={()=>zoom(1.25)}>−</button><button aria-pressed={cameraMode==="top"} onClick={()=>cameraView(cameraMode==="top"?"perspective":"top")}>Top view</button><button onClick={()=>cameraView(usesTopView(slug)?"top":"perspective")}>Reset view</button></div></div></div>;
+  return <div className="spaceThree"><div className="spaceCanvas" ref={host} role="img" aria-label={`${slug.replaceAll("-"," ")} 3D view`}/>{marsLoading&&!failed&&<div className="spaceLoading" role="status">Loading Mars lander…</div>}{failed&&<p className="spaceFallback">3D is unavailable on this device. You can still use the controls, measurements, and mission checks.</p>}<div className="spaceCameraBar"><span>Drag to orbit · Scroll / pinch to zoom<br/><small>{slug==="earth-seasons-tilt"?"Sun and Earth sizes and distance are illustrative":slug==="planet-size-comparison-3d"?"Planet radii shown to the same scale · Saturn’s rings omitted":"Illustrative overview scale"}</small></span><div><button aria-label="Zoom in" onClick={()=>zoom(.8)}>＋</button><button aria-label="Zoom out" onClick={()=>zoom(1.25)}>−</button><button aria-pressed={cameraMode==="top"} onClick={()=>cameraView(cameraMode==="top"?"perspective":"top")}>Top view</button><button onClick={()=>cameraView(usesTopView(slug)?"top":"perspective")}>Reset view</button></div></div></div>;
 }

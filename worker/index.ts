@@ -7,6 +7,7 @@ import { handleAdmin, type AdminEnv } from "../lib/admin/api";
 import { publicContent } from "../lib/admin/public-content";
 import { supabaseAdmin } from "../lib/server/supabase";
 import { defaultLocale, locales, supportedLocales } from "../lib/i18n/config";
+import { legacyRedirect } from "../lib/seo/legacy-redirects";
 
 type Env = BillingEnv & TutorEnv & AdminEnv & { ASSETS: { fetch(input: Request | URL | string): Promise<Response> } };
 
@@ -43,6 +44,10 @@ export default {
       if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405, headers: { allow: "POST" } });
       return createDonationCheckout(request);
     }
+
+    // Retired pages (molecule pages, lab worksheets, public exam-prep lessons) point to their new home.
+    const moved = legacyRedirect(pathname);
+    if (moved) return new Response(null, { status: 301, headers: { location: new URL(moved, url).toString() } });
 
     const hasLocale = locales.some((locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`));
     if (!hasLocale && !pathname.startsWith("/_next") && !pathname.startsWith("/api/") && !pathname.includes(".")) {

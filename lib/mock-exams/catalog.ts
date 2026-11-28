@@ -73,5 +73,11 @@ export const mockExams: MockExam[] = [
 
 export const getMockExam = (id: string) => mockExams.find((exam) => exam.id === id);
 
-/** Sitemap paths (no locale prefix). Premium sets are soft-locked, so only the hub and free sets are listed. */
-export const mockExamIndexablePaths: string[] = ["/mock-exams", ...mockExams.filter((exam) => !exam.premium).map((exam) => `/mock-exams/${exam.id}`)];
+/**
+ * Practice sets are for signed-in students: each opens inside the signed-in view of /en/mock-exams
+ * (?exam=<id>), and the questions load only after sign-in. Only the public hub is in the sitemap.
+ */
+export const mockExamIndexablePaths: string[] = ["/mock-exams"];
+
+/** Address of a practice set (or the hub) inside the signed-in mock exam area. */
+export const mockExamHref = (id?: string) => (id && /^[a-z0-9-]{1,40}$/.test(id) ? `/en/mock-exams?exam=${id}` : "/en/mock-exams");

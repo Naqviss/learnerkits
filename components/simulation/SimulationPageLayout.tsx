@@ -6,6 +6,7 @@ import type { SimulationCard, SubjectDefinition } from "@/lib/subjects/catalog";
 import { SimulationGuide } from "@/components/seo/SimulationGuide";
 import { getSimulationContent, simulationReviewDate } from "@/lib/seo/simulation-content";
 import { ProtectedFeaturePreview } from "./ProtectedFeaturePreview";
+import { InvestigationWorksheet } from "./practical/InvestigationWorksheet";
 
 const dateFormat = new Intl.DateTimeFormat("en", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 import { SimulationShare } from "./SimulationShare";
@@ -30,7 +31,6 @@ export function SimulationPageLayout({
 }) {
   const content = locale === "en" ? getSimulationContent(simulation.slug) : undefined;
   const student = studentGuides[simulation.slug as InvestigationSlug];
-  const guidePath = `/en/guides/${simulation.slug}`;
   return <main className={`universalSimulationPage subject-${subject.slug}`}>
     <header className="container simulationPageHeader">
       <nav className="simulationBreadcrumbs" aria-label="Breadcrumb">
@@ -63,13 +63,14 @@ export function SimulationPageLayout({
         <SimulationGuide locale={locale} subject={subject} simulation={simulation} protectedSections={
           <div className="protectedSimulationGrid">
             <ProtectedFeaturePreview feature="Measurements" simulation={simulation} available={!!student || measurementsAvailable}>
-              {student && <div><p>{student.method}</p><Link className="textLink" href={guidePath+"/how-to-measure"}>{student.measurement} →</Link></div>}
+              {student && <div><p>{student.method}</p><a className="textLink" href="#investigation">{student.measurement} →</a></div>}
             </ProtectedFeaturePreview>
             <ProtectedFeaturePreview feature="Missions" simulation={simulation} available={!!student || missionsAvailable} prompts={student ? [student.challenge, student.method, student.explanation] : undefined}>
-              {student && <div><p>{student.challenge}</p><Link className="textLink" href={guidePath+"/mission"}>{student.mission} →</Link></div>}
+              {student && <div><p>{student.challenge}</p><a className="textLink" href="#investigation">{student.mission} →</a></div>}
             </ProtectedFeaturePreview>
           </div>
         }/>
+        {student && <InvestigationWorksheet slug={simulation.slug as InvestigationSlug}/>}
         {supplementaryGuide}
       </div>
     </article>

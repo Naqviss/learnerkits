@@ -17,7 +17,8 @@ describe("homepage discovery and localized metadata", () => {
       expect(html).toContain(copy.faqs[0].q);
       expect(html).toContain('href="/en/teacher-kit"');
       expect(html).toContain('href="/en/exam-prep"');
-      expect(html).toContain('href="/en/mock-exams/9702free"');
+      // Mock exam sets open inside the signed-in mock exam area.
+      expect(html).toContain('href="/en/mock-exams?exam=9702free"');
       expect(html).toContain('href="/en/articles/how-virtual-science-labs-work"');
       const graph = JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/)![1])["@graph"];
       const page = graph.find((node: Record<string, unknown>) => node["@type"] === "WebPage");
